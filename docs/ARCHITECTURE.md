@@ -35,6 +35,7 @@ This document describes the current runtime architecture of the prototype and mu
 5. `Player`:
 - Is authored as a reusable scene instance (`res://scenes/player.tscn`) in `main.tscn`.
 - Uses `CollisionShape3D` + `PlayerVisual` (`Node3D`) with imported octo model (`res://assets/models/octo/octo.glb`).
+- `PlayerVisual` runs `res://scripts/OctoRig.gd`, which resolves the model `Skeleton3D` and builds procedural rig wrappers (`OctoHead` + `OctoArm` objects).
 - Updated each physics frame by `player_controller.gd`.
 6. `Interactables`:
 - `LightButton` (`StaticBody3D`) with `Interactable` child for click interaction.
@@ -96,6 +97,16 @@ This document describes the current runtime architecture of the prototype and mu
 - Runtime-builds keypad geometry and interactables.
 - Enforces focus-gated keypad input.
 - Handles code-entry state (`ENTER CODE`, masked input, `DENIED`, latched `GRANTED`) and LED material-state transitions.
+12. `res://scripts/OctoRig.gd`
+- Procedural rig bootstrap around imported octopus skeleton.
+- Accepts manual bone assignment for head + arms using `HEAD_BONE_NAMES` and `ARM_CONFIGS`.
+- Resolves/caches rest pose data for future procedural pose layers.
+- Validates rig data on startup and prints debug summaries.
+13. `res://scripts/OctoArm.gd`
+- Per-arm data model with role metadata (`side`, `role_bias`), resolved indices, base/mid/tip partitions, and rest pose caches.
+- Stores runtime control fields (`current_state`, `phase_offset`, held-item/target references).
+14. `res://scripts/OctoHead.gd`
+- Head-chain data model mirroring arm setup patterns (resolved indices, grouped parts, rest pose caches).
 
 ## Movement Data Flow
 

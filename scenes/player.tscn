@@ -1,17 +1,19 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene format=3 uid="uid://63bbsnp8k0ew"]
 
-[ext_resource type="Script" path="res://scripts/player_controller.gd" id="1_6ujh3"]
-[ext_resource type="PackedScene" path="res://assets/models/octo/octo.glb" id="2_yn3vd"]
+[ext_resource type="Script" uid="uid://d2xiurclda6aa" path="res://scripts/player_controller.gd" id="1_6ujh3"]
+[ext_resource type="PackedScene" uid="uid://b3e53em1mvq8k" path="res://assets/models/octo/octo.glb" id="2_yn3vd"]
+[ext_resource type="Script" uid="uid://55li82r2kp3x" path="res://scripts/OctoRig.gd" id="3_8x4hh"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_player"]
 size = Vector3(0.5, 0.5, 0.5)
 
-[node name="Player" type="CharacterBody3D"]
+[node name="Player" type="CharacterBody3D" unique_id=1546049060]
 script = ExtResource("1_6ujh3")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1046069454]
 shape = SubResource("BoxShape3D_player")
 
-[node name="PlayerVisual" type="Node3D" parent="."]
+[node name="PlayerVisual" type="Node3D" parent="." unique_id=69441856]
+script = ExtResource("3_8x4hh")
 
-[node name="Octo" parent="PlayerVisual" instance=ExtResource("2_yn3vd")]
+[node name="Octo" parent="PlayerVisual" unique_id=1282528951 instance=ExtResource("2_yn3vd")]

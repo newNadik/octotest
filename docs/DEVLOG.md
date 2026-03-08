@@ -2,6 +2,43 @@
 
 ## 2026-03-08
 
+### Step 26 - Procedural octopus rig wrapper foundation (`OctoRig` / `OctoArm` / `OctoHead`)
+
+- Added rig-wrapper scripts for procedural animation groundwork:
+  - `scripts/OctoRig.gd`
+  - `scripts/OctoArm.gd`
+  - `scripts/OctoHead.gd`
+- Attached `OctoRig` to `PlayerVisual` in `scenes/player.tscn` so rig setup lives with the visual model layer.
+- Implemented skeleton resolution for nested imported model scenes:
+  - optional direct export (`skeleton`),
+  - optional `skeleton_path`,
+  - fallback recursive child search for `Skeleton3D`.
+- Added manual rig configuration constants:
+  - `HEAD_BONE_NAMES`
+  - richer `ARM_CONFIGS` format with `side`, `role_bias`, and `bones`.
+- Implemented startup rig validation:
+  - missing skeleton/config checks,
+  - per-bone existence checks,
+  - arm minimum-length checks,
+  - duplicate assignment warnings across head/arm configs.
+- Implemented chain partitioning + cached data for procedural layers:
+  - base/mid/tip grouping by thirds,
+  - convenience accessors (`base_bone`, `middle_bone`, `tip_bone`),
+  - cached rest transforms, rest positions, and rest rotations (`Quaternion`) per resolved bone.
+- Added future-facing per-arm runtime fields:
+  - state enum (`IDLE`, `SUPPORT`, `STEP`, `HOLD`, `REACH`),
+  - phase offset,
+  - held-item reference,
+  - target position / target node.
+- Added debug output helpers:
+  - setup summary by head/arm,
+  - optional resolved bone index printing.
+- Updated architecture and README docs to include the new rig layer.
+
+### Validation commands (pass)
+1. `./scripts/check.sh`
+   - Result: boot smoke PASS, `movement_math_test: PASS`, `slope_movement_test: PASS`, `card_reader_interaction_test: PASS`.
+
 ### Step 25 - Player scene extraction + octo model integration
 
 - Extracted player into reusable scene:
