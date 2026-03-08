@@ -39,15 +39,20 @@ var _focus_target: FocusTargetType
 var _focus_pending_target: FocusTargetType
 var _focus_tween: Tween
 var _saved_spring_length := 9.0
-var _player_mesh: MeshInstance3D
+var _player_visual_root: Node3D
 
 
 func _ready() -> void:
 	player.global_position = Vector3(0.0, OCTO_START_Y, 0.0)
+	var follow_position := player.global_position + Vector3(0.0, CAMERA_FOLLOW_HEIGHT, 0.0)
+	follow_position.y = maxf(follow_position.y, CAMERA_MIN_WORLD_Y)
+	camera_pivot.global_position = follow_position
 	_apply_camera_angles()
 	_make_click_through(hud_root)
 	_create_interaction_controller()
-	_player_mesh = player.get_node_or_null("MeshInstance3D") as MeshInstance3D
+	_player_visual_root = player.get_node_or_null("PlayerVisual") as Node3D
+	if _player_visual_root == null:
+		_player_visual_root = player.get_node_or_null("MeshInstance3D") as Node3D
 	in_game_main_menu_button.pressed.connect(_on_main_menu_pressed)
 	in_game_quit_button.pressed.connect(_on_quit_pressed)
 	_set_in_game_menu_visible(false)
@@ -222,8 +227,8 @@ func _start_focus_tween(target_pivot_position: Vector3, target_zoom: float) -> v
 
 
 func _set_focus_visuals_enabled(is_enabled: bool) -> void:
-	if _player_mesh != null:
-		_player_mesh.visible = is_enabled
+	if _player_visual_root != null:
+		_player_visual_root.visible = is_enabled
 	_interaction_controller.set_held_item_visuals_visible(is_enabled or _focus_mode)
 
 

@@ -13,6 +13,7 @@ Godot `4.6.1` 3D isometric prototype with:
 9. Focus-mode interaction system for precision objects (e.g. card reader).
 10. Card reader gameplay with one-slot insertion, LED feedback, and clickable card ejection.
 11. Wall-mounted code panel gameplay with focus-first keypad input (`0-9`, `<<`, `OK`), display feedback, and card-reader-matched LED states.
+12. Player extracted into a dedicated scene (`res://scenes/player.tscn`) with imported octo model visual (`res://assets/models/octo/octo.glb`).
 
 ## Canonical Branch
 

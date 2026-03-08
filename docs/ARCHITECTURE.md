@@ -8,7 +8,7 @@ This document describes the current runtime architecture of the prototype and mu
 2. `MainMenu` (`Control`) owns menu UI flow into gameplay (`Play`) or app exit (`Quit`).
 3. `res://scenes/main.tscn` is the gameplay scene.
 4. `Main` (`Node3D`) owns world setup, camera behavior, click-to-move input routing, and in-game UI menu flow.
-5. `Player` (`CharacterBody3D`) owns locomotion, gravity handling, and slope alignment.
+5. `Player` (`CharacterBody3D`) is instanced from `res://scenes/player.tscn` and owns locomotion, gravity handling, and slope alignment.
 6. `Room` contains authored static geometry for the office layout (floor, ceiling, walls, windows, doors, desks, chairs, console, storage/tank props).
 7. `Interactables` contains authored clickable and pickup objects (`Area3D` + `RigidBody3D`/`StaticBody3D`), including focus-enabled objects such as `CardReader` and `CodePanel`.
 8. `WorldEnvironment` provides sky/background visuals visible through wall openings.
@@ -33,7 +33,8 @@ This document describes the current runtime architecture of the prototype and mu
 - Includes authored office set dressing and climbable elevated surfaces (chairs/desks).
 - Includes window/skylight geometry and door/cabinet blocking geometry used for navigation/LOS.
 5. `Player`:
-- Uses `CollisionShape3D` + visible cube mesh.
+- Is authored as a reusable scene instance (`res://scenes/player.tscn`) in `main.tscn`.
+- Uses `CollisionShape3D` + `PlayerVisual` (`Node3D`) with imported octo model (`res://assets/models/octo/octo.glb`).
 - Updated each physics frame by `player_controller.gd`.
 6. `Interactables`:
 - `LightButton` (`StaticBody3D`) with `Interactable` child for click interaction.
@@ -54,6 +55,7 @@ This document describes the current runtime architecture of the prototype and mu
 2. `res://scripts/main.gd`
 - Lightweight scene orchestrator.
 - Owns camera orbit/zoom behavior.
+- Initializes camera pivot follow position during `_ready()` to avoid first-frame startup pop.
 - Owns in-game menu visibility and scene change/quit actions.
 - Routes click-to-move and delegates interact/drop input to `InteractionController`.
 - Owns focus-mode transitions (auto-enter after approach, movement lock, click-based exit rules).

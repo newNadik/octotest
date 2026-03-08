@@ -1,7 +1,7 @@
 [gd_scene load_steps=56 format=3]
 
 [ext_resource type="Script" path="res://scripts/main.gd" id="1_4f72t"]
-[ext_resource type="Script" path="res://scripts/player_controller.gd" id="2_vrsh6"]
+[ext_resource type="PackedScene" path="res://scenes/player.tscn" id="2_vrsh6"]
 [ext_resource type="Script" path="res://scripts/interactable.gd" id="3_3ygbf"]
 [ext_resource type="Script" path="res://scripts/card_reader.gd" id="4_b6dyj"]
 [ext_resource type="Script" path="res://scripts/focus_target.gd" id="5_lmyi0"]
@@ -938,15 +938,7 @@ hold_offset = Vector3(0, -0.02, 0.06)
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Interactables/Card4/Interactable"]
 shape = SubResource("BoxShape3D_card_interaction")
 
-[node name="Player" type="CharacterBody3D" parent="."]
-script = ExtResource("2_vrsh6")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Player"]
-shape = SubResource("BoxShape3D_player")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Player"]
-mesh = SubResource("BoxMesh_player")
-material_override = SubResource("StandardMaterial3D_player")
+[node name="Player" parent="." instance=ExtResource("2_vrsh6")]
 
 [node name="CameraPivot" type="Node3D" parent="."]
 

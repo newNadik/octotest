@@ -1,5 +1,23 @@
 # Dev Log
 
+## 2026-03-08
+
+### Step 25 - Player scene extraction + octo model integration
+
+- Extracted player into reusable scene:
+  - added `scenes/player.tscn` (`CharacterBody3D` + `CollisionShape3D` + `PlayerVisual`).
+- Replaced inline player node in `scenes/main.tscn` with an instance of `res://scenes/player.tscn`.
+- Switched player visual from placeholder cube to imported octo model:
+  - `res://assets/models/octo/octo.glb`
+  - source asset path: `assets/models/octo/octo.glb`.
+- Updated gameplay focus-visual toggling in `scripts/main.gd` to target `PlayerVisual` (with fallback to old mesh path for compatibility).
+- Fixed first-frame camera startup pop by initializing camera pivot follow position during `_ready()`.
+- Removed temporary runtime pose prototype (`scripts/octo_pose.gd`) and restored imported default rig pose.
+
+### Validation commands (pass)
+1. `HOME=/tmp /Applications/Godot.app/Contents/MacOS/godot --headless --path /Users/nadiiaiv/Documents/GodotProjects/Octotest --quit`
+   - Result: scene/scripts parse and project boots headless without runtime script errors.
+
 ## 2026-02-25
 
 ### Step 24 - Scope update + planning docs overhaul (single-building version)
