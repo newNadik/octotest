@@ -4,7 +4,7 @@ extends CharacterBody3D
 const WALL_COLLISION_MASK := 1 << 0
 const GROUND_COLLISION_MASK := 1 << 1
 const PLAYER_COLLISION_LAYER := 1 << 2
-const MovementMath = preload("res://scripts/movement_math.gd")
+const MovementMath = preload("res://scripts/core/movement_math.gd")
 
 @export var move_speed := 6.0
 @export var acceleration := 22.0

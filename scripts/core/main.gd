@@ -3,8 +3,7 @@ extends Node3D
 
 const CLICK_TARGET_COLLISION_MASK := (1 << 0) | (1 << 1)
 const MAIN_MENU_SCENE_PATH := "res://scenes/main_menu.tscn"
-const InteractionController = preload("res://scripts/interaction_controller.gd")
-const FocusTargetType = preload("res://scripts/focus_target.gd")
+const InteractionControllerScript = preload("res://scripts/interaction/interaction_controller.gd")
 const OCTO_START_Y := 0.26
 const CAMERA_FOLLOW_HEIGHT := 0.65
 const CAMERA_MIN_WORLD_Y := 1.25
@@ -30,13 +29,13 @@ const CAMERA_MIN_WORLD_Y := 1.25
 @onready var in_game_quit_button: Button = $UI/InGameMenu/MenuCenter/MenuPanel/MenuMargin/MenuButtons/QuitButton
 @onready var room_light: OmniLight3D = $OmniLight3D
 
-var _interaction_controller: InteractionController
+var _interaction_controller
 var _orbiting := false
 var _yaw := 35.0
 var _pitch := -35.0
 var _focus_mode := false
-var _focus_target: FocusTargetType
-var _focus_pending_target: FocusTargetType
+var _focus_target
+var _focus_pending_target
 var _focus_tween: Tween
 var _saved_spring_length := 9.0
 var _player_visual_root: Node3D
@@ -103,7 +102,7 @@ func _unhandled_input(event: InputEvent) -> void:
 
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
-			var clicked_focus_target := _interaction_controller.get_focus_target_at_screen(event.position)
+			var clicked_focus_target = _interaction_controller.get_focus_target_at_screen(event.position)
 			if clicked_focus_target != null:
 				_focus_pending_target = clicked_focus_target
 			if _interaction_controller.try_handle_interaction_click(event.position):
@@ -183,7 +182,7 @@ func _process_focus_mode() -> void:
 		_exit_focus_mode()
 
 
-func _enter_focus_mode(target: FocusTargetType) -> void:
+func _enter_focus_mode(target) -> void:
 	if target == null:
 		return
 	_focus_mode = true
@@ -232,18 +231,18 @@ func _set_focus_visuals_enabled(is_enabled: bool) -> void:
 	_interaction_controller.set_held_item_visuals_visible(is_enabled or _focus_mode)
 
 
-func _compute_focus_angles(target: FocusTargetType) -> Vector2:
+func _compute_focus_angles(target) -> Vector2:
 	var host := target.get_parent() as Node3D
 	var default_yaw := _yaw
 	if host != null:
 		default_yaw = wrapf(rad_to_deg(host.global_rotation.y) - 180.0, -180.0, 180.0)
-	var desired_yaw := target.get_focus_yaw_degrees(default_yaw)
-	var desired_pitch := target.get_focus_pitch_degrees(-22.0)
+	var desired_yaw = target.get_focus_yaw_degrees(default_yaw)
+	var desired_pitch = target.get_focus_pitch_degrees(-22.0)
 	return Vector2(desired_yaw, desired_pitch)
 
 
 func _create_interaction_controller() -> void:
-	_interaction_controller = InteractionController.new()
+	_interaction_controller = InteractionControllerScript.new()
 	_interaction_controller.name = "InteractionController"
 	add_child(_interaction_controller)
 	_interaction_controller.initialize(player, camera, hint_label, self, room_light)
@@ -304,7 +303,7 @@ func _set_in_game_menu_visible(is_visible: bool) -> void:
 		in_game_main_menu_button.grab_focus()
 
 
-func is_focus_target_active(target: FocusTargetType) -> bool:
+func is_focus_target_active(target) -> bool:
 	if not _focus_mode:
 		return false
 	if target == null:

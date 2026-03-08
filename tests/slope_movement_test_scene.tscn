@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3]
 
-[ext_resource type="Script" path="res://scripts/player_controller.gd" id="1_vyjls"]
+[ext_resource type="Script" path="res://scripts/player/player_controller.gd" id="1_vyjls"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_player"]
 size = Vector3(1, 1, 1)

@@ -3,7 +3,7 @@ class_name FocusRejectFeedback
 
 
 var duration := 0.32
-var _item: Interactable
+var _item
 var _remaining := 0.0
 
 
@@ -12,7 +12,7 @@ func reset() -> void:
 	_remaining = 0.0
 
 
-func trigger(item: Interactable) -> void:
+func trigger(item) -> void:
 	if item == null:
 		return
 	_item = item
@@ -27,7 +27,7 @@ func tick(delta: float) -> void:
 		_item = null
 
 
-func get_offset(item: Interactable, base_target_pos: Vector3, slot_position: Vector3) -> Vector3:
+func get_offset(item, base_target_pos: Vector3, slot_position: Vector3) -> Vector3:
 	if _item == null or item != _item:
 		return Vector3.ZERO
 	if _remaining <= 0.0:

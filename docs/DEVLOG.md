@@ -2,6 +2,26 @@
 
 ## 2026-03-08
 
+### Step 27 - Script folder restructure + octopus rig/editor-preview cleanup
+
+- Reorganized scripts into domain folders:
+  - `scripts/core/`
+  - `scripts/player/`
+  - `scripts/interaction/`
+  - `scripts/rig/`
+- Updated scene/script/test references to new paths.
+- Fixed post-move GDScript parse/type regressions in interaction and rig stack:
+  - stabilized `InteractionController` script-type usage with explicit preloads,
+  - removed fragile type inference points introduced during refactor,
+  - aligned `main.gd` controller instantiation and focus-target typing to be robust after file moves.
+- Kept octopus rig defaults for current gameplay tuning:
+  - `default_arm_lift = 0.82` on `PlayerVisual` rig component.
+- Updated architecture docs with the new script directory layout.
+
+### Validation commands (pass)
+1. `./scripts/check.sh`
+   - Result: boot smoke PASS, `movement_math_test: PASS`, `slope_movement_test: PASS`, `card_reader_interaction_test: PASS`.
+
 ### Step 26 - Procedural octopus rig wrapper foundation (`OctoRig` / `OctoArm` / `OctoHead`)
 
 - Added rig-wrapper scripts for procedural animation groundwork:

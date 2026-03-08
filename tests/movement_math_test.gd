@@ -2,7 +2,7 @@ extends SceneTree
 
 
 const EPSILON := 0.0001
-const MovementMath = preload("res://scripts/movement_math.gd")
+const MovementMath = preload("res://scripts/core/movement_math.gd")
 
 var _failures := 0
 

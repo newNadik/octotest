@@ -18,12 +18,12 @@ func _run() -> void:
 	for i in range(SETTLE_FRAMES):
 		await physics_frame
 
-	var controller := world.get_node_or_null("InteractionController") as InteractionController
-	var reader := world.get_node_or_null("Interactables/CardReader") as CardReader
-	var focus_target := world.get_node_or_null("Interactables/CardReader/FocusTarget") as FocusTarget
+	var controller := world.get_node_or_null("InteractionController")
+	var reader := world.get_node_or_null("Interactables/CardReader")
+	var focus_target := world.get_node_or_null("Interactables/CardReader/FocusTarget")
 	var camera := world.get_node_or_null("CameraPivot/CameraYaw/CameraPitch/SpringArm3D/Camera3D") as Camera3D
-	var card_a := world.get_node_or_null("Interactables/Card/Interactable") as Interactable
-	var card_b := world.get_node_or_null("Interactables/Card2/Interactable") as Interactable
+	var card_a := world.get_node_or_null("Interactables/Card/Interactable")
+	var card_b := world.get_node_or_null("Interactables/Card2/Interactable")
 
 	_expect_true(controller != null, "interaction controller should exist")
 	_expect_true(reader != null, "card reader should exist")

@@ -4,27 +4,28 @@ class_name InteractionController
 
 const WALL_COLLISION_MASK := 1 << 0
 const INTERACTABLE_COLLISION_MASK := 1 << 3
-const CardReaderType = preload("res://scripts/card_reader.gd")
-const CodePanelType = preload("res://scripts/code_panel.gd")
-const FocusTargetType = preload("res://scripts/focus_target.gd")
-const FocusRejectFeedbackType = preload("res://scripts/focus_reject_feedback.gd")
-const InteractionHintBuilderType = preload("res://scripts/interaction_hint_builder.gd")
+const CardReaderScript = preload("res://scripts/interaction/card_reader.gd")
+const CodePanelScript = preload("res://scripts/interaction/code_panel.gd")
+const FocusTargetScript = preload("res://scripts/interaction/focus_target.gd")
+const FocusRejectFeedbackScript = preload("res://scripts/interaction/focus_reject_feedback.gd")
+const InteractableScript = preload("res://scripts/interaction/interactable.gd")
+const InteractionHintBuilderScript = preload("res://scripts/interaction/interaction_hint_builder.gd")
 const FOCUS_SELECTION_CLICK_RADIUS := 220.0
 const FOCUS_HELD_CLICK_RADIUS := 170.0
 const FOCUS_READER_INSERTED_CLICK_RADIUS := 190.0
 
-@export var interact_move_standoff := 1.2
-@export var held_item_follow_speed := 15.0
-@export var max_held_items := 8
-@export var slow_at_item_count := 5
-@export var immobilized_at_item_count := 8
-@export var heavy_carry_speed_multiplier := 0.45
-@export var hand_socket_inner_radius := 0.3
-@export var hand_socket_outer_radius := 0.54
-@export var hand_socket_height := 0.34
-@export var drop_clamp_extent := 15.2
-@export var debug_interaction_logs := false
-@export var focus_reject_feedback_duration := 0.32
+@export var interact_move_standoff = 1.2
+@export var held_item_follow_speed = 15.0
+@export var max_held_items = 8
+@export var slow_at_item_count = 5
+@export var immobilized_at_item_count = 8
+@export var heavy_carry_speed_multiplier = 0.45
+@export var hand_socket_inner_radius = 0.3
+@export var hand_socket_outer_radius = 0.54
+@export var hand_socket_height = 0.34
+@export var drop_clamp_extent = 15.2
+@export var debug_interaction_logs = false
+@export var focus_reject_feedback_duration = 0.32
 
 var _player: CharacterBody3D
 var _camera: Camera3D
@@ -32,28 +33,28 @@ var _hint_label: Label
 var _world_root: Node3D
 var _room_light: OmniLight3D
 
-var _interaction_enabled := true
-var _hovered_interactable: Interactable
-var _hovered_in_range := false
-var _hovered_blocked := false
-var _held_interactables: Array[Interactable] = []
+var _interaction_enabled = true
+var _hovered_interactable
+var _hovered_in_range = false
+var _hovered_blocked = false
+var _held_interactables: Array = []
 var _hand_sockets: Array[Node3D] = []
 var _held_socket_by_item_id: Dictionary = {}
 var _held_global_scale_by_item_id: Dictionary = {}
-var _queued_interaction_target: Interactable
-var _pending_card_reader: CardReaderType
-var _awaiting_card_selection := false
-var _eligible_held_cards: Array[Interactable] = []
-var _light_toggle_on := true
-var _default_light_energy := 4.0
-var _base_move_speed := 6.0
-var _focus_locked := false
-var _focus_display_enabled := false
+var _queued_interaction_target
+var _pending_card_reader: CardReaderScript
+var _awaiting_card_selection = false
+var _eligible_held_cards: Array = []
+var _light_toggle_on = true
+var _default_light_energy = 4.0
+var _base_move_speed = 6.0
+var _focus_locked = false
+var _focus_display_enabled = false
 var _focus_display_camera: Camera3D
-var _focus_target: FocusTargetType
-var _focus_card_reader: CardReaderType
-var _focus_reject_feedback: FocusRejectFeedbackType = FocusRejectFeedbackType.new()
-var _hint_builder: InteractionHintBuilderType = InteractionHintBuilderType.new()
+var _focus_target: FocusTargetScript
+var _focus_card_reader: CardReaderScript
+var _focus_reject_feedback = FocusRejectFeedbackScript.new()
+var _hint_builder = InteractionHintBuilderScript.new()
 
 
 func initialize(player: CharacterBody3D, camera: Camera3D, hint_label: Label, world_root: Node3D, room_light: OmniLight3D) -> void:
@@ -100,7 +101,7 @@ func try_handle_interaction_click(screen_position: Vector2) -> bool:
 		_debug_log("Ignored click: interaction disabled")
 		return false
 
-	var target := _raycast_to_interactable(screen_position)
+	var target = _raycast_to_interactable(screen_position)
 	_debug_log("Click at %s target=%s focus_locked=%s awaiting_card_selection=%s" % [
 		str(screen_position),
 		_describe_interactable(target),
@@ -110,12 +111,12 @@ func try_handle_interaction_click(screen_position: Vector2) -> bool:
 
 	if _awaiting_card_selection:
 		if target == null and _focus_locked:
-			var clicked_card := _get_eligible_card_at_screen(screen_position, FOCUS_SELECTION_CLICK_RADIUS)
+			var clicked_card = _get_eligible_card_at_screen(screen_position, FOCUS_SELECTION_CLICK_RADIUS)
 			if clicked_card != null and _is_click_confirmed_for_held_item(clicked_card):
 				_debug_log("Card selection: screen-picked %s" % _describe_interactable(clicked_card))
 				_apply_card_to_pending_reader(clicked_card)
 				return true
-			var clicked_held := _get_held_item_at_screen(screen_position, FOCUS_SELECTION_CLICK_RADIUS)
+			var clicked_held = _get_held_item_at_screen(screen_position, FOCUS_SELECTION_CLICK_RADIUS)
 			if clicked_held != null and _is_click_confirmed_for_held_item(clicked_held) and _focus_card_reader != null and not _eligible_held_cards.has(clicked_held):
 				_debug_log("Card selection: non-eligible item clicked %s" % _describe_interactable(clicked_held))
 				_trigger_focus_reject_feedback(clicked_held)
@@ -133,8 +134,8 @@ func try_handle_interaction_click(screen_position: Vector2) -> bool:
 			_cancel_card_selection_mode()
 			return true
 		if _focus_locked:
-			var near_reader := _is_click_near_focus_card_reader(screen_position)
-			var over_focus_items := is_click_over_focus_items(screen_position, FOCUS_SELECTION_CLICK_RADIUS)
+			var near_reader = _is_click_near_focus_card_reader(screen_position)
+			var over_focus_items = is_click_over_focus_items(screen_position, FOCUS_SELECTION_CLICK_RADIUS)
 			if near_reader or over_focus_items:
 				_debug_log("Card selection pending: click inside focus interaction area")
 				_update_hint_text()
@@ -147,7 +148,7 @@ func try_handle_interaction_click(screen_position: Vector2) -> bool:
 
 	if target == null:
 		if _focus_locked:
-			var clicked_held := _get_held_item_at_screen(screen_position, FOCUS_HELD_CLICK_RADIUS)
+			var clicked_held = _get_held_item_at_screen(screen_position, FOCUS_HELD_CLICK_RADIUS)
 			if clicked_held != null and _is_click_confirmed_for_held_item(clicked_held):
 				_queued_interaction_target = null
 				_try_apply_focus_held_item(clicked_held)
@@ -167,12 +168,12 @@ func try_handle_interaction_click(screen_position: Vector2) -> bool:
 		_drop_specific_held_item(target)
 		return true
 
-	var in_range := _is_interactable_in_range(target)
-	var blocked := not _has_line_of_sight(target)
+	var in_range = _is_interactable_in_range(target)
+	var blocked = not _has_line_of_sight(target)
 	if _is_focus_reader_interactable(target):
 		in_range = true
 		blocked = false
-	if target.interaction_type == Interactable.InteractionType.PICKUP and _held_interactables.size() >= max_held_items:
+	if target.interaction_type == InteractableScript.InteractionType.PICKUP and _held_interactables.size() >= max_held_items:
 		blocked = true
 		in_range = false
 
@@ -182,15 +183,15 @@ func try_handle_interaction_click(screen_position: Vector2) -> bool:
 
 	if _hovered_in_range:
 		_queued_interaction_target = null
-		var reader := _get_card_reader_for_interactable(target)
+		var reader = _get_card_reader_for_interactable(target)
 		if reader != null:
 			_debug_log("Reader interaction click on %s" % _describe_interactable(target))
 			_handle_card_reader_click(reader)
 			return true
-		if target.interaction_type == Interactable.InteractionType.CLICK:
+		if target.interaction_type == InteractableScript.InteractionType.CLICK:
 			target.interact(_player)
 			return true
-		if target.interaction_type == Interactable.InteractionType.PICKUP:
+		if target.interaction_type == InteractableScript.InteractionType.PICKUP:
 			_pick_up_interactable(target)
 			return true
 		return true
@@ -232,53 +233,53 @@ func _is_click_near_focus_card_reader(screen_position: Vector2) -> bool:
 	if _focus_display_camera == null:
 		return false
 	if _focus_target != null:
-		var focus_screen := _focus_display_camera.unproject_position(_focus_target.get_focus_position())
+		var focus_screen = _focus_display_camera.unproject_position(_focus_target.get_focus_position())
 		if focus_screen.distance_to(screen_position) <= _focus_target.click_outside_exit_px:
 			return true
 	if _focus_card_reader.has_inserted_card():
-		var inserted_screen := _focus_display_camera.unproject_position(_focus_card_reader.get_inserted_card_position())
+		var inserted_screen = _focus_display_camera.unproject_position(_focus_card_reader.get_inserted_card_position())
 		if inserted_screen.distance_to(screen_position) <= FOCUS_READER_INSERTED_CLICK_RADIUS:
 			return true
 	return false
 
 
-func _get_held_item_at_screen(screen_position: Vector2, max_distance_px: float) -> Interactable:
+func _get_held_item_at_screen(screen_position: Vector2, max_distance_px: float) :
 	if not _focus_display_enabled or _focus_display_camera == null:
 		return null
-	var closest: Interactable
-	var best_distance := max_distance_px
+	var closest
+	var best_distance = max_distance_px
 	for held_item in _held_interactables:
-		var pickup_root := held_item.get_pickup_root()
+		var pickup_root = held_item.get_pickup_root()
 		if pickup_root == null:
 			continue
-		var item_screen := _focus_display_camera.unproject_position(pickup_root.global_position)
-		var distance := item_screen.distance_to(screen_position)
+		var item_screen = _focus_display_camera.unproject_position(pickup_root.global_position)
+		var distance = item_screen.distance_to(screen_position)
 		if distance <= best_distance:
 			best_distance = distance
 			closest = held_item
 	return closest
 
 
-func _get_eligible_card_at_screen(screen_position: Vector2, max_distance_px: float) -> Interactable:
+func _get_eligible_card_at_screen(screen_position: Vector2, max_distance_px: float) :
 	if not _focus_display_enabled or _focus_display_camera == null:
 		return null
-	var closest: Interactable
-	var best_distance := max_distance_px
+	var closest
+	var best_distance = max_distance_px
 	for card in _eligible_held_cards:
 		if card == null or not is_instance_valid(card):
 			continue
-		var pickup_root := card.get_pickup_root()
+		var pickup_root = card.get_pickup_root()
 		if pickup_root == null:
 			continue
-		var item_screen := _focus_display_camera.unproject_position(pickup_root.global_position)
-		var distance := item_screen.distance_to(screen_position)
+		var item_screen = _focus_display_camera.unproject_position(pickup_root.global_position)
+		var distance = item_screen.distance_to(screen_position)
 		if distance <= best_distance:
 			best_distance = distance
 			closest = card
 	return closest
 
 
-func _is_click_confirmed_for_held_item(item: Interactable) -> bool:
+func _is_click_confirmed_for_held_item(item) -> bool:
 	if item == null:
 		return false
 	if _hovered_interactable == null:
@@ -293,7 +294,7 @@ func set_focus_locked(is_locked: bool) -> void:
 
 func set_held_item_visuals_visible(is_visible: bool) -> void:
 	for held_item in _held_interactables:
-		var root := held_item.get_pickup_root()
+		var root = held_item.get_pickup_root()
 		if root != null:
 			root.visible = is_visible
 
@@ -303,18 +304,18 @@ func set_focus_display(enabled: bool, camera: Camera3D = null) -> void:
 	_focus_display_camera = camera
 
 
-func set_focus_target(target: FocusTargetType) -> void:
+func set_focus_target(target: FocusTargetScript) -> void:
 	_focus_target = target
 	_focus_card_reader = null
 	_focus_reject_feedback.reset()
 	if _focus_target == null:
 		return
-	var interactable := _get_interactable_for_focus_target(_focus_target)
+	var interactable = _get_interactable_for_focus_target(_focus_target)
 	_focus_card_reader = _get_card_reader_for_interactable(interactable)
 
 
 func get_held_item_names() -> PackedStringArray:
-	var names := PackedStringArray()
+	var names = PackedStringArray()
 	for held_item in _held_interactables:
 		names.append(held_item.display_name)
 	return names
@@ -323,7 +324,7 @@ func get_held_item_names() -> PackedStringArray:
 func get_held_items_for_focus() -> Array[Dictionary]:
 	var items: Array[Dictionary] = []
 	for held_item in _held_interactables:
-		var eligible := true
+		var eligible = true
 		if _awaiting_card_selection:
 			eligible = _eligible_held_cards.has(held_item)
 		items.append({
@@ -339,7 +340,7 @@ func select_held_item_by_index(index: int) -> bool:
 	if not _awaiting_card_selection:
 		return false
 
-	var item := _held_interactables[index]
+	var item = _held_interactables[index]
 	if not _eligible_held_cards.has(item):
 		return false
 
@@ -351,74 +352,74 @@ func is_awaiting_card_selection() -> bool:
 	return _awaiting_card_selection
 
 
-func get_focus_target_at_screen(screen_position: Vector2) -> FocusTargetType:
-	var target := _raycast_to_interactable(screen_position)
+func get_focus_target_at_screen(screen_position: Vector2) -> FocusTargetScript:
+	var target = _raycast_to_interactable(screen_position)
 	return _get_focus_target_for_interactable(target)
 
 
-func request_approach_focus_target(focus_target: FocusTargetType) -> void:
-	var interactable := _get_interactable_for_focus_target(focus_target)
+func request_approach_focus_target(focus_target: FocusTargetScript) -> void:
+	var interactable = _get_interactable_for_focus_target(focus_target)
 	if interactable != null:
 		_move_toward_interactable(interactable)
 
 
-func can_enter_focus_target(focus_target: FocusTargetType) -> bool:
+func can_enter_focus_target(focus_target: FocusTargetScript) -> bool:
 	if focus_target == null:
 		return false
-	var interactable := _get_interactable_for_focus_target(focus_target)
+	var interactable = _get_interactable_for_focus_target(focus_target)
 	if interactable == null:
 		return false
 	if not _is_interactable_in_range(interactable):
 		return false
 	if not _has_line_of_sight(interactable):
 		return false
-	var planar_speed := Vector2(_player.velocity.x, _player.velocity.z).length()
+	var planar_speed = Vector2(_player.velocity.x, _player.velocity.z).length()
 	return planar_speed <= 0.12
 
 
-func is_focus_target_solved(focus_target: FocusTargetType) -> bool:
+func is_focus_target_solved(focus_target: FocusTargetScript) -> bool:
 	if focus_target == null:
 		return false
 	return focus_target.is_solved()
 
 
-func _raycast_to_interactable(screen_position: Vector2) -> Interactable:
-	var from := _camera.project_ray_origin(screen_position)
-	var to := from + _camera.project_ray_normal(screen_position) * 500.0
+func _raycast_to_interactable(screen_position: Vector2) :
+	var from = _camera.project_ray_origin(screen_position)
+	var to = from + _camera.project_ray_normal(screen_position) * 500.0
 
-	var query := PhysicsRayQueryParameters3D.create(from, to)
+	var query = PhysicsRayQueryParameters3D.create(from, to)
 	query.collision_mask = INTERACTABLE_COLLISION_MASK
 	query.collide_with_areas = true
 	query.collide_with_bodies = false
 	query.exclude = [_player]
 
-	var result := _world_root.get_world_3d().direct_space_state.intersect_ray(query)
+	var result = _world_root.get_world_3d().direct_space_state.intersect_ray(query)
 	if result.is_empty():
 		return null
-	if result.collider is Interactable:
-		return result.collider as Interactable
+	if result.collider is Area3D:
+		return result.collider
 	return null
 
 
-func _get_focus_target_for_interactable(target: Interactable) -> FocusTargetType:
+func _get_focus_target_for_interactable(target) -> FocusTargetScript:
 	if target == null:
 		return null
-	var parent := target.get_parent()
+	var parent = target.get_parent()
 	if parent == null:
 		return null
-	var focus_target := parent.get_node_or_null("FocusTarget")
-	if focus_target is FocusTargetType:
-		return focus_target as FocusTargetType
+	var focus_target = parent.get_node_or_null("FocusTargetScript")
+	if focus_target is FocusTargetScript:
+		return focus_target as FocusTargetScript
 	return null
 
 
-func _get_interactable_for_focus_target(focus_target: FocusTargetType) -> Interactable:
+func _get_interactable_for_focus_target(focus_target: FocusTargetScript) :
 	if focus_target == null:
 		return null
-	var host := focus_target.get_parent()
+	var host = focus_target.get_parent()
 	if host == null:
 		return null
-	return host.get_node_or_null("Interactable") as Interactable
+	return host.get_node_or_null("Interactable")
 
 
 func _process_queued_interaction() -> void:
@@ -435,7 +436,7 @@ func _process_queued_interaction() -> void:
 	if not _is_interactable_in_range(_queued_interaction_target):
 		return
 
-	if _queued_interaction_target.interaction_type == Interactable.InteractionType.PICKUP:
+	if _queued_interaction_target.interaction_type == InteractableScript.InteractionType.PICKUP:
 		if _held_interactables.size() >= max_held_items:
 			_queued_interaction_target = null
 			return
@@ -443,8 +444,8 @@ func _process_queued_interaction() -> void:
 		_queued_interaction_target = null
 		return
 
-	if _queued_interaction_target.interaction_type == Interactable.InteractionType.CLICK:
-		var reader := _get_card_reader_for_interactable(_queued_interaction_target)
+	if _queued_interaction_target.interaction_type == InteractableScript.InteractionType.CLICK:
+		var reader = _get_card_reader_for_interactable(_queued_interaction_target)
 		if reader != null:
 			_handle_card_reader_click(reader)
 			_queued_interaction_target = null
@@ -454,7 +455,7 @@ func _process_queued_interaction() -> void:
 
 
 func _update_hovered_interactable() -> void:
-	var target := _raycast_to_interactable(get_viewport().get_mouse_position())
+	var target = _raycast_to_interactable(get_viewport().get_mouse_position())
 	if target == null:
 		_set_hovered_interactable(null, false, false)
 		return
@@ -463,36 +464,36 @@ func _update_hovered_interactable() -> void:
 		_set_hovered_interactable(target, true, false)
 		return
 
-	var in_range := _is_interactable_in_range(target)
-	var blocked := not _has_line_of_sight(target)
+	var in_range = _is_interactable_in_range(target)
+	var blocked = not _has_line_of_sight(target)
 	if _is_focus_reader_interactable(target):
 		in_range = true
 		blocked = false
-	if target.interaction_type == Interactable.InteractionType.PICKUP and _held_interactables.size() >= max_held_items:
+	if target.interaction_type == InteractableScript.InteractionType.PICKUP and _held_interactables.size() >= max_held_items:
 		blocked = true
 		in_range = false
 
 	_set_hovered_interactable(target, in_range, blocked)
 
 
-func _get_card_reader_for_interactable(target: Interactable) -> CardReaderType:
+func _get_card_reader_for_interactable(target) -> CardReaderScript:
 	if target == null:
 		return null
-	var node := target.get_parent()
+	var node = target.get_parent()
 	while node != null:
-		if node is CardReaderType:
-			return node as CardReaderType
+		if node is CardReaderScript:
+			return node as CardReaderScript
 		node = node.get_parent()
 	return null
 
 
-func _is_focus_reader_interactable(target: Interactable) -> bool:
+func _is_focus_reader_interactable(target) -> bool:
 	if not _focus_locked or _focus_card_reader == null or target == null:
 		return false
 	return _get_card_reader_for_interactable(target) == _focus_card_reader
 
 
-func _handle_card_reader_click(reader: CardReaderType) -> void:
+func _handle_card_reader_click(reader: CardReaderScript) -> void:
 	if reader == null:
 		return
 
@@ -502,7 +503,7 @@ func _handle_card_reader_click(reader: CardReaderType) -> void:
 			_debug_log("Eject blocked: hands are full")
 			_update_hint_text()
 			return
-		var ejected_card := reader.eject_card()
+		var ejected_card = reader.eject_card()
 		if ejected_card != null:
 			_debug_log("Ejected card %s" % _describe_interactable(ejected_card))
 			_attach_item_to_hands(ejected_card, false)
@@ -510,7 +511,7 @@ func _handle_card_reader_click(reader: CardReaderType) -> void:
 		_update_hint_text()
 		return
 
-	var held_cards := _get_held_cards()
+	var held_cards = _get_held_cards()
 	if held_cards.is_empty():
 		_debug_log("Reader empty and no held cards")
 		_cancel_card_selection_mode()
@@ -527,15 +528,15 @@ func _handle_card_reader_click(reader: CardReaderType) -> void:
 	_enter_card_selection_mode(reader, held_cards)
 
 
-func _get_held_cards() -> Array[Interactable]:
-	var cards: Array[Interactable] = []
+func _get_held_cards() -> Array:
+	var cards: Array = []
 	for held_item in _held_interactables:
 		if held_item.is_card():
 			cards.append(held_item)
 	return cards
 
 
-func _enter_card_selection_mode(reader: CardReaderType, held_cards: Array[Interactable]) -> void:
+func _enter_card_selection_mode(reader: CardReaderScript, held_cards: Array) -> void:
 	_cancel_card_selection_mode()
 	_pending_card_reader = reader
 	_awaiting_card_selection = true
@@ -552,12 +553,12 @@ func _cancel_card_selection_mode() -> void:
 	_pending_card_reader = null
 	for card in _eligible_held_cards:
 		if card != null and is_instance_valid(card):
-			card.set_visual_state(Interactable.VisualState.HELD)
+			card.set_visual_state(InteractableScript.VisualState.HELD)
 	_eligible_held_cards.clear()
 	_update_hint_text()
 
 
-func _apply_card_to_pending_reader(card: Interactable) -> void:
+func _apply_card_to_pending_reader(card) -> void:
 	if _pending_card_reader == null or card == null:
 		_debug_log("Card apply failed: pending reader or card missing")
 		_cancel_card_selection_mode()
@@ -571,7 +572,7 @@ func _apply_card_to_pending_reader(card: Interactable) -> void:
 		_update_hint_text()
 		return
 
-	var removed_card := _remove_held_item(card)
+	var removed_card = _remove_held_item(card)
 	if removed_card == null:
 		_debug_log("Card apply failed: could not remove held card")
 		_cancel_card_selection_mode()
@@ -594,18 +595,18 @@ func _debug_log(message: String) -> void:
 	print("[InteractionController] %s" % message)
 
 
-func _describe_interactable(item: Interactable) -> String:
+func _describe_interactable(item) -> String:
 	if item == null:
 		return "null"
 	return "%s(id=%s)" % [item.display_name, item.item_id]
 
 
-func _set_hovered_interactable(target: Interactable, in_range: bool, blocked: bool) -> void:
+func _set_hovered_interactable(target, in_range: bool, blocked: bool) -> void:
 	if _hovered_interactable != null and _hovered_interactable != target:
 		if _is_item_currently_held(_hovered_interactable):
-			_hovered_interactable.set_visual_state(Interactable.VisualState.HELD)
+			_hovered_interactable.set_visual_state(InteractableScript.VisualState.HELD)
 		else:
-			_hovered_interactable.set_visual_state(Interactable.VisualState.IDLE)
+			_hovered_interactable.set_visual_state(InteractableScript.VisualState.IDLE)
 
 	_hovered_interactable = target
 	_hovered_in_range = in_range and not blocked
@@ -613,32 +614,32 @@ func _set_hovered_interactable(target: Interactable, in_range: bool, blocked: bo
 
 	if _hovered_interactable != null:
 		if _is_item_currently_held(_hovered_interactable):
-			_hovered_interactable.set_visual_state(Interactable.VisualState.HOVERED)
+			_hovered_interactable.set_visual_state(InteractableScript.VisualState.HOVERED)
 		elif _hovered_blocked:
-			_hovered_interactable.set_visual_state(Interactable.VisualState.BLOCKED)
+			_hovered_interactable.set_visual_state(InteractableScript.VisualState.BLOCKED)
 		elif _hovered_in_range:
-			_hovered_interactable.set_visual_state(Interactable.VisualState.IN_RANGE)
+			_hovered_interactable.set_visual_state(InteractableScript.VisualState.IN_RANGE)
 		else:
-			_hovered_interactable.set_visual_state(Interactable.VisualState.HOVERED)
+			_hovered_interactable.set_visual_state(InteractableScript.VisualState.HOVERED)
 
 	_update_hint_text()
 
 
-func _is_interactable_in_range(target: Interactable) -> bool:
+func _is_interactable_in_range(target) -> bool:
 	return target.can_interact_from(_player.global_position)
 
 
-func _has_line_of_sight(target: Interactable) -> bool:
+func _has_line_of_sight(target) -> bool:
 	var from: Vector3 = _player.global_position + Vector3(0.0, 0.9, 0.0)
 	var to: Vector3 = target.get_focus_position()
-	var target_root := target.get_pickup_root()
-	var query := PhysicsRayQueryParameters3D.create(from, to)
+	var target_root = target.get_pickup_root()
+	var query = PhysicsRayQueryParameters3D.create(from, to)
 	query.collision_mask = WALL_COLLISION_MASK | INTERACTABLE_COLLISION_MASK
 	query.collide_with_areas = true
 	query.collide_with_bodies = true
 	query.exclude = [_player]
 
-	var result := _world_root.get_world_3d().direct_space_state.intersect_ray(query)
+	var result = _world_root.get_world_3d().direct_space_state.intersect_ray(query)
 	if result.is_empty():
 		return true
 	var collider: Variant = result.collider
@@ -651,38 +652,38 @@ func _has_line_of_sight(target: Interactable) -> bool:
 	return false
 
 
-func _belongs_to_same_card_reader(target: Interactable, collider: Variant) -> bool:
-	var reader := _get_card_reader_for_interactable(target)
+func _belongs_to_same_card_reader(target, collider: Variant) -> bool:
+	var reader = _get_card_reader_for_interactable(target)
 	if reader == null:
 		return false
 	if not (collider is Node):
 		return false
-	var collider_node := collider as Node
+	var collider_node = collider as Node
 	return collider_node == reader or reader.is_ancestor_of(collider_node)
 
 
-func _belongs_to_same_code_panel(target: Interactable, collider: Variant) -> bool:
-	var code_panel := _get_code_panel_for_interactable(target)
+func _belongs_to_same_code_panel(target, collider: Variant) -> bool:
+	var code_panel = _get_code_panel_for_interactable(target)
 	if code_panel == null:
 		return false
 	if not (collider is Node):
 		return false
-	var collider_node := collider as Node
+	var collider_node = collider as Node
 	return collider_node == code_panel or code_panel.is_ancestor_of(collider_node)
 
 
-func _get_code_panel_for_interactable(target: Interactable) -> CodePanelType:
+func _get_code_panel_for_interactable(target) -> CodePanelScript:
 	if target == null:
 		return null
-	var node := target.get_parent()
+	var node = target.get_parent()
 	while node != null:
-		if node is CodePanelType:
-			return node as CodePanelType
+		if node is CodePanelScript:
+			return node as CodePanelScript
 		node = node.get_parent()
 	return null
 
 
-func _move_toward_interactable(target: Interactable) -> void:
+func _move_toward_interactable(target) -> void:
 	var player_pos: Vector3 = _player.global_position
 	var target_pos: Vector3 = target.get_focus_position()
 	var away: Vector3 = player_pos - target_pos
@@ -693,7 +694,7 @@ func _move_toward_interactable(target: Interactable) -> void:
 	else:
 		away = away.normalized()
 
-	var standoff := interact_move_standoff
+	var standoff = interact_move_standoff
 	if _get_card_reader_for_interactable(target) != null:
 		standoff = maxf(standoff, 2.6)
 
@@ -702,7 +703,7 @@ func _move_toward_interactable(target: Interactable) -> void:
 	_player.set_move_target(move_position)
 
 
-func _pick_up_interactable(target: Interactable) -> void:
+func _pick_up_interactable(target) -> void:
 	if _held_interactables.size() >= max_held_items or _is_item_currently_held(target):
 		return
 
@@ -720,8 +721,8 @@ func _drop_last_held_item() -> void:
 	_drop_held_item_by_index(_held_interactables.size() - 1)
 
 
-func _drop_specific_held_item(item: Interactable) -> void:
-	var index := _held_interactables.find(item)
+func _drop_specific_held_item(item) -> void:
+	var index = _held_interactables.find(item)
 	if index == -1:
 		return
 	_drop_held_item_by_index(index)
@@ -736,23 +737,23 @@ func _drop_held_item_by_index(index: int) -> void:
 	if index < 0 or index >= _held_interactables.size():
 		return
 
-	var item := _held_interactables[index]
+	var item = _held_interactables[index]
 	item = _remove_held_item(item)
 	if item == null:
 		return
 
-	var pickup_root := item.get_pickup_root()
+	var pickup_root = item.get_pickup_root()
 	pickup_root.reparent(_world_root, true)
 	item.set_held(false)
 	item.drop(_player)
 
-	var lateral_offset := _player.global_basis.x * (0.2 * float(index % 3 - 1))
+	var lateral_offset = _player.global_basis.x * (0.2 * float(index % 3 - 1))
 	var drop_position: Vector3 = _player.global_position + _player.global_basis.z * 1.25 + Vector3(0.0, 0.6, 0.0) + lateral_offset
 	drop_position.x = clampf(drop_position.x, -drop_clamp_extent, drop_clamp_extent)
 	drop_position.z = clampf(drop_position.z, -drop_clamp_extent, drop_clamp_extent)
 	pickup_root.global_position = drop_position
 	if pickup_root is RigidBody3D:
-		var body := pickup_root as RigidBody3D
+		var body = pickup_root as RigidBody3D
 		body.linear_velocity = _player.velocity * 0.35 + Vector3(0.0, 0.5, 0.0)
 
 	if _hovered_interactable == item:
@@ -771,40 +772,40 @@ func _update_held_item_transform(delta: float) -> void:
 		_update_focus_display_transforms(delta)
 		return
 
-	var alpha := minf(1.0, held_item_follow_speed * delta)
+	var alpha = minf(1.0, held_item_follow_speed * delta)
 	for held_item in _held_interactables:
-		var item_id := held_item.get_instance_id()
-		var socket_index := int(_held_socket_by_item_id.get(item_id, -1))
+		var item_id = held_item.get_instance_id()
+		var socket_index = int(_held_socket_by_item_id.get(item_id, -1))
 		if socket_index < 0 or socket_index >= _hand_sockets.size():
 			continue
-		var pickup_root := held_item.get_pickup_root()
-		var socket := _hand_sockets[socket_index]
-		var target_transform := socket.global_transform * held_item.get_hold_transform()
+		var pickup_root = held_item.get_pickup_root()
+		var socket = _hand_sockets[socket_index]
+		var target_transform = socket.global_transform * held_item.get_hold_transform()
 		pickup_root.global_transform = pickup_root.global_transform.interpolate_with(target_transform, alpha)
 		_reapply_held_global_scale(item_id, pickup_root)
 
 
 func _update_focus_display_transforms(delta: float) -> void:
-	var count := _held_interactables.size()
-	var columns := mini(count, 4)
-	var alpha := minf(1.0, held_item_follow_speed * delta)
-	var bottom_anchor := -1.34
-	var row_spacing := 0.58
+	var count = _held_interactables.size()
+	var columns = mini(count, 4)
+	var alpha = minf(1.0, held_item_follow_speed * delta)
+	var bottom_anchor = -1.34
+	var row_spacing = 0.58
 
 	for i in range(count):
-		var held_item := _held_interactables[i]
-		var item_id := held_item.get_instance_id()
-		var pickup_root := held_item.get_pickup_root()
-		var col := i % columns
-		var row := i / columns
-		var offset_x := (float(col) - float(columns - 1) * 0.5) * 0.82
-		var offset_y := bottom_anchor + float(row) * row_spacing
+		var held_item = _held_interactables[i]
+		var item_id = held_item.get_instance_id()
+		var pickup_root = held_item.get_pickup_root()
+		var col = i % columns
+		var row = i / columns
+		var offset_x = (float(col) - float(columns - 1) * 0.5) * 0.82
+		var offset_y = bottom_anchor + float(row) * row_spacing
 
-		var camera_forward := -_focus_display_camera.global_basis.z
-		var camera_right := _focus_display_camera.global_basis.x
-		var camera_up := _focus_display_camera.global_basis.y
+		var camera_forward = -_focus_display_camera.global_basis.z
+		var camera_right = _focus_display_camera.global_basis.x
+		var camera_up = _focus_display_camera.global_basis.y
 
-		var target_pos := _focus_display_camera.global_position
+		var target_pos = _focus_display_camera.global_position
 		target_pos += camera_forward * 2.2
 		target_pos += camera_right * offset_x
 		target_pos += camera_up * offset_y
@@ -814,19 +815,19 @@ func _update_focus_display_transforms(delta: float) -> void:
 			_get_focus_reject_target_position(target_pos)
 		)
 
-		var target_basis := Basis.looking_at(-camera_forward, Vector3.UP)
-		var target_transform := Transform3D(target_basis, target_pos)
+		var target_basis = Basis.looking_at(-camera_forward, Vector3.UP)
+		var target_transform = Transform3D(target_basis, target_pos)
 		pickup_root.global_transform = pickup_root.global_transform.interpolate_with(target_transform, alpha)
 		_reapply_held_global_scale(item_id, pickup_root)
 
 
-func _trigger_focus_reject_feedback(item: Interactable) -> void:
+func _trigger_focus_reject_feedback(item) -> void:
 	if item == null or not _focus_locked:
 		return
 	_focus_reject_feedback.trigger(item)
 
 
-func _try_apply_focus_held_item(item: Interactable) -> void:
+func _try_apply_focus_held_item(item) -> void:
 	if item == null:
 		return
 	if _can_focus_target_accept_held_item(item):
@@ -840,7 +841,7 @@ func _get_focus_reject_target_position(fallback_position: Vector3) -> Vector3:
 	return _get_focus_item_target_position(fallback_position)
 
 
-func _can_focus_target_accept_held_item(item: Interactable) -> bool:
+func _can_focus_target_accept_held_item(item) -> bool:
 	if item == null:
 		return false
 
@@ -852,7 +853,7 @@ func _can_focus_target_accept_held_item(item: Interactable) -> bool:
 	return false
 
 
-func _apply_held_item_to_focus_target(item: Interactable) -> void:
+func _apply_held_item_to_focus_target(item) -> void:
 	if item == null:
 		return
 
@@ -879,14 +880,14 @@ func _ensure_hand_sockets() -> void:
 		sockets_root.name = "HandSockets"
 		_player.add_child(sockets_root)
 
-	var existing_count := sockets_root.get_child_count()
+	var existing_count = sockets_root.get_child_count()
 	for i in range(existing_count, max_held_items):
-		var socket := Node3D.new()
+		var socket = Node3D.new()
 		socket.name = "HandSocket%d" % i
 		sockets_root.add_child(socket)
 
 	_hand_sockets.clear()
-	var child_index := 0
+	var child_index = 0
 	for child in sockets_root.get_children():
 		if child_index >= max_held_items:
 			break
@@ -899,7 +900,7 @@ func _ensure_hand_sockets() -> void:
 
 func _refresh_hand_socket_layout() -> void:
 	_held_socket_by_item_id.clear()
-	var held_count := _held_interactables.size()
+	var held_count = _held_interactables.size()
 	if held_count == 0:
 		for socket in _hand_sockets:
 			socket.position = Vector3(0.0, hand_socket_height, 0.0)
@@ -908,34 +909,34 @@ func _refresh_hand_socket_layout() -> void:
 	for i in range(held_count):
 		_held_socket_by_item_id[_held_interactables[i].get_instance_id()] = i
 
-	var t := clampf(float(held_count - 1) / float(maxi(max_held_items - 1, 1)), 0.0, 1.0)
-	var radius := lerpf(hand_socket_inner_radius, hand_socket_outer_radius, t)
-	var angle_offset := PI * 0.5
+	var t = clampf(float(held_count - 1) / float(maxi(max_held_items - 1, 1)), 0.0, 1.0)
+	var radius = lerpf(hand_socket_inner_radius, hand_socket_outer_radius, t)
+	var angle_offset = PI * 0.5
 	for i in range(_hand_sockets.size()):
-		var socket := _hand_sockets[i]
+		var socket = _hand_sockets[i]
 		if i >= held_count:
 			socket.position = Vector3(0.0, hand_socket_height, 0.0)
 			continue
 
-		var angle := TAU * float(i) / float(held_count) + angle_offset
-		var local_pos := Vector3(cos(angle) * radius, hand_socket_height, sin(angle) * radius)
+		var angle = TAU * float(i) / float(held_count) + angle_offset
+		var local_pos = Vector3(cos(angle) * radius, hand_socket_height, sin(angle) * radius)
 		socket.position = local_pos
 
-		var outward := Vector3(local_pos.x, 0.0, local_pos.z).normalized()
+		var outward = Vector3(local_pos.x, 0.0, local_pos.z).normalized()
 		if outward.length() > 0.001:
 			socket.rotation.y = atan2(outward.x, outward.z)
 
 
-func _is_item_currently_held(item: Interactable) -> bool:
+func _is_item_currently_held(item) -> bool:
 	if item == null:
 		return false
 	return _held_socket_by_item_id.has(item.get_instance_id())
 
 
-func _remove_held_item(item: Interactable) -> Interactable:
+func _remove_held_item(item) :
 	if item == null:
 		return null
-	var index := _held_interactables.find(item)
+	var index = _held_interactables.find(item)
 	if index == -1:
 		return null
 	_held_interactables.remove_at(index)
@@ -945,7 +946,7 @@ func _remove_held_item(item: Interactable) -> Interactable:
 	return item
 
 
-func _attach_item_to_hands(item: Interactable, clear_motion_target: bool) -> bool:
+func _attach_item_to_hands(item, clear_motion_target: bool) -> bool:
 	if item == null:
 		return false
 	if _held_interactables.size() >= max_held_items:
@@ -956,15 +957,15 @@ func _attach_item_to_hands(item: Interactable, clear_motion_target: bool) -> boo
 	_held_interactables.append(item)
 	_refresh_hand_socket_layout()
 
-	var socket_index := int(_held_socket_by_item_id.get(item.get_instance_id(), -1))
+	var socket_index = int(_held_socket_by_item_id.get(item.get_instance_id(), -1))
 	if socket_index < 0 or socket_index >= _hand_sockets.size():
 		_held_interactables.erase(item)
 		_refresh_hand_socket_layout()
 		return false
 
-	var pickup_root := item.get_pickup_root()
-	var socket := _hand_sockets[socket_index]
-	var item_id := item.get_instance_id()
+	var pickup_root = item.get_pickup_root()
+	var socket = _hand_sockets[socket_index]
+	var item_id = item.get_instance_id()
 	_held_global_scale_by_item_id[item_id] = pickup_root.global_basis.get_scale().abs()
 	pickup_root.reparent(socket, true)
 	item.set_interaction_enabled(true)
@@ -985,15 +986,15 @@ func _reapply_held_global_scale(item_id: int, pickup_root: Node3D) -> void:
 	var held_scale_variant: Variant = _held_global_scale_by_item_id.get(item_id, null)
 	if held_scale_variant == null:
 		return
-	var held_global_scale := held_scale_variant as Vector3
-	var current_global := pickup_root.global_transform
-	var rotation_basis := current_global.basis.orthonormalized()
+	var held_global_scale = held_scale_variant as Vector3
+	var current_global = pickup_root.global_transform
+	var rotation_basis = current_global.basis.orthonormalized()
 	current_global.basis = rotation_basis.scaled(held_global_scale)
 	pickup_root.global_transform = current_global
 
 
 func _update_carry_mobility() -> void:
-	var held_count := _held_interactables.size()
+	var held_count = _held_interactables.size()
 	if _focus_locked:
 		_player.move_speed = 0.0
 		_player.clear_move_target()
@@ -1007,11 +1008,11 @@ func _update_carry_mobility() -> void:
 
 
 func _setup_scene_interactables() -> void:
-	var button := _world_root.get_node_or_null("Interactables/LightButton/Interactable") as Interactable
+	var button = _world_root.get_node_or_null("Interactables/LightButton/Interactable")
 	if button == null:
 		return
 
-	var handler := _on_button_clicked.bind(button.get_parent() as StaticBody3D)
+	var handler = _on_button_clicked.bind(button.get_parent() as StaticBody3D)
 	if not button.clicked.is_connected(handler):
 		button.clicked.connect(handler)
 
@@ -1020,7 +1021,7 @@ func _update_hint_text() -> void:
 	if _hint_label == null:
 		return
 
-	var context := {
+	var context = {
 		"focus_locked": _focus_locked,
 		"hovered_name": _hovered_interactable.display_name if _hovered_interactable != null else "",
 		"hovered_is_held": _is_item_currently_held(_hovered_interactable) if _hovered_interactable != null else false,
@@ -1034,23 +1035,23 @@ func _update_hint_text() -> void:
 		"queued_target_name": _queued_interaction_target.display_name if _queued_interaction_target != null and is_instance_valid(_queued_interaction_target) else "",
 		"awaiting_card_selection": _awaiting_card_selection and _pending_card_reader != null,
 	}
-	var lines := _hint_builder.build_lines(context)
+	var lines = _hint_builder.build_lines(context)
 	_hint_label.text = "\n".join(lines)
 
 
 func _make_material(color: Color, roughness: float) -> StandardMaterial3D:
-	var material := StandardMaterial3D.new()
+	var material = StandardMaterial3D.new()
 	material.albedo_color = color
 	material.roughness = roughness
 	return material
 
 
-func _on_button_clicked(_interactable: Interactable, _actor: Node, button_body: StaticBody3D) -> void:
+func _on_button_clicked(_interactable, _actor: Node, button_body: StaticBody3D) -> void:
 	_light_toggle_on = not _light_toggle_on
 	_room_light.light_energy = _default_light_energy if _light_toggle_on else 0.35
 
 	if button_body.has_node("MeshInstance3D"):
-		var mesh := button_body.get_node("MeshInstance3D") as MeshInstance3D
+		var mesh = button_body.get_node("MeshInstance3D") as MeshInstance3D
 		mesh.material_override = _make_material(
 			Color(0.84, 0.24, 0.2, 1.0) if _light_toggle_on else Color(0.36, 0.36, 0.38, 1.0),
 			0.5

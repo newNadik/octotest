@@ -16,7 +16,7 @@ This document describes the current runtime architecture of the prototype and mu
 ## Scene Graph Responsibilities
 
 1. `Main`:
-- Script: `res://scripts/main.gd`
+- Script: `res://scripts/core/main.gd`
 - Handles mouse raycast targeting on ground collision layer.
 - Handles orbit camera controls (RMB drag, Q/E yaw, wheel zoom).
 - Handles in-game menu (`Esc` toggle) with `Main Menu` and `Quit` actions.
@@ -35,7 +35,7 @@ This document describes the current runtime architecture of the prototype and mu
 5. `Player`:
 - Is authored as a reusable scene instance (`res://scenes/player.tscn`) in `main.tscn`.
 - Uses `CollisionShape3D` + `PlayerVisual` (`Node3D`) with imported octo model (`res://assets/models/octo/octo.glb`).
-- `PlayerVisual` runs `res://scripts/OctoRig.gd`, which resolves the model `Skeleton3D` and builds procedural rig wrappers (`OctoHead` + `OctoArm` objects).
+- `PlayerVisual` runs `res://scripts/rig/OctoRig.gd`, which resolves the model `Skeleton3D` and builds procedural rig wrappers (`OctoHead` + `OctoArm` objects).
 - Updated each physics frame by `player_controller.gd`.
 6. `Interactables`:
 - `LightButton` (`StaticBody3D`) with `Interactable` child for click interaction.
@@ -49,31 +49,31 @@ This document describes the current runtime architecture of the prototype and mu
 
 ## Script Architecture
 
-1. `res://scripts/main_menu.gd`
+1. `res://scripts/core/main_menu.gd`
 - Handles startup menu button actions.
 - Changes to gameplay scene on `Play`.
 - Quits app on `Quit`.
-2. `res://scripts/main.gd`
+2. `res://scripts/core/main.gd`
 - Lightweight scene orchestrator.
 - Owns camera orbit/zoom behavior.
 - Initializes camera pivot follow position during `_ready()` to avoid first-frame startup pop.
 - Owns in-game menu visibility and scene change/quit actions.
 - Routes click-to-move and delegates interact/drop input to `InteractionController`.
 - Owns focus-mode transitions (auto-enter after approach, movement lock, click-based exit rules).
-3. `res://scripts/player_controller.gd`
+3. `res://scripts/player/player_controller.gd`
 - Character movement state (`_target_position`, `_has_target`).
 - Gravity and grounded handling.
 - Uses `MovementMath.next_velocity_2d()` for planar acceleration/deceleration.
 - Uses `MovementMath.project_planar_direction_on_surface()` to keep movement stable on slopes.
 - Includes click-to-climb mantle logic with landing-footprint validation for stable chair/desk climbing.
-4. `res://scripts/movement_math.gd`
+4. `res://scripts/core/movement_math.gd`
 - Pure helper math (no scene dependencies).
 - Designed for headless logic testing.
-5. `res://scripts/interactable.gd`
+5. `res://scripts/interaction/interactable.gd`
 - Reusable `Area3D` interaction component.
 - Encapsulates interaction type (`CLICK`, `PICKUP`), range, prompts, held-state toggles, and visual overlays.
 - Emits `clicked`, `picked_up`, and `dropped` signals for gameplay-specific reactions.
-6. `res://scripts/interaction_controller.gd`
+6. `res://scripts/interaction/interaction_controller.gd`
 - Centralized interaction and carry system.
 - Handles interactable raycasts, hover state transitions, line-of-sight and range checks, and queued auto-interact.
 - Handles octopus hand-socket layout, held-item updates, targeted drop, and carry movement penalties.
@@ -84,29 +84,46 @@ This document describes the current runtime architecture of the prototype and mu
   - `_can_focus_target_accept_held_item(...)`,
   - `_apply_held_item_to_focus_target(...)`,
   - `_get_focus_item_target_position(...)`.
-7. `res://scripts/focus_target.gd`
+7. `res://scripts/interaction/focus_target.gd`
 - Configures per-object focus behavior (anchor, click-outside threshold, optional angle overrides, solved-state auto-exit).
-8. `res://scripts/card_reader.gd`
+8. `res://scripts/interaction/card_reader.gd`
 - Manages card reader state (`EMPTY`, `WRONG`, `CORRECT`), LED state, insertion/ejection, and slot anchors.
 - Preserves inserted card world scale when snapping into the slot.
-9. `res://scripts/focus_reject_feedback.gd`
+9. `res://scripts/interaction/focus_reject_feedback.gd`
 - Encapsulates short "apply failed" item motion toward slot and return.
-10. `res://scripts/interaction_hint_builder.gd`
+10. `res://scripts/interaction/interaction_hint_builder.gd`
 - Builds HUD hint text from controller state so text policy is not embedded in interaction flow logic.
-11. `res://scripts/code_panel.gd`
+11. `res://scripts/interaction/code_panel.gd`
 - Runtime-builds keypad geometry and interactables.
 - Enforces focus-gated keypad input.
 - Handles code-entry state (`ENTER CODE`, masked input, `DENIED`, latched `GRANTED`) and LED material-state transitions.
-12. `res://scripts/OctoRig.gd`
+12. `res://scripts/rig/OctoRig.gd`
 - Procedural rig bootstrap around imported octopus skeleton.
 - Accepts manual bone assignment for head + arms using `HEAD_BONE_NAMES` and `ARM_CONFIGS`.
 - Resolves/caches rest pose data for future procedural pose layers.
 - Validates rig data on startup and prints debug summaries.
-13. `res://scripts/OctoArm.gd`
+13. `res://scripts/rig/OctoArm.gd`
 - Per-arm data model with role metadata (`side`, `role_bias`), resolved indices, base/mid/tip partitions, and rest pose caches.
 - Stores runtime control fields (`current_state`, `phase_offset`, held-item/target references).
-14. `res://scripts/OctoHead.gd`
+14. `res://scripts/rig/OctoHead.gd`
 - Head-chain data model mirroring arm setup patterns (resolved indices, grouped parts, rest pose caches).
+
+## Script Directory Layout
+
+Scripts are grouped by runtime domain to keep ownership boundaries clear:
+
+1. `res://scripts/core/`
+- Scene orchestration and shared gameplay math.
+- Current files: `main.gd`, `main_menu.gd`, `movement_math.gd`.
+2. `res://scripts/player/`
+- Player locomotion/controller logic.
+- Current files: `player_controller.gd`.
+3. `res://scripts/interaction/`
+- Reusable interactable components and interaction systems.
+- Current files: `interactable.gd`, `interaction_controller.gd`, `focus_target.gd`, `card_reader.gd`, `code_panel.gd`, `focus_reject_feedback.gd`, `interaction_hint_builder.gd`.
+4. `res://scripts/rig/`
+- Procedural octopus rig wrapper and arm/head data models.
+- Current files: `OctoRig.gd`, `OctoArm.gd`, `OctoHead.gd`.
 
 ## Movement Data Flow
 

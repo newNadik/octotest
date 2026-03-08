@@ -1,17 +1,17 @@
 extends StaticBody3D
 class_name CodePanel
 
-const INTERACTABLE_SCRIPT := preload("res://scripts/interactable.gd")
-const FOCUS_TARGET_SCRIPT := preload("res://scripts/focus_target.gd")
+const INTERACTABLE_SCRIPT := preload("res://scripts/interaction/interactable.gd")
+const FOCUS_TARGET_SCRIPT := preload("res://scripts/interaction/focus_target.gd")
 
 @export var required_code := "1234"
 @export var max_input_length := 8
 
 var _display_label: Label3D
 var _led_mesh: MeshInstance3D
-var _focus_target: FocusTarget
-var _entry_interactable: Interactable
-var _button_areas: Array[Interactable] = []
+var _focus_target
+var _entry_interactable
+var _button_areas: Array = []
 var _input_text := ""
 var _buttons_enabled := false
 var _granted_latched := false
@@ -103,13 +103,13 @@ func _build_panel() -> void:
 	_led_mesh.mesh = led_box
 	add_child(_led_mesh)
 
-	_focus_target = FOCUS_TARGET_SCRIPT.new() as FocusTarget
+	_focus_target = FOCUS_TARGET_SCRIPT.new()
 	_focus_target.name = "FocusTarget"
 	_focus_target.position = Vector3(0.0, 0.12, -0.12)
 	_focus_target.auto_exit_on_solved = false
 	add_child(_focus_target)
 
-	_entry_interactable = INTERACTABLE_SCRIPT.new() as Interactable
+	_entry_interactable = INTERACTABLE_SCRIPT.new()
 	_entry_interactable.name = "Interactable"
 	_entry_interactable.collision_layer = 8
 	_entry_interactable.collision_mask = 0
@@ -191,7 +191,7 @@ func _create_button(key: String, local_pos: Vector3) -> StaticBody3D:
 	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	button.add_child(label)
 
-	var area := INTERACTABLE_SCRIPT.new() as Interactable
+	var area := INTERACTABLE_SCRIPT.new()
 	area.name = "Interactable"
 	area.collision_layer = 8
 	area.collision_mask = 0
@@ -214,7 +214,7 @@ func _create_button(key: String, local_pos: Vector3) -> StaticBody3D:
 	return button
 
 
-func _on_button_clicked(_interactable: Interactable, _actor: Node, key: String) -> void:
+func _on_button_clicked(_interactable, _actor: Node, key: String) -> void:
 	if not _is_focus_active():
 		return
 
