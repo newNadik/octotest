@@ -23,8 +23,6 @@ var mid_bones: Array[int] = []
 var tip_bones: Array[int] = []
 
 var rest_rotations: Dictionary = {}
-var rest_positions: Dictionary = {}
-var rest_transforms: Dictionary = {}
 
 var current_state: ArmState = ArmState.IDLE
 var phase_offset: float = 0.0
@@ -32,26 +30,26 @@ var held_item: Node3D
 var target_position: Vector3 = Vector3.ZERO
 var target_node: Node3D
 
-# Parameter-driven pose controls (radians for angle params, unitless for tip_bias).
-var spread_angle: float = 0.0
-var curl_amount: float = 0.0
-var lift_amount: float = 0.0
-var twist_amount: float = 0.0
-var tip_bias: float = 0.0
+# Section-driven pose controls.
+# bend = contraction amount, bend_angle = direction around the section axis.
+var base_bend: float = 0.0
+var base_bend_angle: float = 0.0
+var mid_bend: float = 0.0
+var mid_bend_angle: float = 0.0
+var tip_bend: float = 0.0
+var tip_bend_angle: float = 0.0
 
-# Per-parameter scales let each arm be tuned independently.
-var spread_scale: float = 1.0
-var curl_scale: float = 0.8
-var lift_scale: float = 0.35
-var twist_scale: float = 1.0
-var tip_bias_scale: float = 1.0
-var lift_outward_sign: float = 1.0
+# Per-section scales let each arm be tuned independently.
+var base_bend_scale: float = 1.0
+var mid_bend_scale: float = 1.0
+var tip_bend_scale: float = 1.0
 
-var target_spread_angle: float = 0.0
-var target_curl_amount: float = 0.0
-var target_lift_amount: float = 0.0
-var target_twist_amount: float = 0.0
-var target_tip_bias: float = 0.0
+var target_base_bend: float = 0.0
+var target_base_bend_angle: float = 0.0
+var target_mid_bend: float = 0.0
+var target_mid_bend_angle: float = 0.0
+var target_tip_bend: float = 0.0
+var target_tip_bend_angle: float = 0.0
 
 var param_lerp_speed: float = 8.0
 
@@ -62,17 +60,21 @@ enum LocalAxis {
 }
 
 # Axis mapping can vary per imported rig. Tune these values if motion looks incorrect.
-var spread_axis: LocalAxis = LocalAxis.Y
-var spread_axis_sign: float = 1.0
 var curl_axis: LocalAxis = LocalAxis.X
 var curl_axis_sign: float = 1.0
 var lift_axis: LocalAxis = LocalAxis.Z
 var lift_axis_sign: float = 1.0
-var twist_axis: LocalAxis = LocalAxis.Y
-var twist_axis_sign: float = 1.0
 
 var errors: Array[String] = []
 var warnings: Array[String] = []
+
+const BASE_BEND_MIN := -1.5
+const BASE_BEND_MAX := 1.5
+const MID_BEND_MIN := -1.5
+const MID_BEND_MAX := 1.5
+const TIP_BEND_MIN := -1.5
+const TIP_BEND_MAX := 1.5
+const BEND_DIRECTION_SIGN := -1.0
 
 var base_bone: int:
 	get:
@@ -106,7 +108,6 @@ func setup(
 	arm_index = new_arm_index
 	side = new_side
 	role_bias = new_role_bias
-	lift_outward_sign = 1.0
 	bone_names = new_bone_names.duplicate()
 
 	if skeleton == null:
@@ -137,7 +138,6 @@ func setup(
 
 	_split_chain_into_parts()
 	_cache_rest_pose(skeleton)
-	auto_configure_lift_direction()
 	snap_to_target_params()
 	return true
 
@@ -163,69 +163,80 @@ func get_part_bones(part_name: String) -> Array[int]:
 			return []
 
 
-func set_target_pose_params(
-	new_spread_angle: float = 0.0,
-	new_curl_amount: float = 0.0,
-	new_lift_amount: float = 0.0,
-	new_twist_amount: float = 0.0,
-	new_tip_bias: float = 0.0
+func set_target_section_bend(
+	new_base_bend: float = 0.0,
+	new_base_bend_angle: float = 0.0,
+	new_mid_bend: float = 0.0,
+	new_mid_bend_angle: float = 0.0,
+	new_tip_bend: float = 0.0,
+	new_tip_bend_angle: float = 0.0
 ) -> void:
-	target_spread_angle = new_spread_angle
-	target_curl_amount = new_curl_amount
-	target_lift_amount = new_lift_amount
-	target_twist_amount = new_twist_amount
-	target_tip_bias = new_tip_bias
+	target_base_bend = clampf(new_base_bend, BASE_BEND_MIN, BASE_BEND_MAX)
+	target_base_bend_angle = new_base_bend_angle
+	target_mid_bend = clampf(new_mid_bend, MID_BEND_MIN, MID_BEND_MAX)
+	target_mid_bend_angle = new_mid_bend_angle
+	target_tip_bend = clampf(new_tip_bend, TIP_BEND_MIN, TIP_BEND_MAX)
+	target_tip_bend_angle = new_tip_bend_angle
+
+
+func set_target_pose_params(
+	new_base_bend: float = 0.0,
+	new_base_bend_angle: float = 0.0,
+	new_mid_bend: float = 0.0,
+	new_mid_bend_angle: float = 0.0,
+	new_tip_bend: float = 0.0,
+	new_tip_bend_angle: float = 0.0
+) -> void:
+	# Backward-compatible alias.
+	set_target_section_bend(
+		new_base_bend,
+		new_base_bend_angle,
+		new_mid_bend,
+		new_mid_bend_angle,
+		new_tip_bend,
+		new_tip_bend_angle
+	)
 
 
 func set_axis_mapping(
-	new_spread_axis: LocalAxis,
 	new_curl_axis: LocalAxis,
 	new_lift_axis: LocalAxis,
-	new_twist_axis: LocalAxis,
-	new_spread_sign: float = 1.0,
 	new_curl_sign: float = 1.0,
-	new_lift_sign: float = 1.0,
-	new_twist_sign: float = 1.0
+	new_lift_sign: float = 1.0
 ) -> void:
-	spread_axis = new_spread_axis
 	curl_axis = new_curl_axis
 	lift_axis = new_lift_axis
-	twist_axis = new_twist_axis
-	spread_axis_sign = new_spread_sign
 	curl_axis_sign = new_curl_sign
 	lift_axis_sign = new_lift_sign
-	twist_axis_sign = new_twist_sign
 
 
-func set_param_scales(
-	new_spread_scale: float = 1.0,
-	new_curl_scale: float = 0.8,
-	new_lift_scale: float = 0.35,
-	new_twist_scale: float = 1.0,
-	new_tip_bias_scale: float = 1.0
+func set_section_bend_scales(
+	new_base_bend_scale: float = 1.0,
+	new_mid_bend_scale: float = 1.0,
+	new_tip_bend_scale: float = 1.0
 ) -> void:
-	spread_scale = new_spread_scale
-	curl_scale = new_curl_scale
-	lift_scale = new_lift_scale
-	twist_scale = new_twist_scale
-	tip_bias_scale = new_tip_bias_scale
+	base_bend_scale = new_base_bend_scale
+	mid_bend_scale = new_mid_bend_scale
+	tip_bend_scale = new_tip_bend_scale
 
 
 func update_params(delta: float) -> void:
 	var alpha := 1.0 - exp(-param_lerp_speed * maxf(delta, 0.0))
-	spread_angle = lerp_angle(spread_angle, target_spread_angle, alpha)
-	curl_amount = lerp_angle(curl_amount, target_curl_amount, alpha)
-	lift_amount = lerp_angle(lift_amount, target_lift_amount, alpha)
-	twist_amount = lerp_angle(twist_amount, target_twist_amount, alpha)
-	tip_bias = lerpf(tip_bias, target_tip_bias, alpha)
+	base_bend = lerpf(base_bend, target_base_bend, alpha)
+	base_bend_angle = lerp_angle(base_bend_angle, target_base_bend_angle, alpha)
+	mid_bend = lerpf(mid_bend, target_mid_bend, alpha)
+	mid_bend_angle = lerp_angle(mid_bend_angle, target_mid_bend_angle, alpha)
+	tip_bend = lerpf(tip_bend, target_tip_bend, alpha)
+	tip_bend_angle = lerp_angle(tip_bend_angle, target_tip_bend_angle, alpha)
 
 
 func snap_to_target_params() -> void:
-	spread_angle = target_spread_angle
-	curl_amount = target_curl_amount
-	lift_amount = target_lift_amount
-	twist_amount = target_twist_amount
-	tip_bias = target_tip_bias
+	base_bend = target_base_bend
+	base_bend_angle = target_base_bend_angle
+	mid_bend = target_mid_bend
+	mid_bend_angle = target_mid_bend_angle
+	tip_bend = target_tip_bend
+	tip_bend_angle = target_tip_bend_angle
 
 
 func apply_pose(skeleton: Skeleton3D) -> void:
@@ -239,61 +250,73 @@ func apply_pose(skeleton: Skeleton3D) -> void:
 		var bone_index := bone_indices[i]
 		if not rest_rotations.has(bone_index):
 			continue
-		var t := compute_bone_t(i, total_count)
-		var spread_value := spread_angle * spread_scale * get_spread_weight(t)
-		var curl_value := curl_amount * curl_scale * get_curl_weight(t)
-		var lift_weight := get_lift_weight(t)
-		var lift_raw := lift_amount * lift_scale * lift_weight
-		var lift_value := 0.0
-		var twist_value := twist_amount * twist_scale * get_twist_weight(t)
-		var tip_value := tip_bias * tip_bias_scale * get_tip_weight(t)
+		var t := _chain_t(i, total_count)
+		var base_influence := _section_bend_influence("base", t)
+		var mid_influence := _section_bend_influence("mid", t)
+		var tip_influence := _section_bend_influence("tip", t)
 
-		# Lift opens/closes in the curl plane to move tips away/toward center without yaw tilt.
-		curl_value += lift_raw * lift_outward_sign
-
-		# tip_bias should feel like tip curl/softness, not automatic sideways turn.
-		curl_value += tip_value * 0.65
-
-		var procedural_offset := _compose_offset_rotation(
-			spread_value,
-			curl_value,
-			lift_value,
-			twist_value
+		# Positive bend should lift arm upward in the current rig setup.
+		var weighted_base_bend := base_bend * base_bend_scale * base_influence * BEND_DIRECTION_SIGN
+		var weighted_mid_bend := mid_bend * mid_bend_scale * mid_influence * BEND_DIRECTION_SIGN
+		var weighted_tip_bend := tip_bend * tip_bend_scale * tip_influence * BEND_DIRECTION_SIGN
+		var curl_value := (
+			weighted_base_bend * cos(base_bend_angle)
+			+ weighted_mid_bend * cos(mid_bend_angle)
+			+ weighted_tip_bend * cos(tip_bend_angle)
 		)
+		var lift_value := (
+			weighted_base_bend * sin(base_bend_angle)
+			+ weighted_mid_bend * sin(mid_bend_angle)
+			+ weighted_tip_bend * sin(tip_bend_angle)
+		)
+
+		var procedural_offset := _compose_offset_rotation(curl_value, lift_value)
 		var rest_rotation: Quaternion = rest_rotations[bone_index]
 		var final_rotation := rest_rotation * procedural_offset
 		skeleton.set_bone_pose_rotation(bone_index, final_rotation)
 
 
-func compute_bone_t(index: int, total_count: int) -> float:
-	if total_count <= 1:
+func _chain_t(index: int, count: int) -> float:
+	if count <= 1:
 		return 0.0
-	return float(index) / float(total_count - 1)
+	return float(index) / float(count - 1)
 
 
-func get_spread_weight(t: float) -> float:
-	# Strong at base, fades toward tip.
-	return pow(1.0 - _saturate(t), 1.5)
+func _section_bend_influence(section: String, t: float) -> float:
+	var blend := _section_blend_weight(section, t)
+	if blend <= 0.0:
+		return 0.0
+	var local_t := _section_local_t(section, t)
+	var contraction := lerpf(0.2, 1.0, _smoothstep01(local_t))
+	return blend * contraction
 
 
-func get_curl_weight(t: float) -> float:
-	# Keep base stable; build curl through mid/tip.
-	return lerpf(0.35, 1.1, _smoothstep01(t))
+func _section_blend_weight(section: String, t: float) -> float:
+	# Overlapping windows so base/mid/tip transitions stay smooth.
+	match section:
+		"base":
+			return 1.0 - _smoothstep(0.22, 0.55, t)
+		"mid":
+			var rise := _smoothstep(0.18, 0.5, t)
+			var fall := 1.0 - _smoothstep(0.5, 0.82, t)
+			return rise * fall
+		"tip":
+			return _smoothstep(0.45, 0.78, t)
+		_:
+			return 0.0
 
 
-func get_lift_weight(t: float) -> float:
-	# Mainly base movement with strong attenuation toward tip to avoid over-arching.
-	return pow(1.0 - _smoothstep(0.2, 0.85, t), 2.0)
-
-
-func get_twist_weight(t: float) -> float:
-	# Gradually increases toward tip.
-	return _smoothstep01(t)
-
-
-func get_tip_weight(t: float) -> float:
-	# Concentrated in final third.
-	return _smoothstep(0.66, 1.0, t)
+func _section_local_t(section: String, t: float) -> float:
+	# Local progress used for contraction profile while preserving section overlap.
+	match section:
+		"base":
+			return _remap_clamped(t, 0.0, 0.55)
+		"mid":
+			return _remap_clamped(t, 0.18, 0.82)
+		"tip":
+			return _remap_clamped(t, 0.45, 1.0)
+		_:
+			return 0.0
 
 
 func _clear_data() -> void:
@@ -303,11 +326,9 @@ func _clear_data() -> void:
 	mid_bones.clear()
 	tip_bones.clear()
 	rest_rotations.clear()
-	rest_positions.clear()
-	rest_transforms.clear()
 	errors.clear()
 	warnings.clear()
-	set_target_pose_params()
+	set_target_section_bend()
 	snap_to_target_params()
 
 
@@ -356,49 +377,13 @@ func _split_chain_into_parts() -> void:
 func _cache_rest_pose(skeleton: Skeleton3D) -> void:
 	for bone_index in bone_indices:
 		var rest := skeleton.get_bone_rest(bone_index)
-		rest_transforms[bone_index] = rest
-		rest_positions[bone_index] = rest.origin
 		rest_rotations[bone_index] = rest.basis.get_rotation_quaternion()
 
 
-func auto_configure_lift_direction(sample_angle: float = 0.22) -> void:
-	if bone_indices.size() < 2:
-		return
-	var base_index := bone_indices[0]
-	var tip_index := bone_indices[bone_indices.size() - 1]
-	if not rest_transforms.has(base_index) or not rest_transforms.has(tip_index):
-		return
-
-	var base_rest: Transform3D = rest_transforms[base_index]
-	var tip_rest: Transform3D = rest_transforms[tip_index]
-	var base_pos := base_rest.origin
-	var tip_pos := tip_rest.origin
-	var arm_vector := tip_pos - base_pos
-	if arm_vector.length() <= 0.0001:
-		return
-
-	var curl_axis_world := (base_rest.basis * _axis_vector(curl_axis)).normalized()
-	if curl_axis_world.length() <= 0.0001:
-		return
-
-	var tip_plus := base_pos + arm_vector.rotated(curl_axis_world, sample_angle)
-	var tip_minus := base_pos + arm_vector.rotated(curl_axis_world, -sample_angle)
-	var plus_distance_sq := tip_plus.length_squared()
-	var minus_distance_sq := tip_minus.length_squared()
-	lift_outward_sign = 1.0 if plus_distance_sq >= minus_distance_sq else -1.0
-
-
-func _compose_offset_rotation(
-	spread_value: float,
-	curl_value: float,
-	lift_value: float,
-	twist_value: float
-) -> Quaternion:
-	var q_spread := Quaternion(_axis_vector(spread_axis), spread_value * spread_axis_sign)
+func _compose_offset_rotation(curl_value: float, lift_value: float) -> Quaternion:
 	var q_lift := Quaternion(_axis_vector(lift_axis), lift_value * lift_axis_sign)
 	var q_curl := Quaternion(_axis_vector(curl_axis), curl_value * curl_axis_sign)
-	var q_twist := Quaternion(_axis_vector(twist_axis), twist_value * twist_axis_sign)
-	return q_spread * q_lift * q_curl * q_twist
+	return q_lift * q_curl
 
 
 func _axis_vector(axis: LocalAxis) -> Vector3:
@@ -427,3 +412,9 @@ func _smoothstep(edge0: float, edge1: float, value: float) -> float:
 		return 0.0
 	var x := (value - edge0) / (edge1 - edge0)
 	return _smoothstep01(x)
+
+
+func _remap_clamped(value: float, in_min: float, in_max: float) -> float:
+	if is_equal_approx(in_min, in_max):
+		return 0.0
+	return _saturate((value - in_min) / (in_max - in_min))

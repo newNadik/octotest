@@ -2,6 +2,30 @@
 
 ## 2026-03-08
 
+### Step 28 - Arm pose model rewrite to section bend controls + smoothing
+
+- Replaced high-level arm controls (`spread/curl/lift/twist/tip_bias`) with section-based controls:
+  - `base_bend`, `base_bend_angle`
+  - `mid_bend`, `mid_bend_angle`
+  - `tip_bend`, `tip_bend_angle`
+- Updated `OctoArm` runtime blending to apply all three section influences across the full chain (overlapping windows) to reduce segmented transitions at section boundaries.
+- Renamed API/export naming to bend terminology for clarity:
+  - new canonical methods: `set_target_section_bend(...)` and `set_arm_target_section_bend(...)`,
+  - old `set_*_pose_params(...)` kept as compatibility aliases.
+- Inverted bend direction so increasing bend values raise arms in the current rig setup.
+- Added bend clamping in runtime and inspector ranges:
+  - all sections now clamped to `[-1.5, 1.5]`.
+- Updated player defaults on `PlayerVisual`:
+  - `default_base_bend = 0.67`,
+  - `default_mid_bend = 0.0`,
+  - `default_tip_bend = 0.0`,
+  - preview bends reset to `0.0`.
+- Removed unused arm rest caches (`rest_positions`, `rest_transforms`) from `OctoArm`.
+
+### Validation commands (pass)
+1. `./scripts/check.sh`
+   - Result: boot smoke PASS, `movement_math_test: PASS`, `slope_movement_test: PASS`, `card_reader_interaction_test: PASS`.
+
 ### Step 27 - Script folder restructure + octopus rig/editor-preview cleanup
 
 - Reorganized scripts into domain folders:
@@ -14,8 +38,8 @@
   - stabilized `InteractionController` script-type usage with explicit preloads,
   - removed fragile type inference points introduced during refactor,
   - aligned `main.gd` controller instantiation and focus-target typing to be robust after file moves.
-- Kept octopus rig defaults for current gameplay tuning:
-  - `default_arm_lift = 0.82` on `PlayerVisual` rig component.
+- Kept octopus rig defaults for current gameplay tuning at that step:
+  - `default_arm_lift = 0.82` on `PlayerVisual` rig component (later replaced by section bend defaults in Step 28).
 - Updated architecture docs with the new script directory layout.
 
 ### Validation commands (pass)

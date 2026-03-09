@@ -100,11 +100,12 @@ This document describes the current runtime architecture of the prototype and mu
 12. `res://scripts/rig/OctoRig.gd`
 - Procedural rig bootstrap around imported octopus skeleton.
 - Accepts manual bone assignment for head + arms using `HEAD_BONE_NAMES` and `ARM_CONFIGS`.
-- Resolves/caches rest pose data for future procedural pose layers.
+- Applies section-based arm bend targets (`base/mid/tip`, each with `bend` + `bend_angle`).
+- Blends section influence across the full chain to avoid segmented transitions.
 - Validates rig data on startup and prints debug summaries.
 13. `res://scripts/rig/OctoArm.gd`
-- Per-arm data model with role metadata (`side`, `role_bias`), resolved indices, base/mid/tip partitions, and rest pose caches.
-- Stores runtime control fields (`current_state`, `phase_offset`, held-item/target references).
+- Per-arm data model with role metadata (`side`, `role_bias`), resolved indices, base/mid/tip partitions, and rest rotation cache.
+- Stores runtime control fields (`current_state`, `phase_offset`, held-item/target references) and bend parameters.
 14. `res://scripts/rig/OctoHead.gd`
 - Head-chain data model mirroring arm setup patterns (resolved indices, grouped parts, rest pose caches).
 

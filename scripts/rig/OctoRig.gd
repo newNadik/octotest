@@ -54,20 +54,26 @@ const HEAD_BONE_NAMES: Array[String] = ["HEAD_01", "Bone.001", "Bone.002", "Bone
 @export var debug_print_on_ready = true
 @export var print_indices_on_ready = false
 @export var apply_arm_pose_each_frame = true
-@export var default_arm_lift = 0.82
+@export var default_base_bend = 0.67
+@export var default_mid_bend = 0.0
+@export var default_tip_bend = 0.0
 @export var enable_idle_wiggle_demo = false
-@export var idle_curl_amplitude = 0.35
-@export var idle_lift_amplitude = 0.18
-@export var idle_tip_bias_amplitude = 0.25
+@export var idle_base_bend_amplitude = 0.35
+@export var idle_mid_bend_amplitude = 0.26
+@export var idle_tip_bend_amplitude = 0.2
+@export_range(-3.14, 3.14, 0.01) var idle_base_bend_angle_offset = 0.0
+@export_range(-3.14, 3.14, 0.01) var idle_mid_bend_angle_offset = 0.45
+@export_range(-3.14, 3.14, 0.01) var idle_tip_bend_angle_offset = 0.9
 @export var idle_frequency_hz = 0.9
 @export var preview_in_editor = false
 @export var preview_apply_to_all_arms = true
 @export var preview_arm_name = "arm_0"
-@export_range(-1.57, 1.57, 0.01) var preview_spread_angle = 0.0
-@export_range(-1.57, 1.57, 0.01) var preview_curl_amount = 0.0
-@export_range(-0.2, 2.0, 0.01) var preview_lift_amount: float = 0.0
-@export_range(-1.57, 1.57, 0.01) var preview_twist_amount = 0.0
-@export_range(-2.5, 2.5, 0.01) var preview_tip_bias_strength: float = 0.0
+@export_range(-1.5, 1.5, 0.01) var preview_base_bend: float = 0.0
+@export_range(-3.14, 3.14, 0.01) var preview_base_bend_angle = 0.0
+@export_range(-1.5, 1.5, 0.01) var preview_mid_bend: float = 0.0
+@export_range(-3.14, 3.14, 0.01) var preview_mid_bend_angle = 0.0
+@export_range(-1.5, 1.5, 0.01) var preview_tip_bend: float = 0.0
+@export_range(-3.14, 3.14, 0.01) var preview_tip_bend_angle = 0.0
 @export var preview_confirm_logs = false
 @export var preview_run_skin_diagnostics = true
 @export var preview_force_single_bone_test = false
@@ -166,30 +172,29 @@ func build_rig() -> bool:
 		var scales_variant: Variant = arm_config.get("scales", {})
 		if scales_variant is Dictionary:
 			var scales: Dictionary = scales_variant
-			arm.set_param_scales(
-				float(scales.get("spread", 1.0)),
-				float(scales.get("curl", 1.0)),
-				float(scales.get("lift", 0.35)),
-				float(scales.get("twist", 1.0)),
-				float(scales.get("tip_bias", 1.0))
+			arm.set_section_bend_scales(
+				float(scales.get("base_bend", 1.0)),
+				float(scales.get("mid_bend", 1.0)),
+				float(scales.get("tip_bend", 1.0))
 			)
 
 		var axis_signs_variant: Variant = arm_config.get("axis_signs", {})
 		if axis_signs_variant is Dictionary:
 			var axis_signs: Dictionary = axis_signs_variant
 			arm.set_axis_mapping(
-				arm.spread_axis,
 				arm.curl_axis,
 				arm.lift_axis,
-				arm.twist_axis,
-				float(axis_signs.get("spread", arm.spread_axis_sign)),
 				float(axis_signs.get("curl", arm.curl_axis_sign)),
-				float(axis_signs.get("lift", arm.lift_axis_sign)),
-				float(axis_signs.get("twist", arm.twist_axis_sign))
+				float(axis_signs.get("lift", arm.lift_axis_sign))
 			)
-		# Ensure lift direction matches final axis/sign overrides.
-		arm.auto_configure_lift_direction()
-		arm.set_target_pose_params(0.0, 0.0, default_arm_lift, 0.0, 0.0)
+		arm.set_target_pose_params(
+			default_base_bend,
+			0.0,
+			default_mid_bend,
+			0.0,
+			default_tip_bend,
+			0.0
+		)
 		arm.snap_to_target_params()
 		arm.phase_offset = (TAU / maxf(1.0, float(arm_keys.size()))) * float(arm_i)
 		arms.append(arm)
@@ -247,24 +252,47 @@ func print_resolved_bone_indices() -> void:
 		print("Arm %s indices: %s" % [arm.arm_name, str(arm.bone_indices)])
 
 
-func set_arm_target_pose_params(
+func set_arm_target_section_bend(
 	arm_name: String,
-	spread_angle: float = 0.0,
-	curl_amount: float = 0.0,
-	lift_amount: float = 0.0,
-	twist_amount: float = 0.0,
-	tip_bias: float = 0.0
+	base_bend: float = 0.0,
+	base_bend_angle: float = 0.0,
+	mid_bend: float = 0.0,
+	mid_bend_angle: float = 0.0,
+	tip_bend: float = 0.0,
+	tip_bend_angle: float = 0.0
 ) -> void:
 	for arm in arms:
 		if arm.arm_name == arm_name:
-			arm.set_target_pose_params(
-				spread_angle,
-				curl_amount,
-				lift_amount,
-				twist_amount,
-				tip_bias
+			arm.set_target_section_bend(
+				base_bend,
+				base_bend_angle,
+				mid_bend,
+				mid_bend_angle,
+				tip_bend,
+				tip_bend_angle
 			)
 			return
+
+
+func set_arm_target_pose_params(
+	arm_name: String,
+	base_bend: float = 0.0,
+	base_bend_angle: float = 0.0,
+	mid_bend: float = 0.0,
+	mid_bend_angle: float = 0.0,
+	tip_bend: float = 0.0,
+	tip_bend_angle: float = 0.0
+) -> void:
+	# Backward-compatible alias.
+	set_arm_target_section_bend(
+		arm_name,
+		base_bend,
+		base_bend_angle,
+		mid_bend,
+		mid_bend_angle,
+		tip_bend,
+		tip_bend_angle
+	)
 
 
 func _update_idle_wiggle_targets() -> void:
@@ -274,12 +302,14 @@ func _update_idle_wiggle_targets() -> void:
 		var phase = arm.phase_offset
 		var main_wave = sin(time_s * omega + phase)
 		var second_wave = sin(time_s * omega * 1.7 + phase * 1.3)
+		var third_wave = sin(time_s * omega * 1.2 + phase * 0.8)
 		arm.set_target_pose_params(
-			0.0,
-			main_wave * idle_curl_amplitude,
-			second_wave * idle_lift_amplitude,
-			0.0,
-			(main_wave * 0.5 + second_wave * 0.5) * idle_tip_bias_amplitude
+			main_wave * idle_base_bend_amplitude,
+			idle_base_bend_angle_offset + second_wave * 0.5,
+			second_wave * idle_mid_bend_amplitude,
+			idle_mid_bend_angle_offset + main_wave * 0.4,
+			third_wave * idle_tip_bend_amplitude,
+			idle_tip_bend_angle_offset + second_wave * 0.6
 		)
 
 
@@ -287,14 +317,15 @@ func _apply_editor_preview_targets() -> void:
 	for arm in arms:
 		if preview_apply_to_all_arms or arm.arm_name == preview_arm_name:
 			arm.set_target_pose_params(
-				preview_spread_angle,
-				preview_curl_amount,
-				_safe_float(preview_lift_amount),
-				preview_twist_amount,
-				_safe_float(preview_tip_bias_strength)
+				_safe_float(preview_base_bend),
+				preview_base_bend_angle,
+				_safe_float(preview_mid_bend),
+				preview_mid_bend_angle,
+				_safe_float(preview_tip_bend),
+				preview_tip_bend_angle
 			)
 		else:
-			arm.set_target_pose_params(0.0, 0.0, 0.0, 0.0, 0.0)
+			arm.set_target_pose_params(0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
 
 
 func _on_preview_property_changed() -> void:
