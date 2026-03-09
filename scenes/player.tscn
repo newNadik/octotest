@@ -15,8 +15,8 @@ shape = SubResource("BoxShape3D_player")
 
 [node name="PlayerVisual" type="Node3D" parent="." unique_id=69441856]
 script = ExtResource("3_8x4hh")
-hold_arm_names = PackedStringArray()
 preview_in_editor = true
 preview_animation_mode = 1
 
 [node name="Octo" parent="PlayerVisual" unique_id=1282528951 instance=ExtResource("2_yn3vd")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.06, 0)

@@ -21,6 +21,7 @@ Godot `4.6.1` 3D isometric prototype with:
 17. Editor rig preview supports `Static Targets`, `Idle`, `Crawl`, `Mixer`, and `Hold` modes for visual tuning without entering gameplay.
 18. Hold flow assigns items to free arm slots with mid-arm priority, keeps each item in a stable slot, and drives occupied arms in hold animation.
 19. Held-item placement follows real rig arm anchors with size-aware clearance (cards stay close, larger props get extra anti-clipping offset).
+20. Camera defaults now support a closer gameplay view with increased zoom-in range.
 
 ## Canonical Branch
 

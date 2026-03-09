@@ -80,7 +80,7 @@ This document describes the current runtime architecture of the prototype and mu
 - Assigns held items to persistent arm-linked slots (mid-arm priority first) and syncs occupied slots to `OctoRig` hold-arm state.
 - Uses rig-driven hold anchoring (`OctoRig` arm anchors) plus size-aware clearance so larger held objects avoid clipping while cards stay tight to arm tips.
 - Handles wall-switch callback, HUD interaction hints, and focus-mode interaction routing.
-- Handles same-object-family LOS exceptions for focus interactions (card reader/code panel subparts).
+- Uses world-geometry-focused LOS checks for blocked state while still allowing focus interaction against target-host colliders.
 - Preserves held item global scale while attached/focused.
 - Provides a unified focus-held item application pipeline with extension points:
   - `_can_focus_target_accept_held_item(...)`,

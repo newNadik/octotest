@@ -10,7 +10,7 @@ const CAMERA_MIN_WORLD_Y := 1.25
 
 @export var orbit_sensitivity := 0.2
 @export var key_orbit_speed := 65.0
-@export var min_zoom := 4.0
+@export var min_zoom := 2.4
 @export var max_zoom := 14.0
 @export var zoom_step := 1.0
 @export var focus_zoom_distance := 2.0

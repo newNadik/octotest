@@ -2,6 +2,28 @@
 
 ## 2026-03-09
 
+### Step 31 - Camera/focus polish and inspector export cleanup
+
+- Increased gameplay close-up capability:
+  - lowered camera min zoom and moved default spring-arm distance closer.
+- Fixed focus regression affecting `CardReader` and `CodePanel`:
+  - updated focus-target lookup to resolve by `FocusTarget` script type instead of brittle node-name matching.
+- Refined blocked-state LOS behavior:
+  - LOS now focuses on world geometry blockers while still accepting target-host hierarchy hits for focusable objects.
+- Added visual grounding adjustment:
+  - lowered octo visual model offset under `PlayerVisual` to reduce apparent hover without changing player physics.
+- Rebalanced held-item vertical placement after visual offset change:
+  - lowered minimum held-item world height and reduced extra upward clearance.
+- Cleaned inspector exports for current workflow:
+  - hid non-crawl tuning from `OctoRig` while keeping crawl + crawl-preview controls visible,
+  - hid `PlayerController` movement/climb tuning exports for cleaner scene editing.
+
+### Validation commands (pass)
+1. `./scripts/check.sh`
+   - Result: boot smoke PASS, `movement_math_test: PASS`, `slope_movement_test: PASS`, `card_reader_interaction_test: PASS`.
+
+## 2026-03-09
+
 ### Step 30 - Hold workflow completion (arm-slot assignment, preview mode, and anchor-based item placement)
 
 - Added `Hold` as an explicit `OctoRig` editor preview mode for direct hold-pose tuning.

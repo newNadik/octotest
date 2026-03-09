@@ -35,7 +35,7 @@ const ARM_SOCKET_ANGLE_BY_NAME := {
 @export var hand_socket_inner_radius = 0.3
 @export var hand_socket_outer_radius = 0.54
 @export var hand_socket_height = 0.34
-@export var held_item_min_world_height = 0.56
+@export var held_item_min_world_height = 0.46
 @export var held_item_clearance_max = 0.62
 @export var drop_clamp_extent = 15.2
 @export var debug_interaction_logs = false
@@ -427,9 +427,9 @@ func _get_focus_target_for_interactable(target) -> FocusTargetScript:
 	var parent = target.get_parent()
 	if parent == null:
 		return null
-	var focus_target = parent.get_node_or_null("FocusTargetScript")
-	if focus_target is FocusTargetScript:
-		return focus_target as FocusTargetScript
+	for child in parent.get_children():
+		if child is FocusTargetScript:
+			return child as FocusTargetScript
 	return null
 
 
@@ -654,42 +654,41 @@ func _has_line_of_sight(target) -> bool:
 	var to: Vector3 = target.get_focus_position()
 	var target_root = target.get_pickup_root()
 	var query = PhysicsRayQueryParameters3D.create(from, to)
-	query.collision_mask = WALL_COLLISION_MASK | INTERACTABLE_COLLISION_MASK
-	query.collide_with_areas = true
+	# LOS should be blocked by level/world geometry, not by unrelated interactable areas.
+	query.collision_mask = WALL_COLLISION_MASK
+	query.collide_with_areas = false
 	query.collide_with_bodies = true
-	query.exclude = [_player]
+	query.exclude = [_player, target, target_root]
 
 	var result = _world_root.get_world_3d().direct_space_state.intersect_ray(query)
 	if result.is_empty():
 		return true
 	var collider: Variant = result.collider
-	if collider == target or collider == target_root:
-		return true
-	if _belongs_to_same_card_reader(target, collider):
-		return true
-	if _belongs_to_same_code_panel(target, collider):
+	if _collider_belongs_to_target(target, target_root, collider):
 		return true
 	return false
 
 
-func _belongs_to_same_card_reader(target, collider: Variant) -> bool:
-	var reader = _get_card_reader_for_interactable(target)
-	if reader == null:
+func _collider_belongs_to_target(target, target_root, collider: Variant) -> bool:
+	if collider == null:
 		return false
+	if collider == target or collider == target_root:
+		return true
 	if not (collider is Node):
 		return false
-	var collider_node = collider as Node
-	return collider_node == reader or reader.is_ancestor_of(collider_node)
-
-
-func _belongs_to_same_code_panel(target, collider: Variant) -> bool:
-	var code_panel = _get_code_panel_for_interactable(target)
-	if code_panel == null:
-		return false
-	if not (collider is Node):
-		return false
-	var collider_node = collider as Node
-	return collider_node == code_panel or code_panel.is_ancestor_of(collider_node)
+	var collider_node := collider as Node
+	if target is Node:
+		var target_node := target as Node
+		if target_node.is_ancestor_of(collider_node) or collider_node.is_ancestor_of(target_node):
+			return true
+		var target_host := target_node.get_parent()
+		if target_host != null and (target_host.is_ancestor_of(collider_node) or collider_node.is_ancestor_of(target_host)):
+			return true
+	if target_root is Node:
+		var root_node := target_root as Node
+		if root_node.is_ancestor_of(collider_node) or collider_node.is_ancestor_of(root_node):
+			return true
+	return false
 
 
 func _get_code_panel_for_interactable(target) -> CodePanelScript:
@@ -1077,7 +1076,7 @@ func _update_hand_sockets_from_rig() -> void:
 			radial = _player.global_basis.z
 			radial.y = 0.0
 		radial = radial.normalized()
-		var world_pos = world_anchor + lift_offset + radial * clearance + Vector3(0.0, clearance * 0.35, 0.0)
+		var world_pos = world_anchor + lift_offset + radial * clearance + Vector3(0.0, clearance * 0.2, 0.0)
 		world_pos.y = maxf(world_pos.y, _player.global_position.y + held_item_min_world_height)
 		var local_anchor = _player.to_local(world_pos)
 		_hand_sockets[socket_index].position = local_anchor

@@ -876,7 +876,7 @@ shape = SubResource("BoxShape3D_card_interaction")
 
 [node name="SpringArm3D" type="SpringArm3D" parent="CameraPivot/CameraYaw/CameraPitch" unique_id=355013904]
 collision_mask = 2
-spring_length = 9.0
+spring_length = 7.2
 margin = 0.2
 
 [node name="Camera3D" type="Camera3D" parent="CameraPivot/CameraYaw/CameraPitch/SpringArm3D" unique_id=1477719398]
