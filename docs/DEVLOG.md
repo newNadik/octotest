@@ -1,5 +1,34 @@
 # Dev Log
 
+## 2026-03-09
+
+### Step 29 - Rig idle/mixer polish, preview updates, and inspector cleanup
+
+- Expanded `OctoRig` arm animation into practical per-arm mixer usage (`STATIC`/`IDLE`/`CRAWL`/`HOLD`) suitable for mixed-behavior gameplay (walking while selected arms hold items).
+- Tuned defaults and behavior for natural floor-contact idle:
+  - base bend resting around `0.68`,
+  - stronger mid/tip curl in idle while keeping very low frequency motion.
+- Added per-arm idle variation controls:
+  - deterministic arm variation terms,
+  - optional randomized mid-angle sign behavior (including even/odd split mode),
+  - per-idle-entry randomized offsets so each idle settle does not start from the exact same pose.
+- Updated head behavior:
+  - mouse-follow refinements with front-guard gating and wider acceptance area,
+  - stronger debug-follow path for quick tuning,
+  - smooth, slow return when mouse leaves viewport.
+- Updated editor preview modes:
+  - kept `Idle` preview available alongside `Static Targets`, `Crawl`, and `Mixer`,
+  - removed obsolete idle-demo preview path.
+- Cleaned inspector exposure in `OctoRig`:
+  - hid internal idle/head debug tuning exports to reduce editor clutter while keeping values available in script for future tuning.
+- Hardened runtime against serialized `nil` states:
+  - added defensive idle-runtime state initialization,
+  - removed unsafe direct dictionary `.get(...)` calls in hot idle path.
+
+### Validation commands (pass)
+1. `./scripts/check.sh`
+   - Result: boot smoke PASS, `movement_math_test: PASS`, `slope_movement_test: PASS`, `card_reader_interaction_test: PASS`.
+
 ## 2026-03-08
 
 ### Step 28 - Arm pose model rewrite to section bend controls + smoothing

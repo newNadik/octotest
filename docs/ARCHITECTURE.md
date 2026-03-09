@@ -102,6 +102,9 @@ This document describes the current runtime architecture of the prototype and mu
 - Accepts manual bone assignment for head + arms using `HEAD_BONE_NAMES` and `ARM_CONFIGS`.
 - Applies section-based arm bend targets (`base/mid/tip`, each with `bend` + `bend_angle`).
 - Blends section influence across the full chain to avoid segmented transitions.
+- Runs a per-arm animation mixer (`STATIC`/`IDLE`/`CRAWL`/`HOLD`) with runtime arm-level overrides.
+- Idle mode includes per-arm deterministic variation plus per-idle-entry randomized offsets/signs so repeated stop->idle transitions do not snap to a single identical pose.
+- Supports editor-time preview modes (`Static Targets`, `Idle`, `Crawl`, `Mixer`) while temporarily suspending local `AnimationPlayer` playback.
 - Validates rig data on startup and prints debug summaries.
 13. `res://scripts/rig/OctoArm.gd`
 - Per-arm data model with role metadata (`side`, `role_bias`), resolved indices, base/mid/tip partitions, and rest rotation cache.
