@@ -10,9 +10,21 @@ const FocusTargetScript = preload("res://scripts/interaction/focus_target.gd")
 const FocusRejectFeedbackScript = preload("res://scripts/interaction/focus_reject_feedback.gd")
 const InteractableScript = preload("res://scripts/interaction/interactable.gd")
 const InteractionHintBuilderScript = preload("res://scripts/interaction/interaction_hint_builder.gd")
+const OctoRigScript = preload("res://scripts/rig/OctoRig.gd")
 const FOCUS_SELECTION_CLICK_RADIUS := 220.0
 const FOCUS_HELD_CLICK_RADIUS := 170.0
 const FOCUS_READER_INSERTED_CLICK_RADIUS := 190.0
+const FALLBACK_HOLD_ARM_PRIORITY := ["arm_2", "arm_3", "arm_5", "arm_4", "arm_0", "arm_1", "arm_6", "arm_7"]
+const ARM_SOCKET_ANGLE_BY_NAME := {
+	"arm_0": 2.36,   # left front
+	"arm_1": 0.78,   # right front
+	"arm_2": 2.62,   # left front-mid
+	"arm_3": 0.52,   # right front-mid
+	"arm_4": -0.52,  # right back-mid
+	"arm_5": -2.62,  # left back-mid
+	"arm_6": -2.36,  # left back
+	"arm_7": -0.78,  # right back
+}
 
 @export var interact_move_standoff = 1.2
 @export var held_item_follow_speed = 15.0
@@ -23,6 +35,8 @@ const FOCUS_READER_INSERTED_CLICK_RADIUS := 190.0
 @export var hand_socket_inner_radius = 0.3
 @export var hand_socket_outer_radius = 0.54
 @export var hand_socket_height = 0.34
+@export var held_item_min_world_height = 0.56
+@export var held_item_clearance_max = 0.62
 @export var drop_clamp_extent = 15.2
 @export var debug_interaction_logs = false
 @export var focus_reject_feedback_duration = 0.32
@@ -41,6 +55,9 @@ var _held_interactables: Array = []
 var _hand_sockets: Array[Node3D] = []
 var _held_socket_by_item_id: Dictionary = {}
 var _held_global_scale_by_item_id: Dictionary = {}
+var _held_clearance_by_item_id: Dictionary = {}
+var _socket_index_by_arm_name: Dictionary = {}
+var _arm_name_by_socket_index: Dictionary = {}
 var _queued_interaction_target
 var _pending_card_reader: CardReaderScript
 var _awaiting_card_selection = false
@@ -55,6 +72,7 @@ var _focus_target: FocusTargetScript
 var _focus_card_reader: CardReaderScript
 var _focus_reject_feedback = FocusRejectFeedbackScript.new()
 var _hint_builder = InteractionHintBuilderScript.new()
+var _octo_rig: OctoRigScript
 
 
 func initialize(player: CharacterBody3D, camera: Camera3D, hint_label: Label, world_root: Node3D, room_light: OmniLight3D) -> void:
@@ -67,6 +85,8 @@ func initialize(player: CharacterBody3D, camera: Camera3D, hint_label: Label, wo
 	_default_light_energy = _room_light.light_energy
 	_focus_reject_feedback.duration = focus_reject_feedback_duration
 	_ensure_hand_sockets()
+	_resolve_octo_rig()
+	_configure_hold_arm_slot_mapping()
 	_setup_scene_interactables()
 	_update_carry_mobility()
 	_update_hint_text()
@@ -767,6 +787,7 @@ func _update_held_item_transform(delta: float) -> void:
 	if _held_interactables.is_empty():
 		return
 	_focus_reject_feedback.tick(delta)
+	_update_hand_sockets_from_rig()
 
 	if _focus_display_enabled and _focus_display_camera != null:
 		_update_focus_display_transforms(delta)
@@ -899,26 +920,15 @@ func _ensure_hand_sockets() -> void:
 
 
 func _refresh_hand_socket_layout() -> void:
-	_held_socket_by_item_id.clear()
-	var held_count = _held_interactables.size()
-	if held_count == 0:
-		for socket in _hand_sockets:
-			socket.position = Vector3(0.0, hand_socket_height, 0.0)
-		return
-
-	for i in range(held_count):
-		_held_socket_by_item_id[_held_interactables[i].get_instance_id()] = i
-
-	var t = clampf(float(held_count - 1) / float(maxi(max_held_items - 1, 1)), 0.0, 1.0)
-	var radius = lerpf(hand_socket_inner_radius, hand_socket_outer_radius, t)
+	var radius = lerpf(hand_socket_inner_radius, hand_socket_outer_radius, 1.0)
 	var angle_offset = PI * 0.5
 	for i in range(_hand_sockets.size()):
 		var socket = _hand_sockets[i]
-		if i >= held_count:
-			socket.position = Vector3(0.0, hand_socket_height, 0.0)
-			continue
-
-		var angle = TAU * float(i) / float(held_count) + angle_offset
+		var angle = TAU * float(i) / float(maxi(_hand_sockets.size(), 1)) + angle_offset
+		if _arm_name_by_socket_index.has(i):
+			var arm_name = str(_arm_name_by_socket_index[i])
+			if ARM_SOCKET_ANGLE_BY_NAME.has(arm_name):
+				angle = float(ARM_SOCKET_ANGLE_BY_NAME[arm_name])
 		var local_pos = Vector3(cos(angle) * radius, hand_socket_height, sin(angle) * radius)
 		socket.position = local_pos
 
@@ -939,9 +949,14 @@ func _remove_held_item(item) :
 	var index = _held_interactables.find(item)
 	if index == -1:
 		return null
+	var item_id = item.get_instance_id()
+	var socket_index = int(_held_socket_by_item_id.get(item_id, -1))
+	_held_socket_by_item_id.erase(item_id)
+	if socket_index >= 0:
+		_set_hold_state_for_socket(socket_index, false)
 	_held_interactables.remove_at(index)
-	_held_global_scale_by_item_id.erase(item.get_instance_id())
-	_refresh_hand_socket_layout()
+	_held_global_scale_by_item_id.erase(item_id)
+	_held_clearance_by_item_id.erase(item_id)
 	_update_carry_mobility()
 	return item
 
@@ -954,19 +969,19 @@ func _attach_item_to_hands(item, clear_motion_target: bool) -> bool:
 	if _is_item_currently_held(item):
 		return true
 
-	_held_interactables.append(item)
-	_refresh_hand_socket_layout()
-
-	var socket_index = int(_held_socket_by_item_id.get(item.get_instance_id(), -1))
+	var socket_index = _find_free_socket_index()
 	if socket_index < 0 or socket_index >= _hand_sockets.size():
-		_held_interactables.erase(item)
-		_refresh_hand_socket_layout()
 		return false
+
+	_held_interactables.append(item)
+	var item_id = item.get_instance_id()
+	_held_socket_by_item_id[item_id] = socket_index
+	_set_hold_state_for_socket(socket_index, true)
 
 	var pickup_root = item.get_pickup_root()
 	var socket = _hand_sockets[socket_index]
-	var item_id = item.get_instance_id()
 	_held_global_scale_by_item_id[item_id] = pickup_root.global_basis.get_scale().abs()
+	_held_clearance_by_item_id[item_id] = _estimate_item_clearance(item, pickup_root)
 	pickup_root.reparent(socket, true)
 	item.set_interaction_enabled(true)
 	item.set_held(true)
@@ -980,6 +995,101 @@ func _attach_item_to_hands(item, clear_motion_target: bool) -> bool:
 	return true
 
 
+func _resolve_octo_rig() -> void:
+	_octo_rig = null
+	if _player == null:
+		return
+	var visual = _player.get_node_or_null("PlayerVisual")
+	if visual is OctoRigScript:
+		_octo_rig = visual as OctoRigScript
+
+
+func _configure_hold_arm_slot_mapping() -> void:
+	_socket_index_by_arm_name.clear()
+	_arm_name_by_socket_index.clear()
+	var arm_priority = _resolve_hold_arm_priority()
+	var count = mini(_hand_sockets.size(), arm_priority.size())
+	for i in range(count):
+		var arm_name = str(arm_priority[i])
+		_socket_index_by_arm_name[arm_name] = i
+		_arm_name_by_socket_index[i] = arm_name
+
+
+func _resolve_hold_arm_priority() -> PackedStringArray:
+	if _octo_rig != null and _octo_rig.has_method("get_hold_arm_priority"):
+		var value: Variant = _octo_rig.call("get_hold_arm_priority")
+		if value is PackedStringArray:
+			return value
+		if value is Array:
+			var result := PackedStringArray()
+			for arm_name in value:
+				result.append(str(arm_name))
+			return result
+	return FALLBACK_HOLD_ARM_PRIORITY
+
+
+func _find_free_socket_index() -> int:
+	for i in range(_hand_sockets.size()):
+		if _arm_name_by_socket_index.has(i) and not _is_socket_occupied(i):
+			return i
+	for i in range(_hand_sockets.size()):
+		if not _arm_name_by_socket_index.has(i):
+			if not _is_socket_occupied(i):
+				return i
+	return -1
+
+
+func _is_socket_occupied(socket_index: int) -> bool:
+	for value in _held_socket_by_item_id.values():
+		if int(value) == socket_index:
+			return true
+	return false
+
+
+func _set_hold_state_for_socket(socket_index: int, holding: bool) -> void:
+	if _octo_rig == null:
+		return
+	if not _arm_name_by_socket_index.has(socket_index):
+		return
+	var arm_name = str(_arm_name_by_socket_index[socket_index])
+	if arm_name.is_empty():
+		return
+	_octo_rig.set_arm_hold_enabled(arm_name, holding)
+
+
+func _update_hand_sockets_from_rig() -> void:
+	if _octo_rig == null or _player == null:
+		return
+	var lift_offset = Vector3(0.0, 0.06, 0.0)
+	for socket_index_variant in _arm_name_by_socket_index.keys():
+		var socket_index = int(socket_index_variant)
+		if socket_index < 0 or socket_index >= _hand_sockets.size():
+			continue
+		if not _is_socket_occupied(socket_index):
+			continue
+		var arm_name = str(_arm_name_by_socket_index[socket_index])
+		var world_anchor: Vector3 = _octo_rig.get_arm_world_anchor(arm_name, "tip")
+		var item_id = _get_item_id_for_socket(socket_index)
+		var clearance = float(_held_clearance_by_item_id.get(item_id, 0.0)) if item_id >= 0 else 0.0
+		var radial = world_anchor - _player.global_position
+		radial.y = 0.0
+		if radial.length_squared() <= 0.0001:
+			radial = _player.global_basis.z
+			radial.y = 0.0
+		radial = radial.normalized()
+		var world_pos = world_anchor + lift_offset + radial * clearance + Vector3(0.0, clearance * 0.35, 0.0)
+		world_pos.y = maxf(world_pos.y, _player.global_position.y + held_item_min_world_height)
+		var local_anchor = _player.to_local(world_pos)
+		_hand_sockets[socket_index].position = local_anchor
+
+
+func _get_item_id_for_socket(socket_index: int) -> int:
+	for item_id_variant in _held_socket_by_item_id.keys():
+		if int(_held_socket_by_item_id[item_id_variant]) == socket_index:
+			return int(item_id_variant)
+	return -1
+
+
 func _reapply_held_global_scale(item_id: int, pickup_root: Node3D) -> void:
 	if pickup_root == null:
 		return
@@ -991,6 +1101,38 @@ func _reapply_held_global_scale(item_id: int, pickup_root: Node3D) -> void:
 	var rotation_basis = current_global.basis.orthonormalized()
 	current_global.basis = rotation_basis.scaled(held_global_scale)
 	pickup_root.global_transform = current_global
+
+
+func _estimate_item_clearance(item, root: Node3D) -> float:
+	if root == null:
+		return 0.0
+	if item != null and item.has_method("is_card") and bool(item.is_card()):
+		return 0.0
+	var max_extent = _estimate_mesh_max_extent(root)
+	# Keep small props close; push larger objects outward enough to avoid body clipping.
+	return clampf((max_extent - 0.2) * 0.7, 0.0, held_item_clearance_max)
+
+
+func _estimate_mesh_max_extent(root: Node3D) -> float:
+	var max_extent = 0.0
+	var stack: Array[Node] = [root]
+	while not stack.is_empty():
+		var node = stack.pop_back()
+		if node is MeshInstance3D:
+			var mesh_instance = node as MeshInstance3D
+			if mesh_instance.mesh != null:
+				var aabb = mesh_instance.mesh.get_aabb()
+				var local_size = aabb.size.abs()
+				var world_scale = mesh_instance.global_basis.get_scale().abs()
+				var scaled_size = Vector3(
+					local_size.x * world_scale.x,
+					local_size.y * world_scale.y,
+					local_size.z * world_scale.z
+				)
+				max_extent = maxf(max_extent, maxf(scaled_size.x, maxf(scaled_size.y, scaled_size.z)))
+		for child in node.get_children():
+			stack.append(child)
+	return max_extent
 
 
 func _update_carry_mobility() -> void:

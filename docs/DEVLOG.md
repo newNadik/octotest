@@ -2,6 +2,30 @@
 
 ## 2026-03-09
 
+### Step 30 - Hold workflow completion (arm-slot assignment, preview mode, and anchor-based item placement)
+
+- Added `Hold` as an explicit `OctoRig` editor preview mode for direct hold-pose tuning.
+- Finalized hold bend defaults and optional shared hold-angle oscillation (`0.0` to `0.5`) for base/mid/tip section angles.
+- Completed carry-to-rig hold integration in `InteractionController`:
+  - free-arm pickup assignment with mid-arm priority first,
+  - persistent slot ownership per item (items keep same slot while held),
+  - occupied slots drive corresponding `OctoRig` arms into `HOLD` mode via runtime hold flags.
+- Added `OctoRig` hold helpers for systems integration:
+  - `get_hold_arm_priority()`,
+  - `get_arm_world_anchor(...)`.
+- Reworked held-item placement from static/index socket approximation to rig-anchor-following sockets.
+- Added size-aware anti-clipping placement:
+  - cards keep zero extra clearance,
+  - larger props gain bounded radial/upward clearance from octo center,
+  - minimum world-height clamp for held items to reduce arm/body clipping.
+- Removed obsolete idle-demo path and resolved nil-safety regressions in idle dictionary access introduced during iteration.
+
+### Validation commands (pass)
+1. `./scripts/check.sh`
+   - Result: boot smoke PASS, `movement_math_test: PASS`, `slope_movement_test: PASS`, `card_reader_interaction_test: PASS`.
+
+## 2026-03-09
+
 ### Step 29 - Rig idle/mixer polish, preview updates, and inspector cleanup
 
 - Expanded `OctoRig` arm animation into practical per-arm mixer usage (`STATIC`/`IDLE`/`CRAWL`/`HOLD`) suitable for mixed-behavior gameplay (walking while selected arms hold items).

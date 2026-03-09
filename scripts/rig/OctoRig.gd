@@ -57,6 +57,7 @@ const ARM_CONFIGS: Dictionary = {
 }
 
 const HEAD_BONE_NAMES: Array[String] = ["HEAD_01", "Bone.001", "Bone.002", "Bone.003"]
+const HOLD_ARM_PRIORITY: PackedStringArray = ["arm_2", "arm_3", "arm_5", "arm_4", "arm_0", "arm_1", "arm_6", "arm_7"]
 
 @export var debug_print_on_ready = true
 @export var print_indices_on_ready = false
@@ -79,12 +80,16 @@ const HEAD_BONE_NAMES: Array[String] = ["HEAD_01", "Bone.001", "Bone.002", "Bone
 @export_range(-3.14, 3.14, 0.01) var crawl_stance_bend_angle = -0.4
 @export_range(-3.14, 3.14, 0.01) var crawl_side_phase_offset = 1.57
 @export var hold_arm_names: PackedStringArray = []
-@export_range(-1.5, 1.5, 0.01) var hold_base_bend = 0.45
-@export_range(-1.5, 1.5, 0.01) var hold_mid_bend = 0.25
-@export_range(-1.5, 1.5, 0.01) var hold_tip_bend = 0.1
+@export_range(-1.5, 1.5, 0.01) var hold_base_bend = 1.0
+@export_range(-1.5, 1.5, 0.01) var hold_mid_bend = 0.68
+@export_range(-1.5, 1.5, 0.01) var hold_tip_bend = -0.83
 @export_range(-3.14, 3.14, 0.01) var hold_base_bend_angle = 0.2
 @export_range(-3.14, 3.14, 0.01) var hold_mid_bend_angle = 0.2
 @export_range(-3.14, 3.14, 0.01) var hold_tip_bend_angle = 0.2
+@export var hold_animate_bend_angles = true
+@export_range(0.0, 0.5, 0.01) var hold_bend_angle_min = 0.0
+@export_range(0.0, 0.5, 0.01) var hold_bend_angle_max = 0.5
+@export_range(0.0, 4.0, 0.01) var hold_bend_angle_hz = 0.2
 @export var enable_head_look = true
 @export var head_look_follow_mouse = true
 @export_range(0.0, 1.0, 0.01) var head_look_weight = 0.65
@@ -97,7 +102,7 @@ const HEAD_BONE_NAMES: Array[String] = ["HEAD_01", "Bone.001", "Bone.002", "Bone
 @export var head_return_lerp_speed = 1.2
 @export_range(-0.5, 1.0, 0.01) var head_front_guard = -0.08
 @export var preview_in_editor = false
-@export_enum("Static Targets", "Idle", "Crawl", "Mixer") var preview_animation_mode := 0
+@export_enum("Static Targets", "Idle", "Crawl", "Mixer", "Hold") var preview_animation_mode := 0
 @export var preview_animate_in_editor = true
 @export_range(0.0, 3.0, 0.01) var preview_crawl_speed = 1.25
 @export var preview_apply_to_all_arms = true
@@ -378,6 +383,49 @@ func set_arm_hold_enabled(arm_name: String, enabled: bool) -> void:
 		_runtime_hold_arms.erase(arm_name)
 
 
+func get_hold_arm_priority() -> PackedStringArray:
+	var result := PackedStringArray()
+	var available := {}
+	for arm in arms:
+		available[arm.arm_name] = true
+	for arm_name in HOLD_ARM_PRIORITY:
+		var key = str(arm_name)
+		if available.has(key):
+			result.append(key)
+	var remaining: Array[String] = []
+	for arm in arms:
+		if not result.has(arm.arm_name):
+			remaining.append(arm.arm_name)
+	remaining.sort()
+	for arm_name in remaining:
+		result.append(arm_name)
+	return result
+
+
+func get_arm_world_anchor(arm_name: String, section: String = "tip") -> Vector3:
+	if skeleton == null:
+		return global_position
+	for arm in arms:
+		if arm.arm_name != arm_name:
+			continue
+		var bone_index = -1
+		match section:
+			"base":
+				if not arm.base_bones.is_empty():
+					bone_index = int(arm.base_bones[0])
+			"mid", "middle":
+				if not arm.mid_bones.is_empty():
+					bone_index = int(arm.mid_bones[arm.mid_bones.size() - 1])
+			_:
+				if arm.tip_bone >= 0:
+					bone_index = int(arm.tip_bone)
+		if bone_index < 0:
+			return global_position
+		var bone_global: Transform3D = skeleton.get_bone_global_pose(bone_index)
+		return skeleton.global_transform * bone_global.origin
+	return global_position
+
+
 func set_arm_target_pose_params(
 	arm_name: String,
 	base_bend: float = 0.0,
@@ -503,13 +551,23 @@ func _apply_idle_target(arm) -> void:
 
 
 func _apply_hold_target(arm) -> void:
+	var base_angle = hold_base_bend_angle
+	var mid_angle = hold_mid_bend_angle
+	var tip_angle = hold_tip_bend_angle
+	if hold_animate_bend_angles:
+		var t = Time.get_ticks_msec() * 0.001
+		var wave01 = sin(t * TAU * hold_bend_angle_hz + arm.phase_offset) * 0.5 + 0.5
+		var shared_angle = lerpf(hold_bend_angle_min, hold_bend_angle_max, wave01)
+		base_angle = shared_angle
+		mid_angle = shared_angle
+		tip_angle = shared_angle
 	arm.set_target_section_bend(
 		hold_base_bend,
-		hold_base_bend_angle,
+		base_angle,
 		hold_mid_bend,
-		hold_mid_bend_angle,
+		mid_angle,
 		hold_tip_bend,
-		hold_tip_bend_angle
+		tip_angle
 	)
 
 
@@ -829,6 +887,9 @@ func _apply_preview_targets(delta: float) -> void:
 				_apply_crawl_target(arm, clampf(preview_crawl_speed / maxf(0.01, crawl_speed_for_full_cycle), 0.0, 1.0))
 		3:
 			_update_arm_animation_targets(delta, preview_crawl_speed)
+		4:
+			for arm in arms:
+				_apply_hold_target(arm)
 		_:
 			_apply_editor_preview_targets()
 

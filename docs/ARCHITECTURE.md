@@ -77,6 +77,8 @@ This document describes the current runtime architecture of the prototype and mu
 - Centralized interaction and carry system.
 - Handles interactable raycasts, hover state transitions, line-of-sight and range checks, and queued auto-interact.
 - Handles octopus hand-socket layout, held-item updates, targeted drop, and carry movement penalties.
+- Assigns held items to persistent arm-linked slots (mid-arm priority first) and syncs occupied slots to `OctoRig` hold-arm state.
+- Uses rig-driven hold anchoring (`OctoRig` arm anchors) plus size-aware clearance so larger held objects avoid clipping while cards stay tight to arm tips.
 - Handles wall-switch callback, HUD interaction hints, and focus-mode interaction routing.
 - Handles same-object-family LOS exceptions for focus interactions (card reader/code panel subparts).
 - Preserves held item global scale while attached/focused.
@@ -103,8 +105,9 @@ This document describes the current runtime architecture of the prototype and mu
 - Applies section-based arm bend targets (`base/mid/tip`, each with `bend` + `bend_angle`).
 - Blends section influence across the full chain to avoid segmented transitions.
 - Runs a per-arm animation mixer (`STATIC`/`IDLE`/`CRAWL`/`HOLD`) with runtime arm-level overrides.
+- Exposes hold-arm priority ordering and per-arm world anchors for carry-slot alignment in `InteractionController`.
 - Idle mode includes per-arm deterministic variation plus per-idle-entry randomized offsets/signs so repeated stop->idle transitions do not snap to a single identical pose.
-- Supports editor-time preview modes (`Static Targets`, `Idle`, `Crawl`, `Mixer`) while temporarily suspending local `AnimationPlayer` playback.
+- Supports editor-time preview modes (`Static Targets`, `Idle`, `Crawl`, `Mixer`, `Hold`) while temporarily suspending local `AnimationPlayer` playback.
 - Validates rig data on startup and prints debug summaries.
 13. `res://scripts/rig/OctoArm.gd`
 - Per-arm data model with role metadata (`side`, `role_bias`), resolved indices, base/mid/tip partitions, and rest rotation cache.
