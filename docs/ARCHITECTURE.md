@@ -105,9 +105,15 @@ This document describes the current runtime architecture of the prototype and mu
 - Applies section-based arm bend targets (`base/mid/tip`, each with `bend` + `bend_angle`).
 - Blends section influence across the full chain to avoid segmented transitions.
 - Runs a per-arm animation mixer (`STATIC`/`IDLE`/`CRAWL`/`HOLD`) with runtime arm-level overrides.
+- Crawl currently uses a simplified authored-motion pass:
+  - per-arm base-angle min/max tables,
+  - per-arm mid-bend min/max tables,
+  - shared forward/back cycle timing,
+  - idle-derived tip bend continuity with crawl tip angle currently pinned for tuning.
 - Exposes hold-arm priority ordering and per-arm world anchors for carry-slot alignment in `InteractionController`.
 - Idle mode includes per-arm deterministic variation plus per-idle-entry randomized offsets/signs so repeated stop->idle transitions do not snap to a single identical pose.
 - Supports editor-time preview modes (`Static Targets`, `Idle`, `Crawl`, `Mixer`, `Hold`) while temporarily suspending local `AnimationPlayer` playback.
+- Crawl preview uses the same cycle-speed math as gameplay, with `preview_motion_speed` as the preview-side speed input.
 - Validates rig data on startup and prints debug summaries.
 13. `res://scripts/rig/OctoArm.gd`
 - Per-arm data model with role metadata (`side`, `role_bias`), resolved indices, base/mid/tip partitions, and rest rotation cache.

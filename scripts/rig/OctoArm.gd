@@ -269,12 +269,10 @@ func apply_pose(skeleton: Skeleton3D) -> void:
 			+ weighted_mid_bend * sin(mid_bend_angle)
 			+ weighted_tip_bend * sin(tip_bend_angle)
 		)
-
 		var procedural_offset := _compose_offset_rotation(curl_value, lift_value)
 		var rest_rotation: Quaternion = rest_rotations[bone_index]
 		var final_rotation := rest_rotation * procedural_offset
 		skeleton.set_bone_pose_rotation(bone_index, final_rotation)
-
 
 func _chain_t(index: int, count: int) -> float:
 	if count <= 1:

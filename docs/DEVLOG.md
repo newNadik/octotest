@@ -1,5 +1,22 @@
 # Dev Log
 
+## 2026-03-11
+
+### Step 32 - Crawl movement cleanup and authored crawl-shape pass
+
+- Simplified `OctoRig` crawl flow around the current tuning workflow:
+  - removed stale generic crawl tuning/export clutter,
+  - moved per-arm crawl base-angle and mid-bend ranges into explicit constants,
+  - extracted shared crawl speed helpers so gameplay and preview use the same cycle-speed math.
+- Refactored idle target generation into reusable target-data assembly so crawl can intentionally inherit selected idle sections.
+- Kept crawl arm shape focused on the current iteration target:
+  - authored base bend center/amplitude,
+  - authored per-arm base-angle sweep ranges,
+  - authored per-arm mid-bend sweep ranges,
+  - fixed crawl tip angle at `0.0` while preserving idle-derived tip bend.
+- Added `preview_motion_speed` as the single preview-side crawl speed input and serialized a slower default on `PlayerVisual` for easier editor tuning.
+- Reverted experimental crawl tip grounding/zeroing passes after review; they were visually too aggressive and are not part of the retained implementation.
+
 ## 2026-03-09
 
 ### Step 31 - Camera/focus polish and inspector export cleanup
