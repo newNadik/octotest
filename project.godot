@@ -10,10 +10,10 @@ config_version=5
 
 [application]
 
-config/name="octotest"
+config/name="Gone Exploring"
 run/main_scene="res://scenes/main_menu.tscn"
 config/features=PackedStringArray("4.6", "GL Compatibility")
-config/icon="res://icon.png"
+config/icon="uid://bveo1mgp8bkut"
 
 [physics]
 
