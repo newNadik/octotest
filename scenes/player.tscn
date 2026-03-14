@@ -15,7 +15,8 @@ shape = SubResource("BoxShape3D_player")
 
 [node name="PlayerVisual" type="Node3D" parent="." unique_id=69441856]
 script = ExtResource("3_8x4hh")
-preview_motion_speed = 0.2
+surface_locomotion_debug_print = true
+surface_locomotion_debug_draw_3d = true
 preview_in_editor = true
 preview_animation_mode = 1
 

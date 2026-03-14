@@ -1,5 +1,31 @@
 # Dev Log
 
+## 2026-03-14
+
+### Step 33 - Surface crawl architecture rewrite (state machine + phase-role posing)
+
+- Replaced authored crawl-shape pass with `OctoSurfaceLocomotion`-driven crawl posing and locomotion.
+- Added per-arm crawl state machine and floor-target/anchor pipeline:
+  - `SEARCH`, `REACH`, `GRAB`, `PUSH_PULL`, `RELEASE`.
+- Added body drive synthesis from anchored arms:
+  - support normal blending,
+  - traction-weighted push force accumulation,
+  - fallback motion when temporarily unanchored.
+- Added phase-role pose architecture for arm sections:
+  - phases `plant`, `load`, `push`, `stabilize`, `recover`, `swing`,
+  - role ownership by segment (`base` placement/sweep, `mid` load/propulsion, `tip` contact/grip),
+  - per-phase progress value for deterministic curves.
+- Added debug instrumentation:
+  - per-arm runtime line includes `STATE/phase(progress)`,
+  - optional 3D debug lines in `OctoRig` for arm vectors/targets/anchors.
+- Added tuning simplifications for current workflow:
+  - deterministic crawl option (`simplify_crawl_motion`),
+  - alternating step groups for less chaotic arm concurrency,
+  - segment-focus mode (`role_focus_segment`) to tune `base` before `mid`/`tip`.
+- Cleaned `OctoRig` inspector exports:
+  - grouped active surface locomotion and preview controls,
+  - hid legacy raw-IK tuning exports (runtime path retained as non-export vars).
+
 ## 2026-03-11
 
 ### Step 32 - Crawl movement cleanup and authored crawl-shape pass

@@ -21,6 +21,8 @@ var mantle_landing_forward := 0.28
 var mantle_clearance := 0.08
 var min_landing_half_extent := 0.14
 var climb_collision_mask := WALL_COLLISION_MASK | GROUND_COLLISION_MASK
+var use_surface_locomotion := true
+var surface_align_strength := 7.5
 
 var _has_target := false
 var _target_position := Vector3.ZERO
@@ -32,6 +34,7 @@ var _mantle_to := Vector3.ZERO
 var _mantle_progress := 0.0
 var _mantle_duration_active := 0.75
 var _post_mantle_turn_timer := 0.0
+var _octo_rig: Node
 const POST_MANTLE_TURN_DAMP_TIME := 0.22
 
 
@@ -42,6 +45,7 @@ func _ready() -> void:
 	var shape_node := get_node_or_null("CollisionShape3D") as CollisionShape3D
 	if shape_node != null and shape_node.shape is BoxShape3D:
 		_half_height = (shape_node.shape as BoxShape3D).size.y * 0.5
+	_octo_rig = get_node_or_null("PlayerVisual")
 
 
 func set_move_target(world_target: Vector3) -> void:
@@ -74,15 +78,27 @@ func _physics_process(delta: float) -> void:
 	if _has_target:
 		move_target = _target_position
 
-	velocity = MovementMath.next_velocity_2d(
-		velocity,
-		global_position,
-		move_target,
-		move_speed,
-		acceleration,
-		stop_distance,
-		delta
-	)
+	var used_surface_drive := false
+	if use_surface_locomotion and _octo_rig != null and _octo_rig.has_method("step_surface_locomotion"):
+		var desired_dir := Vector3.ZERO
+		if _has_target:
+			var to_target := _target_position - global_position
+			desired_dir = Vector3(to_target.x, 0.0, to_target.z)
+		var drive_velocity: Vector3 = _octo_rig.step_surface_locomotion(delta, global_position, desired_dir, velocity)
+		velocity.x = move_toward(velocity.x, drive_velocity.x, acceleration * delta)
+		velocity.z = move_toward(velocity.z, drive_velocity.z, acceleration * delta)
+		used_surface_drive = true
+
+	if not used_surface_drive:
+		velocity = MovementMath.next_velocity_2d(
+			velocity,
+			global_position,
+			move_target,
+			move_speed,
+			acceleration,
+			stop_distance,
+			delta
+		)
 
 	if grounded:
 		_align_planar_velocity_to_slope(floor_normal)
@@ -96,6 +112,18 @@ func _physics_process(delta: float) -> void:
 		_try_begin_climb()
 
 	move_and_slide()
+	if use_surface_locomotion and grounded and _octo_rig != null and _octo_rig.has_method("get_surface_support_normal"):
+		var support_normal: Vector3 = _octo_rig.get_surface_support_normal()
+		if support_normal.length_squared() > 0.0001:
+			var planar_forward := -global_transform.basis.z
+			var aligned_forward := MovementMath.project_planar_direction_on_surface(planar_forward, support_normal)
+			if aligned_forward.length_squared() > 0.0001:
+				aligned_forward = aligned_forward.normalized()
+				var target_basis := Basis.looking_at(aligned_forward, support_normal)
+				global_transform.basis = global_transform.basis.slerp(
+					target_basis,
+					1.0 - exp(-surface_align_strength * delta)
+				).orthonormalized()
 	_rotate_toward_motion(delta)
 
 

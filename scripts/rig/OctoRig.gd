@@ -4,6 +4,7 @@ class_name OctoRig
 
 const OctoArmType = preload("res://scripts/rig/OctoArm.gd")
 const OctoHeadType = preload("res://scripts/rig/OctoHead.gd")
+const OctoSurfaceLocomotionType = preload("res://scripts/rig/OctoSurfaceLocomotion.gd")
 
 enum ArmAnimMode {
 	STATIC,
@@ -86,6 +87,18 @@ var default_base_bend = 0.67
 var default_mid_bend = 0.0
 var default_tip_bend = 0.0
 var enable_arm_animation_mixer = true
+@export_group("Surface Locomotion")
+@export var use_surface_locomotion := true
+@export var surface_locomotion_debug := true
+@export var surface_locomotion_debug_print := false
+@export var surface_locomotion_debug_draw_3d := false
+@export_range(0.02, 0.6, 0.01) var surface_locomotion_debug_normal_len := 0.18
+# Legacy IK tuning (not exposed; raw skeleton IK path is disabled).
+var use_arm_ik := false
+var ik_influence := 0.35
+var ik_max_iterations := 24
+var ik_min_distance := 0.01
+var ik_target_lerp := 0.5
 var use_idle_when_stationary = true
 var idle_stationary_speed_threshold = 0.08
 var idle_entry_pose_memory = true
@@ -123,6 +136,7 @@ var head_forward_sign = 1.0
 var head_look_lerp_speed = 6.0
 var head_return_lerp_speed = 1.2
 var head_front_guard = -0.08
+@export_group("Preview")
 @export var preview_in_editor = false
 @export_enum("Static Targets", "Idle", "Crawl", "Mixer", "Hold") var preview_animation_mode := 0
 @export var preview_animate_in_editor = true
@@ -199,6 +213,15 @@ var _idle_entry_offsets: Dictionary = {}
 var _idle_run_offsets: Dictionary = {}
 var _idle_mid_signs: Dictionary = {}
 var _idle_rng := RandomNumberGenerator.new()
+var _surface_locomotion = OctoSurfaceLocomotionType.new()
+var _surface_drive_velocity := Vector3.ZERO
+var _surface_support_normal := Vector3.UP
+var _surface_debug_lines: PackedStringArray = []
+var _surface_debug_accum := 0.0
+var _surface_debug_mesh_instance: MeshInstance3D
+var _surface_debug_immediate: ImmediateMesh
+var _arm_ik_nodes: Dictionary = {}
+var _arm_ik_targets: Dictionary = {}
 
 
 func _ready() -> void:
@@ -228,13 +251,18 @@ func _process(delta: float) -> void:
 		return
 	if skeleton == null:
 		return
-	if enable_arm_animation_mixer:
+	skeleton.clear_bones_global_pose_override()
+	if use_surface_locomotion:
+		# Arm targets are set from `step_surface_locomotion()` during physics.
+		pass
+	elif enable_arm_animation_mixer:
 		_update_arm_animation_targets(delta)
 	if apply_arm_pose_each_frame:
 		for arm in arms:
 			arm.update_params(delta)
 			arm.apply_pose(skeleton)
 	_update_head_pose(delta)
+	_update_surface_debug_draw()
 
 
 func build_rig() -> bool:
@@ -314,6 +342,11 @@ func build_rig() -> bool:
 		_validation_errors.append("OctoRig: no arms were created.")
 
 	_setup_valid = _validation_errors.is_empty()
+	if _setup_valid:
+		_surface_locomotion.setup(self, arms)
+		_surface_locomotion.enabled = use_surface_locomotion
+		_surface_locomotion.debug_enabled = surface_locomotion_debug
+		_setup_arm_ik()
 	return _setup_valid
 
 
@@ -445,6 +478,297 @@ func get_arm_world_anchor(arm_name: String, section: String = "tip") -> Vector3:
 		var bone_global: Transform3D = skeleton.get_bone_global_pose(bone_index)
 		return skeleton.global_transform * bone_global.origin
 	return global_position
+
+
+func step_surface_locomotion(
+	delta: float,
+	body_position: Vector3,
+	desired_direction: Vector3,
+	current_velocity: Vector3
+) -> Vector3:
+	if not use_surface_locomotion or not _setup_valid or skeleton == null:
+		_surface_drive_velocity = Vector3.ZERO
+		_surface_support_normal = Vector3.UP
+		_surface_debug_lines = PackedStringArray()
+		return Vector3.ZERO
+
+	var world = get_world_3d()
+	if world == null:
+		return _surface_drive_velocity
+	var space_state = world.direct_space_state
+	_surface_locomotion.enabled = use_surface_locomotion
+	_surface_locomotion.debug_enabled = surface_locomotion_debug
+	_surface_locomotion.step(
+		delta,
+		body_position,
+		global_transform.basis,
+		desired_direction,
+		current_velocity,
+		space_state
+	)
+	_surface_drive_velocity = _surface_locomotion.get_drive_velocity()
+	_surface_support_normal = _surface_locomotion.get_support_normal()
+	_surface_debug_lines = _surface_locomotion.get_debug_lines()
+	_update_arm_ik_targets()
+	if surface_locomotion_debug_print:
+		_surface_debug_accum += delta
+		if _surface_debug_accum >= 0.5:
+			_surface_debug_accum = 0.0
+			for line in _surface_debug_lines:
+				print("surface debug | %s" % line)
+	return _surface_drive_velocity
+
+
+func get_surface_support_normal() -> Vector3:
+	return _surface_support_normal
+
+
+func get_surface_anchored_arm_count() -> int:
+	return _surface_locomotion.get_anchored_count()
+
+
+func get_surface_debug_lines() -> PackedStringArray:
+	return _surface_debug_lines
+
+
+func _setup_arm_ik() -> void:
+	_clear_arm_ik_nodes()
+	# Built-in section controls in OctoArm are the active IK layer.
+	# Raw bone-level CCD (global pose overrides) is intentionally disabled here
+	# because this rig's multiple parallel chains produce unstable deformations.
+	return
+
+
+func _find_valid_ik_chain_indices(arm) -> Dictionary:
+	if skeleton == null:
+		return {}
+	var best_root := -1
+	var best_tip := -1
+	var best_length := -1
+	for root_variant in arm.bone_indices:
+		var root_index := int(root_variant)
+		for tip_variant in arm.bone_indices:
+			var tip_index := int(tip_variant)
+			if root_index == tip_index:
+				continue
+			var chain_len := _ik_chain_length_if_ancestor(root_index, tip_index)
+			if chain_len > best_length:
+				best_length = chain_len
+				best_root = root_index
+				best_tip = tip_index
+	if best_root < 0 or best_tip < 0:
+		return {}
+	return {
+		"root": best_root,
+		"tip": best_tip,
+	}
+
+
+func _find_preferred_ik_chain_indices(arm) -> PackedInt32Array:
+	var row: Array = []
+	for i in arm.bone_names.size():
+		var bone_name := str(arm.bone_names[i])
+		var prefix := bone_name.split(".")[0]
+		var number := int(prefix)
+		if number >= 21 and number <= 25:
+			row.append(int(arm.bone_indices[i]))
+	if row.size() < 2:
+		return PackedInt32Array()
+	row.sort()
+	var root_index := int(row[0])
+	var tip_index := int(row[row.size() - 1])
+	return _build_ik_chain_indices(root_index, tip_index)
+
+
+func _ik_chain_length_if_ancestor(root_index: int, tip_index: int) -> int:
+	var length := 0
+	var current := tip_index
+	while current >= 0:
+		if current == root_index:
+			return length
+		current = skeleton.get_bone_parent(current)
+		length += 1
+	return -1
+
+
+func _arm_bone_name_for_index(arm, bone_index: int) -> String:
+	for i in arm.bone_indices.size():
+		if int(arm.bone_indices[i]) == bone_index:
+			return str(arm.bone_names[i])
+	return str(skeleton.get_bone_name(bone_index))
+
+
+func _build_ik_chain_indices(root_index: int, tip_index: int) -> PackedInt32Array:
+	var reversed: PackedInt32Array = PackedInt32Array()
+	var current := tip_index
+	while current >= 0:
+		reversed.append(current)
+		if current == root_index:
+			break
+		current = skeleton.get_bone_parent(current)
+	if reversed.is_empty() or reversed[reversed.size() - 1] != root_index:
+		return PackedInt32Array()
+	var chain: PackedInt32Array = PackedInt32Array()
+	for i in reversed.size():
+		chain.append(reversed[reversed.size() - 1 - i])
+	return chain
+
+
+func _update_arm_ik_targets() -> void:
+	# Arm targets still come from OctoSurfaceLocomotion, but are resolved through
+	# section-level arm controls in `_apply_arm_pose()`.
+	return
+
+
+func _update_surface_debug_draw() -> void:
+	if not surface_locomotion_debug_draw_3d or not use_surface_locomotion or not _setup_valid:
+		if _surface_debug_mesh_instance != null:
+			_surface_debug_mesh_instance.visible = false
+		return
+	if Engine.is_editor_hint():
+		return
+	_ensure_surface_debug_draw_node()
+	if _surface_debug_immediate == null or _surface_debug_mesh_instance == null:
+		return
+	var targets: Dictionary = _surface_locomotion.get_arm_targets()
+	_surface_debug_immediate.clear_surfaces()
+	_surface_debug_immediate.surface_begin(Mesh.PRIMITIVE_LINES)
+	for arm in arms:
+		if arm == null:
+			continue
+		var arm_name := str(arm.arm_name)
+		var base_world := get_arm_world_anchor(arm_name, "base")
+		var tip_world := get_arm_world_anchor(arm_name, "tip")
+		var base_local := to_local(base_world)
+		var tip_local := to_local(tip_world)
+		_surface_debug_immediate.surface_set_color(Color(0.65, 0.65, 0.65, 0.9))
+		_surface_debug_immediate.surface_add_vertex(base_local)
+		_surface_debug_immediate.surface_add_vertex(tip_local)
+		if not targets.has(arm_name):
+			continue
+		var data: Dictionary = targets[arm_name]
+		var target_world: Vector3 = data.get("tip_target", tip_world)
+		if target_world == Vector3.ZERO:
+			target_world = tip_world
+		var target_local := to_local(target_world)
+		_surface_debug_immediate.surface_set_color(Color(1.0, 0.92, 0.2, 0.95))
+		_surface_debug_immediate.surface_add_vertex(tip_local)
+		_surface_debug_immediate.surface_add_vertex(target_local)
+		var anchored := bool(data.get("anchor_valid", false))
+		if anchored:
+			var anchor_world: Vector3 = data.get("anchor", target_world)
+			var anchor_local := to_local(anchor_world)
+			_surface_debug_immediate.surface_set_color(Color(0.2, 1.0, 0.55, 0.95))
+			_surface_debug_immediate.surface_add_vertex(tip_local)
+			_surface_debug_immediate.surface_add_vertex(anchor_local)
+			# Arm normal is not currently exposed directly; use rig support normal fallback.
+			var normal_world := _surface_support_normal
+			var normal_tip_world := anchor_world + normal_world * surface_locomotion_debug_normal_len
+			_surface_debug_immediate.surface_set_color(Color(0.15, 0.8, 1.0, 0.95))
+			_surface_debug_immediate.surface_add_vertex(anchor_local)
+			_surface_debug_immediate.surface_add_vertex(to_local(normal_tip_world))
+	_surface_debug_immediate.surface_end()
+	_surface_debug_mesh_instance.visible = true
+
+
+func _ensure_surface_debug_draw_node() -> void:
+	if _surface_debug_mesh_instance != null and is_instance_valid(_surface_debug_mesh_instance):
+		return
+	_surface_debug_immediate = ImmediateMesh.new()
+	_surface_debug_mesh_instance = MeshInstance3D.new()
+	_surface_debug_mesh_instance.name = "SurfaceDebugDraw"
+	_surface_debug_mesh_instance.mesh = _surface_debug_immediate
+	var mat := StandardMaterial3D.new()
+	mat.vertex_color_use_as_albedo = true
+	mat.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+	mat.no_depth_test = true
+	_surface_debug_mesh_instance.material_override = mat
+	add_child(_surface_debug_mesh_instance)
+
+
+func _solve_arm_chain_ccd(chain: PackedInt32Array, target_world: Vector3, pole_world: Vector3) -> void:
+	_solve_arm_chain_ccd_with_params(chain, target_world, pole_world, ik_influence, ik_max_iterations, ik_min_distance)
+
+
+func _solve_arm_chain_ccd_with_params(
+	chain: PackedInt32Array,
+	target_world: Vector3,
+	pole_world: Vector3,
+	influence: float,
+	max_iterations: int,
+	min_distance: float
+) -> void:
+	if chain.size() < 2:
+		return
+	var target_local := skeleton.global_transform.affine_inverse() * target_world
+	var tip_index := int(chain[chain.size() - 1])
+	var iterations := mini(max_iterations, 24)
+	for _iter in iterations:
+		var tip_pose := skeleton.get_bone_global_pose(tip_index)
+		var tip_pos: Vector3 = tip_pose.origin
+		if tip_pos.distance_to(target_local) <= min_distance:
+			break
+		for i in range(chain.size() - 2, -1, -1):
+			var bone_index := int(chain[i])
+			var bone_pose := skeleton.get_bone_global_pose(bone_index)
+			var bone_pos: Vector3 = bone_pose.origin
+			var to_tip := tip_pos - bone_pos
+			var to_target := target_local - bone_pos
+			var tip_len := to_tip.length()
+			var target_len := to_target.length()
+			if tip_len <= 0.00001 or target_len <= 0.00001:
+				continue
+			to_tip /= tip_len
+			to_target /= target_len
+			var axis := to_tip.cross(to_target)
+			var axis_len := axis.length()
+			if axis_len <= 0.00001:
+				continue
+			axis /= axis_len
+			var dot_val := clampf(to_tip.dot(to_target), -1.0, 1.0)
+			var angle := acos(dot_val)
+			if angle <= 0.0001:
+				continue
+			var step_angle := minf(angle, 0.35)
+			var rot := Basis(axis, step_angle)
+			var new_basis := (rot * bone_pose.basis).orthonormalized()
+			var new_pose := Transform3D(new_basis, bone_pose.origin)
+			skeleton.set_bone_global_pose_override(bone_index, new_pose, influence, false)
+			tip_pose = skeleton.get_bone_global_pose(tip_index)
+			tip_pos = tip_pose.origin
+
+	if pole_world != Vector3.ZERO and chain.size() >= 3:
+		var root_index := int(chain[0])
+		var mid_index := int(chain[1])
+		var tip_pose_final := skeleton.get_bone_global_pose(tip_index)
+		var root_pose := skeleton.get_bone_global_pose(root_index)
+		var mid_pose := skeleton.get_bone_global_pose(mid_index)
+		var axis_dir := (tip_pose_final.origin - root_pose.origin).normalized()
+		var pole_local := skeleton.global_transform.affine_inverse() * pole_world
+		var current_vec := mid_pose.origin - root_pose.origin
+		var desired_vec := pole_local - root_pose.origin
+		var cur_proj := current_vec - axis_dir * current_vec.dot(axis_dir)
+		var des_proj := desired_vec - axis_dir * desired_vec.dot(axis_dir)
+		if cur_proj.length_squared() > 0.00001 and des_proj.length_squared() > 0.00001:
+			cur_proj = cur_proj.normalized()
+			des_proj = des_proj.normalized()
+			var signed := atan2(axis_dir.dot(cur_proj.cross(des_proj)), cur_proj.dot(des_proj))
+			var pole_step := clampf(signed, -0.25, 0.25)
+			var pole_rot := Basis(axis_dir, pole_step)
+			var new_root_basis := (pole_rot * root_pose.basis).orthonormalized()
+			skeleton.set_bone_global_pose_override(root_index, Transform3D(new_root_basis, root_pose.origin), influence, false)
+
+
+func _clear_arm_ik_nodes() -> void:
+	if skeleton != null:
+		skeleton.clear_bones_global_pose_override()
+	for target_variant in _arm_ik_targets.values():
+		if target_variant is Node3D:
+			var target := target_variant as Node3D
+			if is_instance_valid(target):
+				target.queue_free()
+	_arm_ik_nodes.clear()
+	_arm_ik_targets.clear()
 
 
 func set_arm_target_pose_params(
@@ -1073,6 +1397,11 @@ func _restore_preview_animation_players() -> void:
 
 
 func _clear_runtime_data() -> void:
+	_clear_arm_ik_nodes()
+	if _surface_debug_mesh_instance != null and is_instance_valid(_surface_debug_mesh_instance):
+		_surface_debug_mesh_instance.queue_free()
+	_surface_debug_mesh_instance = null
+	_surface_debug_immediate = null
 	arms.clear()
 	head = null
 	skeleton = null
@@ -1089,6 +1418,11 @@ func _clear_runtime_data() -> void:
 	_idle_entry_offsets.clear()
 	_idle_run_offsets.clear()
 	_idle_mid_signs.clear()
+	_surface_drive_velocity = Vector3.ZERO
+	_surface_support_normal = Vector3.UP
+	_surface_debug_lines = PackedStringArray()
+	_surface_debug_accum = 0.0
+	_surface_locomotion.setup(self, [])
 
 
 func _to_string_array(value: Variant, context: String) -> Array[String]:

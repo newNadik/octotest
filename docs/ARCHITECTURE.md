@@ -105,11 +105,14 @@ This document describes the current runtime architecture of the prototype and mu
 - Applies section-based arm bend targets (`base/mid/tip`, each with `bend` + `bend_angle`).
 - Blends section influence across the full chain to avoid segmented transitions.
 - Runs a per-arm animation mixer (`STATIC`/`IDLE`/`CRAWL`/`HOLD`) with runtime arm-level overrides.
-- Crawl currently uses a simplified authored-motion pass:
-  - per-arm base-angle min/max tables,
-  - per-arm mid-bend min/max tables,
-  - shared forward/back cycle timing,
-  - idle-derived tip bend continuity with crawl tip angle currently pinned for tuning.
+- Uses `OctoSurfaceLocomotion` for crawl locomotion and pose driving:
+  - arm state machine (`SEARCH`/`REACH`/`GRAB`/`PUSH_PULL`/`RELEASE`),
+  - reach/anchor target solving against floor via ray queries,
+  - support-normal aggregation and body drive velocity output,
+  - phase-role pose synthesis (`plant`/`load`/`push`/`stabilize`/`recover`/`swing`) mapped to arm sections.
+- Current tuning workflow is segment-focused:
+  - `role_focus_segment` (`base|mid|tip|all`) lets one segment be tuned in isolation,
+  - crawl-neutral baseline keeps contact posture stable while focus sweeps are tuned.
 - Exposes hold-arm priority ordering and per-arm world anchors for carry-slot alignment in `InteractionController`.
 - Idle mode includes per-arm deterministic variation plus per-idle-entry randomized offsets/signs so repeated stop->idle transitions do not snap to a single identical pose.
 - Supports editor-time preview modes (`Static Targets`, `Idle`, `Crawl`, `Mixer`, `Hold`) while temporarily suspending local `AnimationPlayer` playback.
@@ -136,7 +139,7 @@ Scripts are grouped by runtime domain to keep ownership boundaries clear:
 - Current files: `interactable.gd`, `interaction_controller.gd`, `focus_target.gd`, `card_reader.gd`, `code_panel.gd`, `focus_reject_feedback.gd`, `interaction_hint_builder.gd`.
 4. `res://scripts/rig/`
 - Procedural octopus rig wrapper and arm/head data models.
-- Current files: `OctoRig.gd`, `OctoArm.gd`, `OctoHead.gd`.
+- Current files: `OctoRig.gd`, `OctoSurfaceLocomotion.gd`, `OctoArm.gd`, `OctoHead.gd`.
 
 ## Movement Data Flow
 
