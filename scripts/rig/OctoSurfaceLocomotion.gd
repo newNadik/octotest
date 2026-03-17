@@ -24,6 +24,8 @@ const ARM_SOCKET_ANGLE_BY_NAME := {
 var enabled := false
 var debug_enabled := true
 var debug_print_state_changes := false
+var debug_print_crawl_base_pose := true
+var debug_crawl_pose_log_interval := 0.05
 
 var ground_probe_height := 0.65
 var ground_probe_depth := 1.25
@@ -64,23 +66,23 @@ var gait_frequency := 0.92
 var gait_duty_cycle := 0.78
 var crawl_bend_plane_offset := 0.0
 var role_phase_visual_gain := 1.25
-var role_stride_sweep_gain := 1.2
+var role_stride_sweep_gain := 2.2
 var role_support_gain := 1.15
 var role_error_soft_limit := 0.18
 var role_error_hard_limit := 0.42
-var role_focus_segment := "mid" # all | base | mid | tip
+var role_focus_segment := "all" # all | base | mid | tip
 var role_focus_blend := 0.72
 var role_focus_base_bend_gain := 1.0
-var role_focus_base_angle_gain := 2.8
+var role_focus_base_angle_gain := 4.2
 var role_mid_plane_offset := 1.8
 var role_mid_bend_sign := 1.0
 var crawl_neutral_base_bend := 0.81
-var crawl_neutral_mid_bend := 0.83
-var crawl_neutral_tip_bend := 0.0
+var crawl_neutral_mid_bend := 1.83
+var crawl_neutral_tip_bend := 3.5
 var crawl_swing_lift := 0.16
-var crawl_support_contact_blend := 0.52
-var crawl_swing_contact_blend := 0.18
-var crawl_max_active_bend := 1.25
+var crawl_support_contact_blend := 0.38
+var crawl_swing_contact_blend := 0.08
+var crawl_max_active_bend := 1.8
 var simplify_crawl_motion := true
 
 var _rig
@@ -158,8 +160,6 @@ func step(
 	var propulsion_force := Vector3.ZERO
 	_anchored_count = 0
 	_debug_lines = PackedStringArray()
-	var active_step_group := int(floor(_cycle_time * gait_frequency * 2.0)) % 2
-
 	for arm in _arms:
 		if arm == null:
 			continue
@@ -169,7 +169,7 @@ func step(
 		var runtime: Dictionary = _arm_runtime_by_name[arm_name]
 		runtime["state_time"] = float(runtime["state_time"]) + delta
 		runtime["last_force"] = 0.0
-		_update_arm_state(runtime, arm, body_position, body_basis, desired_planar, has_command, active_step_group, space_state, delta)
+		_update_arm_state(runtime, arm, body_position, body_basis, desired_planar, has_command, space_state, delta)
 		_apply_arm_pose(runtime, arm, body_position, body_basis, has_command)
 
 		if bool(runtime["anchor_valid"]):
@@ -278,7 +278,6 @@ func _update_arm_state(
 	body_basis: Basis,
 	desired_planar: Vector3,
 	has_command: bool,
-	active_step_group: int,
 	space_state: PhysicsDirectSpaceState3D,
 	delta: float
 ) -> void:
@@ -294,10 +293,11 @@ func _update_arm_state(
 	var ground_hit := _sample_ground_contact(tip_now, body_basis, space_state)
 	var state: int = int(runtime["state"])
 	var state_time: float = float(runtime["state_time"])
-	var phase: float = float(runtime["phase"])
-	var gait := _gait_value(phase)
 	var group := int(runtime.get("step_group", 0))
-	var should_step := has_command and group == active_step_group and gait > gait_duty_cycle
+	# Two 4-arm cohorts oscillate in opposite phase for smoother crawl cadence.
+	var group_phase := 0.0 if group == 0 else 0.5
+	var group_gait := _gait_value(group_phase)
+	var should_step := has_command and group_gait > gait_duty_cycle
 	var tip_target: Vector3 = runtime["tip_target"]
 	var anchor: Vector3 = runtime["anchor"]
 
@@ -599,6 +599,22 @@ func _apply_arm_pose(runtime: Dictionary, arm, body_position: Vector3, body_basi
 		tip_bend,
 		tip_angle
 	)
+	runtime["base_bend"] = base_bend
+	runtime["base_angle"] = base_angle
+	if debug_print_crawl_base_pose and has_command and crawl_phase == "swing":
+		var last_pose_log_t := float(runtime.get("last_crawl_pose_log_t", -INF))
+		if _cycle_time - last_pose_log_t >= maxf(0.01, debug_crawl_pose_log_interval):
+			print(
+				"crawl pose %s | phase=%s(%.2f) | base_bend=%.3f | base_angle=%.3f"
+				% [
+					str(runtime["name"]),
+					crawl_phase,
+					crawl_phase_t,
+					base_bend,
+					base_angle,
+				]
+			)
+			runtime["last_crawl_pose_log_t"] = _cycle_time
 
 
 func _apply_segment_focus(
@@ -625,6 +641,62 @@ func _apply_segment_focus(
 	var out_mid_angle := mid_angle
 	var out_tip_angle := tip_angle
 	match segment_name:
+		"all":
+			# Compose all role-focus profiles so "all" reflects tuned base/mid/tip behaviors.
+			var base_pose := _apply_segment_focus(
+				"base",
+				a,
+				phase_name,
+				phase_t,
+				stretch,
+				role_swing,
+				arm_side_sign,
+				ground_plane_angle,
+				base_bend,
+				mid_bend,
+				tip_bend,
+				base_angle,
+				mid_angle,
+				tip_angle
+			)
+			var mid_pose := _apply_segment_focus(
+				"mid",
+				a,
+				phase_name,
+				phase_t,
+				stretch,
+				role_swing,
+				arm_side_sign,
+				ground_plane_angle,
+				base_bend,
+				mid_bend,
+				tip_bend,
+				base_angle,
+				mid_angle,
+				tip_angle
+			)
+			var tip_pose := _apply_segment_focus(
+				"tip",
+				a,
+				phase_name,
+				phase_t,
+				stretch,
+				role_swing,
+				arm_side_sign,
+				ground_plane_angle,
+				base_bend,
+				mid_bend,
+				tip_bend,
+				base_angle,
+				mid_angle,
+				tip_angle
+			)
+			out_base_bend = (float(base_pose["base_bend"]) + float(mid_pose["base_bend"]) + float(tip_pose["base_bend"])) / 3.0
+			out_mid_bend = (float(base_pose["mid_bend"]) + float(mid_pose["mid_bend"]) + float(tip_pose["mid_bend"])) / 3.0
+			out_tip_bend = (float(base_pose["tip_bend"]) + float(mid_pose["tip_bend"]) + float(tip_pose["tip_bend"])) / 3.0
+			out_base_angle = (float(base_pose["base_angle"]) + float(mid_pose["base_angle"]) + float(tip_pose["base_angle"])) / 3.0
+			out_mid_angle = (float(base_pose["mid_angle"]) + float(mid_pose["mid_angle"]) + float(tip_pose["mid_angle"])) / 3.0
+			out_tip_angle = (float(base_pose["tip_angle"]) + float(mid_pose["tip_angle"]) + float(tip_pose["tip_angle"])) / 3.0
 		"base":
 			# Explicit long-stroke sweep per phase:
 			# push/load leaves arm behind, recover/swing moves it far forward.
@@ -633,9 +705,9 @@ func _apply_segment_focus(
 			# Keep bend low; drive sweep mostly by angle to avoid vertical "umbrella" pose.
 			out_base_bend = (0.08 + arch * 0.12 + (1.0 - stretch) * 0.06) * role_focus_base_bend_gain
 			out_base_angle = ground_plane_angle + clampf(
-				(role_swing * 0.38) + sweep * role_focus_base_angle_gain,
-				-1.05,
-				1.05
+				(role_swing * 0.85) + sweep * role_focus_base_angle_gain,
+				-2.6,
+				2.6
 			)
 			# Keep mid/tip in passive contact posture (no forced downward curl).
 			out_mid_bend = lerpf(out_mid_bend, 0.04, a)
@@ -718,10 +790,10 @@ func _apply_crawl_neutral_baseline(
 		# Keep base stable and avoid fold-over while tuning mid.
 		base_blend *= 0.65
 	var out_base_bend := lerpf(base_bend, target_base_bend, base_blend)
-	var out_mid_bend := lerpf(mid_bend, target_mid_bend, contact_blend)
-	var out_tip_bend := lerpf(tip_bend, target_tip_bend, contact_blend)
+	var out_mid_bend := lerpf(mid_bend, target_mid_bend, contact_blend) * 2
+	var out_tip_bend := lerpf(tip_bend, target_tip_bend, contact_blend) * 2
 
-	var base_angle_contact_blend := contact_blend * 0.18
+	var base_angle_contact_blend := contact_blend * 0.08
 	var mid_angle_target := ground_plane_angle
 	var tip_angle_target := ground_plane_angle
 	var mid_angle_blend := contact_blend * 0.95
@@ -734,8 +806,8 @@ func _apply_crawl_neutral_baseline(
 		tip_angle_blend = contact_blend * 0.35
 
 	var out_base_angle := lerpf(base_angle, ground_plane_angle, base_angle_contact_blend)
-	var out_mid_angle := lerp_angle(mid_angle, mid_angle_target, mid_angle_blend) + 1 * arm_side_sign
-	var out_tip_angle := lerp_angle(tip_angle, tip_angle_target, tip_angle_blend)
+	var out_mid_angle := lerp_angle(mid_angle, mid_angle_target, mid_angle_blend) + 1.5 * arm_side_sign
+	var out_tip_angle := lerp_angle(tip_angle, tip_angle_target, tip_angle_blend) + 2.5 * arm_side_sign
 
 	return {
 		"base_bend": out_base_bend,
@@ -853,7 +925,7 @@ func _build_role_pose_for_phase(
 				"base_bend": lerpf(0.78, 0.44, stretch) * (1.0 - ease * 0.2) * (1.0 + (vg - 1.0) * 0.25),
 				"mid_bend": lerpf(0.16, 0.06, stretch) * (1.0 + (vg - 1.0) * 0.2),
 				"tip_bend": lerpf(0.06, 0.0, stretch) * (1.0 + (vg - 1.0) * 0.18),
-				"base_angle": ground_plane_angle + clampf(role_swing * 0.62, -0.56, 0.56),
+				"base_angle": ground_plane_angle + clampf(role_swing * 1.24, -1.12, 1.12),
 				"mid_angle": ground_plane_angle + clampf(role_swing * 0.18 + pole_x * 0.03, -0.2, 0.2),
 				"tip_angle": ground_plane_angle + clampf(role_swing * 0.1, -0.1, 0.1),
 			}
@@ -863,7 +935,7 @@ func _build_role_pose_for_phase(
 				"base_bend": lerpf(0.42, 0.24, stretch) * (1.0 + (vg - 1.0) * 0.25),
 				"mid_bend": (lerpf(0.54, 0.3, stretch) + ease * 0.24) * (1.0 + (vg - 1.0) * 0.55),
 				"tip_bend": (lerpf(0.22, 0.12, stretch) + ease * 0.12) * (1.0 + (vg - 1.0) * 0.45),
-				"base_angle": ground_plane_angle + clampf(role_swing * 0.64, -0.58, 0.58),
+				"base_angle": ground_plane_angle + clampf(role_swing * 1.28, -1.16, 1.16),
 				"mid_angle": ground_plane_angle + clampf(role_swing * 0.74 + pole_x * 0.05, -0.66, 0.66),
 				"tip_angle": ground_plane_angle + clampf(role_swing * 0.42, -0.38, 0.38),
 			}
@@ -894,7 +966,7 @@ func _build_role_pose_for_phase(
 				"base_bend": lerpf(0.5, 0.24, stretch),
 				"mid_bend": lerpf(0.32, 0.12, stretch),
 				"tip_bend": lerpf(0.14, 0.04, stretch),
-				"base_angle": ground_plane_angle + clampf(role_swing * 0.72, -0.62, 0.62),
+				"base_angle": ground_plane_angle + clampf(role_swing * 1.44, -1.24, 1.24),
 				"mid_angle": ground_plane_angle + clampf(role_swing * 0.48 + pole_x * 0.04, -0.4, 0.4),
 				"tip_angle": ground_plane_angle + clampf(role_swing * 0.3, -0.26, 0.26),
 			}
@@ -902,10 +974,10 @@ func _build_role_pose_for_phase(
 			# Swing role: base leads stride; mid/tip tuck then extend toward plant.
 			var swing_lift := sin(ease * PI)
 			return {
-				"base_bend": (lerpf(0.92, 0.52, stretch) + swing_lift * 0.24 * vg) * (1.0 + (vg - 1.0) * 0.35),
+				"base_bend": (lerpf(0.92, 0.52, stretch) + swing_lift * 0.72 * vg) * (1.0 + (vg - 1.0) * 0.35),
 				"mid_bend": (lerpf(0.26, 0.08, stretch) + swing_lift * 0.12 * vg) * (1.0 + (vg - 1.0) * 0.35),
 				"tip_bend": (lerpf(0.08, 0.02, stretch) + swing_lift * 0.06 * vg) * (1.0 + (vg - 1.0) * 0.25),
-				"base_angle": ground_plane_angle + clampf(role_swing * 1.52, -1.25, 1.25),
+				"base_angle": ground_plane_angle + clampf(role_swing * 6.2, -5.2, 5.2),
 				"mid_angle": ground_plane_angle + clampf(role_swing * 0.9 + pole_x * 0.06, -0.72, 0.72),
 				"tip_angle": ground_plane_angle + clampf(role_swing * 0.42, -0.34, 0.34),
 			}
@@ -1081,7 +1153,7 @@ func _gait_value(phase: float) -> float:
 
 
 func _debug_line(runtime: Dictionary) -> String:
-	return "%s | %s/%s(%.2f) | anchored=%s | traction=%.2f | force=%.2f | err=%.3f" % [
+	return "%s | %s/%s(%.2f) | anchored=%s | traction=%.2f | force=%.2f | err=%.3f | base_bend=%.3f | base_angle=%.3f" % [
 		str(runtime["name"]),
 		_state_name(int(runtime["state"])),
 		str(runtime.get("crawl_phase", "idle")),
@@ -1090,6 +1162,8 @@ func _debug_line(runtime: Dictionary) -> String:
 		float(runtime["traction"]),
 		float(runtime["last_force"]),
 		float(runtime["anchor_error"]),
+		float(runtime.get("base_bend", 0.0)),
+		float(runtime.get("base_angle", 0.0)),
 	]
 
 

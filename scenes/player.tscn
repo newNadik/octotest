@@ -19,8 +19,10 @@ surface_locomotion_debug_print = true
 surface_locomotion_debug_draw_3d = true
 preview_in_editor = true
 preview_base_bend = 0.81
-preview_mid_bend = 0.8300000000000001
-preview_mid_bend_angle = 1.4999999999999996
+preview_mid_bend = 0.8199999999999998
+preview_mid_bend_angle = 1.9199999999999995
+preview_tip_bend = 1.5
+preview_tip_bend_angle = 1.4999999999999996
 
 [node name="Octo" parent="PlayerVisual" unique_id=1282528951 instance=ExtResource("2_yn3vd")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.06, 0)
