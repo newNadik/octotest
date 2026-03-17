@@ -59,26 +59,12 @@ const ARM_CONFIGS: Dictionary = {
 
 const HEAD_BONE_NAMES: Array[String] = ["HEAD_01", "Bone.001", "Bone.002", "Bone.003"]
 const HOLD_ARM_PRIORITY: PackedStringArray = ["arm_2", "arm_3", "arm_5", "arm_4", "arm_0", "arm_1", "arm_6", "arm_7"]
-const CRAWL_BASE_ANGLE_RANGES := {
-	"arm_0": Vector2(0.85, -0.7),
-	"arm_1": Vector2(0.55, 1.5),
-	"arm_2": Vector2(1.0, -0.4),
-	"arm_3": Vector2(-0.3, 0.9),
-	"arm_4": Vector2(-0.7, 0.7),
-	"arm_5": Vector2(0.7, -0.2),
-	"arm_6": Vector2(1.4, 0.0),
-	"arm_7": Vector2(-0.7, 0.4),
-}
-const CRAWL_MID_BEND_RANGES := {
-	"arm_0": Vector2(-1.0, 1.0),
-	"arm_1": Vector2(1.0, -1.0),
-	"arm_2": Vector2(-1.0, 1.0),
-	"arm_3": Vector2(1.0, -1.0),
-	"arm_4": Vector2(1.0, -1.0),
-	"arm_5": Vector2(-1.0, 1.0),
-	"arm_6": Vector2(-1.0, 1.0),
-	"arm_7": Vector2(1.0, -1.0),
-}
+const CRAWL_PREVIEW_NEUTRAL_BASE_BEND := 0.81
+const CRAWL_PREVIEW_NEUTRAL_MID_BEND := 1.83
+const CRAWL_PREVIEW_NEUTRAL_TIP_BEND := 3.5
+const CRAWL_PREVIEW_MAX_ACTIVE_BEND := 1.8
+const CRAWL_PREVIEW_BASE_ANGLE_BACK_LIMIT := -7.5
+const CRAWL_PREVIEW_BASE_ANGLE_FORWARD_LIMIT := 5.0
 
 var debug_print_on_ready = true
 var print_indices_on_ready = false
@@ -93,6 +79,14 @@ var enable_arm_animation_mixer = true
 @export var surface_locomotion_debug_print := false
 @export var surface_locomotion_debug_draw_3d := false
 @export_range(0.02, 0.6, 0.01) var surface_locomotion_debug_normal_len := 0.18
+@export_subgroup("Surface Overrides")
+@export_range(0.0, 1.0, 0.01) var surface_hold_blend_strength := 1.0
+@export_subgroup("Crawl Profile")
+@export_range(0.2, 6.0, 0.01) var crawl_profile_gait_frequency := 5.0
+@export_range(0.2, 10.0, 0.01) var crawl_profile_stride_sweep_gain := 10.0
+@export_range(0.0, 1.0, 0.01) var crawl_profile_swing_lift := 0.16
+@export_range(0.0, 12.0, 0.01) var crawl_profile_base_angle_gain := 6.8
+@export_range(-6.0, 6.0, 0.01) var crawl_profile_base_angle_back_bias := -1.3
 # Legacy IK tuning (not exposed; raw skeleton IK path is disabled).
 var use_arm_ik := false
 var ik_influence := 0.35
@@ -104,16 +98,8 @@ var idle_stationary_speed_threshold = 0.08
 var idle_entry_pose_memory = true
 var idle_entry_memory_decay_speed = 2.4
 var crawl_requires_motion = true
-var crawl_cycle_hz = 1.5
 var crawl_speed_for_full_cycle = 2.5
 @export_range(0.0, 6.0, 0.01) var preview_motion_speed = 0.6
-var crawl_base_bend_center = 0.68
-var crawl_base_bend_amplitude = 0.08
-var crawl_mid_bend_angle_default = -1.5
-var crawl_mid_bend_angle_amplitude = 0.3
-var crawl_forward_ratio = 0.65
-var crawl_forward_lift = 0.08
-var crawl_backward_lift = 0.02
 var hold_arm_names: PackedStringArray = []
 var hold_base_bend = 1.0
 var hold_mid_bend = 0.68
@@ -166,15 +152,15 @@ var head_idle_sway_yaw = 0.08
 var head_idle_sway_pitch = 0.05
 var head_idle_sway_hz = 0.28
 var idle_base_bend_center = 0.68
-var idle_mid_bend_center = 1.0
+var idle_mid_bend_center = 1.5
 var idle_tip_bend_center = 0.5
 var idle_base_bend_amplitude = 0.1
 var idle_mid_bend_amplitude = 0.5
-var idle_tip_bend_amplitude = 0.5
+var idle_tip_bend_amplitude = 2.2
 var idle_base_bend_angle_offset = 0.0
 var idle_mid_bend_angle_offset = 1.7
 var idle_tip_bend_angle_offset = 0.0
-var idle_frequency_hz = 0.009
+var idle_frequency_hz = 0.05
 var idle_per_arm_amplitude_variation = 0.22
 var idle_per_arm_frequency_variation = 0.18
 var idle_per_arm_angle_variation = 0.3
@@ -218,15 +204,18 @@ var _surface_drive_velocity := Vector3.ZERO
 var _surface_support_normal := Vector3.UP
 var _surface_debug_lines: PackedStringArray = []
 var _surface_debug_accum := 0.0
+var _surface_idle_blend_state := 0.0
 var _surface_debug_mesh_instance: MeshInstance3D
 var _surface_debug_immediate: ImmediateMesh
 var _arm_ik_nodes: Dictionary = {}
 var _arm_ik_targets: Dictionary = {}
+const SURFACE_IDLE_BLEND_SPEED := 8.0
 
 
 func _ready() -> void:
 	set_process(true)
 	_idle_rng.randomize()
+	_sync_surface_locomotion_profile()
 	_setup_valid = build_rig()
 	if _setup_valid and debug_print_on_ready:
 		print_debug_summary()
@@ -252,17 +241,21 @@ func _process(delta: float) -> void:
 	if skeleton == null:
 		return
 	skeleton.clear_bones_global_pose_override()
-	if use_surface_locomotion:
-		# Arm targets are set from `step_surface_locomotion()` during physics.
-		pass
-	elif enable_arm_animation_mixer:
-		_update_arm_animation_targets(delta)
+	_update_non_surface_animation_targets(delta)
 	if apply_arm_pose_each_frame:
 		for arm in arms:
 			arm.update_params(delta)
 			arm.apply_pose(skeleton)
 	_update_head_pose(delta)
 	_update_surface_debug_draw()
+
+
+func _update_non_surface_animation_targets(delta: float) -> void:
+	# Surface locomotion owns crawl/idle targets via `step_surface_locomotion()`.
+	if use_surface_locomotion:
+		return
+	if enable_arm_animation_mixer:
+		_update_arm_animation_targets(delta)
 
 
 func build_rig() -> bool:
@@ -344,6 +337,7 @@ func build_rig() -> bool:
 	_setup_valid = _validation_errors.is_empty()
 	if _setup_valid:
 		_surface_locomotion.setup(self, arms)
+		_sync_surface_locomotion_profile()
 		_surface_locomotion.enabled = use_surface_locomotion
 		_surface_locomotion.debug_enabled = surface_locomotion_debug
 		_setup_arm_ik()
@@ -496,6 +490,7 @@ func step_surface_locomotion(
 	if world == null:
 		return _surface_drive_velocity
 	var space_state = world.direct_space_state
+	_sync_surface_locomotion_profile()
 	_surface_locomotion.enabled = use_surface_locomotion
 	_surface_locomotion.debug_enabled = surface_locomotion_debug
 	_surface_locomotion.step(
@@ -506,6 +501,7 @@ func step_surface_locomotion(
 		current_velocity,
 		space_state
 	)
+	_apply_surface_animation_overrides(delta, _has_surface_command_input(desired_direction))
 	_surface_drive_velocity = _surface_locomotion.get_drive_velocity()
 	_surface_support_normal = _surface_locomotion.get_support_normal()
 	_surface_debug_lines = _surface_locomotion.get_debug_lines()
@@ -796,7 +792,7 @@ func _update_arm_animation_targets(delta: float, speed_override: float = -1.0) -
 	var speed = speed_override if speed_override >= 0.0 else _get_owner_speed()
 	var speed_factor = _get_crawl_speed_factor(speed)
 	var cycle_drive = _get_crawl_cycle_drive(speed_factor)
-	_crawl_phase = wrapf(_crawl_phase + TAU * crawl_cycle_hz * cycle_drive * delta, 0.0, TAU)
+	_crawl_phase = wrapf(_crawl_phase + TAU * crawl_profile_gait_frequency * cycle_drive * delta, 0.0, TAU)
 	_update_idle_entry_state(speed, delta)
 
 	for arm in arms:
@@ -876,7 +872,7 @@ func _build_idle_target_data(arm, time_scale: float = 1.0) -> Dictionary:
 		target_mid_angle += float(run_offsets[3])
 		target_tip_bend += float(run_offsets[4])
 		target_tip_angle += float(run_offsets[5])
-	if idle_entry_pose_memory and _idle_entry_blend > 0.0:
+	if idle_entry_pose_memory and _idle_entry_blend > 0.0 and not use_surface_locomotion:
 		if typeof(_idle_entry_offsets) == TYPE_DICTIONARY and _idle_entry_offsets.has(arm.arm_name):
 			var offsets: Array = _idle_entry_offsets[arm.arm_name]
 			if offsets.size() >= 6:
@@ -931,18 +927,33 @@ func _apply_hold_target(arm) -> void:
 
 func _apply_crawl_target(arm) -> void:
 	var phase = wrapf(_crawl_phase + arm.phase_offset, 0.0, TAU)
-	var base_angle_range = _get_crawl_base_angle_range(arm.arm_name)
-	var mid_bend_range = _get_crawl_mid_bend_range(arm.arm_name)
-	var idle_target_data = _build_idle_target_data(arm)
-	var crawl_cycle = _build_crawl_cycle(phase)
-	var cycle_progress = float(crawl_cycle["progress"])
-	var cycle_lift = float(crawl_cycle["lift"])
-	var base_bend = _safe_float(crawl_base_bend_center) + sin(phase) * _safe_float(crawl_base_bend_amplitude) + cycle_lift
-	var base_angle = lerpf(base_angle_range.x, base_angle_range.y, cycle_progress)
-	var mid_bend = lerpf(mid_bend_range.x, mid_bend_range.y, cycle_progress)
-	var mid_bend_angle = _safe_float(crawl_mid_bend_angle_default) + sin(phase) * _safe_float(crawl_mid_bend_angle_amplitude) + cycle_lift * 0.2
-	var tip_bend = float(idle_target_data["tip_bend"])
-	var tip_angle = 0.0
+	var side_sign := _arm_side_sign(arm)
+	var stride_wave := sin(phase)
+	var role_swing := stride_wave * 0.38 * crawl_profile_stride_sweep_gain
+	var swing_lift := maxf(0.0, stride_wave) * crawl_profile_swing_lift
+
+	var base_bend := clampf(
+		CRAWL_PREVIEW_NEUTRAL_BASE_BEND + swing_lift * 0.45,
+		-CRAWL_PREVIEW_MAX_ACTIVE_BEND,
+		CRAWL_PREVIEW_MAX_ACTIVE_BEND
+	)
+	var mid_bend := clampf(
+		CRAWL_PREVIEW_NEUTRAL_MID_BEND + swing_lift * 0.7,
+		-CRAWL_PREVIEW_MAX_ACTIVE_BEND,
+		CRAWL_PREVIEW_MAX_ACTIVE_BEND
+	)
+	var tip_bend := clampf(
+		CRAWL_PREVIEW_NEUTRAL_TIP_BEND + swing_lift,
+		-CRAWL_PREVIEW_MAX_ACTIVE_BEND,
+		CRAWL_PREVIEW_MAX_ACTIVE_BEND
+	)
+	var base_angle := side_sign * clampf(
+		role_swing * crawl_profile_base_angle_gain + crawl_profile_base_angle_back_bias,
+		CRAWL_PREVIEW_BASE_ANGLE_BACK_LIMIT,
+		CRAWL_PREVIEW_BASE_ANGLE_FORWARD_LIMIT
+	)
+	var mid_bend_angle := side_sign * (clampf(role_swing * 0.9, -0.72, 0.72) + 1.5)
+	var tip_angle := side_sign * (clampf(role_swing * 0.42, -0.34, 0.34) + 2.5)
 
 	arm.set_target_section_bend(
 		base_bend,
@@ -954,32 +965,12 @@ func _apply_crawl_target(arm) -> void:
 	)
 
 
-func _get_crawl_base_angle_range(arm_name: String) -> Vector2:
-	if CRAWL_BASE_ANGLE_RANGES.has(arm_name):
-		return CRAWL_BASE_ANGLE_RANGES[arm_name]
-	return Vector2.ZERO
-
-
-func _get_crawl_mid_bend_range(arm_name: String) -> Vector2:
-	if CRAWL_MID_BEND_RANGES.has(arm_name):
-		return CRAWL_MID_BEND_RANGES[arm_name]
-	return Vector2(-1.0, 1.0)
-
-
-func _build_crawl_cycle(phase: float) -> Dictionary:
-	var cycle_pos = phase / TAU
-	var forward_ratio = clampf(_safe_float(crawl_forward_ratio), 0.05, 0.95)
-	if cycle_pos < forward_ratio:
-		var forward_t = cycle_pos / forward_ratio
-		return {
-			"progress": _smoothstep01(forward_t),
-			"lift": sin(forward_t * PI) * _safe_float(crawl_forward_lift),
-		}
-	var backward_t = (cycle_pos - forward_ratio) / maxf(0.001, 1.0 - forward_ratio)
-	return {
-		"progress": 1.0 - _smoothstep01(backward_t),
-		"lift": sin(backward_t * PI) * _safe_float(crawl_backward_lift),
-	}
+func _arm_side_sign(arm) -> float:
+	if arm == null:
+		return 1.0
+	if str(arm.side) == "left":
+		return -1.0
+	return 1.0
 
 
 func _get_crawl_speed_factor(speed: float) -> float:
@@ -988,6 +979,67 @@ func _get_crawl_speed_factor(speed: float) -> float:
 
 func _get_crawl_cycle_drive(speed_factor: float) -> float:
 	return speed_factor if crawl_requires_motion else maxf(0.2, speed_factor)
+
+
+func _sync_surface_locomotion_profile() -> void:
+	if _surface_locomotion == null:
+		return
+	_surface_locomotion.gait_frequency = crawl_profile_gait_frequency
+	_surface_locomotion.role_stride_sweep_gain = crawl_profile_stride_sweep_gain
+	_surface_locomotion.crawl_swing_lift = crawl_profile_swing_lift
+	_surface_locomotion.crawl_swing_base_angle_gain = crawl_profile_base_angle_gain
+	_surface_locomotion.crawl_swing_base_angle_back_bias = crawl_profile_base_angle_back_bias
+
+
+func _has_surface_command_input(desired_direction: Vector3) -> bool:
+	var planar_len := Vector2(desired_direction.x, desired_direction.z).length()
+	return planar_len > _surface_locomotion.command_deadzone
+
+
+func _apply_surface_animation_overrides(delta: float, has_command_input: bool) -> void:
+	if has_command_input:
+		var idle_alpha := 1.0 - exp(-SURFACE_IDLE_BLEND_SPEED * maxf(delta, 0.0))
+		_surface_idle_blend_state = lerpf(_surface_idle_blend_state, 0.0, idle_alpha)
+	else:
+		# Immediate handoff to idle on command release avoids one-frame crawl residue pose.
+		_surface_idle_blend_state = 1.0
+	var idle_blend := clampf(_surface_idle_blend_state, 0.0, 1.0)
+	for arm in arms:
+		var crawl_target := _capture_arm_target_pose(arm)
+		if _is_hold_arm(arm.arm_name):
+			_apply_hold_target(arm)
+			var hold_target := _capture_arm_target_pose(arm)
+			_apply_blended_pose(arm, crawl_target, hold_target, surface_hold_blend_strength)
+		else:
+			if idle_blend > 0.001:
+				_apply_idle_target(arm, 1.0)
+				var idle_target := _capture_arm_target_pose(arm)
+				_apply_blended_pose(arm, crawl_target, idle_target, idle_blend)
+			else:
+				_apply_blended_pose(arm, crawl_target, crawl_target, 0.0)
+
+
+func _capture_arm_target_pose(arm) -> Dictionary:
+	return {
+		"base_bend": float(arm.target_base_bend),
+		"base_angle": float(arm.target_base_bend_angle),
+		"mid_bend": float(arm.target_mid_bend),
+		"mid_angle": float(arm.target_mid_bend_angle),
+		"tip_bend": float(arm.target_tip_bend),
+		"tip_angle": float(arm.target_tip_bend_angle),
+	}
+
+
+func _apply_blended_pose(arm, from_pose: Dictionary, to_pose: Dictionary, blend: float) -> void:
+	var t := clampf(blend, 0.0, 1.0)
+	arm.set_target_section_bend(
+		lerpf(float(from_pose["base_bend"]), float(to_pose["base_bend"]), t),
+		lerp_angle(float(from_pose["base_angle"]), float(to_pose["base_angle"]), t),
+		lerpf(float(from_pose["mid_bend"]), float(to_pose["mid_bend"]), t),
+		lerp_angle(float(from_pose["mid_angle"]), float(to_pose["mid_angle"]), t),
+		lerpf(float(from_pose["tip_bend"]), float(to_pose["tip_bend"]), t),
+		lerp_angle(float(from_pose["tip_angle"]), float(to_pose["tip_angle"]), t)
+	)
 
 
 func _update_head_pose(delta: float) -> void:
@@ -1200,6 +1252,7 @@ func _on_preview_property_changed() -> void:
 		return
 	if not is_inside_tree():
 		return
+	_sync_surface_locomotion_profile()
 	if not preview_in_editor:
 		_restore_preview_animation_players()
 		return
@@ -1265,11 +1318,13 @@ func _apply_preview_targets(delta: float) -> void:
 			for arm in arms:
 				_apply_idle_target(arm)
 		2:
-			var preview_speed_factor = _get_crawl_speed_factor(_safe_float(preview_motion_speed))
-			var preview_cycle_drive = _get_crawl_cycle_drive(preview_speed_factor)
-			_crawl_phase = wrapf(_crawl_phase + TAU * _safe_float(crawl_cycle_hz) * preview_cycle_drive * maxf(delta, 1.0 / 60.0), 0.0, TAU)
-			for arm in arms:
-				_apply_crawl_target(arm)
+			if not _apply_surface_preview_crawl(delta):
+				# Fallback if editor world/space state is unavailable.
+				var preview_speed_factor = _get_crawl_speed_factor(_safe_float(preview_motion_speed))
+				var preview_cycle_drive = _get_crawl_cycle_drive(preview_speed_factor)
+				_crawl_phase = wrapf(_crawl_phase + TAU * crawl_profile_gait_frequency * preview_cycle_drive * maxf(delta, 1.0 / 60.0), 0.0, TAU)
+				for arm in arms:
+					_apply_crawl_target(arm)
 		3:
 			_update_arm_animation_targets(delta, _safe_float(crawl_speed_for_full_cycle))
 		4:
@@ -1277,6 +1332,36 @@ func _apply_preview_targets(delta: float) -> void:
 				_apply_hold_target(arm)
 		_:
 			_apply_editor_preview_targets()
+
+
+func _apply_surface_preview_crawl(delta: float) -> bool:
+	if not _setup_valid or skeleton == null:
+		return false
+	var world := get_world_3d()
+	if world == null:
+		return false
+	var space_state := world.direct_space_state
+	if space_state == null:
+		return false
+	var preview_delta := maxf(delta, 1.0 / 60.0)
+	var preview_speed := maxf(0.0, _safe_float(preview_motion_speed))
+	var desired_direction := -global_transform.basis.z * preview_speed
+	_sync_surface_locomotion_profile()
+	_surface_locomotion.enabled = true
+	_surface_locomotion.debug_enabled = surface_locomotion_debug
+	_surface_locomotion.step(
+		preview_delta,
+		global_position,
+		global_transform.basis,
+		desired_direction,
+		_surface_drive_velocity,
+		space_state
+	)
+	_apply_surface_animation_overrides(preview_delta, _has_surface_command_input(desired_direction))
+	_surface_drive_velocity = _surface_locomotion.get_drive_velocity()
+	_surface_support_normal = _surface_locomotion.get_support_normal()
+	_surface_debug_lines = _surface_locomotion.get_debug_lines()
+	return true
 
 
 func _log_preview_confirmation() -> void:
@@ -1422,6 +1507,7 @@ func _clear_runtime_data() -> void:
 	_surface_support_normal = Vector3.UP
 	_surface_debug_lines = PackedStringArray()
 	_surface_debug_accum = 0.0
+	_surface_idle_blend_state = 0.0
 	_surface_locomotion.setup(self, [])
 
 

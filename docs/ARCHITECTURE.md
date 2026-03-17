@@ -110,9 +110,10 @@ This document describes the current runtime architecture of the prototype and mu
   - reach/anchor target solving against floor via ray queries,
   - support-normal aggregation and body drive velocity output,
   - phase-role pose synthesis (`plant`/`load`/`push`/`stabilize`/`recover`/`swing`) mapped to arm sections.
-- Current tuning workflow is segment-focused:
-  - `role_focus_segment` (`base|mid|tip|all`) lets one segment be tuned in isolation,
-  - crawl-neutral baseline keeps contact posture stable while focus sweeps are tuned.
+- Surface animation ownership is explicit:
+  - `OctoSurfaceLocomotion` owns crawl targets and no-command settle targets.
+  - `OctoRig` applies post-overrides only (idle handoff for non-hold arms, hold override for occupied arms).
+- Crawl cadence uses two 4-arm cohorts with `gait_duty_cycle` in `[0..1]` and normalized propulsion by active pushing-arm count to reduce uneven slide pulses.
 - Exposes hold-arm priority ordering and per-arm world anchors for carry-slot alignment in `InteractionController`.
 - Idle mode includes per-arm deterministic variation plus per-idle-entry randomized offsets/signs so repeated stop->idle transitions do not snap to a single identical pose.
 - Supports editor-time preview modes (`Static Targets`, `Idle`, `Crawl`, `Mixer`, `Hold`) while temporarily suspending local `AnimationPlayer` playback.

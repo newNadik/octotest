@@ -18,10 +18,10 @@ Godot `4.6.1` 3D isometric prototype with:
 14. Section-based arm posing controls (`base/mid/tip` with `bend` + `bend_angle`), smooth cross-section blending, and clamped bend ranges for natural defaults.
 15. Arm animation mixer with per-arm modes (`STATIC`, `IDLE`, `CRAWL`, `HOLD`) so different arms can run different behaviors at the same time.
 16. Idle animation system with subtle global sway plus per-idle-run randomized per-arm offsets/signs to avoid identical settle poses after movement.
-17. Crawl animation is currently driven by explicit per-arm range tables plus shared forward/back timing, which makes step-shape tuning easier than the earlier generic crawl oscillator.
-18. Editor rig preview supports `Static Targets`, `Idle`, `Crawl`, `Mixer`, and `Hold` modes for visual tuning without entering gameplay.
-19. Crawl preview uses the same speed model as gameplay and is driven by `preview_motion_speed` instead of a separate preview-only crawl rate.
-20. Crawl currently keeps idle tip bend continuity while tip angle is pinned for direct crawl-shape iteration.
+17. Surface crawl is driven by `OctoSurfaceLocomotion` arm-state stepping (`SEARCH/REACH/GRAB/PUSH_PULL/RELEASE`) with role-phase pose synthesis (`plant/load/push/stabilize/recover/swing`).
+18. Crawl->idle handoff is explicit: when movement command drops, non-hold arms switch immediately to idle targets while hold arms remain in hold override.
+19. Crawl propulsion is normalized by active push-arm count to reduce uneven slide spikes when arm participation changes.
+20. Editor rig preview supports `Static Targets`, `Idle`, `Crawl`, `Mixer`, and `Hold`; crawl preview uses the same surface locomotion pipeline and `preview_motion_speed` input as gameplay.
 21. Hold flow assigns items to free arm slots with mid-arm priority, keeps each item in a stable slot, and drives occupied arms in hold animation.
 22. Held-item placement follows real rig arm anchors with size-aware clearance (cards stay close, larger props get extra anti-clipping offset).
 23. Camera defaults now support a closer gameplay view with increased zoom-in range.

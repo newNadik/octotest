@@ -172,11 +172,11 @@ func set_target_section_bend(
 	new_tip_bend_angle: float = 0.0
 ) -> void:
 	target_base_bend = clampf(new_base_bend, BASE_BEND_MIN, BASE_BEND_MAX)
-	target_base_bend_angle = new_base_bend_angle
+	target_base_bend_angle = wrapf(new_base_bend_angle, -PI, PI)
 	target_mid_bend = clampf(new_mid_bend, MID_BEND_MIN, MID_BEND_MAX)
-	target_mid_bend_angle = new_mid_bend_angle
+	target_mid_bend_angle = wrapf(new_mid_bend_angle, -PI, PI)
 	target_tip_bend = clampf(new_tip_bend, TIP_BEND_MIN, TIP_BEND_MAX)
-	target_tip_bend_angle = new_tip_bend_angle
+	target_tip_bend_angle = wrapf(new_tip_bend_angle, -PI, PI)
 
 
 func set_target_pose_params(
@@ -222,6 +222,9 @@ func set_section_bend_scales(
 
 func update_params(delta: float) -> void:
 	var alpha := 1.0 - exp(-param_lerp_speed * maxf(delta, 0.0))
+	base_bend_angle = wrapf(base_bend_angle, -PI, PI)
+	mid_bend_angle = wrapf(mid_bend_angle, -PI, PI)
+	tip_bend_angle = wrapf(tip_bend_angle, -PI, PI)
 	base_bend = lerpf(base_bend, target_base_bend, alpha)
 	base_bend_angle = lerp_angle(base_bend_angle, target_base_bend_angle, alpha)
 	mid_bend = lerpf(mid_bend, target_mid_bend, alpha)

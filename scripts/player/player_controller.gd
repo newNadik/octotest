@@ -11,6 +11,8 @@ var acceleration := 22.0
 var stop_distance := 0.2
 var gravity_scale := 1.0
 var turn_speed := 10.0
+var crawl_turn_speed_scale := 0.55
+var crawl_heading_smoothing := 10.0
 var step_height := 0.4
 var mantle_height := 1.2
 var mantle_duration := 0.75
@@ -35,6 +37,7 @@ var _mantle_progress := 0.0
 var _mantle_duration_active := 0.75
 var _post_mantle_turn_timer := 0.0
 var _octo_rig: Node
+var _smoothed_motion_dir := Vector2(0.0, 1.0)
 const POST_MANTLE_TURN_DAMP_TIME := 0.22
 
 
@@ -46,6 +49,10 @@ func _ready() -> void:
 	if shape_node != null and shape_node.shape is BoxShape3D:
 		_half_height = (shape_node.shape as BoxShape3D).size.y * 0.5
 	_octo_rig = get_node_or_null("PlayerVisual")
+	var forward := -global_transform.basis.z
+	var planar_forward := Vector2(forward.x, forward.z)
+	if planar_forward.length_squared() > 0.0001:
+		_smoothed_motion_dir = planar_forward.normalized()
 
 
 func set_move_target(world_target: Vector3) -> void:
@@ -131,10 +138,17 @@ func _rotate_toward_motion(delta: float) -> void:
 	var planar_velocity := Vector2(velocity.x, velocity.z)
 	if planar_velocity.length() <= 0.08:
 		return
+	var target_dir := planar_velocity.normalized()
 	var speed := turn_speed
+	if use_surface_locomotion:
+		var dir_alpha := 1.0 - exp(-crawl_heading_smoothing * maxf(delta, 0.0))
+		_smoothed_motion_dir = _smoothed_motion_dir.lerp(target_dir, dir_alpha)
+		if _smoothed_motion_dir.length_squared() > 0.0001:
+			target_dir = _smoothed_motion_dir.normalized()
+		speed *= crawl_turn_speed_scale
 	if _post_mantle_turn_timer > 0.0:
 		speed *= 0.35
-	_rotate_toward_planar(planar_velocity, delta, speed)
+	_rotate_toward_planar(target_dir, delta, speed)
 
 
 func _rotate_toward_planar(planar_direction: Vector2, delta: float, speed: float) -> void:

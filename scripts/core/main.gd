@@ -15,6 +15,8 @@ const CAMERA_MIN_WORLD_Y := 1.25
 @export var zoom_step := 1.0
 @export var focus_zoom_distance := 2.0
 @export var focus_tween_duration := 0.24
+@export var camera_follow_lerp_speed := 10.0
+@export var camera_follow_deadzone := 0.03
 
 @onready var player: CharacterBody3D = $Player
 @onready var camera_pivot: Node3D = $CameraPivot
@@ -61,7 +63,10 @@ func _physics_process(delta: float) -> void:
 	if not _focus_mode:
 		var follow_position := player.global_position + Vector3(0.0, CAMERA_FOLLOW_HEIGHT, 0.0)
 		follow_position.y = maxf(follow_position.y, CAMERA_MIN_WORLD_Y)
-		camera_pivot.global_position = follow_position
+		var to_follow := follow_position - camera_pivot.global_position
+		if to_follow.length() > camera_follow_deadzone:
+			var follow_alpha := 1.0 - exp(-camera_follow_lerp_speed * maxf(delta, 0.0))
+			camera_pivot.global_position = camera_pivot.global_position.lerp(follow_position, follow_alpha)
 
 	if in_game_menu.visible:
 		_interaction_controller.set_interaction_enabled(false)
