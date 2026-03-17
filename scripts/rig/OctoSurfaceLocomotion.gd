@@ -69,16 +69,18 @@ var role_support_gain := 1.15
 var role_error_soft_limit := 0.18
 var role_error_hard_limit := 0.42
 var role_focus_segment := "mid" # all | base | mid | tip
-var role_focus_blend := 0.88
+var role_focus_blend := 0.72
 var role_focus_base_bend_gain := 1.0
 var role_focus_base_angle_gain := 2.8
-var crawl_neutral_base_bend := 1.5
-var crawl_neutral_mid_bend := 0
-var crawl_neutral_tip_bend := 0
+var role_mid_plane_offset := 1.8
+var role_mid_bend_sign := 1.0
+var crawl_neutral_base_bend := 0.81
+var crawl_neutral_mid_bend := 0.83
+var crawl_neutral_tip_bend := 0.0
 var crawl_swing_lift := 0.16
 var crawl_support_contact_blend := 0.52
 var crawl_swing_contact_blend := 0.18
-var crawl_max_active_bend := 1.2
+var crawl_max_active_bend := 1.25
 var simplify_crawl_motion := true
 
 var _rig
@@ -449,7 +451,13 @@ func _apply_arm_pose(runtime: Dictionary, arm, body_position: Vector3, body_basi
 		var pole_vec := pole_target - base_pos
 		if pole_vec.length_squared() > 0.0001:
 			pole_dir = pole_vec.normalized()
-	var arm_side_sign := 1.0 if sin(float(runtime["angle_center"])) >= 0.0 else -1.0
+	var arm_side_sign := 1.0
+	if str(arm.side) == "left":
+		arm_side_sign = -1.0
+	elif str(arm.side) == "right":
+		arm_side_sign = 1.0
+	else:
+		arm_side_sign = 1.0 if sin(float(runtime["angle_center"])) >= 0.0 else -1.0
 	var local_pole := body_basis.inverse() * pole_dir
 	var local_dir := body_basis.inverse() * dir
 	var planar_local := Vector3(local_dir.x, 0.0, local_dir.z)
@@ -518,7 +526,7 @@ func _apply_arm_pose(runtime: Dictionary, arm, body_position: Vector3, body_basi
 	tip_angle = lerpf(ground_plane_angle, tip_angle, err_alpha)
 
 	var penetration := tip_target.y - tip_now_world.y
-	if penetration > 0.015:
+	if penetration > 0.015 and role_focus_segment != "mid":
 		var lift_fix := clampf(penetration * 2.2, 0.0, 0.32)
 		base_bend += lift_fix
 		mid_bend += lift_fix * 1.15
@@ -533,6 +541,7 @@ func _apply_arm_pose(runtime: Dictionary, arm, body_position: Vector3, body_basi
 			crawl_phase_t,
 			stretch,
 			role_swing,
+			arm_side_sign,
 			ground_plane_angle,
 			base_bend,
 			mid_bend,
@@ -551,6 +560,7 @@ func _apply_arm_pose(runtime: Dictionary, arm, body_position: Vector3, body_basi
 		var neutral_pose := _apply_crawl_neutral_baseline(
 			crawl_phase,
 			crawl_phase_t,
+			arm_side_sign,
 			ground_plane_angle,
 			base_bend,
 			mid_bend,
@@ -566,10 +576,18 @@ func _apply_arm_pose(runtime: Dictionary, arm, body_position: Vector3, body_basi
 		mid_angle = float(neutral_pose["mid_angle"])
 		tip_angle = float(neutral_pose["tip_angle"])
 
+		if role_focus_segment == "mid":
+			# Prevent phase/lift leakage while tuning mid crawl curvature.
+			base_bend = crawl_neutral_base_bend
+			tip_bend = crawl_neutral_tip_bend
+			base_angle = ground_plane_angle
+			tip_angle = ground_plane_angle
+
 	var bend_max := crawl_max_active_bend if has_command and crawl_phase != "idle" else 1.5
-	base_bend = clampf(base_bend, -0.3, bend_max)
-	mid_bend = clampf(mid_bend, -0.3, bend_max)
-	tip_bend = clampf(tip_bend, -0.3, bend_max)
+	var bend_min := -bend_max if has_command and crawl_phase != "idle" else -1.5
+	base_bend = clampf(base_bend, bend_min, bend_max)
+	mid_bend = clampf(mid_bend, bend_min, bend_max)
+	tip_bend = clampf(tip_bend, bend_min, bend_max)
 	runtime["crawl_phase"] = crawl_phase
 	runtime["crawl_phase_t"] = crawl_phase_t
 
@@ -590,6 +608,7 @@ func _apply_segment_focus(
 	phase_t: float,
 	stretch: float,
 	role_swing: float,
+	arm_side_sign: float,
 	ground_plane_angle: float,
 	base_bend: float,
 	mid_bend: float,
@@ -624,12 +643,31 @@ func _apply_segment_focus(
 			out_mid_angle = lerpf(out_mid_angle, ground_plane_angle + sweep * 0.06, a)
 			out_tip_angle = lerpf(out_tip_angle, ground_plane_angle + sweep * 0.04, a)
 		"mid":
-			out_mid_bend = out_mid_bend * 1.45
-			out_mid_angle = ground_plane_angle + (out_mid_angle - ground_plane_angle) * 1.7
-			out_base_bend = lerpf(out_base_bend, 0.18, a)
-			out_tip_bend = lerpf(out_tip_bend, 0.08, a)
+			# Mid role: strong power bend in curl plane (no lift-dominant angle).
+			var forward_bias := _mid_focus_forward_curve(phase_name, phase_t)
+			var mid_plane_angle := arm_side_sign * role_mid_plane_offset
+			var phase_back_bias := 0.0
+			if phase_name == "load":
+				phase_back_bias = 0.14
+			elif phase_name == "push":
+				phase_back_bias = 0.22
+			elif phase_name == "stabilize":
+				phase_back_bias = 0.08
+			out_mid_bend = lerpf(
+				out_mid_bend,
+				(0.72 + forward_bias * 0.2 + phase_back_bias * 0.35) * role_mid_bend_sign,
+				a
+			)
+			out_mid_angle = lerp_angle(
+				out_mid_angle,
+				mid_plane_angle + clampf((role_swing * 0.12) + forward_bias * 0.07, -0.2, 0.2),
+				a
+			)
+			# Keep base neutral; tip stays flatter so curvature reads in mid/body contact zone.
+			out_base_bend = lerpf(out_base_bend, crawl_neutral_base_bend, a)
+			out_tip_bend = lerpf(out_tip_bend, crawl_neutral_tip_bend, a)
 			out_base_angle = lerpf(out_base_angle, ground_plane_angle, a)
-			out_tip_angle = lerpf(out_tip_angle, ground_plane_angle, a)
+			out_tip_angle = lerp_angle(out_tip_angle, ground_plane_angle, a * 0.85)
 		"tip":
 			out_tip_bend = out_tip_bend * 1.45
 			out_tip_angle = ground_plane_angle + (out_tip_angle - ground_plane_angle) * 1.6
@@ -653,6 +691,7 @@ func _apply_segment_focus(
 func _apply_crawl_neutral_baseline(
 	phase_name: String,
 	phase_t: float,
+	arm_side_sign: float,
 	ground_plane_angle: float,
 	base_bend: float,
 	mid_bend: float,
@@ -674,14 +713,29 @@ func _apply_crawl_neutral_baseline(
 	var target_mid_bend := crawl_neutral_mid_bend + swing_lift * 0.7
 	var target_tip_bend := crawl_neutral_tip_bend + swing_lift
 
-	var out_base_bend := lerpf(base_bend, target_base_bend, contact_blend)
+	var base_blend := contact_blend
+	if role_focus_segment == "mid":
+		# Keep base stable and avoid fold-over while tuning mid.
+		base_blend *= 0.65
+	var out_base_bend := lerpf(base_bend, target_base_bend, base_blend)
 	var out_mid_bend := lerpf(mid_bend, target_mid_bend, contact_blend)
 	var out_tip_bend := lerpf(tip_bend, target_tip_bend, contact_blend)
 
 	var base_angle_contact_blend := contact_blend * 0.18
+	var mid_angle_target := ground_plane_angle
+	var tip_angle_target := ground_plane_angle
+	var mid_angle_blend := contact_blend * 0.95
+	var tip_angle_blend := contact_blend * 0.95
+	if role_focus_segment == "mid":
+		# Preserve lateral mid bend plane while still allowing mild stabilization.
+		mid_angle_target = arm_side_sign * role_mid_plane_offset
+		tip_angle_target = ground_plane_angle
+		mid_angle_blend = contact_blend * 0.2
+		tip_angle_blend = contact_blend * 0.35
+
 	var out_base_angle := lerpf(base_angle, ground_plane_angle, base_angle_contact_blend)
-	var out_mid_angle := lerpf(mid_angle, ground_plane_angle, contact_blend * 0.95)
-	var out_tip_angle := lerpf(tip_angle, ground_plane_angle, contact_blend * 0.95)
+	var out_mid_angle := lerp_angle(mid_angle, mid_angle_target, mid_angle_blend) + 1 * arm_side_sign
+	var out_tip_angle := lerp_angle(tip_angle, tip_angle_target, tip_angle_blend)
 
 	return {
 		"base_bend": out_base_bend,
@@ -725,6 +779,23 @@ func _base_focus_bend_curve(phase_name: String, phase_t: float) -> float:
 			return 0.4 + t * 0.3
 		_:
 			return 0.32
+
+
+func _mid_focus_forward_curve(phase_name: String, phase_t: float) -> float:
+	var t := clampf(phase_t, 0.0, 1.0)
+	match phase_name:
+		"load":
+			return lerpf(0.2, 0.7, t)
+		"push":
+			return lerpf(0.7, 1.0, t)
+		"stabilize":
+			return lerpf(1.0, 0.45, t)
+		"recover":
+			return lerpf(0.45, 0.15, t)
+		"swing":
+			return lerpf(0.15, 0.35, t)
+		_:
+			return 0.15
 
 
 func _resolve_crawl_phase(state: int, state_time: float) -> String:
