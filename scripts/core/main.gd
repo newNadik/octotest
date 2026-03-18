@@ -9,7 +9,7 @@ const CAMERA_FOLLOW_HEIGHT := 0.65
 const CAMERA_MIN_WORLD_Y := 1.25
 
 @export var orbit_sensitivity := 0.2
-@export var key_orbit_speed := 65.0
+@export var drag_orbit_threshold_px := 10.0
 @export var min_zoom := 2.4
 @export var max_zoom := 14.0
 @export var zoom_step := 1.0
@@ -33,6 +33,9 @@ const CAMERA_MIN_WORLD_Y := 1.25
 
 var _interaction_controller
 var _orbiting := false
+var _primary_pointer_down := false
+var _primary_pointer_dragging := false
+var _primary_pointer_start := Vector2.ZERO
 var _yaw := 35.0
 var _pitch := -35.0
 var _focus_mode := false
@@ -77,13 +80,6 @@ func _physics_process(delta: float) -> void:
 	_process_focus_mode()
 	_process_pending_focus_entry()
 
-	if not _focus_mode and Input.is_key_pressed(KEY_Q):
-		_yaw += key_orbit_speed * delta
-		_apply_camera_angles()
-	elif not _focus_mode and Input.is_key_pressed(KEY_E):
-		_yaw -= key_orbit_speed * delta
-		_apply_camera_angles()
-
 
 func _unhandled_input(event: InputEvent) -> void:
 	if _is_escape_press(event):
@@ -101,71 +97,102 @@ func _unhandled_input(event: InputEvent) -> void:
 	if in_game_menu.visible:
 		return
 
-	if _focus_mode:
-		_handle_focus_mode_input(event)
+	if event is InputEventMouseButton:
+		if event.button_index == MOUSE_BUTTON_WHEEL_UP and event.pressed:
+			spring_arm.spring_length = clampf(spring_arm.spring_length - zoom_step, min_zoom, max_zoom)
+			get_viewport().set_input_as_handled()
+			return
+		if event.button_index == MOUSE_BUTTON_WHEEL_DOWN and event.pressed:
+			spring_arm.spring_length = clampf(spring_arm.spring_length + zoom_step, min_zoom, max_zoom)
+			get_viewport().set_input_as_handled()
+			return
+		if event.button_index == MOUSE_BUTTON_LEFT:
+			if event.pressed:
+				_begin_primary_pointer(event.position)
+			else:
+				if _end_primary_pointer(event.position):
+					get_viewport().set_input_as_handled()
+			return
+
+	if event is InputEventScreenTouch:
+		if event.pressed:
+			_begin_primary_pointer(event.position)
+		else:
+			if _end_primary_pointer(event.position):
+				get_viewport().set_input_as_handled()
 		return
 
-	if event is InputEventMouseButton:
-		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
-			var clicked_focus_target = _interaction_controller.get_focus_target_at_screen(event.position)
-			if clicked_focus_target != null:
-				_focus_pending_target = clicked_focus_target
-			if _interaction_controller.try_handle_interaction_click(event.position):
-				get_viewport().set_input_as_handled()
-				return
-			if clicked_focus_target != null:
-				_interaction_controller.request_approach_focus_target(clicked_focus_target)
-				get_viewport().set_input_as_handled()
-				return
-			var click_position: Vector3 = _raycast_to_ground(event.position)
-			if click_position.is_finite():
-				if _interaction_controller.try_handle_ground_move_click():
-					get_viewport().set_input_as_handled()
-					return
-				player.set_move_target(click_position)
-				get_viewport().set_input_as_handled()
-		elif event.button_index == MOUSE_BUTTON_RIGHT:
-			_orbiting = event.pressed
-		elif event.button_index == MOUSE_BUTTON_WHEEL_UP and event.pressed:
-			spring_arm.spring_length = clampf(spring_arm.spring_length - zoom_step, min_zoom, max_zoom)
-		elif event.button_index == MOUSE_BUTTON_WHEEL_DOWN and event.pressed:
-			spring_arm.spring_length = clampf(spring_arm.spring_length + zoom_step, min_zoom, max_zoom)
-
-	if event is InputEventMouseMotion and _orbiting:
-		_yaw -= event.relative.x * orbit_sensitivity
-		_pitch = clampf(_pitch - event.relative.y * orbit_sensitivity, -80.0, -10.0)
-		_apply_camera_angles()
-
-	if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_F:
-		_interaction_controller.handle_drop_input(event.shift_pressed)
-		get_viewport().set_input_as_handled()
-
-
-func _handle_focus_mode_input(event: InputEvent) -> void:
-	if event is InputEventMouseButton:
-		if event.button_index == MOUSE_BUTTON_RIGHT and event.pressed:
-			_exit_focus_mode()
+	if event is InputEventMouseMotion:
+		if _update_primary_pointer_drag(event.position, event.relative):
 			get_viewport().set_input_as_handled()
-			return
-		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
-			if _interaction_controller.try_handle_interaction_click(event.position):
-				get_viewport().set_input_as_handled()
-				return
+		return
 
-			if _interaction_controller.try_interact_with_focus_target(event.position):
-				get_viewport().set_input_as_handled()
-				return
-
-			if _interaction_controller.is_click_over_focus_items(event.position):
-				get_viewport().set_input_as_handled()
-				return
-
-			_exit_focus_mode()
+	if event is InputEventScreenDrag:
+		if _update_primary_pointer_drag(event.position, event.relative):
 			get_viewport().set_input_as_handled()
-			return
+		return
 
-	if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_F:
-		get_viewport().set_input_as_handled()
+
+func _begin_primary_pointer(screen_position: Vector2) -> void:
+	_primary_pointer_down = true
+	_primary_pointer_dragging = false
+	_primary_pointer_start = screen_position
+
+
+func _end_primary_pointer(screen_position: Vector2) -> bool:
+	if not _primary_pointer_down:
+		return false
+	var was_dragging := _primary_pointer_dragging
+	_primary_pointer_down = false
+	_primary_pointer_dragging = false
+	_orbiting = false
+	if was_dragging:
+		return true
+	return _handle_primary_click(screen_position)
+
+
+func _update_primary_pointer_drag(screen_position: Vector2, relative: Vector2) -> bool:
+	if not _primary_pointer_down:
+		return false
+	if not _primary_pointer_dragging and screen_position.distance_to(_primary_pointer_start) >= drag_orbit_threshold_px:
+		_primary_pointer_dragging = true
+	if not _primary_pointer_dragging:
+		return false
+	if _focus_mode:
+		return true
+	_orbiting = true
+	_yaw -= relative.x * orbit_sensitivity
+	_pitch = clampf(_pitch - relative.y * orbit_sensitivity, -80.0, -10.0)
+	_apply_camera_angles()
+	return true
+
+
+func _handle_primary_click(screen_position: Vector2) -> bool:
+	if _focus_mode:
+		if _interaction_controller.try_handle_interaction_click(screen_position):
+			return true
+		if _interaction_controller.try_interact_with_focus_target(screen_position):
+			return true
+		if _interaction_controller.is_click_over_focus_items(screen_position):
+			return true
+		_exit_focus_mode()
+		return true
+
+	var clicked_focus_target = _interaction_controller.get_focus_target_at_screen(screen_position)
+	if clicked_focus_target != null:
+		_focus_pending_target = clicked_focus_target
+	if _interaction_controller.try_handle_interaction_click(screen_position):
+		return true
+	if clicked_focus_target != null:
+		_interaction_controller.request_approach_focus_target(clicked_focus_target)
+		return true
+	var click_position: Vector3 = _raycast_to_ground(screen_position)
+	if click_position.is_finite():
+		if _interaction_controller.try_handle_ground_move_click():
+			return true
+		player.set_move_target(click_position)
+		return true
+	return false
 
 
 func _process_pending_focus_entry() -> void:

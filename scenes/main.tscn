@@ -926,8 +926,7 @@ theme_override_constants/margin_bottom = 10
 [node name="HintLabel" type="Label" parent="UI/HUD/HintPanel/HintMargin" unique_id=671620158]
 layout_mode = 2
 text = "LMB Move
-RMB + Drag Orbit
-Q/E Keyboard Orbit
+LMB Drag Orbit
 Mouse Wheel Zoom
 Esc In-Game Menu"
 horizontal_alignment = 2

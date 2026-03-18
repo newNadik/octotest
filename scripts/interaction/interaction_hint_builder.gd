@@ -8,17 +8,14 @@ func build_lines(context: Dictionary) -> PackedStringArray:
 	if focus_locked:
 		lines.append_array([
 			"LMB Interact",
-			"RMB Exit Focus",
+			"LMB Drag Orbit",
 			"Esc In-Game Menu"
 		])
 	else:
 		lines.append_array([
 			"LMB Move / Interact",
-			"RMB + Drag Orbit",
-			"Q/E Keyboard Orbit",
+			"LMB Drag Orbit",
 			"Mouse Wheel Zoom",
-			"F Drop Last Item",
-			"Shift+F Drop All Items",
 			"Esc In-Game Menu"
 		])
 

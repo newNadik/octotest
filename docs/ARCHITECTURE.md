@@ -18,7 +18,10 @@ This document describes the current runtime architecture of the prototype and mu
 1. `Main`:
 - Script: `res://scripts/core/main.gd`
 - Handles mouse raycast targeting on ground collision layer.
-- Handles orbit camera controls (RMB drag, Q/E yaw, wheel zoom).
+- Handles simplified pointer controls:
+  - click/tap for move/interact,
+  - drag with primary pointer for orbit,
+  - wheel/pinch for zoom.
 - Handles in-game menu (`Esc` toggle) with `Main Menu` and `Quit` actions.
 - Delegates interaction/carry systems to `InteractionController`.
 2. `UI` (`CanvasLayer`) in gameplay scene:

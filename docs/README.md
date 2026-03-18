@@ -62,23 +62,19 @@ GODOT_BIN=/absolute/path/to/godot ./scripts/check.sh
 
 ## Controls
 
-1. `LMB`: set move target.
-2. `RMB + drag`: orbit camera.
-3. `Q` / `E`: keyboard orbit.
-4. Mouse wheel: zoom camera.
-5. `LMB` on interactable in range: interact immediately.
-6. `LMB` on interactable out of range: move closer and auto-interact when close.
-7. `LMB` on held item: drop that specific item.
-8. `F`: drop last held item.
-9. `Shift + F`: drop all held items.
-10. `Esc`: toggle in-game menu.
-11. Focus mode:
+1. `LMB` click/tap: move/interact (context-sensitive).
+2. `LMB` drag: orbit camera.
+3. Mouse wheel / pinch: zoom camera.
+4. `LMB` on interactable in range: interact immediately.
+5. `LMB` on interactable out of range: move closer and auto-interact when close.
+6. `LMB` on held item: drop that specific item.
+7. `Esc`: toggle in-game menu.
+8. Focus mode:
 - Auto-zooms when a focus-enabled object is clicked and the player reaches interaction distance.
-- `RMB` exits focus.
 - `LMB` outside interaction area exits focus.
 - While focused, held items are selectable at the bottom of the screen.
 - Code panel keypad buttons are only interactive while the panel is focused.
-12. Octopus does not jump; climb/mantle is triggered automatically when moving onto valid low elevated surfaces.
+9. Octopus does not jump; climb/mantle is triggered automatically when moving onto valid low elevated surfaces.
 
 ## Validate
 
