@@ -73,20 +73,17 @@ var default_base_bend = 0.67
 var default_mid_bend = 0.0
 var default_tip_bend = 0.0
 var enable_arm_animation_mixer = true
-@export_group("Surface Locomotion")
-@export var use_surface_locomotion := true
-@export var surface_locomotion_debug := true
-@export var surface_locomotion_debug_print := false
-@export var surface_locomotion_debug_draw_3d := false
-@export_range(0.02, 0.6, 0.01) var surface_locomotion_debug_normal_len := 0.18
-@export_subgroup("Surface Overrides")
-@export_range(0.0, 1.0, 0.01) var surface_hold_blend_strength := 1.0
-@export_subgroup("Crawl Profile")
-@export_range(0.2, 6.0, 0.01) var crawl_profile_gait_frequency := 5.0
-@export_range(0.2, 10.0, 0.01) var crawl_profile_stride_sweep_gain := 10.0
-@export_range(0.0, 1.0, 0.01) var crawl_profile_swing_lift := 0.16
-@export_range(0.0, 12.0, 0.01) var crawl_profile_base_angle_gain := 6.8
-@export_range(-6.0, 6.0, 0.01) var crawl_profile_base_angle_back_bias := -1.3
+var use_surface_locomotion := true
+var surface_locomotion_debug := true
+var surface_locomotion_debug_print := false
+var surface_locomotion_debug_draw_3d := false
+var surface_locomotion_debug_normal_len := 0.18
+var surface_hold_blend_strength := 1.0
+var crawl_profile_gait_frequency := 5.0
+var crawl_profile_stride_sweep_gain := 10.0
+var crawl_profile_swing_lift := 0.16
+var crawl_profile_base_angle_gain := 6.8
+var crawl_profile_base_angle_back_bias := -1.3
 # Legacy IK tuning (not exposed; raw skeleton IK path is disabled).
 var use_arm_ik := false
 var ik_influence := 0.35
@@ -99,7 +96,7 @@ var idle_entry_pose_memory = true
 var idle_entry_memory_decay_speed = 2.4
 var crawl_requires_motion = true
 var crawl_speed_for_full_cycle = 2.5
-@export_range(0.0, 6.0, 0.01) var preview_motion_speed = 0.6
+var preview_motion_speed = 0.6
 var hold_arm_names: PackedStringArray = []
 var hold_base_bend = 1.0
 var hold_mid_bend = 0.68
@@ -122,18 +119,17 @@ var head_forward_sign = 1.0
 var head_look_lerp_speed = 6.0
 var head_return_lerp_speed = 1.2
 var head_front_guard = -0.08
-@export_group("Preview")
-@export var preview_in_editor = false
-@export_enum("Static Targets", "Idle", "Crawl", "Mixer", "Hold") var preview_animation_mode := 0
-@export var preview_animate_in_editor = true
-@export var preview_apply_to_all_arms = true
-@export_enum("arm_0", "arm_1", "arm_2", "arm_3", "arm_4", "arm_5", "arm_6", "arm_7") var preview_arm_name := "arm_0"
-@export_range(-1.5, 1.5, 0.01) var preview_base_bend: float = 0.0
-@export_range(-3.14, 3.14, 0.01) var preview_base_bend_angle = 0.0
-@export_range(-1.5, 1.5, 0.01) var preview_mid_bend: float = 0.0
-@export_range(-3.14, 3.14, 0.01) var preview_mid_bend_angle = 0.0
-@export_range(-1.5, 1.5, 0.01) var preview_tip_bend: float = 0.0
-@export_range(-3.14, 3.14, 0.01) var preview_tip_bend_angle = 0.0
+var preview_in_editor = false
+var preview_animation_mode := 0
+var preview_animate_in_editor = true
+var preview_apply_to_all_arms = true
+var preview_arm_name := "arm_0"
+var preview_base_bend: float = 0.0
+var preview_base_bend_angle = 0.0
+var preview_mid_bend: float = 0.0
+var preview_mid_bend_angle = 0.0
+var preview_tip_bend: float = 0.0
+var preview_tip_bend_angle = 0.0
 
 # Internal debug toggles (kept in code, hidden from inspector by default).
 var head_debug_strong_follow = false

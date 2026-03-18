@@ -5,6 +5,9 @@ const WALL_COLLISION_MASK := 1 << 0
 const GROUND_COLLISION_MASK := 1 << 1
 const PLAYER_COLLISION_LAYER := 1 << 2
 const MovementMath = preload("res://scripts/core/movement_math.gd")
+const CLIMB_PHASE_FIRST_REACH := 0
+const CLIMB_PHASE_SECOND_REACH := 1
+const CLIMB_PHASE_TRANSITION := 2
 
 var move_speed := 6.0
 var acceleration := 22.0
@@ -93,17 +96,8 @@ func trigger_blocked_move_feedback() -> void:
 
 
 func _physics_process(delta: float) -> void:
-	if _pre_mantle_active:
-		_update_surface_crawl_pose(delta, _pre_mantle_planar_direction)
-		_process_pre_mantle(delta)
-		_update_blocked_move_feedback(delta)
-		return
-
-	if _mantling:
-		var mantle_dir := _mantle_to - global_position
-		_update_surface_crawl_pose(delta, Vector3(mantle_dir.x, 0.0, mantle_dir.z))
-		_process_mantle(delta)
-		_update_blocked_move_feedback(delta)
+	if _process_climb_phase(delta):
+		_update_visual_feedback(delta)
 		return
 
 	if _post_mantle_turn_timer > 0.0:
@@ -168,7 +162,20 @@ func _physics_process(delta: float) -> void:
 					1.0 - exp(-surface_align_strength * delta)
 				).orthonormalized()
 	_rotate_toward_motion(delta)
-	_update_blocked_move_feedback(delta)
+	_update_visual_feedback(delta)
+
+
+func _process_climb_phase(delta: float) -> bool:
+	if _pre_mantle_active:
+		_update_surface_crawl_pose(delta, _pre_mantle_planar_direction)
+		_process_pre_mantle(delta)
+		return true
+	if _mantling:
+		var mantle_dir := _mantle_to - global_position
+		_update_surface_crawl_pose(delta, Vector3(mantle_dir.x, 0.0, mantle_dir.z))
+		_process_mantle(delta)
+		return true
+	return false
 
 
 func _rotate_toward_motion(delta: float) -> void:
@@ -212,7 +219,7 @@ func _align_planar_velocity_to_slope(floor_normal: Vector3) -> void:
 	velocity.z = slope_direction.z * planar_speed
 
 
-func _update_blocked_move_feedback(delta: float) -> void:
+func _update_visual_feedback(delta: float) -> void:
 	if _visual_root == null:
 		return
 	var tilt_target := 0.0
@@ -318,21 +325,21 @@ func _process_pre_mantle(delta: float) -> void:
 	var target_planar := Vector2(sin(_pre_mantle_turn_target_yaw), cos(_pre_mantle_turn_target_yaw))
 	_rotate_toward_planar(target_planar, delta, climb_turn_speed)
 	match _pre_mantle_phase:
-		0:
+		CLIMB_PHASE_FIRST_REACH:
 			var t0 := clampf(_pre_mantle_phase_time / maxf(0.01, climb_first_arm_lead_duration), 0.0, 1.0)
 			_apply_climb_arm_reach_pose(climb_front_arm_a, t0)
 			_apply_climb_arm_reach_pose(climb_front_arm_b, 0.0)
 			if t0 >= 1.0:
-				_pre_mantle_phase = 1
+				_pre_mantle_phase = CLIMB_PHASE_SECOND_REACH
 				_pre_mantle_phase_time = 0.0
-		1:
+		CLIMB_PHASE_SECOND_REACH:
 			var t1 := clampf(_pre_mantle_phase_time / maxf(0.01, climb_reach_phase_duration), 0.0, 1.0)
 			_apply_climb_arm_reach_pose(climb_front_arm_a, 1.0)
 			_apply_climb_arm_reach_pose(climb_front_arm_b, t1)
 			if t1 >= 0.78:
-				_pre_mantle_phase = 2
+				_pre_mantle_phase = CLIMB_PHASE_TRANSITION
 				_pre_mantle_phase_time = 0.0
-		2:
+		CLIMB_PHASE_TRANSITION:
 			var t2 := clampf(_pre_mantle_phase_time / maxf(0.01, climb_turn_phase_duration), 0.0, 1.0)
 			_apply_climb_arm_reach_pose(climb_front_arm_a, 1.0)
 			_apply_climb_arm_reach_pose(climb_front_arm_b, 1.0)
@@ -357,13 +364,12 @@ func _cancel_pre_mantle_sequence() -> void:
 
 
 func _apply_climb_arm_reach_pose(arm_name: String, intensity: float) -> void:
-	if _octo_rig == null or arm_name.is_empty():
+	if not _is_valid_climb_arm(arm_name):
 		return
 	var t := clampf(intensity, 0.0, 1.0)
 	var inward_sign := _get_climb_arm_inward_sign(arm_name)
-	_octo_rig.call("set_arm_animation_mode", arm_name, 0)
-	_octo_rig.call(
-		"set_arm_target_section_bend",
+	_set_climb_arm_mode_static(arm_name)
+	_set_climb_arm_pose(
 		arm_name,
 		lerpf(0.72, 1.0, t),
 		lerpf(0.0, -0.4 * inward_sign, t),
@@ -377,16 +383,14 @@ func _apply_climb_arm_reach_pose(arm_name: String, intensity: float) -> void:
 func _clear_climb_arm_overrides() -> void:
 	if _octo_rig == null:
 		return
-	if not climb_front_arm_a.is_empty():
+	if _is_valid_climb_arm(climb_front_arm_a):
 		_octo_rig.call("clear_arm_animation_mode", climb_front_arm_a)
-	if not climb_front_arm_b.is_empty():
+	if _is_valid_climb_arm(climb_front_arm_b):
 		_octo_rig.call("clear_arm_animation_mode", climb_front_arm_b)
 
 
 func _update_surface_crawl_pose(delta: float, desired_dir: Vector3) -> void:
-	if not use_surface_locomotion:
-		return
-	if _octo_rig == null or not _octo_rig.has_method("step_surface_locomotion"):
+	if not _can_step_surface_pose():
 		return
 	_octo_rig.call("step_surface_locomotion", delta, global_position, desired_dir, velocity)
 
@@ -401,6 +405,40 @@ func _get_climb_arm_inward_sign(arm_name: String) -> float:
 			return 1.0
 		_:
 			return 0.0
+
+
+func _can_step_surface_pose() -> bool:
+	return use_surface_locomotion and _octo_rig != null and _octo_rig.has_method("step_surface_locomotion")
+
+
+func _is_valid_climb_arm(arm_name: String) -> bool:
+	return _octo_rig != null and not arm_name.is_empty()
+
+
+func _set_climb_arm_mode_static(arm_name: String) -> void:
+	# 0 maps to OctoRig.ArmAnimMode.STATIC.
+	_octo_rig.call("set_arm_animation_mode", arm_name, 0)
+
+
+func _set_climb_arm_pose(
+	arm_name: String,
+	base_bend: float,
+	base_bend_angle: float,
+	mid_bend: float,
+	mid_bend_angle: float,
+	tip_bend: float,
+	tip_bend_angle: float
+) -> void:
+	_octo_rig.call(
+		"set_arm_target_section_bend",
+		arm_name,
+		base_bend,
+		base_bend_angle,
+		mid_bend,
+		mid_bend_angle,
+		tip_bend,
+		tip_bend_angle
+	)
 
 
 func _cast_ray(from: Vector3, to: Vector3, mask: int) -> Dictionary:
