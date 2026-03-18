@@ -37,7 +37,12 @@ var _mantle_progress := 0.0
 var _mantle_duration_active := 0.75
 var _post_mantle_turn_timer := 0.0
 var _octo_rig: Node
+var _visual_root: Node3D
 var _smoothed_motion_dir := Vector2(0.0, 1.0)
+var _blocked_move_feedback_time := 0.0
+var _blocked_move_feedback_duration := 0.62
+var _blocked_move_feedback_roll := deg_to_rad(2.0)
+var _blocked_move_feedback_yaw := deg_to_rad(9.0)
 const POST_MANTLE_TURN_DAMP_TIME := 0.22
 
 
@@ -49,6 +54,9 @@ func _ready() -> void:
 	if shape_node != null and shape_node.shape is BoxShape3D:
 		_half_height = (shape_node.shape as BoxShape3D).size.y * 0.5
 	_octo_rig = get_node_or_null("PlayerVisual")
+	_visual_root = _octo_rig as Node3D
+	if _visual_root == null:
+		_visual_root = get_node_or_null("MeshInstance3D") as Node3D
 	var forward := -global_transform.basis.z
 	var planar_forward := Vector2(forward.x, forward.z)
 	if planar_forward.length_squared() > 0.0001:
@@ -63,6 +71,11 @@ func set_move_target(world_target: Vector3) -> void:
 func clear_move_target() -> void:
 	_has_target = false
 	_mantling = false
+
+
+func trigger_blocked_move_feedback() -> void:
+	_blocked_move_feedback_time = _blocked_move_feedback_duration
+	clear_move_target()
 
 
 func _physics_process(delta: float) -> void:
@@ -132,6 +145,7 @@ func _physics_process(delta: float) -> void:
 					1.0 - exp(-surface_align_strength * delta)
 				).orthonormalized()
 	_rotate_toward_motion(delta)
+	_update_blocked_move_feedback(delta)
 
 
 func _rotate_toward_motion(delta: float) -> void:
@@ -173,6 +187,25 @@ func _align_planar_velocity_to_slope(floor_normal: Vector3) -> void:
 
 	velocity.x = slope_direction.x * planar_speed
 	velocity.z = slope_direction.z * planar_speed
+
+
+func _update_blocked_move_feedback(delta: float) -> void:
+	if _visual_root == null:
+		return
+	if _blocked_move_feedback_time <= 0.0:
+		_visual_root.rotation = _visual_root.rotation.lerp(Vector3.ZERO, minf(1.0, 8.0 * delta))
+		return
+
+	_blocked_move_feedback_time = maxf(0.0, _blocked_move_feedback_time - delta)
+	var progress := 1.0 - (_blocked_move_feedback_time / _blocked_move_feedback_duration)
+	var envelope := sin(progress * PI)
+	var phase := progress * TAU * 1.35
+	var yaw := sin(phase) * _blocked_move_feedback_yaw * envelope
+	_visual_root.rotation = Vector3(
+		0.0,
+		yaw,
+		(-yaw * 0.2) + (sin(phase + PI * 0.5) * _blocked_move_feedback_roll * envelope)
+	)
 
 
 func _process_mantle(delta: float) -> void:

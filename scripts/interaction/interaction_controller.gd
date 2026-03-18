@@ -216,6 +216,10 @@ func try_handle_interaction_click(screen_position: Vector2) -> bool:
 			return true
 		return true
 
+	if _is_movement_blocked_by_full_load():
+		_trigger_blocked_move_feedback()
+		return true
+
 	_queued_interaction_target = target
 	_debug_log("Queued move-to-interact for %s" % _describe_interactable(target))
 	_move_toward_interactable(target)
@@ -380,7 +384,17 @@ func get_focus_target_at_screen(screen_position: Vector2) -> FocusTargetScript:
 func request_approach_focus_target(focus_target: FocusTargetScript) -> void:
 	var interactable = _get_interactable_for_focus_target(focus_target)
 	if interactable != null:
+		if _is_movement_blocked_by_full_load():
+			_trigger_blocked_move_feedback()
+			return
 		_move_toward_interactable(interactable)
+
+
+func try_handle_ground_move_click() -> bool:
+	if not _is_movement_blocked_by_full_load():
+		return false
+	_trigger_blocked_move_feedback()
+	return true
 
 
 func can_enter_focus_target(focus_target: FocusTargetScript) -> bool:
@@ -1146,6 +1160,17 @@ func _update_carry_mobility() -> void:
 		_player.move_speed = _base_move_speed * heavy_carry_speed_multiplier
 	else:
 		_player.move_speed = _base_move_speed
+
+
+func _is_movement_blocked_by_full_load() -> bool:
+	return _held_interactables.size() >= immobilized_at_item_count
+
+
+func _trigger_blocked_move_feedback() -> void:
+	_queued_interaction_target = null
+	_player.clear_move_target()
+	if _player != null and _player.has_method("trigger_blocked_move_feedback"):
+		_player.call("trigger_blocked_move_feedback")
 
 
 func _setup_scene_interactables() -> void:

@@ -119,7 +119,11 @@ func _unhandled_input(event: InputEvent) -> void:
 				return
 			var click_position: Vector3 = _raycast_to_ground(event.position)
 			if click_position.is_finite():
+				if _interaction_controller.try_handle_ground_move_click():
+					get_viewport().set_input_as_handled()
+					return
 				player.set_move_target(click_position)
+				get_viewport().set_input_as_handled()
 		elif event.button_index == MOUSE_BUTTON_RIGHT:
 			_orbiting = event.pressed
 		elif event.button_index == MOUSE_BUTTON_WHEEL_UP and event.pressed:
