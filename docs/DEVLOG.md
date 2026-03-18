@@ -1,5 +1,27 @@
 # Dev Log
 
+## 2026-03-18
+
+### Step 34 - Climb pre-mantle sequencing and overload move feedback polish
+
+- Added full-load move blocking feedback path:
+  - world and approach clicks are consumed when all 8 arm slots are occupied,
+  - octo plays a slower "no" wiggle instead of moving.
+- Added pre-mantle climb sequence in `player_controller.gd`:
+  - smooth turn toward click direction,
+  - first front-arm reach, then second front-arm reach with a small lead delay,
+  - short transition into mantle translation.
+- Tuned climb arm reach shaping:
+  - switched to front arms (`arm_0`, `arm_1`),
+  - increased forward reach, inward angle bias, and small tip bend for more believable contact.
+- Kept crawl locomotion posing active during pre-mantle and mantle so arms continue animating while body climbs.
+- Added subtle climb head tilt blend on `PlayerVisual` during pre-mantle/mantle.
+- Cleaned serialized scene property noise in `player.tscn` (removed stale `surface_hold_blend_strength = null`).
+
+### Validation commands (pass)
+1. `./scripts/check.sh`
+   - Result: boot smoke PASS, `movement_math_test: PASS`, `slope_movement_test: PASS`, `card_reader_interaction_test: PASS`.
+
 ## 2026-03-14
 
 ### Step 33 - Surface crawl architecture rewrite (state machine + phase-role posing)

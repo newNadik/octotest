@@ -66,6 +66,14 @@ This document describes the current runtime architecture of the prototype and mu
 - Uses `MovementMath.next_velocity_2d()` for planar acceleration/deceleration.
 - Uses `MovementMath.project_planar_direction_on_surface()` to keep movement stable on slopes.
 - Includes click-to-climb mantle logic with landing-footprint validation for stable chair/desk climbing.
+- Runs a climb pre-mantle sequence before body translation:
+  - smooth turn toward click direction,
+  - first front-arm reach, then second front-arm reach,
+  - brief transition into mantle.
+- Keeps surface crawl pose updates active during pre-mantle + mantle so arms continue moving while climbing.
+- Adds climb-specific visual feedback on `PlayerVisual`:
+  - blocked-move "no" wiggle when overloaded,
+  - subtle climb head tilt blend during pre-mantle/mantle.
 4. `res://scripts/core/movement_math.gd`
 - Pure helper math (no scene dependencies).
 - Designed for headless logic testing.
@@ -77,6 +85,7 @@ This document describes the current runtime architecture of the prototype and mu
 - Centralized interaction and carry system.
 - Handles interactable raycasts, hover state transitions, line-of-sight and range checks, and queued auto-interact.
 - Handles octopus hand-socket layout, held-item updates, targeted drop, and carry movement penalties.
+- Blocks move/approach click intents when fully loaded and triggers blocked-move feedback instead of queuing locomotion.
 - Assigns held items to persistent arm-linked slots (mid-arm priority first) and syncs occupied slots to `OctoRig` hold-arm state.
 - Uses rig-driven hold anchoring (`OctoRig` arm anchors) plus size-aware clearance so larger held objects avoid clipping while cards stay tight to arm tips.
 - Handles wall-switch callback, HUD interaction hints, and focus-mode interaction routing.

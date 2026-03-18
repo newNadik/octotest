@@ -15,7 +15,6 @@ shape = SubResource("BoxShape3D_player")
 
 [node name="PlayerVisual" type="Node3D" parent="." unique_id=69441856]
 script = ExtResource("3_8x4hh")
-surface_hold_blend_strength = null
 crawl_profile_gait_frequency = 3.0
 crawl_profile_stride_sweep_gain = 8.0
 preview_in_editor = true
