@@ -47,6 +47,9 @@ var _player_visual_root: Node3D
 
 
 func _ready() -> void:
+	process_mode = Node.PROCESS_MODE_ALWAYS
+	in_game_menu.process_mode = Node.PROCESS_MODE_WHEN_PAUSED
+	player.process_mode = Node.PROCESS_MODE_PAUSABLE
 	player.global_position = Vector3(0.0, OCTO_START_Y, 0.0)
 	var follow_position := player.global_position + Vector3(0.0, CAMERA_FOLLOW_HEIGHT, 0.0)
 	follow_position.y = maxf(follow_position.y, CAMERA_MIN_WORLD_Y)
@@ -281,6 +284,7 @@ func _create_interaction_controller() -> void:
 	_interaction_controller = InteractionControllerScript.new()
 	_interaction_controller.name = "InteractionController"
 	add_child(_interaction_controller)
+	_interaction_controller.process_mode = Node.PROCESS_MODE_PAUSABLE
 	_interaction_controller.initialize(player, camera, hint_label, self, room_light)
 
 
@@ -332,6 +336,7 @@ func _set_in_game_menu_visible(is_visible: bool) -> void:
 	if is_visible and _focus_mode:
 		_exit_focus_mode()
 	in_game_menu.visible = is_visible
+	get_tree().paused = is_visible
 	_orbiting = false
 	if is_visible:
 		_interaction_controller.set_interaction_enabled(false)
@@ -356,6 +361,7 @@ func _make_click_through(node: Node) -> void:
 
 
 func _on_main_menu_pressed() -> void:
+	get_tree().paused = false
 	var error := get_tree().change_scene_to_file(MAIN_MENU_SCENE_PATH)
 	if error != OK:
 		push_error("Failed to load main menu scene: %s" % MAIN_MENU_SCENE_PATH)

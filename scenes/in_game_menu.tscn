@@ -1,0 +1,57 @@
+[gd_scene format=3]
+
+[node name="InGameMenu" type="Control"]
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MenuShade" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.44)
+
+[node name="MenuCenter" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MenuPanel" type="PanelContainer" parent="MenuCenter"]
+custom_minimum_size = Vector2(260, 0)
+layout_mode = 2
+
+[node name="MenuMargin" type="MarginContainer" parent="MenuCenter/MenuPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 14
+theme_override_constants/margin_top = 14
+theme_override_constants/margin_right = 14
+theme_override_constants/margin_bottom = 14
+
+[node name="MenuButtons" type="VBoxContainer" parent="MenuCenter/MenuPanel/MenuMargin"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="MenuTitle" type="Label" parent="MenuCenter/MenuPanel/MenuMargin/MenuButtons"]
+layout_mode = 2
+text = "In-Game Menu"
+horizontal_alignment = 1
+
+[node name="MainMenuButton" type="Button" parent="MenuCenter/MenuPanel/MenuMargin/MenuButtons"]
+custom_minimum_size = Vector2(0, 42)
+layout_mode = 2
+text = "Main Menu"
+
+[node name="QuitButton" type="Button" parent="MenuCenter/MenuPanel/MenuMargin/MenuButtons"]
+custom_minimum_size = Vector2(0, 42)
+layout_mode = 2
+text = "Quit"
