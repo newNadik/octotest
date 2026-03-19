@@ -6,7 +6,7 @@ Godot `4.6.1` 3D isometric prototype with:
 2. Orbit camera rig (`SpringArm3D`).
 3. Gravity locomotion with authored climb/mantle movement for low elevated surfaces (chairs/desks).
 4. Authored data-office room geometry (walls, windows, doors, console, desks, chairs, storage, tank).
-5. UI flow with a startup main menu, in-game menu, and gameplay HUD hints.
+5. UI flow with a startup main menu (browser-frame styled), in-game pause menu, and gameplay HUD hints.
 6. Interactable object system with hover/in-range/blocked visualization.
 7. Clickable wall light switch.
 8. Multi-item octopus carry system (up to 8 held items) with overload movement penalties.
@@ -25,6 +25,7 @@ Godot `4.6.1` 3D isometric prototype with:
 21. Hold flow assigns items to free arm slots with mid-arm priority, keeps each item in a stable slot, and drives occupied arms in hold animation.
 22. Held-item placement follows real rig arm anchors with size-aware clearance (cards stay close, larger props get extra anti-clipping offset).
 23. Camera defaults now support a closer gameplay view with increased zoom-in range.
+24. Display stretch configured for fixed design height with adaptive width (`canvas_items` + `keep_height`) for desktop/tablet fullscreen layouts.
 
 ## Canonical Branch
 
@@ -68,13 +69,26 @@ GODOT_BIN=/absolute/path/to/godot ./scripts/check.sh
 4. `LMB` on interactable in range: interact immediately.
 5. `LMB` on interactable out of range: move closer and auto-interact when close.
 6. `LMB` on held item: drop that specific item.
-7. `Esc`: toggle in-game menu.
+7. `Esc`: toggle in-game pause menu during gameplay.
 8. Focus mode:
 - Auto-zooms when a focus-enabled object is clicked and the player reaches interaction distance.
 - `LMB` outside interaction area exits focus.
 - While focused, held items are selectable at the bottom of the screen.
 - Code panel keypad buttons are only interactive while the panel is focused.
 9. Octopus does not jump; climb/mantle is triggered automatically when moving onto valid low elevated surfaces.
+
+## Menu Notes
+
+1. Main menu actions:
+- `New Game` starts gameplay.
+- `Load Game` is a placeholder (not implemented yet).
+- `Settings` is a placeholder (not implemented yet).
+- `Quit` exits the app.
+2. In-game pause menu actions:
+- `Resume` closes pause menu.
+- `Settings` is a placeholder (not implemented yet).
+- `Main Menu` returns to startup menu.
+3. `Esc` on the startup main menu does not quit the app.
 
 ## Validate
 

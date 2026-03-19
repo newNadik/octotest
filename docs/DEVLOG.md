@@ -1,5 +1,35 @@
 # Dev Log
 
+## 2026-03-19
+
+### Step 35 - Menu UI overhaul, pause flow update, and display scaling polish
+
+- Refactored menu UI into reusable scene components and moved pause UI into its own scene.
+- Added reusable button style with right-side icon indicator and consistent focus/hover behavior.
+- Reworked startup menu visual presentation with:
+  - browser-frame styled header image,
+  - slideshow panel using `assets/ui/slideshow/*`,
+  - dot indicator carousel state.
+- Updated startup menu actions:
+  - `New Game` (scene load),
+  - `Load Game` placeholder warning,
+  - `Settings` placeholder warning,
+  - `Quit`.
+- Updated in-game pause actions:
+  - `Resume` (default focused action),
+  - `Settings` placeholder warning,
+  - `Main Menu`.
+- Removed startup `Esc -> quit` shortcut to avoid accidental app exits from main menu.
+- Enabled actual gameplay pause via `get_tree().paused` while keeping pause UI/input responsive.
+- Added display stretch settings in `project.godot`:
+  - `window/stretch/mode="canvas_items"`
+  - `window/stretch/aspect="keep_height"`
+  - fixed design viewport `1280x720`.
+
+### Validation commands (pass)
+1. `./scripts/check.sh`
+   - Result: boot smoke PASS, `movement_math_test: PASS`, `slope_movement_test: PASS`, `card_reader_interaction_test: PASS`.
+
 ## 2026-03-18
 
 ### Step 34 - Climb pre-mantle sequencing and overload move feedback polish

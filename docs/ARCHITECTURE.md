@@ -5,7 +5,7 @@ This document describes the current runtime architecture of the prototype and mu
 ## High-Level Runtime
 
 1. `res://scenes/main_menu.tscn` is the startup scene.
-2. `MainMenu` (`Control`) owns menu UI flow into gameplay (`Play`) or app exit (`Quit`).
+2. `MainMenu` (`Control`) owns startup UI flow (`New Game`, `Load Game` placeholder, `Settings` placeholder, `Quit`) and slideshow presentation.
 3. `res://scenes/main.tscn` is the gameplay scene.
 4. `Main` (`Node3D`) owns world setup, camera behavior, click-to-move input routing, and in-game UI menu flow.
 5. `Player` (`CharacterBody3D`) is instanced from `res://scenes/player.tscn` and owns locomotion, gravity handling, and slope alignment.
@@ -22,12 +22,12 @@ This document describes the current runtime architecture of the prototype and mu
   - click/tap for move/interact,
   - drag with primary pointer for orbit,
   - wheel/pinch for zoom.
-- Handles in-game menu (`Esc` toggle) with `Main Menu` and `Quit` actions.
+- Handles in-game pause menu (`Esc` toggle) with `Resume`, `Settings` placeholder, and `Main Menu` actions.
 - Delegates interaction/carry systems to `InteractionController`.
 2. `UI` (`CanvasLayer`) in gameplay scene:
 - `HUD` contains key hints anchored to screen corner.
 - HUD controls are set to ignore mouse input so world clicks pass through.
-- `InGameMenu` blocks world input while visible and routes button actions.
+- `InGameMenu` blocks world input while visible and routes pause actions.
 3. `WorldEnvironment`:
 - Provides procedural sky and ambient environment settings.
 4. `Room`:
@@ -54,13 +54,14 @@ This document describes the current runtime architecture of the prototype and mu
 
 1. `res://scripts/core/main_menu.gd`
 - Handles startup menu button actions.
-- Changes to gameplay scene on `Play`.
+- Changes to gameplay scene on `New Game`.
+- Emits placeholder warnings for `Load Game` and `Settings`.
 - Quits app on `Quit`.
 2. `res://scripts/core/main.gd`
 - Lightweight scene orchestrator.
 - Owns camera orbit/zoom behavior.
 - Initializes camera pivot follow position during `_ready()` to avoid first-frame startup pop.
-- Owns in-game menu visibility and scene change/quit actions.
+- Owns in-game pause menu visibility and scene-change actions.
 - Routes click-to-move and delegates interact/drop input to `InteractionController`.
 - Owns focus-mode transitions (auto-enter after approach, movement lock, click-based exit rules).
 3. `res://scripts/player/player_controller.gd`

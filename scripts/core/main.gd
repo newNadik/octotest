@@ -27,8 +27,9 @@ const CAMERA_MIN_WORLD_Y := 1.25
 @onready var hud_root: Control = $UI/HUD
 @onready var hint_label: Label = $UI/HUD/HintPanel/HintMargin/HintLabel
 @onready var in_game_menu: Control = $UI/InGameMenu
+@onready var in_game_resume_button: Button = $UI/InGameMenu/MenuCenter/MenuPanel/MenuMargin/MenuButtons/ResumeButton
 @onready var in_game_main_menu_button: Button = $UI/InGameMenu/MenuCenter/MenuPanel/MenuMargin/MenuButtons/MainMenuButton
-@onready var in_game_quit_button: Button = $UI/InGameMenu/MenuCenter/MenuPanel/MenuMargin/MenuButtons/QuitButton
+@onready var in_game_settings_button: Button = $UI/InGameMenu/MenuCenter/MenuPanel/MenuMargin/MenuButtons/SettingsButton
 @onready var room_light: OmniLight3D = $OmniLight3D
 
 var _interaction_controller
@@ -60,8 +61,9 @@ func _ready() -> void:
 	_player_visual_root = player.get_node_or_null("PlayerVisual") as Node3D
 	if _player_visual_root == null:
 		_player_visual_root = player.get_node_or_null("MeshInstance3D") as Node3D
+	in_game_resume_button.pressed.connect(_on_resume_pressed)
+	in_game_settings_button.pressed.connect(_on_settings_pressed)
 	in_game_main_menu_button.pressed.connect(_on_main_menu_pressed)
-	in_game_quit_button.pressed.connect(_on_quit_pressed)
 	_set_in_game_menu_visible(false)
 
 
@@ -341,7 +343,7 @@ func _set_in_game_menu_visible(is_visible: bool) -> void:
 	if is_visible:
 		_interaction_controller.set_interaction_enabled(false)
 	if is_visible:
-		in_game_main_menu_button.grab_focus()
+		in_game_resume_button.grab_focus()
 
 
 func is_focus_target_active(target) -> bool:
@@ -367,5 +369,9 @@ func _on_main_menu_pressed() -> void:
 		push_error("Failed to load main menu scene: %s" % MAIN_MENU_SCENE_PATH)
 
 
-func _on_quit_pressed() -> void:
-	get_tree().quit()
+func _on_resume_pressed() -> void:
+	_set_in_game_menu_visible(false)
+
+
+func _on_settings_pressed() -> void:
+	push_warning("Pause Settings is not implemented yet.")

@@ -10,6 +10,8 @@ const SLIDESHOW_TEXTURE_PATHS := [
 ]
 
 @onready var play_button: Button = $MainMargin/RootColumn/ContentRow/LeftPanel/LeftMargin/LeftContent/MenuButtons/PlayButton
+@onready var load_game_button: Button = $MainMargin/RootColumn/ContentRow/LeftPanel/LeftMargin/LeftContent/MenuButtons/LoadGameButton
+@onready var settings_button: Button = $MainMargin/RootColumn/ContentRow/LeftPanel/LeftMargin/LeftContent/MenuButtons/SettingsButton
 @onready var quit_button: Button = $MainMargin/RootColumn/ContentRow/LeftPanel/LeftMargin/LeftContent/MenuButtons/QuitButton
 @onready var slide_dots_label: Label = $MainMargin/RootColumn/ContentRow/RightPanel/CarouselPanel/CarouselMargin/CarouselLayout/CarouselControls/SlideDotsLabel
 @onready var slide_timer: Timer = $SlideTimer
@@ -21,17 +23,14 @@ var _slide_index := 0
 
 func _ready() -> void:
 	play_button.pressed.connect(_on_play_pressed)
+	load_game_button.pressed.connect(_on_load_game_pressed)
+	settings_button.pressed.connect(_on_settings_pressed)
 	quit_button.pressed.connect(_on_quit_pressed)
 	slide_timer.timeout.connect(_on_slide_timer_timeout)
 	_collect_slides()
 	_assign_slide_textures()
 	_show_slide(0)
 	play_button.grab_focus()
-
-
-func _unhandled_input(event: InputEvent) -> void:
-	if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_ESCAPE:
-		_on_quit_pressed()
 
 
 func _on_play_pressed() -> void:
@@ -42,6 +41,14 @@ func _on_play_pressed() -> void:
 
 func _on_quit_pressed() -> void:
 	get_tree().quit()
+
+
+func _on_load_game_pressed() -> void:
+	push_warning("Load Game is not implemented yet.")
+
+
+func _on_settings_pressed() -> void:
+	push_warning("Settings is not implemented yet.")
 
 
 func _collect_slides() -> void:
