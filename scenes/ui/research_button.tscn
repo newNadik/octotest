@@ -1,0 +1,74 @@
+[gd_scene format=3 uid="uid://bydkhwglewp85"]
+
+[ext_resource type="Script" uid="uid://c0mm6kswf4f6f" path="res://scripts/ui/research_button.gd" id="1_script"]
+[ext_resource type="Texture2D" uid="uid://vpfngsiguofr" path="res://assets/ui/arrow.png" id="2_arrow_icon"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_button_normal"]
+content_margin_left = 18.0
+content_margin_top = 14.0
+content_margin_right = 74.0
+content_margin_bottom = 14.0
+bg_color = Color(0.0627451, 0.658824, 0.917647, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_button_pressed"]
+content_margin_left = 18.0
+content_margin_top = 14.0
+content_margin_right = 74.0
+content_margin_bottom = 14.0
+bg_color = Color(0.00784314, 0.262745, 0.431373, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_button_hover"]
+content_margin_left = 18.0
+content_margin_top = 14.0
+content_margin_right = 74.0
+content_margin_bottom = 14.0
+bg_color = Color(0.00784314, 0.262745, 0.431373, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_button_focus"]
+content_margin_left = 18.0
+content_margin_top = 14.0
+content_margin_right = 74.0
+content_margin_bottom = 14.0
+bg_color = Color(0.00784314, 0.262745, 0.431373, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.96, 0.98, 1, 1)
+
+[node name="ResearchButton" type="Button" unique_id=2081914663]
+clip_contents = true
+custom_minimum_size = Vector2(0, 64)
+theme_override_colors/font_color = Color(0.0196078, 0.0666667, 0.133333, 1)
+theme_override_colors/font_focus_color = Color(0.96, 0.98, 1, 1)
+theme_override_colors/font_pressed_color = Color(0.917647, 0.952941, 0.996078, 1)
+theme_override_colors/font_hover_color = Color(0.96, 0.98, 1, 1)
+theme_override_constants/h_separation = 12
+theme_override_font_sizes/font_size = 24
+theme_override_styles/normal = SubResource("StyleBoxFlat_button_normal")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_button_pressed")
+theme_override_styles/hover = SubResource("StyleBoxFlat_button_hover")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_button_pressed")
+theme_override_styles/focus = SubResource("StyleBoxFlat_button_focus")
+text = "Button"
+alignment = 0
+script = ExtResource("1_script")
+
+[node name="ArrowIcon" type="TextureRect" parent="." unique_id=2051543625]
+visible = false
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -52.0
+offset_top = -12.0
+offset_right = -12.0
+offset_bottom = 13.0
+grow_horizontal = 0
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("2_arrow_icon")
+expand_mode = 1
+stretch_mode = 5

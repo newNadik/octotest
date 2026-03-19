@@ -1,70 +1,179 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene format=3 uid="uid://coal8f6nwu8f5"]
 
-[ext_resource type="Script" path="res://scripts/core/main_menu.gd" id="1_af74n"]
+[ext_resource type="Script" uid="uid://ce31gq7bqv6ur" path="res://scripts/core/main_menu.gd" id="1_core"]
+[ext_resource type="PackedScene" path="res://scenes/ui/research_button.tscn" id="2_button"]
+[ext_resource type="PackedScene" path="res://scenes/ui/photo_slide.tscn" id="3_slide"]
 
-[node name="MainMenu" type="Control"]
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_bqqt6"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_wu84c"]
+
+[node name="MainMenu" type="Control" unique_id=133547752]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_af74n")
+script = ExtResource("1_core")
 
-[node name="Background" type="ColorRect" parent="."]
+[node name="Background" type="ColorRect" parent="." unique_id=654065522]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.07, 0.1, 0.14, 1)
+color = Color(0.0313726, 0.0941176, 0.176471, 1)
 
-[node name="CenterContainer" type="CenterContainer" parent="."]
+[node name="TopBand" type="ColorRect" parent="." unique_id=563147151]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 70.0
+grow_horizontal = 2
+color = Color(0.0627451, 0.658824, 0.917647, 1)
+
+[node name="MainMargin" type="MarginContainer" parent="." unique_id=305465895]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_constants/margin_left = 32
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 32
+theme_override_constants/margin_bottom = 24
 
-[node name="MenuPanel" type="PanelContainer" parent="CenterContainer"]
-custom_minimum_size = Vector2(340, 0)
+[node name="RootColumn" type="VBoxContainer" parent="MainMargin" unique_id=1802753494]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="HeaderRow" type="HBoxContainer" parent="MainMargin/RootColumn" unique_id=1077242368]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="StationBadge" type="PanelContainer" parent="MainMargin/RootColumn/HeaderRow" unique_id=1754446908]
+custom_minimum_size = Vector2(188, 50)
 layout_mode = 2
 
-[node name="MenuMargin" type="MarginContainer" parent="CenterContainer/MenuPanel"]
+[node name="BadgeText" type="Label" parent="MainMargin/RootColumn/HeaderRow/StationBadge" unique_id=551016171]
 layout_mode = 2
-theme_override_constants/margin_left = 18
-theme_override_constants/margin_top = 18
-theme_override_constants/margin_right = 18
-theme_override_constants/margin_bottom = 18
+theme_override_colors/font_color = Color(0.0313726, 0.0941176, 0.176471, 1)
+theme_override_font_sizes/font_size = 21
+text = "Octotest"
+horizontal_alignment = 1
+vertical_alignment = 1
 
-[node name="MenuButtons" type="VBoxContainer" parent="CenterContainer/MenuPanel/MenuMargin"]
+[node name="ContentRow" type="HBoxContainer" parent="MainMargin/RootColumn" unique_id=1237966849]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 24
+
+[node name="LeftPanel" type="PanelContainer" parent="MainMargin/RootColumn/ContentRow" unique_id=1825222399]
+custom_minimum_size = Vector2(370, 0)
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxEmpty_bqqt6")
+
+[node name="LeftMargin" type="MarginContainer" parent="MainMargin/RootColumn/ContentRow/LeftPanel" unique_id=849936540]
+layout_mode = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="LeftContent" type="VBoxContainer" parent="MainMargin/RootColumn/ContentRow/LeftPanel/LeftMargin" unique_id=982058858]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 16
+
+[node name="MainTitle" type="Label" parent="MainMargin/RootColumn/ContentRow/LeftPanel/LeftMargin/LeftContent" unique_id=1356475576]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.917647, 0.952941, 0.996078, 1)
+theme_override_font_sizes/font_size = 44
+text = "Main Menu"
+autowrap_mode = 3
+
+[node name="MenuButtons" type="VBoxContainer" parent="MainMargin/RootColumn/ContentRow/LeftPanel/LeftMargin/LeftContent" unique_id=951151387]
 layout_mode = 2
 theme_override_constants/separation = 12
 
-[node name="Title" type="Label" parent="CenterContainer/MenuPanel/MenuMargin/MenuButtons"]
-layout_mode = 2
-text = "Octotest"
-horizontal_alignment = 1
-theme_override_font_sizes/font_size = 46
-
-[node name="Subtitle" type="Label" parent="CenterContainer/MenuPanel/MenuMargin/MenuButtons"]
-layout_mode = 2
-text = "Prototype Demo"
-horizontal_alignment = 1
-modulate = Color(0.85, 0.89, 0.93, 0.82)
-
-[node name="Spacer" type="Control" parent="CenterContainer/MenuPanel/MenuMargin/MenuButtons"]
-custom_minimum_size = Vector2(0, 10)
-layout_mode = 2
-
-[node name="PlayButton" type="Button" parent="CenterContainer/MenuPanel/MenuMargin/MenuButtons"]
-custom_minimum_size = Vector2(0, 46)
+[node name="PlayButton" parent="MainMargin/RootColumn/ContentRow/LeftPanel/LeftMargin/LeftContent/MenuButtons" unique_id=845831966 instance=ExtResource("2_button")]
 layout_mode = 2
 text = "Play"
 
-[node name="QuitButton" type="Button" parent="CenterContainer/MenuPanel/MenuMargin/MenuButtons"]
-custom_minimum_size = Vector2(0, 46)
+[node name="QuitButton" parent="MainMargin/RootColumn/ContentRow/LeftPanel/LeftMargin/LeftContent/MenuButtons" unique_id=697351820 instance=ExtResource("2_button")]
 layout_mode = 2
 text = "Quit"
+
+[node name="LeftSpacer" type="Control" parent="MainMargin/RootColumn/ContentRow/LeftPanel/LeftMargin/LeftContent" unique_id=1142557592]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="RightPanel" type="VBoxContainer" parent="MainMargin/RootColumn/ContentRow" unique_id=152490017]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 18
+
+[node name="CarouselPanel" type="PanelContainer" parent="MainMargin/RootColumn/ContentRow/RightPanel" unique_id=1604388800]
+custom_minimum_size = Vector2(0, 420)
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxEmpty_wu84c")
+
+[node name="CarouselMargin" type="MarginContainer" parent="MainMargin/RootColumn/ContentRow/RightPanel/CarouselPanel" unique_id=231900548]
+layout_mode = 2
+theme_override_constants/margin_left = 14
+theme_override_constants/margin_top = 14
+theme_override_constants/margin_right = 14
+theme_override_constants/margin_bottom = 14
+
+[node name="CarouselLayout" type="VBoxContainer" parent="MainMargin/RootColumn/ContentRow/RightPanel/CarouselPanel/CarouselMargin" unique_id=1194044863]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="SlidesHost" type="Control" parent="MainMargin/RootColumn/ContentRow/RightPanel/CarouselPanel/CarouselMargin/CarouselLayout" unique_id=693251718]
+custom_minimum_size = Vector2(0, 308)
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Slides" type="Control" parent="MainMargin/RootColumn/ContentRow/RightPanel/CarouselPanel/CarouselMargin/CarouselLayout/SlidesHost" unique_id=1569302063]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="SlideCurrent" parent="MainMargin/RootColumn/ContentRow/RightPanel/CarouselPanel/CarouselMargin/CarouselLayout/SlidesHost/Slides" unique_id=1993281005 instance=ExtResource("3_slide")]
+layout_mode = 1
+
+[node name="SlideClimate" parent="MainMargin/RootColumn/ContentRow/RightPanel/CarouselPanel/CarouselMargin/CarouselLayout/SlidesHost/Slides" unique_id=861172178 instance=ExtResource("3_slide")]
+visible = false
+layout_mode = 1
+
+[node name="SlideWildlife" parent="MainMargin/RootColumn/ContentRow/RightPanel/CarouselPanel/CarouselMargin/CarouselLayout/SlidesHost/Slides" unique_id=42119201 instance=ExtResource("3_slide")]
+visible = false
+layout_mode = 1
+
+[node name="SlideFour" parent="MainMargin/RootColumn/ContentRow/RightPanel/CarouselPanel/CarouselMargin/CarouselLayout/SlidesHost/Slides" instance=ExtResource("3_slide")]
+visible = false
+layout_mode = 1
+
+[node name="CarouselControls" type="HBoxContainer" parent="MainMargin/RootColumn/ContentRow/RightPanel/CarouselPanel/CarouselMargin/CarouselLayout" unique_id=1104917884]
+layout_mode = 2
+alignment = 1
+
+[node name="SlideDotsLabel" type="Label" parent="MainMargin/RootColumn/ContentRow/RightPanel/CarouselPanel/CarouselMargin/CarouselLayout/CarouselControls" unique_id=298462774]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.823529, 0.894118, 0.968627, 0.9)
+theme_override_font_sizes/font_size = 22
+text = "● ○ ○ ○"
+horizontal_alignment = 1
+
+[node name="SlideTimer" type="Timer" parent="." unique_id=369526518]
+wait_time = 4.5
+autostart = true
