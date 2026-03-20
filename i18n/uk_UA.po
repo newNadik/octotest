@@ -64,7 +64,7 @@ msgid "Card reader: choose a held card (click a card in hands)"
 msgstr "Зчитувач картки: оберіть картку в руках (натисніть на картку в щупальцях)"
 
 msgid "Contact Us"
-msgstr "Зв'язатися з нами"
+msgstr "Зв'язатися"
 
 msgid ""
 "Blue Current Research Centre\n"
