@@ -3,6 +3,9 @@ extends Control
 
 const GAME_SCENE_PATH := "res://scenes/main.tscn"
 const SETTINGS_MENU_SCENE := preload("res://scenes/ui/settings_menu.tscn")
+const ABOUT_POPUP_SCENE := preload("res://scenes/ui/about_popup.tscn")
+const CONTACT_POPUP_SCENE := preload("res://scenes/ui/contact_popup.tscn")
+const STAFF_ACCESS_POPUP_SCENE := preload("res://scenes/ui/staff_access_popup.tscn")
 const SLIDESHOW_TEXTURE_PATHS := [
 	"res://assets/ui/slideshow/1.jpg",
 	"res://assets/ui/slideshow/2.jpg",
@@ -38,6 +41,8 @@ var _slide_index := 0
 var _display_material: ShaderMaterial
 var _display_reflection_offset := Vector2.ZERO
 var _settings_overlay: Control
+var _info_popup_overlay: Control
+var _popup_layer: CanvasLayer
 
 
 func _ready() -> void:
@@ -52,6 +57,7 @@ func _ready() -> void:
 	_setup_nav_links()
 	_setup_language_select()
 	_setup_display_parallax()
+	_ensure_popup_layer()
 	play_button.grab_focus()
 
 
@@ -181,15 +187,22 @@ func _setup_nav_links() -> void:
 
 func _setup_nav_links_for(container: HBoxContainer) -> void:
 	for child: Node in container.get_children():
-		var label := child as Label
-		if label == null:
+		var control := child as Control
+		if control == null:
 			continue
-		label.mouse_filter = Control.MOUSE_FILTER_STOP
-		label.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
-		label.mouse_entered.connect(_on_nav_label_mouse_entered.bind(label))
-		label.mouse_exited.connect(_on_nav_label_mouse_exited.bind(label))
-		label.gui_input.connect(_on_nav_label_gui_input.bind(label.text))
-		_ensure_nav_underline(label)
+		var label := control as Label
+		if label != null:
+			label.mouse_filter = Control.MOUSE_FILTER_STOP
+			label.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+			label.mouse_entered.connect(_on_nav_label_mouse_entered.bind(label))
+			label.mouse_exited.connect(_on_nav_label_mouse_exited.bind(label))
+			label.gui_input.connect(_on_nav_label_gui_input.bind(label))
+			_ensure_nav_underline(label)
+			continue
+		var button := control as BaseButton
+		if button != null:
+			button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+			button.pressed.connect(_on_nav_button_pressed.bind(button))
 
 
 func _ensure_nav_underline(label: Label) -> void:
@@ -221,16 +234,27 @@ func _on_nav_label_mouse_exited(label: Label) -> void:
 		underline.visible = false
 
 
-func _on_nav_label_gui_input(event: InputEvent, section_name: String) -> void:
+func _on_nav_label_gui_input(event: InputEvent, label: Label) -> void:
 	var mouse_button := event as InputEventMouseButton
 	if mouse_button == null:
 		return
 	if mouse_button.button_index != MOUSE_BUTTON_LEFT or not mouse_button.pressed:
 		return
-	if (section_name == "About"):
-		push_warning("Add About logic")
-	else :
-		push_warning("%s section is not implemented yet." % section_name)
+	var popup_scene := _resolve_popup_scene(label)
+	if popup_scene != null:
+		_show_info_popup(popup_scene)
+		return
+	push_warning("%s section is not implemented yet." % label.text)
+
+
+func _on_nav_button_pressed(button: BaseButton) -> void:
+	if button == null:
+		return
+	var popup_scene := _resolve_popup_scene(button)
+	if popup_scene != null:
+		_show_info_popup(popup_scene)
+		return
+	push_warning("%s section is not implemented yet." % button.text)
 
 
 func _setup_language_select() -> void:
@@ -312,3 +336,66 @@ func _scaled_icon(texture: Texture2D, target_width: int) -> Texture2D:
 	var target_height: int = maxi(1, int(round(float(target_width) * aspect)))
 	image.resize(target_width, target_height, Image.INTERPOLATE_LANCZOS)
 	return ImageTexture.create_from_image(image)
+
+
+func _resolve_popup_scene(control: Control) -> PackedScene:
+	if control == null:
+		return null
+	var section_text := ""
+	var label := control as Label
+	if label != null:
+		section_text = label.text
+	else:
+		var button := control as BaseButton
+		if button != null:
+			section_text = button.text
+	var normalized := section_text.strip_edges().to_lower()
+	if normalized == "about" or normalized == "about us":
+		return ABOUT_POPUP_SCENE
+	if normalized == "contact us":
+		return CONTACT_POPUP_SCENE
+	if normalized == "staff access" or normalized == "stuff access":
+		return STAFF_ACCESS_POPUP_SCENE
+	if normalized == "про нас":
+		return ABOUT_POPUP_SCENE
+	if normalized == "зв'яжіться з нами" or normalized == "контакти":
+		return CONTACT_POPUP_SCENE
+	if normalized == "доступ для персоналу":
+		return STAFF_ACCESS_POPUP_SCENE
+	return null
+
+
+func _show_info_popup(popup_scene: PackedScene) -> void:
+	if popup_scene == null:
+		return
+	_ensure_popup_layer()
+	if _info_popup_overlay != null and is_instance_valid(_info_popup_overlay):
+		_info_popup_overlay.queue_free()
+	var popup := popup_scene.instantiate() as Control
+	if popup == null:
+		return
+	popup.z_index = 1000
+	popup.set_anchors_preset(Control.PRESET_FULL_RECT)
+	popup.anchor_right = 1.0
+	popup.anchor_bottom = 1.0
+	if popup.has_signal("closed"):
+		popup.closed.connect(_on_info_popup_closed)
+	_popup_layer.add_child(popup)
+	popup.move_to_front()
+	_info_popup_overlay = popup
+
+
+func _on_info_popup_closed() -> void:
+	if _info_popup_overlay == null:
+		return
+	if is_instance_valid(_info_popup_overlay):
+		_info_popup_overlay.queue_free()
+	_info_popup_overlay = null
+
+
+func _ensure_popup_layer() -> void:
+	if _popup_layer != null and is_instance_valid(_popup_layer):
+		return
+	_popup_layer = CanvasLayer.new()
+	_popup_layer.layer = 20
+	add_child(_popup_layer)

@@ -1,0 +1,98 @@
+[gd_scene format=3 uid="uid://c0fnad8c8q65u"]
+
+[ext_resource type="PackedScene" uid="uid://de5vjlwmf3x4e" path="res://scenes/ui/info_popup.tscn" id="1_base"]
+[ext_resource type="Script" uid="uid://c05yo1sqk1xgo" path="res://scripts/ui/staff_access_popup.gd" id="2_script"]
+[ext_resource type="PackedScene" uid="uid://bydkhwglewp85" path="res://scenes/ui/research_button.tscn" id="3_research_button"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_input_normal"]
+content_margin_left = 12.0
+content_margin_top = 10.0
+content_margin_right = 12.0
+content_margin_bottom = 10.0
+bg_color = Color(0.9490196, 0.98039216, 1, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.42352942, 0.7529412, 1, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_input_focus"]
+content_margin_left = 12.0
+content_margin_top = 10.0
+content_margin_right = 12.0
+content_margin_bottom = 10.0
+bg_color = Color(0.9490196, 0.98039216, 1, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.007843138, 0.2627451, 0.43137255, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[node name="StaffAccessPopup" unique_id=63964281 instance=ExtResource("1_base")]
+script = ExtResource("2_script")
+popup_title = "Staff Access"
+
+[node name="MarginContainer" parent="CenterContainer/PanelContainer/VBoxContainer" parent_id_path=PackedInt32Array(1808686370) index="1" unique_id=1439368667]
+size_flags_vertical = 3
+
+[node name="BodyLabel" parent="CenterContainer/PanelContainer/VBoxContainer/MarginContainer" index="0" unique_id=357781043]
+visible = false
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer/PanelContainer/VBoxContainer/MarginContainer" index="1" unique_id=1632567570]
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="BcrcIdInput" type="LineEdit" parent="CenterContainer/PanelContainer/VBoxContainer/MarginContainer/VBoxContainer" index="0" unique_id=1084488283]
+custom_minimum_size = Vector2(0, 46)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.019607844, 0.06666667, 0.13333334, 1)
+theme_override_colors/font_placeholder_color = Color(0.00784314, 0.262745, 0.431373, 0.7)
+theme_override_colors/caret_color = Color(0.00784314, 0.262745, 0.431373, 1)
+theme_override_font_sizes/font_size = 22
+theme_override_styles/normal = SubResource("StyleBoxFlat_input_normal")
+theme_override_styles/read_only = SubResource("StyleBoxFlat_input_normal")
+theme_override_styles/focus = SubResource("StyleBoxFlat_input_focus")
+placeholder_text = "BCRC ID"
+
+[node name="PasswordInput" type="LineEdit" parent="CenterContainer/PanelContainer/VBoxContainer/MarginContainer/VBoxContainer" index="1" unique_id=1128231527]
+custom_minimum_size = Vector2(0, 46)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.019607844, 0.06666667, 0.13333334, 1)
+theme_override_colors/font_placeholder_color = Color(0.00784314, 0.262745, 0.431373, 0.7)
+theme_override_colors/caret_color = Color(0.00784314, 0.262745, 0.431373, 1)
+theme_override_font_sizes/font_size = 22
+theme_override_styles/normal = SubResource("StyleBoxFlat_input_normal")
+theme_override_styles/read_only = SubResource("StyleBoxFlat_input_normal")
+theme_override_styles/focus = SubResource("StyleBoxFlat_input_focus")
+placeholder_text = "Password"
+secret = true
+
+[node name="Control" type="Control" parent="CenterContainer/PanelContainer/VBoxContainer/MarginContainer/VBoxContainer" index="2" unique_id=1513609150]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CenterContainer/PanelContainer/VBoxContainer/MarginContainer/VBoxContainer" index="3" unique_id=1864324960]
+layout_mode = 2
+size_flags_horizontal = 8
+theme_override_constants/separation = 16
+
+[node name="ErrorLabel" type="Label" parent="CenterContainer/PanelContainer/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer" index="0" unique_id=60762707]
+visible = false
+layout_mode = 2
+theme_override_colors/font_color = Color(0.546193, 0.022671726, 0.06815057, 1)
+theme_override_font_sizes/font_size = 20
+text = "Wrong ID or Password"
+horizontal_alignment = 1
+
+[node name="LoginButton" parent="CenterContainer/PanelContainer/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer" index="1" unique_id=1976410876 instance=ExtResource("3_research_button")]
+custom_minimum_size = Vector2(220, 64)
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Login"

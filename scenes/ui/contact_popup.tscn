@@ -1,0 +1,7 @@
+[gd_scene format=3 uid="uid://dv6oqn25jt7ob"]
+
+[ext_resource type="PackedScene" uid="uid://de5vjlwmf3x4e" path="res://scenes/ui/info_popup.tscn" id="1_base"]
+
+[node name="ContactPopup" unique_id=670677096 instance=ExtResource("1_base")]
+popup_title = "Contact Us"
+popup_body = "Blue Current Research Centre\n\nEmail:\nPhone:"

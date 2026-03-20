@@ -125,6 +125,15 @@ godot --path /path/to/octotest
 4. Keep `.uid` files committed with scripts/scenes to reduce resource ID churn.
 5. Use `scripts/check.sh` as the default pre-commit validation entrypoint.
 
+## Text & Localisation Rules
+
+All player-visible text must follow these rules before merge:
+
+1. Source text must use proper UK English spelling and wording.
+2. Every new/changed player-visible string must have a corresponding Ukrainian translation entry in `i18n/uk_UA.po`.
+3. Runtime UI strings must be passed through `tr(...)` so locale switching applies consistently.
+4. Text-only changes are not done until translation coverage is verified in-game for both `en_GB` and `uk_UA`.
+
 ## End-of-Session Checklist
 
 1. Run tests and smoke checks again.

@@ -19,6 +19,23 @@ msgstr "Назад"
 msgid "Blue Current Research Centre"
 msgstr "Дослідницький центр «Блакитна течія»"
 
+msgid ""
+"Blue Current Research Facility is a permanent underwater research centre "
+"focused on ocean monitoring and renewable energy development. We are open to "
+"visitors year-round and offer guided tours for schools and adult groups.\n"
+"\n"
+"Come and explore our facility - and find out what really goes on down here."
+msgstr ""
+"Дослідницький центр «Блакитна течія» — це постійно діючий підводний науковий "
+"центр, що спеціалізується на моніторингу океану та розвитку відновлюваної "
+"енергетики. Ми відкриті для відвідувачів цілий рік і пропонуємо екскурсії "
+"для шкільних груп та дорослих.\n"
+"\n"
+"Завітайте до нас — і дізнайтеся, що насправді тут відбувається"
+
+msgid "BCRC ID"
+msgstr "BCRC ID"
+
 msgid "Box"
 msgstr "Коробка"
 
@@ -48,6 +65,17 @@ msgstr "Зчитувач картки: оберіть картку в руках
 
 msgid "Contact Us"
 msgstr "Зв'язатися з нами"
+
+msgid ""
+"Blue Current Research Centre\n"
+"\n"
+"Email:\n"
+"Phone:"
+msgstr ""
+"Дослідницький центр «Блакитна течія»\n"
+"\n"
+"Ел. пошта:\n"
+"Телефон:"
 
 msgid "DENIED"
 msgstr "ВІДМОВЛЕНО"
@@ -97,6 +125,9 @@ msgstr "ЛКМ Обрати %s"
 msgid "Light Button"
 msgstr "Кнопка світла"
 
+msgid "Login"
+msgstr "Увійти"
+
 msgid "Load Game"
 msgstr "Завантажити гру"
 
@@ -126,6 +157,9 @@ msgstr "Нова гра"
 
 msgid "Overloaded: cannot move"
 msgstr "Перевантаження: рух неможливий"
+
+msgid "Password"
+msgstr "Пароль"
 
 msgid "Pick up"
 msgstr "Підібрати"
@@ -166,8 +200,8 @@ msgstr "Увімкнено"
 msgid "Off"
 msgstr "Вимкнено"
 
-msgid "English (UK)"
-msgstr "Англійська (Велика Британія)"
+msgid "English"
+msgstr "Англійська"
 
 msgid "Ukrainian"
 msgstr "Українська"
@@ -180,6 +214,9 @@ msgstr "Використати картку"
 
 msgid "Use Keypad"
 msgstr "Використати клавіатуру"
+
+msgid "Wrong ID or Password"
+msgstr "Неправильний ID або пароль"
 
 msgid "%s is out of range"
 msgstr "%s поза межами досяжності"

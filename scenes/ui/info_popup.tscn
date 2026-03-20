@@ -1,0 +1,159 @@
+[gd_scene format=3 uid="uid://de5vjlwmf3x4e"]
+
+[ext_resource type="Script" uid="uid://dgnbc0ab3u8kx" path="res://scripts/ui/info_popup.gd" id="1_script"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_popup_panel"]
+bg_color = Color(0.9490196, 0.98039216, 1, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.00784314, 0.262745, 0.431373, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_loqr2"]
+bg_color = Color(0.77254903, 0.9098039, 0.99607843, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cbw4x"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+
+[sub_resource type="Shader" id="Shader_display_fx"]
+code = "shader_type canvas_item;
+render_mode unshaded;
+
+uniform sampler2D screen_tex : hint_screen_texture, repeat_disable, filter_linear_mipmap;
+uniform float vignette_strength : hint_range(0.0, 0.35) = 0.12;
+uniform float scanline_strength : hint_range(0.0, 0.2) = 0.01;
+uniform float glare_strength : hint_range(0.0, 0.4) = 0.2;
+uniform vec2 reflection_offset = vec2(0.0, 0.0);
+
+void fragment() {
+	vec2 uv = SCREEN_UV;
+	vec4 src = texture(screen_tex, uv);
+
+	vec2 centered = uv - vec2(0.5);
+	float vignette = 1.0 - smoothstep(0.22, 0.8, length(centered)) * vignette_strength;
+
+	float y_px = uv.y / SCREEN_PIXEL_SIZE.y;
+	float line_wave = sin(y_px * 0.85) * 0.5 + 0.5;
+	float scanline = 1.0 - scanline_strength * (1.0 - line_wave);
+
+	vec2 glare_uv = uv + reflection_offset;
+	float band = smoothstep(0.32, 0.0, abs(glare_uv.y - 0.2));
+	float diagonal = smoothstep(-0.25, 0.95, glare_uv.x + glare_uv.y * 0.35);
+	float glare = band * diagonal * glare_strength;
+
+	vec3 tinted = src.rgb * vec3(0.982, 0.993, 1.008);
+	vec3 out_rgb = tinted * vignette * scanline + vec3(glare * 0.75, glare * 0.9, glare * 1.1);
+	COLOR = vec4(out_rgb, 1.0);
+}
+"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_cbw4x"]
+shader = SubResource("Shader_display_fx")
+shader_parameter/vignette_strength = 0.12
+shader_parameter/scanline_strength = 0.01
+shader_parameter/glare_strength = 0.2
+shader_parameter/reflection_offset = Vector2(0, 0)
+
+[node name="InfoPopup" type="Control" unique_id=1293369428]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+script = ExtResource("1_script")
+
+[node name="Overlay" type="ColorRect" parent="." unique_id=1891404555]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+color = Color(0.007843138, 0.043137256, 0.08627451, 0.7019608)
+
+[node name="CenterContainer" type="CenterContainer" parent="." unique_id=1913693067]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="CenterContainer" unique_id=272388147]
+custom_minimum_size = Vector2(680, 340)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_popup_panel")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer/PanelContainer" unique_id=1808686370]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="PanelContainer" type="PanelContainer" parent="CenterContainer/PanelContainer/VBoxContainer" unique_id=1704747879]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_loqr2")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CenterContainer/PanelContainer/VBoxContainer/PanelContainer" unique_id=143708574]
+custom_minimum_size = Vector2(0, 75)
+layout_mode = 2
+size_flags_vertical = 4
+
+[node name="Control" type="Control" parent="CenterContainer/PanelContainer/VBoxContainer/PanelContainer/HBoxContainer" unique_id=151898330]
+custom_minimum_size = Vector2(24, 0)
+layout_mode = 2
+
+[node name="TitleLabel" type="Label" parent="CenterContainer/PanelContainer/VBoxContainer/PanelContainer/HBoxContainer" unique_id=555461278]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.0196078, 0.0666667, 0.133333, 1)
+theme_override_font_sizes/font_size = 24
+text = "Info"
+
+[node name="Control2" type="Control" parent="CenterContainer/PanelContainer/VBoxContainer/PanelContainer/HBoxContainer" unique_id=1034344711]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="CloseButton" type="Button" parent="CenterContainer/PanelContainer/VBoxContainer/PanelContainer/HBoxContainer" unique_id=1484200614]
+custom_minimum_size = Vector2(75, 44)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(0.050980393, 0.14117648, 0.23921569, 1)
+theme_override_colors/font_focus_color = Color(0.050980393, 0.14117648, 0.23921569, 1)
+theme_override_colors/font_pressed_color = Color(0.050980393, 0.14117648, 0.23921569, 1)
+theme_override_colors/font_hover_color = Color(0.050980393, 0.14117648, 0.23921569, 1)
+theme_override_font_sizes/font_size = 32
+theme_override_styles/normal = SubResource("StyleBoxFlat_cbw4x")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_cbw4x")
+theme_override_styles/hover = SubResource("StyleBoxFlat_cbw4x")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_cbw4x")
+theme_override_styles/focus = SubResource("StyleBoxFlat_cbw4x")
+text = "X"
+
+[node name="MarginContainer" type="MarginContainer" parent="CenterContainer/PanelContainer/VBoxContainer" unique_id=1439368667]
+layout_mode = 2
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 24
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 24
+
+[node name="BodyLabel" type="RichTextLabel" parent="CenterContainer/PanelContainer/VBoxContainer/MarginContainer" unique_id=357781043]
+custom_minimum_size = Vector2(0, 200)
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_colors/default_color = Color(0.00784314, 0.262745, 0.431373, 1)
+theme_override_font_sizes/normal_font_size = 24
+text = "Content"
+fit_content = true
+scroll_active = false
+
+[node name="DisplayFX" type="ColorRect" parent="." unique_id=283459698]
+material = SubResource("ShaderMaterial_cbw4x")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2

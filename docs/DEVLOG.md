@@ -2,6 +2,19 @@
 
 ## 2026-03-20
 
+### Step 39 - Popup localisation coverage and documentation rule update
+
+- Completed localisation pass for new popup/login strings and added missing Ukrainian entries in `i18n/uk_UA.po`.
+- Ensured popup title/body content uses `tr(...)` so about/contact/staff popup text follows active locale.
+- Added workflow requirement to `docs/PROCEDURES.md`:
+  - all player-visible source text must be proper UK English,
+  - all new/updated strings must have Ukrainian translation coverage.
+- Added matching policy notes in `docs/README.md` and QA checklist coverage in `docs/TESTING.md`.
+
+### Validation commands (pass)
+1. `./scripts/check.sh`
+   - Result: boot smoke PASS, `movement_math_test: PASS`, `slope_movement_test: PASS`, `card_reader_interaction_test: PASS`.
+
 ### Step 38 - Shared settings menu implementation, style polish, and audio default updates
 
 - Implemented `res://scenes/ui/settings_menu.tscn` and `res://scripts/ui/settings_menu.gd` as a shared settings screen used from:

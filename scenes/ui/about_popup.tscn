@@ -1,0 +1,7 @@
+[gd_scene format=3 uid="uid://cga37rs2hf6mw"]
+
+[ext_resource type="PackedScene" uid="uid://de5vjlwmf3x4e" path="res://scenes/ui/info_popup.tscn" id="1_base"]
+
+[node name="AboutPopup" unique_id=1236934776 instance=ExtResource("1_base")]
+popup_title = "About"
+popup_body = "Blue Current Research Facility is a permanent underwater research centre focused on ocean monitoring and renewable energy development. We are open to visitors year-round and offer guided tours for schools and adult groups.\n\nCome and explore our facility - and find out what really goes on down here."

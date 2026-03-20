@@ -94,6 +94,9 @@ GODOT_BIN=/absolute/path/to/godot ./scripts/check.sh
 - `Language` switches between `English (UK)` and `Ukrainian` with `<`/`>`.
 - Language preference is saved to `user://settings.cfg` and applied on startup.
 4. `Esc` on the startup main menu does not quit the app.
+5. Text policy:
+- Player-visible source text should use UK English.
+- New/changed text should include Ukrainian translation coverage in `i18n/uk_UA.po`.
 
 ## Validate
 
