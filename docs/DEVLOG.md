@@ -2,6 +2,30 @@
 
 ## 2026-03-20
 
+### Step 38 - Shared settings menu implementation, style polish, and audio default updates
+
+- Implemented `res://scenes/ui/settings_menu.tscn` and `res://scripts/ui/settings_menu.gd` as a shared settings screen used from:
+  - startup main menu (`Settings` button),
+  - in-game pause menu (`Settings` button).
+- Added settings menu close paths:
+  - top-left back button,
+  - `Esc` handling in both overlay contexts.
+- Replaced previous placeholder `Settings` actions in startup/pause flows with real overlay navigation.
+- Added settings controls and persistence wiring through `GameSettings`:
+  - `Music` slider,
+  - `Sound Effects` slider,
+  - `Subtitles` selector (`<` / `>`),
+  - `Language` selector (`<` / `>`).
+- Added runtime localization refresh in settings screen and ensured startup language dropdown syncs after returning from settings.
+- Added and tuned settings UI visual styles:
+  - custom blue palette for sliders and selector arrows,
+  - custom slider grabber icon rendering for smooth, non-default knob styling.
+- Updated audio defaults to `100%` (`1.0`) for first run/fallback paths.
+
+### Validation commands (pass)
+1. `./scripts/check.sh`
+   - Result: boot smoke PASS, `movement_math_test: PASS`, `slope_movement_test: PASS`, `card_reader_interaction_test: PASS`.
+
 ### Step 37 - Localisation foundation (UK/UA), translatable runtime text, and persisted language setting
 
 - Added project-level localisation setup:

@@ -39,32 +39,37 @@ HOME=/tmp XDG_DATA_HOME=/tmp XDG_CONFIG_HOME=/tmp godot --headless --path /path/
 10. Confirm HUD key-hint panel is visible in a corner and does not block click-to-move when clicking through it.
 11. Press `Esc` to open/close in-game pause menu; verify `Resume` closes pause menu and `Main Menu` returns to startup menu.
 12. In startup main menu, press `Esc` and confirm the app does not exit.
-13. Click startup `Load Game` and `Settings` and confirm placeholder warnings are logged (not implemented yet).
-14. Confirm light switch is mounted on wall and toggles room light + button material.
-15. Confirm hover color state when out of range.
-16. Confirm in-range interaction color state.
-17. Confirm blocked interaction color state.
-18. Confirm click on out-of-range interactable moves player closer and auto-interacts when in range.
-19. Confirm octopus can hold up to 8 pickup items.
-20. Confirm movement slows at heavy carry threshold and stops when fully loaded.
-21. Confirm `LMB` on held item drops that specific item.
-22. Confirm `F` drops last held item and `Shift + F` drops all.
-23. Confirm clicking a focus-enabled object enters focus mode after approach (e.g. `CardReader`).
-24. In focus mode, confirm held items appear at the bottom and can be selected by click.
-25. Confirm clicking outside focus interaction area exits focus immediately.
-26. Confirm card reader LED states: yellow (empty), red (wrong), green (correct).
-27. Confirm reader holds one card at a time: second card cannot replace inserted card.
-28. Confirm clicking inserted card retrieves/ejects it back to held items (when a slot is available).
-29. Confirm non-applicable held item click in focus (e.g. mug on reader) animates toward slot and returns.
-30. Confirm code panel can be clicked to enter focus mode.
-31. Confirm code panel keypad is only clickable while focused.
-32. Confirm code panel input supports `0-9`, `<<` (backspace), and `OK`.
-33. Confirm default code `1234` sets display to `GRANTED` and latches green LED.
-34. Confirm wrong code sets display to `DENIED`, red LED, then resets to `ENTER CODE` + yellow LED.
-35. Confirm code panel LED colors match card reader colors for idle/wrong/correct states.
-36. Confirm non-applicable held item click in code panel focus animates toward panel and returns.
-37. Confirm all code panel button columns are clickable (no blocked `2/3`, `5/6`, `8/9`, `0/OK` patterns).
-38. Confirm pickup item size stays consistent through hold -> reader insert -> eject -> hold cycles.
+13. Click startup `Load Game` and confirm placeholder warning is logged (not implemented yet).
+14. Click startup `Settings` and confirm settings overlay opens and closes via back button and `Esc`.
+15. Open pause menu `Settings` and confirm settings overlay opens and closes via back button and `Esc`.
+16. Confirm language switch in settings (`<`/`>`) changes UI language immediately and persists after restart.
+17. Confirm main menu language dropdown stays in sync with saved locale after returning from settings.
+18. Confirm default music and SFX values are `100%` on first launch.
+19. Confirm light switch is mounted on wall and toggles room light + button material.
+20. Confirm hover color state when out of range.
+21. Confirm in-range interaction color state.
+22. Confirm blocked interaction color state.
+23. Confirm click on out-of-range interactable moves player closer and auto-interacts when in range.
+24. Confirm octopus can hold up to 8 pickup items.
+25. Confirm movement slows at heavy carry threshold and stops when fully loaded.
+26. Confirm `LMB` on held item drops that specific item.
+27. Confirm `F` drops last held item and `Shift + F` drops all.
+28. Confirm clicking a focus-enabled object enters focus mode after approach (e.g. `CardReader`).
+29. In focus mode, confirm held items appear at the bottom and can be selected by click.
+30. Confirm clicking outside focus interaction area exits focus immediately.
+31. Confirm card reader LED states: yellow (empty), red (wrong), green (correct).
+32. Confirm reader holds one card at a time: second card cannot replace inserted card.
+33. Confirm clicking inserted card retrieves/ejects it back to held items (when a slot is available).
+34. Confirm non-applicable held item click in focus (e.g. mug on reader) animates toward slot and returns.
+35. Confirm code panel can be clicked to enter focus mode.
+36. Confirm code panel keypad is only clickable while focused.
+37. Confirm code panel input supports `0-9`, `<<` (backspace), and `OK`.
+38. Confirm default code `1234` sets display to `GRANTED` and latches green LED.
+39. Confirm wrong code sets display to `DENIED`, red LED, then resets to `ENTER CODE` + yellow LED.
+40. Confirm code panel LED colors match card reader colors for idle/wrong/correct states.
+41. Confirm non-applicable held item click in code panel focus animates toward panel and returns.
+42. Confirm all code panel button columns are clickable (no blocked `2/3`, `5/6`, `8/9`, `0/OK` patterns).
+43. Confirm pickup item size stays consistent through hold -> reader insert -> eject -> hold cycles.
 
 ## Regression Focus Areas
 

@@ -3,6 +3,7 @@ extends Node3D
 
 const CLICK_TARGET_COLLISION_MASK := (1 << 0) | (1 << 1)
 const MAIN_MENU_SCENE_PATH := "res://scenes/main_menu.tscn"
+const SETTINGS_MENU_SCENE := preload("res://scenes/ui/settings_menu.tscn")
 const InteractionControllerScript = preload("res://scripts/interaction/interaction_controller.gd")
 const OCTO_START_Y := 0.26
 const CAMERA_FOLLOW_HEIGHT := 0.65
@@ -45,6 +46,7 @@ var _focus_pending_target
 var _focus_tween: Tween
 var _saved_spring_length := 9.0
 var _player_visual_root: Node3D
+var _settings_overlay: Control
 
 
 func _ready() -> void:
@@ -87,6 +89,12 @@ func _physics_process(delta: float) -> void:
 
 
 func _unhandled_input(event: InputEvent) -> void:
+	if _settings_overlay != null and is_instance_valid(_settings_overlay):
+		if _is_escape_press(event):
+			_close_settings_overlay()
+			get_viewport().set_input_as_handled()
+		return
+
 	if _is_escape_press(event):
 		if _focus_mode:
 			_exit_focus_mode()
@@ -374,4 +382,26 @@ func _on_resume_pressed() -> void:
 
 
 func _on_settings_pressed() -> void:
-	push_warning("Pause Settings is not implemented yet.")
+	if _settings_overlay != null and is_instance_valid(_settings_overlay):
+		return
+
+	var settings_menu := SETTINGS_MENU_SCENE.instantiate() as Control
+	settings_menu.set("is_overlay", true)
+	settings_menu.closed.connect(_on_settings_overlay_closed)
+	add_child(settings_menu)
+	_settings_overlay = settings_menu
+	in_game_menu.visible = false
+
+
+func _on_settings_overlay_closed() -> void:
+	_close_settings_overlay()
+
+
+func _close_settings_overlay() -> void:
+	if _settings_overlay == null:
+		return
+	if is_instance_valid(_settings_overlay):
+		_settings_overlay.queue_free()
+	_settings_overlay = null
+	in_game_menu.visible = true
+	in_game_resume_button.grab_focus()

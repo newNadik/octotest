@@ -5,7 +5,7 @@ This document describes the current runtime architecture of the prototype and mu
 ## High-Level Runtime
 
 1. `res://scenes/main_menu.tscn` is the startup scene.
-2. `MainMenu` (`Control`) owns startup UI flow (`New Game`, `Load Game` placeholder, `Settings` placeholder, `Quit`) and slideshow presentation.
+2. `MainMenu` (`Control`) owns startup UI flow (`New Game`, `Load Game` placeholder, `Settings`, `Quit`) and slideshow presentation.
 3. `res://scenes/main.tscn` is the gameplay scene.
 4. `Main` (`Node3D`) owns world setup, camera behavior, click-to-move input routing, and in-game UI menu flow.
 5. `Player` (`CharacterBody3D`) is instanced from `res://scenes/player.tscn` and owns locomotion, gravity handling, and slope alignment.
@@ -22,7 +22,8 @@ This document describes the current runtime architecture of the prototype and mu
   - click/tap for move/interact,
   - drag with primary pointer for orbit,
   - wheel/pinch for zoom.
-- Handles in-game pause menu (`Esc` toggle) with `Resume`, `Settings` placeholder, and `Main Menu` actions.
+- Handles in-game pause menu (`Esc` toggle) with `Resume`, `Settings`, and `Main Menu` actions.
+- Opens settings as an in-scene overlay from pause flow and restores pause menu focus on close.
 - Delegates interaction/carry systems to `InteractionController`.
 2. `UI` (`CanvasLayer`) in gameplay scene:
 - `HUD` contains key hints anchored to screen corner.
@@ -52,19 +53,30 @@ This document describes the current runtime architecture of the prototype and mu
 
 ## Script Architecture
 
-1. `res://scripts/core/main_menu.gd`
+1. `res://scripts/ui/main_menu.gd`
 - Handles startup menu button actions.
 - Changes to gameplay scene on `New Game`.
-- Emits placeholder warnings for `Load Game` and `Settings`.
+- Emits placeholder warnings for `Load Game`.
+- Opens `res://scenes/ui/settings_menu.tscn` as an overlay for `Settings`.
 - Quits app on `Quit`.
 2. `res://scripts/core/main.gd`
 - Lightweight scene orchestrator.
 - Owns camera orbit/zoom behavior.
 - Initializes camera pivot follow position during `_ready()` to avoid first-frame startup pop.
 - Owns in-game pause menu visibility and scene-change actions.
+- Opens `res://scenes/ui/settings_menu.tscn` as an overlay from pause menu and closes it with back/`Esc`.
 - Routes click-to-move and delegates interact/drop input to `InteractionController`.
 - Owns focus-mode transitions (auto-enter after approach, movement lock, click-based exit rules).
-3. `res://scripts/player/player_controller.gd`
+3. `res://scripts/ui/settings_menu.gd`
+- Shared settings UI controller used from both startup and pause flows.
+- Supports overlay mode (close signal + fast close path) and standalone scene mode.
+- Persists and applies settings through `/root/GameSettings`:
+  - music and SFX volume,
+  - subtitles toggle,
+  - locale (`en_GB`, `uk_UA`).
+- Applies translatable labels at runtime (`tr(...)`).
+- Generates custom slider grabber icon to match menu visual style.
+4. `res://scripts/player/player_controller.gd`
 - Character movement state (`_target_position`, `_has_target`).
 - Gravity and grounded handling.
 - Uses `MovementMath.next_velocity_2d()` for planar acceleration/deceleration.
@@ -78,14 +90,14 @@ This document describes the current runtime architecture of the prototype and mu
 - Adds climb-specific visual feedback on `PlayerVisual`:
   - blocked-move "no" wiggle when overloaded,
   - subtle climb head tilt blend during pre-mantle/mantle.
-4. `res://scripts/core/movement_math.gd`
+5. `res://scripts/core/movement_math.gd`
 - Pure helper math (no scene dependencies).
 - Designed for headless logic testing.
-5. `res://scripts/interaction/interactable.gd`
+6. `res://scripts/interaction/interactable.gd`
 - Reusable `Area3D` interaction component.
 - Encapsulates interaction type (`CLICK`, `PICKUP`), range, prompts, held-state toggles, and visual overlays.
 - Emits `clicked`, `picked_up`, and `dropped` signals for gameplay-specific reactions.
-6. `res://scripts/interaction/interaction_controller.gd`
+7. `res://scripts/interaction/interaction_controller.gd`
 - Centralized interaction and carry system.
 - Handles interactable raycasts, hover state transitions, line-of-sight and range checks, and queued auto-interact.
 - Handles octopus hand-socket layout, held-item updates, targeted drop, and carry movement penalties.
@@ -99,20 +111,20 @@ This document describes the current runtime architecture of the prototype and mu
   - `_can_focus_target_accept_held_item(...)`,
   - `_apply_held_item_to_focus_target(...)`,
   - `_get_focus_item_target_position(...)`.
-7. `res://scripts/interaction/focus_target.gd`
+8. `res://scripts/interaction/focus_target.gd`
 - Configures per-object focus behavior (anchor, click-outside threshold, optional angle overrides, solved-state auto-exit).
-8. `res://scripts/interaction/card_reader.gd`
+9. `res://scripts/interaction/card_reader.gd`
 - Manages card reader state (`EMPTY`, `WRONG`, `CORRECT`), LED state, insertion/ejection, and slot anchors.
 - Preserves inserted card world scale when snapping into the slot.
-9. `res://scripts/interaction/focus_reject_feedback.gd`
+10. `res://scripts/interaction/focus_reject_feedback.gd`
 - Encapsulates short "apply failed" item motion toward slot and return.
-10. `res://scripts/interaction/interaction_hint_builder.gd`
+11. `res://scripts/interaction/interaction_hint_builder.gd`
 - Builds HUD hint text from controller state so text policy is not embedded in interaction flow logic.
-11. `res://scripts/interaction/code_panel.gd`
+12. `res://scripts/interaction/code_panel.gd`
 - Runtime-builds keypad geometry and interactables.
 - Enforces focus-gated keypad input.
 - Handles code-entry state (`ENTER CODE`, masked input, `DENIED`, latched `GRANTED`) and LED material-state transitions.
-12. `res://scripts/rig/OctoRig.gd`
+13. `res://scripts/rig/OctoRig.gd`
 - Procedural rig bootstrap around imported octopus skeleton.
 - Accepts manual bone assignment for head + arms using `HEAD_BONE_NAMES` and `ARM_CONFIGS`.
 - Applies section-based arm bend targets (`base/mid/tip`, each with `bend` + `bend_angle`).
@@ -132,10 +144,10 @@ This document describes the current runtime architecture of the prototype and mu
 - Supports editor-time preview modes (`Static Targets`, `Idle`, `Crawl`, `Mixer`, `Hold`) while temporarily suspending local `AnimationPlayer` playback.
 - Crawl preview uses the same cycle-speed math as gameplay, with `preview_motion_speed` as the preview-side speed input.
 - Validates rig data on startup and prints debug summaries.
-13. `res://scripts/rig/OctoArm.gd`
+14. `res://scripts/rig/OctoArm.gd`
 - Per-arm data model with role metadata (`side`, `role_bias`), resolved indices, base/mid/tip partitions, and rest rotation cache.
 - Stores runtime control fields (`current_state`, `phase_offset`, held-item/target references) and bend parameters.
-14. `res://scripts/rig/OctoHead.gd`
+15. `res://scripts/rig/OctoHead.gd`
 - Head-chain data model mirroring arm setup patterns (resolved indices, grouped parts, rest pose caches).
 
 ## Script Directory Layout
@@ -144,14 +156,17 @@ Scripts are grouped by runtime domain to keep ownership boundaries clear:
 
 1. `res://scripts/core/`
 - Scene orchestration and shared gameplay math.
-- Current files: `main.gd`, `main_menu.gd`, `movement_math.gd`.
-2. `res://scripts/player/`
+- Current files: `main.gd`, `movement_math.gd`, `game_settings.gd`.
+2. `res://scripts/ui/`
+- UI scene controllers.
+- Current files: `main_menu.gd`, `settings_menu.gd`.
+3. `res://scripts/player/`
 - Player locomotion/controller logic.
 - Current files: `player_controller.gd`.
-3. `res://scripts/interaction/`
+4. `res://scripts/interaction/`
 - Reusable interactable components and interaction systems.
 - Current files: `interactable.gd`, `interaction_controller.gd`, `focus_target.gd`, `card_reader.gd`, `code_panel.gd`, `focus_reject_feedback.gd`, `interaction_hint_builder.gd`.
-4. `res://scripts/rig/`
+5. `res://scripts/rig/`
 - Procedural octopus rig wrapper and arm/head data models.
 - Current files: `OctoRig.gd`, `OctoSurfaceLocomotion.gd`, `OctoArm.gd`, `OctoHead.gd`.
 

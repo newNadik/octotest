@@ -13,6 +13,9 @@ msgstr "Автовзаємодію додано в чергу: %s"
 msgid "Blocked: %s"
 msgstr "Заблоковано: %s"
 
+msgid "Back"
+msgstr "Назад"
+
 msgid "Blue Current Research Centre"
 msgstr "Дослідницький центр «Блакитна течія»"
 
@@ -97,8 +100,14 @@ msgstr "Кнопка світла"
 msgid "Load Game"
 msgstr "Завантажити гру"
 
+msgid "Music"
+msgstr "Музика"
+
 msgid "Main Menu"
 msgstr "Головне меню"
+
+msgid "More settings coming soon."
+msgstr "Незабаром з'являться додаткові налаштування."
 
 msgid "Mouse Wheel Zoom"
 msgstr "Коліщатко миші Масштаб"
@@ -133,6 +142,9 @@ msgstr "Продовжити"
 msgid "Science"
 msgstr "Дослідження"
 
+msgid "Sound Effects"
+msgstr "Звукові ефекти"
+
 msgid "Settings"
 msgstr "Налаштування"
 
@@ -141,6 +153,24 @@ msgstr "Вхід для персоналу"
 
 msgid "Technology"
 msgstr "Технології"
+
+msgid "Subtitles"
+msgstr "Субтитри"
+
+msgid "Language"
+msgstr "Мова"
+
+msgid "On"
+msgstr "Увімкнено"
+
+msgid "Off"
+msgstr "Вимкнено"
+
+msgid "English (UK)"
+msgstr "Англійська (Велика Британія)"
+
+msgid "Ukrainian"
+msgstr "Українська"
 
 msgid "Understanding the ocean. Powering the future."
 msgstr "Вивчення океану. Енергія для майбутнього."

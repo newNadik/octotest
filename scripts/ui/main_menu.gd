@@ -2,6 +2,7 @@ extends Control
 
 
 const GAME_SCENE_PATH := "res://scenes/main.tscn"
+const SETTINGS_MENU_SCENE := preload("res://scenes/ui/settings_menu.tscn")
 const SLIDESHOW_TEXTURE_PATHS := [
 	"res://assets/ui/slideshow/1.jpg",
 	"res://assets/ui/slideshow/2.jpg",
@@ -29,11 +30,14 @@ const DISPLAY_REFLECTION_SMOOTH_SPEED := 10.0
 @onready var bottom_nav_buttons: HBoxContainer = $MainVBoxContainer/BottomPanelContainer/MarginContainer/HBoxContainer/BottomNavButtons
 @onready var language_select: OptionButton = $MainVBoxContainer/BottomPanelContainer/MarginContainer/HBoxContainer/LanguageSelect
 @onready var display_fx: ColorRect = $DisplayFX
+@onready var main_vbox: VBoxContainer = $MainVBoxContainer
+@onready var sticker_container: Control = $StickerContainer
 
 var _slides: Array[Control] = []
 var _slide_index := 0
 var _display_material: ShaderMaterial
 var _display_reflection_offset := Vector2.ZERO
+var _settings_overlay: Control
 
 
 func _ready() -> void:
@@ -66,7 +70,41 @@ func _on_load_game_pressed() -> void:
 
 
 func _on_settings_pressed() -> void:
-	push_warning("Settings is not implemented yet.")
+	if _settings_overlay != null and is_instance_valid(_settings_overlay):
+		return
+	var settings_menu := SETTINGS_MENU_SCENE.instantiate() as Control
+	settings_menu.set("is_overlay", true)
+	settings_menu.z_index = 100
+	settings_menu.set_anchors_preset(Control.PRESET_FULL_RECT)
+	settings_menu.anchor_right = 1.0
+	settings_menu.anchor_bottom = 1.0
+	settings_menu.closed.connect(_on_settings_overlay_closed)
+	add_child(settings_menu)
+	settings_menu.move_to_front()
+	settings_menu.show()
+	_settings_overlay = settings_menu
+	_set_base_menu_visible(false)
+
+
+func _on_settings_overlay_closed() -> void:
+	_close_settings_overlay()
+
+
+func _close_settings_overlay() -> void:
+	if _settings_overlay == null:
+		return
+	if is_instance_valid(_settings_overlay):
+		_settings_overlay.queue_free()
+	_settings_overlay = null
+	_set_base_menu_visible(true)
+	_sync_language_select_selection()
+	settings_button.grab_focus()
+
+
+func _set_base_menu_visible(visible: bool) -> void:
+	main_vbox.visible = visible
+	display_fx.visible = visible
+	sticker_container.visible = visible
 
 
 func _collect_slides() -> void:
@@ -224,8 +262,7 @@ func _setup_language_select() -> void:
 	popup_bg.corner_radius_bottom_right = 6
 	popup_bg.corner_radius_bottom_left = 6
 	popup.add_theme_stylebox_override("panel", popup_bg)
-	var locale := _get_active_locale()
-	language_select.select(1 if locale.begins_with("uk") else 0)
+	_sync_language_select_selection()
 	language_select.item_selected.connect(_on_language_selected)
 
 
@@ -248,12 +285,19 @@ func _set_active_locale(locale: String) -> void:
 	var settings := _get_game_settings()
 	if settings != null and settings.has_method("set_locale"):
 		settings.call("set_locale", locale)
+		_sync_language_select_selection()
 		return
 	TranslationServer.set_locale(locale)
+	_sync_language_select_selection()
 
 
 func _get_game_settings() -> Node:
 	return get_node_or_null("/root/GameSettings")
+
+
+func _sync_language_select_selection() -> void:
+	var locale := _get_active_locale()
+	language_select.select(1 if locale.begins_with("uk") else 0)
 
 
 func _scaled_icon(texture: Texture2D, target_width: int) -> Texture2D:

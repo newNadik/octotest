@@ -82,13 +82,18 @@ GODOT_BIN=/absolute/path/to/godot ./scripts/check.sh
 1. Main menu actions:
 - `New Game` starts gameplay.
 - `Load Game` is a placeholder (not implemented yet).
-- `Settings` is a placeholder (not implemented yet).
+- `Settings` opens the shared settings overlay.
 - `Quit` exits the app.
 2. In-game pause menu actions:
 - `Resume` closes pause menu.
-- `Settings` is a placeholder (not implemented yet).
+- `Settings` opens the shared settings overlay.
 - `Main Menu` returns to startup menu.
-3. `Esc` on the startup main menu does not quit the app.
+3. Settings menu controls:
+- `Music` and `Sound Effects` sliders persist audio values.
+- `Subtitles` toggles with `<`/`>`.
+- `Language` switches between `English (UK)` and `Ukrainian` with `<`/`>`.
+- Language preference is saved to `user://settings.cfg` and applied on startup.
+4. `Esc` on the startup main menu does not quit the app.
 
 ## Validate
 

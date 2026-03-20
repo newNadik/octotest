@@ -3,16 +3,28 @@ extends Node
 
 const SETTINGS_PATH := "user://settings.cfg"
 const SECTION_GENERAL := "general"
+const SECTION_AUDIO := "audio"
+const SECTION_ACCESSIBILITY := "accessibility"
 const KEY_LOCALE := "locale"
+const KEY_MUSIC_VOLUME := "music_volume"
+const KEY_SOUND_VOLUME := "sound_volume"
+const KEY_SUBTITLES_ENABLED := "subtitles_enabled"
 const DEFAULT_LOCALE := "en_GB"
+const DEFAULT_MUSIC_VOLUME := 1.0
+const DEFAULT_SOUND_VOLUME := 1.0
+const DEFAULT_SUBTITLES_ENABLED := true
 
 var _config := ConfigFile.new()
 var _locale := DEFAULT_LOCALE
+var _music_volume := DEFAULT_MUSIC_VOLUME
+var _sound_volume := DEFAULT_SOUND_VOLUME
+var _subtitles_enabled := DEFAULT_SUBTITLES_ENABLED
 
 
 func _ready() -> void:
 	load_settings()
 	_apply_locale()
+	_apply_audio_settings()
 
 
 func get_locale() -> String:
@@ -29,22 +41,73 @@ func set_locale(locale: String) -> void:
 	save_settings()
 
 
+func get_music_volume() -> float:
+	return _music_volume
+
+
+func set_music_volume(value: float) -> void:
+	var clamped := clampf(value, 0.0, 1.0)
+	if is_equal_approx(_music_volume, clamped):
+		return
+	_music_volume = clamped
+	_apply_audio_settings()
+	save_settings()
+
+
+func get_sound_volume() -> float:
+	return _sound_volume
+
+
+func set_sound_volume(value: float) -> void:
+	var clamped := clampf(value, 0.0, 1.0)
+	if is_equal_approx(_sound_volume, clamped):
+		return
+	_sound_volume = clamped
+	_apply_audio_settings()
+	save_settings()
+
+
+func get_subtitles_enabled() -> bool:
+	return _subtitles_enabled
+
+
+func set_subtitles_enabled(enabled: bool) -> void:
+	if _subtitles_enabled == enabled:
+		return
+	_subtitles_enabled = enabled
+	save_settings()
+
+
 func load_settings() -> void:
 	var error := _config.load(SETTINGS_PATH)
 	if error == OK:
 		_locale = str(_config.get_value(SECTION_GENERAL, KEY_LOCALE, DEFAULT_LOCALE))
+		_music_volume = float(_config.get_value(SECTION_AUDIO, KEY_MUSIC_VOLUME, DEFAULT_MUSIC_VOLUME))
+		_sound_volume = float(_config.get_value(SECTION_AUDIO, KEY_SOUND_VOLUME, DEFAULT_SOUND_VOLUME))
+		_subtitles_enabled = bool(_config.get_value(SECTION_ACCESSIBILITY, KEY_SUBTITLES_ENABLED, DEFAULT_SUBTITLES_ENABLED))
 	elif error == ERR_FILE_NOT_FOUND:
 		_locale = DEFAULT_LOCALE
+		_music_volume = DEFAULT_MUSIC_VOLUME
+		_sound_volume = DEFAULT_SOUND_VOLUME
+		_subtitles_enabled = DEFAULT_SUBTITLES_ENABLED
 	else:
 		push_warning("Failed to load settings file: %s" % SETTINGS_PATH)
 		_locale = DEFAULT_LOCALE
+		_music_volume = DEFAULT_MUSIC_VOLUME
+		_sound_volume = DEFAULT_SOUND_VOLUME
+		_subtitles_enabled = DEFAULT_SUBTITLES_ENABLED
 
 	if _locale.is_empty():
 		_locale = DEFAULT_LOCALE
+	_music_volume = clampf(_music_volume, 0.0, 1.0)
+	_sound_volume = clampf(_sound_volume, 0.0, 1.0)
 
 
 func save_settings() -> void:
 	_config.set_value(SECTION_GENERAL, KEY_LOCALE, _locale)
+	_config.set_value(SECTION_AUDIO, KEY_MUSIC_VOLUME, _music_volume)
+	_config.set_value(SECTION_AUDIO, KEY_SOUND_VOLUME, _sound_volume)
+	_config.set_value(SECTION_ACCESSIBILITY, KEY_SUBTITLES_ENABLED, _subtitles_enabled)
 	var error := _config.save(SETTINGS_PATH)
 	if error != OK:
 		push_warning("Failed to save settings file: %s" % SETTINGS_PATH)
@@ -52,3 +115,16 @@ func save_settings() -> void:
 
 func _apply_locale() -> void:
 	TranslationServer.set_locale(_locale)
+
+
+func _apply_audio_settings() -> void:
+	_set_bus_volume_if_exists("Music", _music_volume)
+	_set_bus_volume_if_exists("SFX", _sound_volume)
+
+
+func _set_bus_volume_if_exists(bus_name: String, linear_value: float) -> void:
+	var bus_index := AudioServer.get_bus_index(bus_name)
+	if bus_index < 0:
+		return
+	var volume_db := -80.0 if linear_value <= 0.0 else linear_to_db(linear_value)
+	AudioServer.set_bus_volume_db(bus_index, volume_db)
