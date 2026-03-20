@@ -1,14 +1,155 @@
 [gd_scene format=3 uid="uid://coal8f6nwu8f5"]
 
-[ext_resource type="Script" uid="uid://ce31gq7bqv6ur" path="res://scripts/core/main_menu.gd" id="1_core"]
+[ext_resource type="Script" uid="uid://ce31gq7bqv6ur" path="res://scripts/ui/main_menu.gd" id="1_core"]
+[ext_resource type="Texture2D" uid="uid://bleasmjxjq0hr" path="res://assets/ui/search.png" id="2_8ln24"]
 [ext_resource type="PackedScene" uid="uid://bydkhwglewp85" path="res://scenes/ui/research_button.tscn" id="2_button"]
 [ext_resource type="PackedScene" path="res://scenes/ui/photo_slide.tscn" id="3_slide"]
+[ext_resource type="Texture2D" uid="uid://bveo1mgp8bkut" path="res://icon.png" id="4_wu84c"]
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_8ln24"]
+[sub_resource type="SystemFont" id="SystemFont_title_heavy"]
+font_names = PackedStringArray("Segoe UI Black", "SF Pro Display Black", "Helvetica Neue Black", "Noto Sans Black", "DejaVu Sans Bold", "sans-serif")
+font_weight = 999
+subpixel_positioning = 0
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_bqqt6"]
+[sub_resource type="LabelSettings" id="LabelSettings_bqqt6"]
+font = SubResource("SystemFont_title_heavy")
+font_size = 32
+font_color = Color(0.050980393, 0.14117648, 0.23921569, 1)
+outline_size = 2
+outline_color = Color(0.050980393, 0.14117648, 0.23921569, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_rtw2f"]
+font_size = 18
+font_color = Color(0.11372549, 0.19607843, 0.28627452, 0.74509805)
+
+[sub_resource type="LabelSettings" id="LabelSettings_wu84c"]
+font_size = 20
+font_color = Color(0.050980393, 0.14117648, 0.23921569, 1)
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_wu84c"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_oa1go"]
+font_color = Color(0.11372549, 0.19607843, 0.28627452, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_8ln24"]
+font_size = 14
+font_color = Color(0.050980393, 0.14117648, 0.23921569, 1)
+
+[sub_resource type="Shader" id="Shader_display_fx"]
+code = "shader_type canvas_item;
+render_mode unshaded;
+
+uniform sampler2D screen_tex : hint_screen_texture, repeat_disable, filter_linear_mipmap;
+uniform float vignette_strength : hint_range(0.0, 0.35) = 0.12;
+uniform float scanline_strength : hint_range(0.0, 0.2) = 0.01;
+uniform float glare_strength : hint_range(0.0, 0.4) = 0.2;
+uniform vec2 reflection_offset = vec2(0.0, 0.0);
+
+void fragment() {
+	vec2 uv = SCREEN_UV;
+	vec4 src = texture(screen_tex, uv);
+
+	vec2 centered = uv - vec2(0.5);
+	float vignette = 1.0 - smoothstep(0.22, 0.8, length(centered)) * vignette_strength;
+
+	float y_px = uv.y / SCREEN_PIXEL_SIZE.y;
+	float line_wave = sin(y_px * 0.85) * 0.5 + 0.5;
+	float scanline = 1.0 - scanline_strength * (1.0 - line_wave);
+
+	vec2 glare_uv = uv + reflection_offset;
+	float band = smoothstep(0.32, 0.0, abs(glare_uv.y - 0.2));
+	float diagonal = smoothstep(-0.25, 0.95, glare_uv.x + glare_uv.y * 0.35);
+	float glare = band * diagonal * glare_strength;
+
+	vec3 tinted = src.rgb * vec3(0.982, 0.993, 1.008);
+	vec3 out_rgb = tinted * vignette * scanline + vec3(glare * 0.75, glare * 0.9, glare * 1.1);
+	COLOR = vec4(out_rgb, 1.0);
+}
+"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_display_fx"]
+shader = SubResource("Shader_display_fx")
+shader_parameter/vignette_strength = 0.12
+shader_parameter/scanline_strength = 0.01
+shader_parameter/glare_strength = 0.2
+shader_parameter/reflection_offset = Vector2(0, 0)
+
+[sub_resource type="Shader" id="Shader_sticker_shadow"]
+code = "shader_type canvas_item;
+
+uniform vec4 shadow_color : source_color = vec4(0.015, 0.082, 0.180, 0.42);
+uniform vec2 shadow_offset = vec2(5.0, 8.0);
+uniform float blur_radius = 9.5;
+uniform float ambient_strength : hint_range(0.0, 1.0) = 0.75;
+uniform float edge_softness : hint_range(0.0, 0.2) = 0.06;
+
+void fragment() {
+	vec4 base = texture(TEXTURE, UV);
+	vec2 texel = TEXTURE_PIXEL_SIZE;
+	vec2 offset_uv = UV - shadow_offset * texel;
+
+	float ambient_near = 0.0;
+	ambient_near += texture(TEXTURE, UV + vec2(-blur_radius, -blur_radius) * texel).a * 0.08;
+	ambient_near += texture(TEXTURE, UV + vec2(0.0, -blur_radius) * texel).a * 0.12;
+	ambient_near += texture(TEXTURE, UV + vec2(blur_radius, -blur_radius) * texel).a * 0.08;
+	ambient_near += texture(TEXTURE, UV + vec2(-blur_radius, 0.0) * texel).a * 0.12;
+	ambient_near += texture(TEXTURE, UV).a * 0.20;
+	ambient_near += texture(TEXTURE, UV + vec2(blur_radius, 0.0) * texel).a * 0.12;
+	ambient_near += texture(TEXTURE, UV + vec2(-blur_radius, blur_radius) * texel).a * 0.08;
+	ambient_near += texture(TEXTURE, UV + vec2(0.0, blur_radius) * texel).a * 0.12;
+	ambient_near += texture(TEXTURE, UV + vec2(blur_radius, blur_radius) * texel).a * 0.08;
+
+	float wide_radius = blur_radius * 1.9;
+	float ambient_wide = 0.0;
+	ambient_wide += texture(TEXTURE, UV + vec2(-wide_radius, -wide_radius) * texel).a * 0.08;
+	ambient_wide += texture(TEXTURE, UV + vec2(0.0, -wide_radius) * texel).a * 0.12;
+	ambient_wide += texture(TEXTURE, UV + vec2(wide_radius, -wide_radius) * texel).a * 0.08;
+	ambient_wide += texture(TEXTURE, UV + vec2(-wide_radius, 0.0) * texel).a * 0.12;
+	ambient_wide += texture(TEXTURE, UV).a * 0.20;
+	ambient_wide += texture(TEXTURE, UV + vec2(wide_radius, 0.0) * texel).a * 0.12;
+	ambient_wide += texture(TEXTURE, UV + vec2(-wide_radius, wide_radius) * texel).a * 0.08;
+	ambient_wide += texture(TEXTURE, UV + vec2(0.0, wide_radius) * texel).a * 0.12;
+	ambient_wide += texture(TEXTURE, UV + vec2(wide_radius, wide_radius) * texel).a * 0.08;
+	float ambient = mix(ambient_near, ambient_wide, 0.45);
+
+	float directional_near = 0.0;
+	directional_near += texture(TEXTURE, offset_uv + vec2(-blur_radius, -blur_radius) * texel).a * 0.08;
+	directional_near += texture(TEXTURE, offset_uv + vec2(0.0, -blur_radius) * texel).a * 0.12;
+	directional_near += texture(TEXTURE, offset_uv + vec2(blur_radius, -blur_radius) * texel).a * 0.08;
+	directional_near += texture(TEXTURE, offset_uv + vec2(-blur_radius, 0.0) * texel).a * 0.12;
+	directional_near += texture(TEXTURE, offset_uv).a * 0.20;
+	directional_near += texture(TEXTURE, offset_uv + vec2(blur_radius, 0.0) * texel).a * 0.12;
+	directional_near += texture(TEXTURE, offset_uv + vec2(-blur_radius, blur_radius) * texel).a * 0.08;
+	directional_near += texture(TEXTURE, offset_uv + vec2(0.0, blur_radius) * texel).a * 0.12;
+	directional_near += texture(TEXTURE, offset_uv + vec2(blur_radius, blur_radius) * texel).a * 0.08;
+
+	float directional_wide = 0.0;
+	directional_wide += texture(TEXTURE, offset_uv + vec2(-wide_radius, -wide_radius) * texel).a * 0.08;
+	directional_wide += texture(TEXTURE, offset_uv + vec2(0.0, -wide_radius) * texel).a * 0.12;
+	directional_wide += texture(TEXTURE, offset_uv + vec2(wide_radius, -wide_radius) * texel).a * 0.08;
+	directional_wide += texture(TEXTURE, offset_uv + vec2(-wide_radius, 0.0) * texel).a * 0.12;
+	directional_wide += texture(TEXTURE, offset_uv).a * 0.20;
+	directional_wide += texture(TEXTURE, offset_uv + vec2(wide_radius, 0.0) * texel).a * 0.12;
+	directional_wide += texture(TEXTURE, offset_uv + vec2(-wide_radius, wide_radius) * texel).a * 0.08;
+	directional_wide += texture(TEXTURE, offset_uv + vec2(0.0, wide_radius) * texel).a * 0.12;
+	directional_wide += texture(TEXTURE, offset_uv + vec2(wide_radius, wide_radius) * texel).a * 0.08;
+	float directional = mix(directional_near, directional_wide, 0.35);
+
+	float shadow_alpha = mix(directional, ambient, ambient_strength);
+	float base_alpha = smoothstep(0.0, edge_softness, base.a);
+	float visible_shadow = shadow_alpha * shadow_color.a * (1.0 - base_alpha);
+	vec3 rgb = mix(shadow_color.rgb, base.rgb, base_alpha);
+	COLOR = vec4(rgb, max(base_alpha, visible_shadow));
+}
+"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_sticker_shadow"]
+shader = SubResource("Shader_sticker_shadow")
+shader_parameter/shadow_color = Color(0.015, 0.082, 0.18, 0.42)
+shader_parameter/shadow_offset = Vector2(5, 8)
+shader_parameter/blur_radius = 9.5
+shader_parameter/ambient_strength = 0.75
+shader_parameter/edge_softness = 0.06
 
 [node name="MainMenu" type="Control" unique_id=133547752]
 layout_mode = 3
@@ -28,138 +169,166 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.047058824, 0.14117648, 0.23921569, 1)
 
-[node name="TopBar" type="ColorRect" parent="." unique_id=1343160351]
-layout_mode = 1
-anchors_preset = 10
-anchor_right = 1.0
-offset_bottom = 80.0
-grow_horizontal = 2
-color = Color(0.77254903, 0.9098039, 0.99607843, 1)
-
-[node name="BottomBar" type="ColorRect" parent="." unique_id=750579359]
-layout_mode = 1
-anchors_preset = 12
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_top = -15.0
-grow_horizontal = 2
-grow_vertical = 0
-color = Color(0.77254903, 0.9098039, 0.99607843, 1)
-
-[node name="MainMargin" type="MarginContainer" parent="." unique_id=305465895]
+[node name="BackgroundLight" type="ColorRect" parent="." unique_id=2146027564]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/margin_left = 32
-theme_override_constants/margin_top = 16
-theme_override_constants/margin_right = 32
+color = Color(0.9497966, 0.9789153, 0.99908715, 1)
+
+[node name="MainVBoxContainer" type="VBoxContainer" parent="." unique_id=73898256]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TopPanelContainer" type="PanelContainer" parent="MainVBoxContainer" unique_id=1580854075]
+layout_mode = 2
+
+[node name="TopBar" type="ColorRect" parent="MainVBoxContainer/TopPanelContainer" unique_id=1343160351]
+layout_mode = 2
+color = Color(0.77254903, 0.9098039, 0.99607843, 1)
+
+[node name="TopContainer" type="MarginContainer" parent="MainVBoxContainer/TopPanelContainer" unique_id=1937161778]
+layout_mode = 2
+theme_override_constants/margin_left = 42
+theme_override_constants/margin_top = 42
+theme_override_constants/margin_right = 42
 theme_override_constants/margin_bottom = 24
 
-[node name="RootColumn" type="VBoxContainer" parent="MainMargin" unique_id=1802753494]
-layout_mode = 2
-theme_override_constants/separation = 20
-
-[node name="HeaderRow" type="HBoxContainer" parent="MainMargin/RootColumn" unique_id=1077242368]
+[node name="HeaderRow" type="HBoxContainer" parent="MainVBoxContainer/TopPanelContainer/TopContainer" unique_id=1077242368]
 layout_mode = 2
 size_flags_horizontal = 3
+size_flags_vertical = 8
 
-[node name="StationBadge" type="PanelContainer" parent="MainMargin/RootColumn/HeaderRow" unique_id=1754446908]
-custom_minimum_size = Vector2(188, 50)
+[node name="VBoxContainer" type="VBoxContainer" parent="MainVBoxContainer/TopPanelContainer/TopContainer/HeaderRow" unique_id=925755749]
 layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxEmpty_8ln24")
+theme_override_constants/separation = -2
 
-[node name="BadgeText" type="Label" parent="MainMargin/RootColumn/HeaderRow/StationBadge" unique_id=551016171]
+[node name="TitleText" type="Label" parent="MainVBoxContainer/TopPanelContainer/TopContainer/HeaderRow/VBoxContainer" unique_id=551016171]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.0313726, 0.0941176, 0.176471, 1)
 theme_override_font_sizes/font_size = 32
 text = "Blue Current Research Center"
+label_settings = SubResource("LabelSettings_bqqt6")
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="ContentRow" type="HBoxContainer" parent="MainMargin/RootColumn" unique_id=1237966849]
+[node name="Label" type="Label" parent="MainVBoxContainer/TopPanelContainer/TopContainer/HeaderRow/VBoxContainer" unique_id=1224347320]
+layout_mode = 2
+text = "Understanding the ocean. Powering the future"
+label_settings = SubResource("LabelSettings_rtw2f")
+
+[node name="Control" type="Control" parent="MainVBoxContainer/TopPanelContainer/TopContainer/HeaderRow" unique_id=862817463]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="NavButtons" type="HBoxContainer" parent="MainVBoxContainer/TopPanelContainer/TopContainer/HeaderRow" unique_id=1969959548]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 8
+theme_override_constants/separation = 20
+
+[node name="Label4" type="Label" parent="MainVBoxContainer/TopPanelContainer/TopContainer/HeaderRow/NavButtons" unique_id=1428038808]
+layout_mode = 2
+text = "About"
+label_settings = SubResource("LabelSettings_wu84c")
+
+[node name="Label2" type="Label" parent="MainVBoxContainer/TopPanelContainer/TopContainer/HeaderRow/NavButtons" unique_id=396042461]
+layout_mode = 2
+text = "Science"
+label_settings = SubResource("LabelSettings_wu84c")
+
+[node name="Label" type="Label" parent="MainVBoxContainer/TopPanelContainer/TopContainer/HeaderRow/NavButtons" unique_id=1210837605]
+layout_mode = 2
+text = "Technology"
+label_settings = SubResource("LabelSettings_wu84c")
+
+[node name="Label6" type="Label" parent="MainVBoxContainer/TopPanelContainer/TopContainer/HeaderRow/NavButtons" unique_id=1413057280]
+layout_mode = 2
+text = "Facilities"
+label_settings = SubResource("LabelSettings_wu84c")
+
+[node name="Label5" type="Label" parent="MainVBoxContainer/TopPanelContainer/TopContainer/HeaderRow/NavButtons" unique_id=1528020684]
+layout_mode = 2
+text = "Contact Us"
+label_settings = SubResource("LabelSettings_wu84c")
+
+[node name="Search" type="TextureRect" parent="MainVBoxContainer/TopPanelContainer/TopContainer/HeaderRow/NavButtons" unique_id=1730775498]
+layout_mode = 2
+texture = ExtResource("2_8ln24")
+
+[node name="MainContainer" type="MarginContainer" parent="MainVBoxContainer" unique_id=848944816]
 layout_mode = 2
 size_flags_vertical = 3
-theme_override_constants/separation = 24
+theme_override_constants/margin_left = 42
+theme_override_constants/margin_top = 42
+theme_override_constants/margin_right = 42
+theme_override_constants/margin_bottom = 42
 
-[node name="LeftPanel" type="PanelContainer" parent="MainMargin/RootColumn/ContentRow" unique_id=1825222399]
-custom_minimum_size = Vector2(370, 0)
+[node name="HBoxContainer" type="HBoxContainer" parent="MainVBoxContainer/MainContainer" unique_id=63538876]
+layout_mode = 2
+size_flags_vertical = 0
+theme_override_constants/separation = 42
+
+[node name="Spacer" type="Control" parent="MainVBoxContainer/MainContainer/HBoxContainer" unique_id=34655410]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="LeftContent" type="VBoxContainer" parent="MainVBoxContainer/MainContainer/HBoxContainer" unique_id=982058858]
+custom_minimum_size = Vector2(350, 420)
+layout_mode = 2
+
+[node name="SpacerTop" type="Control" parent="MainVBoxContainer/MainContainer/HBoxContainer/LeftContent" unique_id=1056765256]
+visible = false
 layout_mode = 2
 size_flags_vertical = 3
-theme_override_styles/panel = SubResource("StyleBoxEmpty_bqqt6")
 
-[node name="LeftMargin" type="MarginContainer" parent="MainMargin/RootColumn/ContentRow/LeftPanel" unique_id=849936540]
+[node name="MenuButtons" type="VBoxContainer" parent="MainVBoxContainer/MainContainer/HBoxContainer/LeftContent" unique_id=951151387]
 layout_mode = 2
-theme_override_constants/margin_left = 20
-theme_override_constants/margin_top = 20
-theme_override_constants/margin_right = 20
-theme_override_constants/margin_bottom = 20
-
-[node name="LeftContent" type="VBoxContainer" parent="MainMargin/RootColumn/ContentRow/LeftPanel/LeftMargin" unique_id=982058858]
-layout_mode = 2
-size_flags_vertical = 3
 theme_override_constants/separation = 16
 
-[node name="LeftSpacer2" type="Control" parent="MainMargin/RootColumn/ContentRow/LeftPanel/LeftMargin/LeftContent" unique_id=1530173946]
-layout_mode = 2
-size_flags_vertical = 3
-
-[node name="MenuButtons" type="VBoxContainer" parent="MainMargin/RootColumn/ContentRow/LeftPanel/LeftMargin/LeftContent" unique_id=951151387]
-layout_mode = 2
-theme_override_constants/separation = 12
-
-[node name="PlayButton" parent="MainMargin/RootColumn/ContentRow/LeftPanel/LeftMargin/LeftContent/MenuButtons" unique_id=845831966 instance=ExtResource("2_button")]
+[node name="PlayButton" parent="MainVBoxContainer/MainContainer/HBoxContainer/LeftContent/MenuButtons" unique_id=845831966 instance=ExtResource("2_button")]
 layout_mode = 2
 text = "New Game"
 
-[node name="LoadGameButton" parent="MainMargin/RootColumn/ContentRow/LeftPanel/LeftMargin/LeftContent/MenuButtons" unique_id=878664379 instance=ExtResource("2_button")]
+[node name="LoadGameButton" parent="MainVBoxContainer/MainContainer/HBoxContainer/LeftContent/MenuButtons" unique_id=878664379 instance=ExtResource("2_button")]
 layout_mode = 2
 text = "Load Game"
 
-[node name="SettingsButton" parent="MainMargin/RootColumn/ContentRow/LeftPanel/LeftMargin/LeftContent/MenuButtons" unique_id=334430107 instance=ExtResource("2_button")]
+[node name="SettingsButton" parent="MainVBoxContainer/MainContainer/HBoxContainer/LeftContent/MenuButtons" unique_id=334430107 instance=ExtResource("2_button")]
 layout_mode = 2
 text = "Settings"
 
-[node name="QuitButton" parent="MainMargin/RootColumn/ContentRow/LeftPanel/LeftMargin/LeftContent/MenuButtons" unique_id=697351820 instance=ExtResource("2_button")]
+[node name="QuitButton" parent="MainVBoxContainer/MainContainer/HBoxContainer/LeftContent/MenuButtons" unique_id=697351820 instance=ExtResource("2_button")]
 layout_mode = 2
 text = "Quit"
 
-[node name="LeftSpacer" type="Control" parent="MainMargin/RootColumn/ContentRow/LeftPanel/LeftMargin/LeftContent" unique_id=1142557592]
+[node name="SpacerBottom" type="Control" parent="MainVBoxContainer/MainContainer/HBoxContainer/LeftContent" unique_id=1142557592]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="RightPanel" type="VBoxContainer" parent="MainMargin/RootColumn/ContentRow" unique_id=152490017]
+[node name="SpacerMid" type="Control" parent="MainVBoxContainer/MainContainer/HBoxContainer" unique_id=601664209]
 layout_mode = 2
 size_flags_horizontal = 3
-size_flags_vertical = 3
-theme_override_constants/separation = 18
 
-[node name="CarouselPanel" type="PanelContainer" parent="MainMargin/RootColumn/ContentRow/RightPanel" unique_id=1604388800]
+[node name="CarouselPanel" type="PanelContainer" parent="MainVBoxContainer/MainContainer/HBoxContainer" unique_id=1604388800]
 custom_minimum_size = Vector2(0, 420)
 layout_mode = 2
-size_flags_vertical = 3
+size_flags_horizontal = 4
+size_flags_vertical = 4
 theme_override_styles/panel = SubResource("StyleBoxEmpty_wu84c")
 
-[node name="CarouselMargin" type="MarginContainer" parent="MainMargin/RootColumn/ContentRow/RightPanel/CarouselPanel" unique_id=231900548]
+[node name="SlidesHost" type="Control" parent="MainVBoxContainer/MainContainer/HBoxContainer/CarouselPanel" unique_id=693251718]
+custom_minimum_size = Vector2(650, 50)
 layout_mode = 2
-theme_override_constants/margin_left = 14
-theme_override_constants/margin_top = 14
-theme_override_constants/margin_right = 14
-theme_override_constants/margin_bottom = 14
 
-[node name="CarouselLayout" type="VBoxContainer" parent="MainMargin/RootColumn/ContentRow/RightPanel/CarouselPanel/CarouselMargin" unique_id=1194044863]
-layout_mode = 2
-theme_override_constants/separation = 10
-
-[node name="SlidesHost" type="Control" parent="MainMargin/RootColumn/ContentRow/RightPanel/CarouselPanel/CarouselMargin/CarouselLayout" unique_id=693251718]
-custom_minimum_size = Vector2(0, 308)
-layout_mode = 2
-size_flags_vertical = 3
-
-[node name="Slides" type="Control" parent="MainMargin/RootColumn/ContentRow/RightPanel/CarouselPanel/CarouselMargin/CarouselLayout/SlidesHost" unique_id=1569302063]
+[node name="Slides" type="Control" parent="MainVBoxContainer/MainContainer/HBoxContainer/CarouselPanel/SlidesHost" unique_id=1569302063]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -167,32 +336,117 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="SlideCurrent" parent="MainMargin/RootColumn/ContentRow/RightPanel/CarouselPanel/CarouselMargin/CarouselLayout/SlidesHost/Slides" unique_id=1993281005 instance=ExtResource("3_slide")]
+[node name="SlideCurrent" parent="MainVBoxContainer/MainContainer/HBoxContainer/CarouselPanel/SlidesHost/Slides" unique_id=1993281005 instance=ExtResource("3_slide")]
 layout_mode = 1
 
-[node name="SlideClimate" parent="MainMargin/RootColumn/ContentRow/RightPanel/CarouselPanel/CarouselMargin/CarouselLayout/SlidesHost/Slides" unique_id=861172178 instance=ExtResource("3_slide")]
+[node name="SlideClimate" parent="MainVBoxContainer/MainContainer/HBoxContainer/CarouselPanel/SlidesHost/Slides" unique_id=861172178 instance=ExtResource("3_slide")]
 visible = false
 layout_mode = 1
 
-[node name="SlideWildlife" parent="MainMargin/RootColumn/ContentRow/RightPanel/CarouselPanel/CarouselMargin/CarouselLayout/SlidesHost/Slides" unique_id=42119201 instance=ExtResource("3_slide")]
+[node name="SlideWildlife" parent="MainVBoxContainer/MainContainer/HBoxContainer/CarouselPanel/SlidesHost/Slides" unique_id=42119201 instance=ExtResource("3_slide")]
 visible = false
 layout_mode = 1
 
-[node name="SlideFour" parent="MainMargin/RootColumn/ContentRow/RightPanel/CarouselPanel/CarouselMargin/CarouselLayout/SlidesHost/Slides" unique_id=1742499530 instance=ExtResource("3_slide")]
+[node name="SlideFour" parent="MainVBoxContainer/MainContainer/HBoxContainer/CarouselPanel/SlidesHost/Slides" unique_id=1742499530 instance=ExtResource("3_slide")]
 visible = false
 layout_mode = 1
 
-[node name="CarouselControls" type="HBoxContainer" parent="MainMargin/RootColumn/ContentRow/RightPanel/CarouselPanel/CarouselMargin/CarouselLayout" unique_id=1104917884]
+[node name="CarouselControls" type="HBoxContainer" parent="MainVBoxContainer/MainContainer/HBoxContainer/CarouselPanel" unique_id=1104917884]
 layout_mode = 2
+size_flags_vertical = 8
 alignment = 1
 
-[node name="SlideDotsLabel" type="Label" parent="MainMargin/RootColumn/ContentRow/RightPanel/CarouselPanel/CarouselMargin/CarouselLayout/CarouselControls" unique_id=298462774]
+[node name="SlideDotsLabel" type="Label" parent="MainVBoxContainer/MainContainer/HBoxContainer/CarouselPanel/CarouselControls" unique_id=298462774]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.823529, 0.894118, 0.968627, 0.9)
 theme_override_font_sizes/font_size = 22
 text = "● ○ ○ ○"
 horizontal_alignment = 1
 
+[node name="SpacerRight" type="Control" parent="MainVBoxContainer/MainContainer/HBoxContainer" unique_id=687562235]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="BottomPanelContainer" type="PanelContainer" parent="MainVBoxContainer" unique_id=1598420305]
+layout_mode = 2
+
+[node name="BottomBar" type="ColorRect" parent="MainVBoxContainer/BottomPanelContainer" unique_id=750579359]
+layout_mode = 2
+color = Color(0.77254903, 0.9098039, 0.99607843, 1)
+
+[node name="MarginContainer" type="MarginContainer" parent="MainVBoxContainer/BottomPanelContainer" unique_id=1417251333]
+layout_mode = 2
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 12
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MainVBoxContainer/BottomPanelContainer/MarginContainer" unique_id=1107443479]
+layout_mode = 2
+
+[node name="BottomNavButtons" type="HBoxContainer" parent="MainVBoxContainer/BottomPanelContainer/MarginContainer/HBoxContainer" unique_id=279862468]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 8
+theme_override_constants/separation = 20
+
+[node name="Label4" type="Label" parent="MainVBoxContainer/BottomPanelContainer/MarginContainer/HBoxContainer/BottomNavButtons" unique_id=2098459424]
+layout_mode = 2
+text = "Staff Access"
+label_settings = SubResource("LabelSettings_oa1go")
+
+[node name="Label3" type="Label" parent="MainVBoxContainer/BottomPanelContainer/MarginContainer/HBoxContainer/BottomNavButtons" unique_id=1357551950]
+layout_mode = 2
+text = "Contact Us"
+label_settings = SubResource("LabelSettings_oa1go")
+
+[node name="Control" type="Control" parent="MainVBoxContainer/BottomPanelContainer/MarginContainer/HBoxContainer" unique_id=1702040881]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="LanguageSelect" type="OptionButton" parent="MainVBoxContainer/BottomPanelContainer/MarginContainer/HBoxContainer" unique_id=1960193502]
+custom_minimum_size = Vector2(56, 0)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+flat = true
+alignment = 1
+
+[node name="Label" type="Label" parent="MainVBoxContainer/BottomPanelContainer/MarginContainer/HBoxContainer" unique_id=537952062]
+layout_mode = 2
+text = "© 2026"
+label_settings = SubResource("LabelSettings_8ln24")
+
 [node name="SlideTimer" type="Timer" parent="." unique_id=369526518]
 wait_time = 4.5
 autostart = true
+
+[node name="DisplayFX" type="ColorRect" parent="." unique_id=268931144]
+material = SubResource("ShaderMaterial_display_fx")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="StickerContainer" type="MarginContainer" parent="." unique_id=1992276939]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -550.0
+offset_top = -75.0
+offset_bottom = 425.0
+grow_horizontal = 0
+mouse_filter = 2
+theme_override_constants/margin_right = 50
+
+[node name="Sticker" type="TextureRect" parent="StickerContainer" unique_id=6937190]
+material = SubResource("ShaderMaterial_sticker_shadow")
+custom_minimum_size = Vector2(0, 500)
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("4_wu84c")
+expand_mode = 2
+stretch_mode = 4

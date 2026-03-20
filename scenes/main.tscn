@@ -6,7 +6,7 @@
 [ext_resource type="Script" uid="uid://df0uvmmccqeho" path="res://scripts/interaction/card_reader.gd" id="4_b6dyj"]
 [ext_resource type="Script" uid="uid://b0r404u7bpvr" path="res://scripts/interaction/focus_target.gd" id="5_lmyi0"]
 [ext_resource type="Script" uid="uid://b16fnujp18m7" path="res://scripts/interaction/code_panel.gd" id="6_5e7k2"]
-[ext_resource type="PackedScene" path="res://scenes/in_game_menu.tscn" id="7_g4k2d"]
+[ext_resource type="PackedScene" uid="uid://ojtj5eewvf4n" path="res://scenes/ui/in_game_menu.tscn" id="7_o6xl0"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_7yl8v"]
 sky_top_color = Color(0.44, 0.59, 0.78, 1)
@@ -933,4 +933,4 @@ Esc In-Game Menu"
 horizontal_alignment = 2
 vertical_alignment = 1
 
-[node name="InGameMenu" parent="UI" unique_id=1961589152 instance=ExtResource("7_g4k2d")]
+[node name="InGameMenu" parent="UI" unique_id=2124539444 instance=ExtResource("7_o6xl0")]

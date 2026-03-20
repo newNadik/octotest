@@ -1,5 +1,36 @@
 # Dev Log
 
+## 2026-03-20
+
+### Step 36 - Main menu visual polish, display layering, and footer UX refinements
+
+- Upgraded startup menu branding and readability:
+  - heavier title treatment for institution name,
+  - refined subtitle styling and spacing.
+- Added monitor/display treatment for the startup UI:
+  - full-screen `DisplayFX` overlay shader layered above website content and below sticker,
+  - tuned vignette/glare/scanline balance and added mouse-driven reflection parallax.
+- Improved sticker presentation:
+  - added dedicated sticker shadow shader,
+  - iterated toward softer, wider, more ambient wrap shadow,
+  - reduced hard cutout edge feel with alpha-edge softening.
+- Added top-nav hyperlink affordance behavior:
+  - pointer cursor on hover,
+  - underline on hover,
+  - click hooks preserved as placeholder warnings for non-implemented sections.
+- Added the same hyperlink underline behavior to `BottomNavButtons`.
+- Added footer language selector to bottom bar:
+  - `UK` / `UA` selection with flag icons,
+  - icon-only compact dropdown presentation,
+  - locale switching hook (`en_GB` / `uk_UA`),
+  - custom dropdown arrow/list colors and compact popup styling.
+- Ensured sticker/display overlays do not block UI interactions by adjusting mouse filters.
+- Addressed strict typed-warning issues in GDScript (`warnings as errors`) and removed unsupported OptionButton API usage by resizing icon textures in script.
+
+### Validation commands (pass)
+1. `./scripts/check.sh`
+   - Result: boot smoke PASS, `movement_math_test: PASS`, `slope_movement_test: PASS`, `card_reader_interaction_test: PASS`.
+
 ## 2026-03-19
 
 ### Step 35 - Menu UI overhaul, pause flow update, and display scaling polish
