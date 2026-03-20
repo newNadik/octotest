@@ -15,6 +15,10 @@ run/main_scene="res://scenes/main_menu.tscn"
 config/features=PackedStringArray("4.6", "GL Compatibility")
 config/icon="uid://bveo1mgp8bkut"
 
+[autoload]
+
+GameSettings="*res://scripts/core/game_settings.gd"
+
 [display]
 
 window/size/viewport_width=1280
@@ -25,6 +29,11 @@ window/stretch/aspect="keep_height"
 [physics]
 
 3d/physics_engine="Jolt Physics"
+
+[internationalization]
+
+locale/fallback="en_GB"
+locale/translations=PackedStringArray("res://i18n/uk_UA.po")
 
 [rendering]
 

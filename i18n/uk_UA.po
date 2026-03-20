@@ -1,0 +1,155 @@
+msgid ""
+msgstr ""
+"Language: uk_UA\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+
+msgid "About"
+msgstr "Про нас"
+
+msgid "Auto-interact queued: %s"
+msgstr "Автовзаємодію додано в чергу: %s"
+
+msgid "Blocked: %s"
+msgstr "Заблоковано: %s"
+
+msgid "Blue Current Research Centre"
+msgstr "Дослідницький центр «Блакитна течія»"
+
+msgid "Box"
+msgstr "Коробка"
+
+msgid "Box 2"
+msgstr "Коробка 2"
+
+msgid "Box 3"
+msgstr "Коробка 3"
+
+msgid "Card"
+msgstr "Картка"
+
+msgid "Card 2"
+msgstr "Картка 2"
+
+msgid "Card 3"
+msgstr "Картка 3"
+
+msgid "Card 4"
+msgstr "Картка 4"
+
+msgid "Card Reader"
+msgstr "Зчитувач картки"
+
+msgid "Card reader: choose a held card (click a card in hands)"
+msgstr "Зчитувач картки: оберіть картку в руках (натисніть на картку в щупальцях)"
+
+msgid "Contact Us"
+msgstr "Зв'язатися з нами"
+
+msgid "DENIED"
+msgstr "ВІДМОВЛЕНО"
+
+msgid "ENTER CODE"
+msgstr "ВВЕДІТЬ КОД"
+
+msgid "Esc In-Game Menu"
+msgstr "Esc Меню в грі"
+
+msgid "Facilities"
+msgstr "Об'єкти"
+
+msgid "GRANTED"
+msgstr "ДОСТУП НАДАНО"
+
+msgid "Heavy carry: movement slowed"
+msgstr "Важке перенесення: рух сповільнено"
+
+msgid "Held: %d/%d"
+msgstr "Утримується: %d/%d"
+
+msgid "Interact"
+msgstr "Взаємодіяти"
+
+msgid "LMB %s %s"
+msgstr "ЛКМ %s %s"
+
+msgid "LMB Drag Orbit"
+msgstr "ЛКМ Перетягнути орбіту"
+
+msgid "LMB Drop %s"
+msgstr "ЛКМ Покласти %s"
+
+msgid "LMB Interact"
+msgstr "ЛКМ Взаємодіяти"
+
+msgid "LMB Move / Interact"
+msgstr "ЛКМ Рух / Взаємодія"
+
+msgid "LMB Move Closer"
+msgstr "ЛКМ Підійти ближче"
+
+msgid "LMB Select %s"
+msgstr "ЛКМ Обрати %s"
+
+msgid "Light Button"
+msgstr "Кнопка світла"
+
+msgid "Load Game"
+msgstr "Завантажити гру"
+
+msgid "Main Menu"
+msgstr "Головне меню"
+
+msgid "Mouse Wheel Zoom"
+msgstr "Коліщатко миші Масштаб"
+
+msgid "Mug"
+msgstr "Горнятко"
+
+msgid "Mug 2"
+msgstr "Горнятко 2"
+
+msgid "Mug 3"
+msgstr "Горнятко 3"
+
+msgid "New Game"
+msgstr "Нова гра"
+
+msgid "Overloaded: cannot move"
+msgstr "Перевантаження: рух неможливий"
+
+msgid "Pick up"
+msgstr "Підібрати"
+
+msgid "Press"
+msgstr "Натиснути"
+
+msgid "Quit"
+msgstr "Вийти"
+
+msgid "Resume"
+msgstr "Продовжити"
+
+msgid "Science"
+msgstr "Дослідження"
+
+msgid "Settings"
+msgstr "Налаштування"
+
+msgid "Staff Access"
+msgstr "Вхід для персоналу"
+
+msgid "Technology"
+msgstr "Технології"
+
+msgid "Understanding the ocean. Powering the future."
+msgstr "Вивчення океану. Енергія для майбутнього."
+
+msgid "Use card"
+msgstr "Використати картку"
+
+msgid "Use Keypad"
+msgstr "Використати клавіатуру"
+
+msgid "%s is out of range"
+msgstr "%s поза межами досяжності"

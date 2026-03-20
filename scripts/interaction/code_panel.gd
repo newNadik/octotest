@@ -114,7 +114,7 @@ func _build_panel() -> void:
 	_entry_interactable.collision_layer = 8
 	_entry_interactable.collision_mask = 0
 	_entry_interactable.display_name = "Code Panel"
-	_entry_interactable.prompt_action = "Use keypad"
+	_entry_interactable.prompt_action = "Use Keypad"
 	_entry_interactable.interaction_range = 2.9
 	_entry_interactable.focus_offset = Vector3(0.0, 0.12, 0.0)
 	add_child(_entry_interactable)
@@ -195,7 +195,7 @@ func _create_button(key: String, local_pos: Vector3) -> StaticBody3D:
 	area.name = "Interactable"
 	area.collision_layer = 8
 	area.collision_mask = 0
-	area.display_name = "Code Panel %s" % key
+	area.display_name = key
 	area.prompt_action = "Press"
 	area.interaction_range = 2.9
 	# Push focus point in front of panel so line-of-sight checks do not hit panel collision first.
@@ -251,7 +251,7 @@ func _submit_code() -> void:
 		return
 
 	_granted_latched = false
-	_display_label.text = "DENIED"
+	_display_label.text = tr("DENIED")
 	_led_mesh.material_override = _led_fail_material
 
 	await get_tree().create_timer(1.1).timeout
@@ -262,11 +262,11 @@ func _submit_code() -> void:
 
 func _update_display() -> void:
 	if _granted_latched:
-		_display_label.text = "GRANTED"
+		_display_label.text = tr("GRANTED")
 		return
 
 	if _input_text.is_empty():
-		_display_label.text = "ENTER CODE"
+		_display_label.text = tr("ENTER CODE")
 		return
 
 	var masked := ""

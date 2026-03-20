@@ -224,16 +224,36 @@ func _setup_language_select() -> void:
 	popup_bg.corner_radius_bottom_right = 6
 	popup_bg.corner_radius_bottom_left = 6
 	popup.add_theme_stylebox_override("panel", popup_bg)
-	language_select.select(0)
+	var locale := _get_active_locale()
+	language_select.select(1 if locale.begins_with("uk") else 0)
 	language_select.item_selected.connect(_on_language_selected)
 
 
 func _on_language_selected(index: int) -> void:
 	if index == 0:
-		TranslationServer.set_locale(LOCALE_EN_GB)
+		_set_active_locale(LOCALE_EN_GB)
 		return
 	if index == 1:
-		TranslationServer.set_locale(LOCALE_UK_UA)
+		_set_active_locale(LOCALE_UK_UA)
+
+
+func _get_active_locale() -> String:
+	var settings := _get_game_settings()
+	if settings != null and settings.has_method("get_locale"):
+		return str(settings.call("get_locale"))
+	return TranslationServer.get_locale()
+
+
+func _set_active_locale(locale: String) -> void:
+	var settings := _get_game_settings()
+	if settings != null and settings.has_method("set_locale"):
+		settings.call("set_locale", locale)
+		return
+	TranslationServer.set_locale(locale)
+
+
+func _get_game_settings() -> Node:
+	return get_node_or_null("/root/GameSettings")
 
 
 func _scaled_icon(texture: Texture2D, target_width: int) -> Texture2D:

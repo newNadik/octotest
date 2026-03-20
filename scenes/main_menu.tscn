@@ -213,14 +213,14 @@ theme_override_constants/separation = -2
 layout_mode = 2
 theme_override_colors/font_color = Color(0.0313726, 0.0941176, 0.176471, 1)
 theme_override_font_sizes/font_size = 32
-text = "Blue Current Research Center"
+text = "Blue Current Research Centre"
 label_settings = SubResource("LabelSettings_bqqt6")
 horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="Label" type="Label" parent="MainVBoxContainer/TopPanelContainer/TopContainer/HeaderRow/VBoxContainer" unique_id=1224347320]
 layout_mode = 2
-text = "Understanding the ocean. Powering the future"
+text = "Understanding the ocean. Powering the future."
 label_settings = SubResource("LabelSettings_rtw2f")
 
 [node name="Control" type="Control" parent="MainVBoxContainer/TopPanelContainer/TopContainer/HeaderRow" unique_id=862817463]

@@ -2,6 +2,30 @@
 
 ## 2026-03-20
 
+### Step 37 - Localisation foundation (UK/UA), translatable runtime text, and persisted language setting
+
+- Added project-level localisation setup:
+  - fallback locale configured to `en_GB`,
+  - translation catalog registered in project settings (`res://i18n/uk_UA.po`).
+- Added Ukrainian translation catalog with current main menu, pause menu, interaction prompt, and hint strings.
+- Normalised visible source text to UK English where applicable (for example, `Centre` spelling).
+- Made runtime-generated UI strings translatable via `tr(...)`:
+  - interaction hints in `InteractionHintBuilder`,
+  - keypad display status text in `CodePanel`.
+- Added settings persistence infrastructure for future settings menu work:
+  - new autoload singleton `GameSettings`,
+  - saves/loads locale in `user://settings.cfg`,
+  - applies locale on startup.
+- Updated main menu language selector to use persisted locale:
+  - initial selection reflects saved value,
+  - selecting UK/UA updates locale and stores it for next session.
+
+### Validation commands (pass)
+1. `./scripts/check.sh`
+   - Result: boot smoke PASS, `movement_math_test: PASS`, `slope_movement_test: PASS`, `card_reader_interaction_test: PASS`.
+
+## 2026-03-20
+
 ### Step 36 - Main menu visual polish, display layering, and footer UX refinements
 
 - Upgraded startup menu branding and readability:
