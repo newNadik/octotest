@@ -43,6 +43,7 @@ var _half_height := 0.5
 var _mantling := false
 var _mantle_from := Vector3.ZERO
 var _mantle_to := Vector3.ZERO
+var _mantle_control := Vector3.ZERO
 var _mantle_progress := 0.0
 var _mantle_duration_active := 0.75
 var _post_mantle_turn_timer := 0.0
@@ -59,6 +60,8 @@ var _pre_mantle_phase := 0
 var _pre_mantle_phase_time := 0.0
 var _pre_mantle_planar_direction := Vector3.ZERO
 var _pre_mantle_turn_target_yaw := 0.0
+var _post_mantle_move_target := Vector3.ZERO
+var _has_post_mantle_move_target := false
 const POST_MANTLE_TURN_DAMP_TIME := 0.22
 
 
@@ -82,11 +85,13 @@ func _ready() -> void:
 func set_move_target(world_target: Vector3) -> void:
 	_target_position = world_target
 	_has_target = true
+	_has_post_mantle_move_target = false
 
 
 func clear_move_target() -> void:
 	_has_target = false
 	_mantling = false
+	_has_post_mantle_move_target = false
 	_cancel_pre_mantle_sequence()
 
 
@@ -252,7 +257,7 @@ func _process_mantle(delta: float) -> void:
 	_mantle_progress += delta / maxf(0.01, _mantle_duration_active)
 	var t := minf(_mantle_progress, 1.0)
 	var eased := 1.0 - pow(1.0 - t, 3.0)
-	global_position = _mantle_from.lerp(_mantle_to, eased)
+	global_position = _quadratic_bezier(_mantle_from, _mantle_control, _mantle_to, eased)
 	velocity = Vector3.ZERO
 	var mantle_planar := Vector2(_mantle_to.x - global_position.x, _mantle_to.z - global_position.z)
 	_rotate_toward_planar(mantle_planar, delta, turn_speed * 0.65)
@@ -260,6 +265,7 @@ func _process_mantle(delta: float) -> void:
 		_mantling = false
 		_clear_climb_arm_overrides()
 		_post_mantle_turn_timer = POST_MANTLE_TURN_DAMP_TIME
+		_resume_post_mantle_move_target()
 
 
 func _try_begin_climb() -> void:
@@ -294,13 +300,15 @@ func _try_begin_climb() -> void:
 	if climb_delta <= 0.01 or climb_delta > mantle_height:
 		return
 
-	var landing_point: Vector3 = top_hit.position + planar_direction * mantle_landing_forward
+	var desired_click_target := _target_position
+	var landing_point := _find_edge_landing_point(top_hit.position, planar_direction)
 	var target_position := Vector3(landing_point.x, target_center_y, landing_point.z)
 
 	var height_ratio := clampf(climb_delta / maxf(0.01, mantle_height), 0.0, 1.0)
 	var duration_scale := lerpf(0.55, 1.15, height_ratio)
 	if climb_delta <= step_height:
 		duration_scale = maxf(0.45, duration_scale * 0.8)
+	_queue_post_mantle_move_target(desired_click_target, target_center_y)
 	_begin_pre_mantle_sequence(target_position, planar_direction, mantle_duration * duration_scale)
 
 
@@ -353,6 +361,7 @@ func _start_mantle_after_pre_climb() -> void:
 	_pre_mantle_phase_time = 0.0
 	_mantling = true
 	_mantle_from = global_position
+	_mantle_control = _build_mantle_control_point(_mantle_from, _mantle_to)
 	_mantle_progress = 0.0
 
 
@@ -520,3 +529,54 @@ func _has_landing_footprint(top_point: Vector3, planar_direction: Vector3) -> bo
 		if absf((sample_hit.position as Vector3).y - top_point.y) > 0.06:
 			return false
 	return true
+
+
+func _find_edge_landing_point(top_point: Vector3, planar_direction: Vector3) -> Vector3:
+	var edge_sample_step := 0.08
+	var max_backtrack := climb_probe_distance + 0.65
+	var last_supported := top_point
+	var found_supported := false
+	var distance := 0.0
+	while distance <= max_backtrack:
+		var sample_point := top_point - planar_direction * distance
+		var from := sample_point + Vector3.UP * 0.35
+		var to := sample_point + Vector3.DOWN * 0.6
+		var sample_hit := _cast_ray(from, to, climb_collision_mask)
+		var supported := false
+		if not sample_hit.is_empty():
+			var sample_normal: Vector3 = sample_hit.normal
+			if sample_normal.dot(Vector3.UP) >= climb_surface_min_up_dot:
+				supported = true
+				last_supported = sample_hit.position
+				found_supported = true
+		if found_supported and not supported:
+			break
+		distance += edge_sample_step
+	return last_supported + planar_direction * mantle_landing_forward
+
+
+func _queue_post_mantle_move_target(desired_target: Vector3, target_center_y: float) -> void:
+	_post_mantle_move_target = Vector3(desired_target.x, target_center_y, desired_target.z)
+	_has_post_mantle_move_target = true
+
+
+func _resume_post_mantle_move_target() -> void:
+	if not _has_post_mantle_move_target:
+		return
+	_has_post_mantle_move_target = false
+	_target_position = _post_mantle_move_target
+	_has_target = true
+
+
+func _build_mantle_control_point(from: Vector3, to: Vector3) -> Vector3:
+	var mid := from.lerp(to, 0.5)
+	var climb_delta := maxf(0.0, to.y - from.y)
+	var lift := maxf(mantle_clearance + 0.08, climb_delta * 0.35)
+	mid.y = maxf(from.y, to.y) + lift
+	return mid
+
+
+func _quadratic_bezier(a: Vector3, b: Vector3, c: Vector3, t: float) -> Vector3:
+	var ab := a.lerp(b, t)
+	var bc := b.lerp(c, t)
+	return ab.lerp(bc, t)
