@@ -18,6 +18,11 @@ Source: [Flaticon](https://www.flaticon.com/)
   Provider: TurboSquid  
   License: Per purchase terms on TurboSquid
 
+## Textures
+
+- https://cc0-textures.com
+- https://ambientcg.com
+
 ## Last Updated
 
 - 2026-03-21
