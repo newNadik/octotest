@@ -117,3 +117,4 @@ Run the unified check script:
 7. Editable game task backlog: `docs/TASK_LIST.md`
 8. Puzzle planning template and dependency sheet: `docs/misc/PUZZLE_PLAN.md`
 9. Per-room concept template: `docs/misc/room_concepts/ROOM_TEMPLATE.md`
+10. Third-party asset credits and license notes: `docs/ATTRIBUTION.md`
