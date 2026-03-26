@@ -1,0 +1,7 @@
+[gd_scene format=3 uid="uid://ct46aw51q70u"]
+
+[ext_resource type="PackedScene" uid="uid://cg7jo6eyp6d2r" path="res://scenes/station/architecture/chem_lab.tscn" id="1_2yydf"]
+
+[node name="checm_lab" type="Node3D" unique_id=2144189485]
+
+[node name="room" parent="." unique_id=2012320187 instance=ExtResource("1_2yydf")]

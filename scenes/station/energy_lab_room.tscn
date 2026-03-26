@@ -1,0 +1,7 @@
+[gd_scene format=3 uid="uid://ciyd0ikb6fk2x"]
+
+[ext_resource type="PackedScene" uid="uid://c2fxhq255lfu6" path="res://scenes/station/architecture/energy_lab.tscn" id="1_1hvab"]
+
+[node name="energy_lab" type="Node3D" unique_id=99183495]
+
+[node name="room" parent="." unique_id=304714198 instance=ExtResource("1_1hvab")]

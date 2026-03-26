@@ -1,0 +1,7 @@
+[gd_scene format=3 uid="uid://bobkphx8oiqd7"]
+
+[ext_resource type="PackedScene" uid="uid://ceub8e3x43ri7" path="res://scenes/station/architecture/systems.tscn" id="1_4de62"]
+
+[node name="systems" type="Node3D" unique_id=1333107396]
+
+[node name="room" parent="." unique_id=365493170 instance=ExtResource("1_4de62")]

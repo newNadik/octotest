@@ -1,0 +1,7 @@
+[gd_scene format=3 uid="uid://b0270kahwvyvu"]
+
+[ext_resource type="PackedScene" uid="uid://dq8f3vrk631bb" path="res://scenes/station/architecture/office.tscn" id="1_43emv"]
+
+[node name="office" type="Node3D" unique_id=1221074504]
+
+[node name="room" parent="." unique_id=901752264 instance=ExtResource("1_43emv")]

@@ -1,0 +1,7 @@
+[gd_scene format=3 uid="uid://drlpwsxtwwp5y"]
+
+[ext_resource type="PackedScene" uid="uid://bsq8i8032qepo" path="res://scenes/station/architecture/workshop.tscn" id="1_oa1b6"]
+
+[node name="workshop" type="Node3D" unique_id=1655701395]
+
+[node name="room" parent="." unique_id=1575795847 instance=ExtResource("1_oa1b6")]

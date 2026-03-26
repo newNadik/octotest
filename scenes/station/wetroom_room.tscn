@@ -1,0 +1,7 @@
+[gd_scene format=3 uid="uid://b1jsgk8hel14c"]
+
+[ext_resource type="PackedScene" uid="uid://b5wbnkdw8pctg" path="res://scenes/station/architecture/wetroom.tscn" id="1_al6ww"]
+
+[node name="wetroom" type="Node3D" unique_id=1413491207]
+
+[node name="room" parent="." unique_id=69966656 instance=ExtResource("1_al6ww")]

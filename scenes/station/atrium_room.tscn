@@ -1,0 +1,17 @@
+[gd_scene format=3 uid="uid://ddamgf1fl0xs3"]
+
+[ext_resource type="PackedScene" uid="uid://d188rcj55r6g0" path="res://scenes/station/architecture/atrium.tscn" id="1_vvece"]
+[ext_resource type="PackedScene" uid="uid://ot2hjy2e1p7d" path="res://scenes/station/window_double.tscn" id="2_ecqnk"]
+
+[node name="atrium" type="Node3D" unique_id=586932133]
+
+[node name="room" parent="." unique_id=1069646296 instance=ExtResource("1_vvece")]
+
+[node name="window_double" parent="." unique_id=1203692207 instance=ExtResource("2_ecqnk")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 20.02, 0, 5.124614)
+
+[node name="window_double2" parent="." unique_id=1362382548 instance=ExtResource("2_ecqnk")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 20.02, 0, 0)
+
+[node name="window_double3" parent="." unique_id=707282381 instance=ExtResource("2_ecqnk")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 20.02, 0, -5.125)
