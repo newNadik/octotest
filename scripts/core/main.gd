@@ -2,17 +2,21 @@ extends Node3D
 
 
 const CLICK_TARGET_COLLISION_MASK := (1 << 0) | (1 << 1)
+const CAMERA_OBSTACLE_COLLISION_MASK := (1 << 0) | (1 << 1)
 const MAIN_MENU_SCENE_PATH := "res://scenes/main_menu.tscn"
 const SETTINGS_MENU_SCENE := preload("res://scenes/ui/settings_menu.tscn")
 const InteractionControllerScript = preload("res://scripts/interaction/interaction_controller.gd")
 const OCTO_START_Y := 0.26
 const CAMERA_FOLLOW_HEIGHT := 0.65
 const CAMERA_MIN_WORLD_Y := 1.25
+const CAMERA_PROBE_RADIUS := 0.32
+const CAMERA_MIN_MARGIN := 0.4
+const CAMERA_NEAR_CLIP := 0.12
 
 @export var orbit_sensitivity := 0.2
 @export var drag_orbit_threshold_px := 10.0
 @export var min_zoom := 2.4
-@export var max_zoom := 14.0
+@export var max_zoom := 10.0
 @export var zoom_step := 1.0
 @export var focus_zoom_distance := 2.0
 @export var focus_tween_duration := 0.24
@@ -58,6 +62,7 @@ func _ready() -> void:
 	follow_position.y = maxf(follow_position.y, CAMERA_MIN_WORLD_Y)
 	camera_pivot.global_position = follow_position
 	_apply_camera_angles()
+	_configure_camera_collision()
 	_make_click_through(hud_root)
 	_create_interaction_controller()
 	_player_visual_root = player.get_node_or_null("PlayerVisual") as Node3D
@@ -296,6 +301,19 @@ func _create_interaction_controller() -> void:
 	add_child(_interaction_controller)
 	_interaction_controller.process_mode = Node.PROCESS_MODE_PAUSABLE
 	_interaction_controller.initialize(player, camera, hint_label, self, room_light)
+
+
+func _configure_camera_collision() -> void:
+	# Imported station meshes can end up on layer 1 while manual blockers use layer 2.
+	# Keep camera collision on both so SpringArm prevents wall clipping consistently.
+	spring_arm.collision_mask = CAMERA_OBSTACLE_COLLISION_MASK
+	if spring_arm.margin < CAMERA_MIN_MARGIN:
+		spring_arm.margin = CAMERA_MIN_MARGIN
+	if spring_arm.shape == null:
+		var probe_shape := SphereShape3D.new()
+		probe_shape.radius = CAMERA_PROBE_RADIUS
+		spring_arm.shape = probe_shape
+	camera.near = CAMERA_NEAR_CLIP
 
 
 func _apply_camera_angles() -> void:
