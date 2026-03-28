@@ -26,6 +26,7 @@ Godot `4.6.1` 3D isometric prototype with:
 22. Held-item placement follows real rig arm anchors with size-aware clearance (cards stay close, larger props get extra anti-clipping offset).
 23. Camera defaults now support a closer gameplay view with increased zoom-in range.
 24. Display stretch configured for fixed design height with adaptive width (`canvas_items` + `keep_height`) for desktop/tablet fullscreen layouts.
+25. Click movement now prefers navmesh path following via `NavigationAgent3D` when navigation data is available, with automatic fallback to direct movement when navmesh is missing or target is unreachable.
 
 ## Canonical Branch
 
@@ -76,6 +77,7 @@ GODOT_BIN=/absolute/path/to/godot ./scripts/check.sh
 - While focused, held items are selectable at the bottom of the screen.
 - Code panel keypad buttons are only interactive while the panel is focused.
 9. Octopus does not jump; climb/mantle is triggered automatically when moving onto valid low elevated surfaces.
+10. Navigation setup note: authored station floors should be covered by `NavigationRegion3D` + baked `NavigationMesh` for best path quality around walls/corners.
 
 ## Menu Notes
 

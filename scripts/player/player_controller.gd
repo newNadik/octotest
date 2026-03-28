@@ -8,6 +8,7 @@ const MovementMath = preload("res://scripts/core/movement_math.gd")
 const CLIMB_PHASE_FIRST_REACH := 0
 const CLIMB_PHASE_SECOND_REACH := 1
 const CLIMB_PHASE_TRANSITION := 2
+const NAV_AGENT_NODE_NAME := "NavigationAgent3D"
 
 var move_speed := 6.0
 var acceleration := 22.0
@@ -62,6 +63,7 @@ var _pre_mantle_planar_direction := Vector3.ZERO
 var _pre_mantle_turn_target_yaw := 0.0
 var _post_mantle_move_target := Vector3.ZERO
 var _has_post_mantle_move_target := false
+var _navigation_agent: NavigationAgent3D
 const POST_MANTLE_TURN_DAMP_TIME := 0.22
 
 
@@ -72,6 +74,7 @@ func _ready() -> void:
 	var shape_node := get_node_or_null("CollisionShape3D") as CollisionShape3D
 	if shape_node != null and shape_node.shape is BoxShape3D:
 		_half_height = (shape_node.shape as BoxShape3D).size.y * 0.5
+	_ensure_navigation_agent()
 	_octo_rig = get_node_or_null("PlayerVisual")
 	_visual_root = _octo_rig as Node3D
 	if _visual_root == null:
@@ -86,6 +89,7 @@ func set_move_target(world_target: Vector3) -> void:
 	_target_position = world_target
 	_has_target = true
 	_has_post_mantle_move_target = false
+	_refresh_navigation_target()
 
 
 func clear_move_target() -> void:
@@ -93,6 +97,7 @@ func clear_move_target() -> void:
 	_mantling = false
 	_has_post_mantle_move_target = false
 	_cancel_pre_mantle_sequence()
+	_reset_navigation_target()
 
 
 func trigger_blocked_move_feedback() -> void:
@@ -113,18 +118,19 @@ func _physics_process(delta: float) -> void:
 	if grounded:
 		floor_normal = get_floor_normal()
 
-	if _has_target and MovementMath.arrived_2d(global_position, _target_position, stop_distance):
+	if _has_target and _is_move_target_reached():
 		_has_target = false
+		_reset_navigation_target()
 
 	var move_target := global_position
 	if _has_target:
-		move_target = _target_position
+		move_target = _get_drive_target()
 
 	var used_surface_drive := false
 	if use_surface_locomotion and _octo_rig != null and _octo_rig.has_method("step_surface_locomotion"):
 		var desired_dir := Vector3.ZERO
 		if _has_target:
-			var to_target := _target_position - global_position
+			var to_target := move_target - global_position
 			desired_dir = Vector3(to_target.x, 0.0, to_target.z)
 		var drive_velocity: Vector3 = _octo_rig.step_surface_locomotion(delta, global_position, desired_dir, velocity)
 		velocity.x = move_toward(velocity.x, drive_velocity.x, acceleration * delta)
@@ -151,7 +157,7 @@ func _physics_process(delta: float) -> void:
 		velocity.y = 0.0
 
 	if _has_target and grounded:
-		_try_begin_climb()
+		_try_begin_climb(move_target)
 
 	move_and_slide()
 	if use_surface_locomotion and grounded and _octo_rig != null and _octo_rig.has_method("get_surface_support_normal"):
@@ -268,8 +274,8 @@ func _process_mantle(delta: float) -> void:
 		_resume_post_mantle_move_target()
 
 
-func _try_begin_climb() -> void:
-	var to_target := _target_position - global_position
+func _try_begin_climb(drive_target: Vector3) -> void:
+	var to_target := drive_target - global_position
 	var planar_direction := Vector3(to_target.x, 0.0, to_target.z)
 	if planar_direction.length() <= 0.01:
 		planar_direction = Vector3(velocity.x, 0.0, velocity.z)
@@ -285,7 +291,7 @@ func _try_begin_climb() -> void:
 		top_hit = _cast_ray(top_probe_start, top_probe_end, climb_collision_mask)
 
 	if top_hit.is_empty():
-		top_hit = _find_target_top_hit()
+		top_hit = _find_target_top_hit(drive_target)
 		if top_hit.is_empty():
 			return
 
@@ -487,23 +493,23 @@ func _wall_probe(ray_from: Vector3, planar_direction: Vector3) -> Dictionary:
 	return hit
 
 
-func _find_target_top_hit() -> Dictionary:
-	var to_target := _target_position - global_position
+func _find_target_top_hit(target: Vector3) -> Dictionary:
+	var to_target := target - global_position
 	var planar_distance := Vector2(to_target.x, to_target.z).length()
 	if planar_distance > climb_probe_distance + 0.9:
 		return {}
-	if _target_position.y <= global_position.y + 0.03:
+	if target.y <= global_position.y + 0.03:
 		return {}
 
 	var down_from := Vector3(
-		_target_position.x,
-		_target_position.y + mantle_height + mantle_clearance + 0.25,
-		_target_position.z
+		target.x,
+		target.y + mantle_height + mantle_clearance + 0.25,
+		target.z
 	)
 	var down_to := Vector3(
-		_target_position.x,
-		_target_position.y - (mantle_height + step_height + 0.65),
-		_target_position.z
+		target.x,
+		target.y - (mantle_height + step_height + 0.65),
+		target.z
 	)
 	return _cast_ray(down_from, down_to, climb_collision_mask)
 
@@ -566,6 +572,7 @@ func _resume_post_mantle_move_target() -> void:
 	_has_post_mantle_move_target = false
 	_target_position = _post_mantle_move_target
 	_has_target = true
+	_refresh_navigation_target()
 
 
 func _build_mantle_control_point(from: Vector3, to: Vector3) -> Vector3:
@@ -580,3 +587,56 @@ func _quadratic_bezier(a: Vector3, b: Vector3, c: Vector3, t: float) -> Vector3:
 	var ab := a.lerp(b, t)
 	var bc := b.lerp(c, t)
 	return ab.lerp(bc, t)
+
+
+func _ensure_navigation_agent() -> void:
+	_navigation_agent = get_node_or_null(NAV_AGENT_NODE_NAME) as NavigationAgent3D
+	if _navigation_agent == null:
+		_navigation_agent = NavigationAgent3D.new()
+		_navigation_agent.name = NAV_AGENT_NODE_NAME
+		add_child(_navigation_agent)
+	_navigation_agent.avoidance_enabled = false
+	_navigation_agent.path_desired_distance = maxf(stop_distance, 0.25)
+	_navigation_agent.target_desired_distance = maxf(stop_distance, 0.2)
+	_navigation_agent.radius = 0.24
+	_navigation_agent.height = maxf(_half_height * 2.0, 0.5)
+	_navigation_agent.max_speed = move_speed
+
+
+func _refresh_navigation_target() -> void:
+	if _can_use_navigation():
+		_navigation_agent.target_position = _target_position
+
+
+func _reset_navigation_target() -> void:
+	if _can_use_navigation():
+		_navigation_agent.target_position = global_position
+
+
+func _can_use_navigation() -> bool:
+	if _navigation_agent == null:
+		return false
+	return _navigation_agent.get_navigation_map() != RID()
+
+
+func _get_drive_target() -> Vector3:
+	if not _can_use_navigation():
+		return _target_position
+	if not _navigation_agent.is_target_reachable():
+		return _target_position
+	if _navigation_agent.is_navigation_finished():
+		return _target_position
+	var next_position := _navigation_agent.get_next_path_position()
+	if not next_position.is_finite():
+		return _target_position
+	return next_position
+
+
+func _is_move_target_reached() -> bool:
+	if not _can_use_navigation():
+		return MovementMath.arrived_2d(global_position, _target_position, stop_distance)
+	if not _navigation_agent.is_target_reachable():
+		return MovementMath.arrived_2d(global_position, _target_position, stop_distance)
+	if not _navigation_agent.is_navigation_finished():
+		return false
+	return MovementMath.arrived_2d(global_position, _target_position, stop_distance)

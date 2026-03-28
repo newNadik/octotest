@@ -9,9 +9,10 @@ This document describes the current runtime architecture of the prototype and mu
 3. `res://scenes/main.tscn` is the gameplay scene.
 4. `Main` (`Node3D`) owns world setup, camera behavior, click-to-move input routing, and in-game UI menu flow.
 5. `Player` (`CharacterBody3D`) is instanced from `res://scenes/player.tscn` and owns locomotion, gravity handling, and slope alignment.
-6. `Room` contains authored static geometry for the office layout (floor, ceiling, walls, windows, doors, desks, chairs, console, storage/tank props).
-7. `Interactables` contains authored clickable and pickup objects (`Area3D` + `RigidBody3D`/`StaticBody3D`), including focus-enabled objects such as `CardReader` and `CodePanel`.
-8. `WorldEnvironment` provides sky/background visuals visible through wall openings.
+6. Navigation data is scene-authored (`NavigationRegion3D` + `NavigationMesh`) and consumed by the player's runtime `NavigationAgent3D` when present.
+7. `Room` contains authored static geometry for the office layout (floor, ceiling, walls, windows, doors, desks, chairs, console, storage/tank props).
+8. `Interactables` contains authored clickable and pickup objects (`Area3D` + `RigidBody3D`/`StaticBody3D`), including focus-enabled objects such as `CardReader` and `CodePanel`.
+9. `WorldEnvironment` provides sky/background visuals visible through wall openings.
 
 ## Scene Graph Responsibilities
 
@@ -79,6 +80,8 @@ This document describes the current runtime architecture of the prototype and mu
 4. `res://scripts/player/player_controller.gd`
 - Character movement state (`_target_position`, `_has_target`).
 - Gravity and grounded handling.
+- Owns runtime `NavigationAgent3D` setup for click path-following on navmesh.
+- Uses navmesh path points when reachable; falls back to direct click target movement when navmesh is missing/unreachable.
 - Uses `MovementMath.next_velocity_2d()` for planar acceleration/deceleration.
 - Uses `MovementMath.project_planar_direction_on_surface()` to keep movement stable on slopes.
 - Includes click-to-climb mantle logic with landing-footprint validation for stable chair/desk climbing.
@@ -174,11 +177,12 @@ Scripts are grouped by runtime domain to keep ownership boundaries clear:
 
 1. User clicks floor/ramp.
 2. `main.gd` raycasts against ground layer and sends target to player when in-game menu is hidden.
-3. `player_controller.gd` computes planar velocity toward target.
-4. If grounded, planar direction is projected onto floor tangent for slope handling.
-5. Gravity is applied when airborne.
-6. `move_and_slide()` resolves motion/collision.
-7. Interact clicks either execute immediately (in range) or queue movement + auto-interact when close.
+3. `player_controller.gd` updates click target and refreshes `NavigationAgent3D` target.
+4. If navmesh path is reachable, movement uses the next nav path position; otherwise movement uses direct click target fallback.
+5. If grounded, planar direction is projected onto floor tangent for slope handling.
+6. Gravity is applied when airborne.
+7. `move_and_slide()` resolves motion/collision.
+8. Interact clicks either execute immediately (in range) or queue movement + auto-interact when close.
 
 ## Test Architecture
 

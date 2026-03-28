@@ -1,5 +1,24 @@
 # Dev Log
 
+## 2026-03-28
+
+### Step 40 - Camera collision hardening and click-navigation pathing fallback
+
+- Improved third-person camera reliability in `res://scripts/core/main.gd`:
+  - widened spring arm obstacle mask coverage for both wall and floor collision layers,
+  - added spring arm collision probe shape and safer margin defaults,
+  - tightened maximum gameplay zoom distance to reduce out-of-room framing issues.
+- Upgraded click movement in `res://scripts/player/player_controller.gd` to support navmesh pathing:
+  - added runtime `NavigationAgent3D` setup under player controller,
+  - movement follows nav path points when navigation target is reachable,
+  - automatic fallback to direct click movement remains active when navmesh is missing or target is unreachable.
+- Preserved existing climb/mantle behavior by steering climb probes from the active movement drive target (path step or direct target).
+- Updated docs (`README`, `ARCHITECTURE`, `TESTING`) with navmesh authoring expectations and QA coverage for navigation fallback/path-follow behavior.
+
+### Validation commands (pass)
+1. `godot --headless --path . --quit`
+   - Result: boot smoke PASS.
+
 ## 2026-03-20
 
 ### Step 39 - Popup localisation coverage and documentation rule update
