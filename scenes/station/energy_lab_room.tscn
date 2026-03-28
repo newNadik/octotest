@@ -4,4 +4,4 @@
 
 [node name="energy_lab" type="Node3D" unique_id=99183495]
 
-[node name="room" parent="." unique_id=304714198 instance=ExtResource("1_1hvab")]
+[node name="energy_lab" parent="." unique_id=1622891315 instance=ExtResource("1_1hvab")]

@@ -4,4 +4,4 @@
 
 [node name="quarters" type="Node3D" unique_id=349748799]
 
-[node name="room" parent="." unique_id=2011469079 instance=ExtResource("1_omwpg")]
+[node name="quarters" parent="." unique_id=150172973 instance=ExtResource("1_omwpg")]

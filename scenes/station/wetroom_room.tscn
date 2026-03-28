@@ -4,4 +4,4 @@
 
 [node name="wetroom" type="Node3D" unique_id=1413491207]
 
-[node name="room" parent="." unique_id=69966656 instance=ExtResource("1_al6ww")]
+[node name="wetroom" parent="." unique_id=2133782979 instance=ExtResource("1_al6ww")]

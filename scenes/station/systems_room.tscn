@@ -4,4 +4,4 @@
 
 [node name="systems" type="Node3D" unique_id=1333107396]
 
-[node name="room" parent="." unique_id=365493170 instance=ExtResource("1_4de62")]
+[node name="system" parent="." unique_id=1217152142 instance=ExtResource("1_4de62")]

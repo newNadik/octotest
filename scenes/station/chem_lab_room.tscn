@@ -4,4 +4,4 @@
 
 [node name="checm_lab" type="Node3D" unique_id=2144189485]
 
-[node name="room" parent="." unique_id=2012320187 instance=ExtResource("1_2yydf")]
+[node name="chem_lab" parent="." unique_id=918888622 instance=ExtResource("1_2yydf")]

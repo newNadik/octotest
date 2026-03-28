@@ -1,17 +1,85 @@
 [gd_scene format=3 uid="uid://ddamgf1fl0xs3"]
 
 [ext_resource type="PackedScene" uid="uid://d188rcj55r6g0" path="res://scenes/station/architecture/atrium.tscn" id="1_vvece"]
-[ext_resource type="PackedScene" uid="uid://ot2hjy2e1p7d" path="res://scenes/station/window_double.tscn" id="2_ecqnk"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_vvece"]
+size = Vector3(1, 31, 30)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ecqnk"]
+size = Vector3(80, 1, 80)
 
 [node name="atrium" type="Node3D" unique_id=586932133]
 
-[node name="room" parent="." unique_id=1069646296 instance=ExtResource("1_vvece")]
+[node name="atrium" parent="." unique_id=2061005798 instance=ExtResource("1_vvece")]
 
-[node name="window_double" parent="." unique_id=1203692207 instance=ExtResource("2_ecqnk")]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 20.02, 0, 5.124614)
+[node name="CameraBorder" type="StaticBody3D" parent="." unique_id=939731238]
+collision_layer = 18
+collision_mask = 0
 
-[node name="window_double2" parent="." unique_id=1362382548 instance=ExtResource("2_ecqnk")]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 20.02, 0, 0)
+[node name="CollisionRoof" type="CollisionShape3D" parent="CameraBorder" unique_id=135438049]
+transform = Transform3D(-0.19080903, 0.98162717, 0, -0.98162717, -0.19080903, 0, 0, 0, 1, 14.587656, 9.385013, 0)
+shape = SubResource("BoxShape3D_vvece")
 
-[node name="window_double3" parent="." unique_id=707282381 instance=ExtResource("2_ecqnk")]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 20.02, 0, -5.125)
+[node name="CollisionRoof2" type="CollisionShape3D" parent="CameraBorder" unique_id=872138619]
+transform = Transform3D(-0.13492234, 0.69411516, 0.7071067, -0.98162705, -0.190809, 0, 0.13492234, -0.69411516, 0.7071067, 9.691059, 9.385013, -11.118479)
+shape = SubResource("BoxShape3D_vvece")
+
+[node name="CollisionRoof3" type="CollisionShape3D" parent="CameraBorder" unique_id=1547707369]
+transform = Transform3D(8.340526e-09, -4.2908283e-08, 0.9999999, -0.981627, -0.190809, 0, 0.190809, -0.98162705, -4.3711385e-08, -0.8205776, 9.385013, -15.202384)
+shape = SubResource("BoxShape3D_vvece")
+
+[node name="CollisionRoof4" type="CollisionShape3D" parent="CameraBorder" unique_id=1478017604]
+transform = Transform3D(0.13492233, -0.6941151, 0.7071067, -0.9816269, -0.190809, 0, 0.13492233, -0.6941151, -0.7071067, -11.528616, 9.385013, -10.842511)
+shape = SubResource("BoxShape3D_vvece")
+
+[node name="CollisionRoof5" type="CollisionShape3D" parent="CameraBorder" unique_id=388369981]
+transform = Transform3D(0.19080897, -0.981627, -8.742277e-08, -0.98162687, -0.190809, 0, -1.668105e-08, 8.581656e-08, -0.9999999, -15.765101, 9.385013, 0.07975578)
+shape = SubResource("BoxShape3D_vvece")
+
+[node name="CollisionRoof6" type="CollisionShape3D" parent="CameraBorder" unique_id=1904052247]
+transform = Transform3D(0.13492233, -0.6941151, -0.70710665, -0.98162687, -0.19080898, 0, -0.1349223, 0.694115, -0.70710677, -11.478741, 9.385013, 10.910896)
+shape = SubResource("BoxShape3D_vvece")
+
+[node name="CollisionRoof7" type="CollisionShape3D" parent="CameraBorder" unique_id=201038702]
+transform = Transform3D(8.340525e-09, -4.2908272e-08, -0.9999999, -0.98162687, -0.19080897, 0, -0.19080897, 0.98162687, -4.3711385e-08, -0.8742714, 9.385013, 15.081987)
+shape = SubResource("BoxShape3D_vvece")
+
+[node name="CollisionRoof8" type="CollisionShape3D" parent="CameraBorder" unique_id=1468270776]
+transform = Transform3D(-0.13492231, 0.69411504, -0.7071067, -0.98162687, -0.19080897, 0, -0.13492231, 0.69411504, 0.7071067, 10.083683, 9.385013, 10.769505)
+shape = SubResource("BoxShape3D_vvece")
+
+[node name="CollisionFloor" type="CollisionShape3D" parent="CameraBorder" unique_id=1050599936]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+shape = SubResource("BoxShape3D_ecqnk")
+
+[node name="CollisionWall" type="CollisionShape3D" parent="CameraBorder" unique_id=202023245]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 29.4, 3, 0)
+shape = SubResource("BoxShape3D_vvece")
+
+[node name="CollisionWall2" type="CollisionShape3D" parent="CameraBorder" unique_id=875409196]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -30.965342, 3, 0)
+shape = SubResource("BoxShape3D_vvece")
+
+[node name="CollisionWall3" type="CollisionShape3D" parent="CameraBorder" unique_id=1905560792]
+transform = Transform3D(0.70710677, 0, 0.70710677, 0, 1, 0, -0.70710677, 0, 0.70710677, -22.971312, 3, 20.515867)
+shape = SubResource("BoxShape3D_vvece")
+
+[node name="CollisionWall4" type="CollisionShape3D" parent="CameraBorder" unique_id=825118781]
+transform = Transform3D(0.70710677, 0, 0.70710677, 0, 1, 0, -0.70710677, 0, 0.70710677, 21.825237, 3, -20.059664)
+shape = SubResource("BoxShape3D_vvece")
+
+[node name="CollisionWall5" type="CollisionShape3D" parent="CameraBorder" unique_id=592919625]
+transform = Transform3D(0.7071067, 0, -0.7071067, 0, 1, 0, 0.7071067, 0, 0.7071067, 21.825237, 3, 20.02305)
+shape = SubResource("BoxShape3D_vvece")
+
+[node name="CollisionWall6" type="CollisionShape3D" parent="CameraBorder" unique_id=707325336]
+transform = Transform3D(0.7071067, 0, -0.7071067, 0, 1, 0, 0.7071067, 0, 0.7071067, -21.719576, 3, -21.791159)
+shape = SubResource("BoxShape3D_vvece")
+
+[node name="CollisionWall7" type="CollisionShape3D" parent="CameraBorder" unique_id=1403561522]
+transform = Transform3D(-4.3711385e-08, 0, 0.9999999, 0, 1, 0, -0.9999999, 0, -4.3711385e-08, -0.60974216, 3, -30.134222)
+shape = SubResource("BoxShape3D_vvece")
+
+[node name="CollisionWall8" type="CollisionShape3D" parent="CameraBorder" unique_id=672955568]
+transform = Transform3D(-4.3711385e-08, 0, 0.9999999, 0, 1, 0, -0.9999999, 0, -4.3711385e-08, -0.60974216, 3, 30.19797)
+shape = SubResource("BoxShape3D_vvece")

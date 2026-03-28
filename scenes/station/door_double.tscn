@@ -1,7 +1,0 @@
-[gd_scene format=3 uid="uid://b8dlpm4u4g0cv"]
-
-[ext_resource type="PackedScene" uid="uid://df388ceifdrb3" path="res://assets/models/station/door_double.glb" id="1_h6ljm"]
-
-[node name="door_double" type="Node3D" unique_id=1045314479]
-
-[node name="door_double" parent="." unique_id=228731868 instance=ExtResource("1_h6ljm")]
