@@ -1,5 +1,33 @@
 # Dev Log
 
+## 2026-03-29
+
+### Step 41 - Station sliding door system (single/double), safety auto-close, and visual polish
+
+- Added interactive station door prefabs and runtime controllers:
+  - `res://scripts/station/interior/door_slide.gd`,
+  - `res://scripts/station/interior/door_lock_group.gd`.
+- Implemented door-slide behavior:
+  - click-to-open interaction on door leaf,
+  - cinematic smooth open/close tweening (`EASE_IN_OUT + TRANS_QUART`),
+  - open travel configured to slide left by near full leaf width.
+- Implemented lock-state support:
+  - exported/group lock state on `DoorSingle` and `DoorDouble`,
+  - lock propagation from group wrapper to child slide leaves.
+- Implemented double-door coordination:
+  - clicking either side opens both leaves,
+  - per-leaf open-distance overrides for alignment tuning.
+- Implemented safe delayed auto-close:
+  - closes after delay only when doorway is clear,
+  - close is blocked by player/items in sensor area,
+  - for double doors, if either side is blocked, neither side closes.
+- Updated door indicator visuals:
+  - muted allowed/openable color `#3ed180`,
+  - muted blocked/moving/locked color `#de3d4d`.
+- Removed yellow hover conflict for door interactables by overriding door-specific interaction overlay colors.
+- Added synchronized hover highlight across both sides of double doors.
+- Extended `Interactable` with `get_visual_state()` to support group-level highlight synchronization.
+
 ## 2026-03-28
 
 ### Step 40 - Camera collision hardening and click-navigation pathing fallback

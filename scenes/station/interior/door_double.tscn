@@ -2,8 +2,10 @@
 
 [ext_resource type="PackedScene" uid="uid://dlqytu68qnf4y" path="res://assets/models/door_double.glb" id="1_oy7p6"]
 [ext_resource type="PackedScene" uid="uid://bwdy63omrocxt" path="res://scenes/station/interior/door_slide.tscn" id="2_obwqj"]
+[ext_resource type="Script" uid="uid://dl7taqvc1mi1o" path="res://scripts/station/interior/door_lock_group.gd" id="3_lock_group_script"]
 
 [node name="DoorDouble" type="Node3D" unique_id=1045878697]
+script = ExtResource("3_lock_group_script")
 
 [node name="door_double" parent="." unique_id=1850481520 instance=ExtResource("1_oy7p6")]
 

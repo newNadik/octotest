@@ -153,6 +153,10 @@ func set_visual_state(state: VisualState) -> void:
 	_set_visual_state(state)
 
 
+func get_visual_state() -> VisualState:
+	return _current_state
+
+
 func _set_visual_state(state: VisualState) -> void:
 	if _current_state == state:
 		return

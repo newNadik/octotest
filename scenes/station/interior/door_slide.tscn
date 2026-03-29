@@ -1,5 +1,8 @@
 [gd_scene format=4 uid="uid://bwdy63omrocxt"]
 
+[ext_resource type="Script" path="res://scripts/station/interior/door_slide.gd" id="1_door_slide_script"]
+[ext_resource type="Script" uid="uid://bt8vvmy3m63u7" path="res://scripts/interaction/interactable.gd" id="2_interactable_script"]
+
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_bn8yx"]
 resource_name = "Walls"
 cull_mode = 2
@@ -265,7 +268,14 @@ shadow_mesh = SubResource("ArrayMesh_2vf7o")
 [sub_resource type="BoxShape3D" id="BoxShape3D_8klbd"]
 size = Vector3(1.51, 4.8, 0.15)
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_door_interaction"]
+size = Vector3(1.55, 4.8, 0.2)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_close_sensor"]
+size = Vector3(1.62, 4.8, 0.42)
+
 [node name="door_slide" type="Node3D" unique_id=126332104]
+script = ExtResource("1_door_slide_script")
 
 [node name="StaticBody3D" type="StaticBody3D" parent="." unique_id=1198069455]
 
@@ -293,3 +303,29 @@ mesh = SubResource("ArrayMesh_xdj8g")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D" unique_id=2023497220]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.4, 0)
 shape = SubResource("BoxShape3D_8klbd")
+
+[node name="Interactable" type="Area3D" parent="." unique_id=1789112203]
+collision_layer = 8
+collision_mask = 0
+script = ExtResource("2_interactable_script")
+display_name = "Door"
+interaction_range = 2.9
+prompt_action = "Open"
+visual_root_path = NodePath("../StaticBody3D/button")
+pickup_root_path = NodePath("../StaticBody3D/button")
+hover_color = Color(0.243137, 0.819608, 0.501961, 0.45)
+in_range_color = Color(0.243137, 0.819608, 0.501961, 0.62)
+blocked_color = Color(0.870588, 0.239216, 0.301961, 0.62)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Interactable" unique_id=162887734]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.4, 0)
+shape = SubResource("BoxShape3D_door_interaction")
+
+[node name="CloseSensor" type="Area3D" parent="." unique_id=1057772214]
+collision_layer = 0
+collision_mask = 12
+monitorable = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CloseSensor" unique_id=496892256]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.4, 0)
+shape = SubResource("BoxShape3D_close_sensor")

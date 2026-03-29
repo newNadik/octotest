@@ -48,7 +48,14 @@ This document describes the current runtime architecture of the prototype and mu
 - `CardReader` (`StaticBody3D`) with `Interactable` and `FocusTarget` children for zoomed precision interaction.
 - `CodePanel` (`StaticBody3D`) with `Interactable` + `FocusTarget` on the host and keypad button interactables that are enabled only during active focus.
 - All interactables use collision layer 8 for interaction raycasts.
-7. Camera rig:
+7. Station interior door prefabs:
+- `res://scenes/station/interior/door_slide.tscn` is a reusable interactive sliding leaf with:
+  - click-to-open interaction,
+  - state-indicator button colors (allowed/openable vs moving/locked),
+  - delayed auto-close with doorway occupancy safety sensor (player/items block close).
+- `res://scenes/station/interior/door_single.tscn` and `res://scenes/station/interior/door_double.tscn` wrap one or two slide leaves and expose group lock state.
+- Double-door wrapper propagates open requests to both leaves, supports per-leaf travel distance overrides, and synchronizes hover highlight across both sides.
+8. Camera rig:
 - `CameraPivot -> CameraYaw -> CameraPitch -> SpringArm3D -> Camera3D`.
 - Pivot follows player position.
 
@@ -100,6 +107,7 @@ This document describes the current runtime architecture of the prototype and mu
 - Reusable `Area3D` interaction component.
 - Encapsulates interaction type (`CLICK`, `PICKUP`), range, prompts, held-state toggles, and visual overlays.
 - Emits `clicked`, `picked_up`, and `dropped` signals for gameplay-specific reactions.
+- Exposes current visual-state query via `get_visual_state()` for group-level visual sync systems.
 7. `res://scripts/interaction/interaction_controller.gd`
 - Centralized interaction and carry system.
 - Handles interactable raycasts, hover state transitions, line-of-sight and range checks, and queued auto-interact.
@@ -152,6 +160,12 @@ This document describes the current runtime architecture of the prototype and mu
 - Stores runtime control fields (`current_state`, `phase_offset`, held-item/target references) and bend parameters.
 15. `res://scripts/rig/OctoHead.gd`
 - Head-chain data model mirroring arm setup patterns (resolved indices, grouped parts, rest pose caches).
+16. `res://scripts/station/interior/door_slide.gd`
+- Sliding-door leaf controller.
+- Handles open/close tweening, lock state, clickable open requests, indicator-button materials, auto-close timing, and doorway blockage checks.
+17. `res://scripts/station/interior/door_lock_group.gd`
+- Single/double door group controller.
+- Propagates lock state to leaf doors, fans open requests across all leaves, applies per-leaf open-distance overrides, and synchronizes double-door highlight state.
 
 ## Script Directory Layout
 
@@ -172,6 +186,9 @@ Scripts are grouped by runtime domain to keep ownership boundaries clear:
 5. `res://scripts/rig/`
 - Procedural octopus rig wrapper and arm/head data models.
 - Current files: `OctoRig.gd`, `OctoSurfaceLocomotion.gd`, `OctoArm.gd`, `OctoHead.gd`.
+6. `res://scripts/station/interior/`
+- Station interior interactive door controllers.
+- Current files: `door_slide.gd`, `door_lock_group.gd`.
 
 ## Movement Data Flow
 
