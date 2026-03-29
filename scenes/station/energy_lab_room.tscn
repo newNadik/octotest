@@ -4,6 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://blnrijpl108tk" path="res://scenes/station/interior/window_double.tscn" id="1_fgm2e"]
 [ext_resource type="Material" uid="uid://b1a0xbuetfwpo" path="res://assets/materials/concrete.tres" id="1_m4qa1"]
 [ext_resource type="Material" uid="uid://bb4hx1vyakkmf" path="res://assets/materials/plaster.tres" id="2_hlkya"]
+[ext_resource type="Material" uid="uid://biog7mv21velq" path="res://assets/materials/OfficeCeiling002_2K-JPG.tres" id="2_jcl15"]
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_eoqii"]
 resource_name = "energy_lab_Plane_115"
@@ -149,6 +150,7 @@ surface_material_override/0 = ExtResource("1_m4qa1")
 [node name="RoofEnergyLab" type="MeshInstance3D" parent="StaticBody3D" unique_id=1091524581]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.8054073, -7.5464764e-06, 0.006915656)
 mesh = SubResource("ArrayMesh_xl21f")
+surface_material_override/0 = ExtResource("2_jcl15")
 
 [node name="PanelEnergyLab" type="MeshInstance3D" parent="StaticBody3D" unique_id=341935415]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.398359, -7.5464764e-06, 9.201983)

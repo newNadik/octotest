@@ -3,6 +3,7 @@
 [ext_resource type="PackedScene" uid="uid://daxvawcm2f6v1" path="res://scenes/station/interior/door_single.tscn" id="1_f5vnd"]
 [ext_resource type="PackedScene" uid="uid://blnrijpl108tk" path="res://scenes/station/interior/window_double.tscn" id="2_uooyi"]
 [ext_resource type="Material" uid="uid://b1a0xbuetfwpo" path="res://assets/materials/concrete.tres" id="3_uooyi"]
+[ext_resource type="Material" uid="uid://biog7mv21velq" path="res://assets/materials/OfficeCeiling002_2K-JPG.tres" id="4_hoakw"]
 [ext_resource type="Material" uid="uid://bb4hx1vyakkmf" path="res://assets/materials/plaster.tres" id="4_tnekd"]
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_l5yu4"]
@@ -118,6 +119,7 @@ surface_material_override/0 = ExtResource("3_uooyi")
 [node name="RoofWetroom" type="MeshInstance3D" parent="StaticBody3D" unique_id=850791184]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.747784, -8.88325, 20.900995)
 mesh = SubResource("ArrayMesh_5w8w2")
+surface_material_override/0 = ExtResource("4_hoakw")
 
 [node name="WallWetroom" type="MeshInstance3D" parent="StaticBody3D" unique_id=1324307157]
 transform = Transform3D(0.9238795, 0, 0.38268346, 0, 1, 0, -0.38268346, 0, 0.9238795, 9.943851, -7.5464764e-06, 25.59095)

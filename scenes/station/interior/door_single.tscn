@@ -1,7 +1,11 @@
 [gd_scene format=3 uid="uid://daxvawcm2f6v1"]
 
 [ext_resource type="PackedScene" uid="uid://cx82tytcr6k5r" path="res://assets/models/door_single.glb" id="1_4uos6"]
+[ext_resource type="PackedScene" uid="uid://bwdy63omrocxt" path="res://scenes/station/interior/door_slide.tscn" id="2_uvuc4"]
 
 [node name="DoorSingle" type="Node3D" unique_id=224428218]
 
 [node name="door_single" parent="." unique_id=195625999 instance=ExtResource("1_4uos6")]
+
+[node name="door_slide" parent="." unique_id=126332104 instance=ExtResource("2_uvuc4")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.03)

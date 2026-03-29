@@ -3,7 +3,6 @@
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_bn8yx"]
 resource_name = "Walls"
 cull_mode = 2
-albedo_color = Color(0.6859516, 0.76433384, 0.90633965, 1)
 roughness = 0.5
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_d4bng"]

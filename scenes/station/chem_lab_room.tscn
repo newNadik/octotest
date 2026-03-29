@@ -4,6 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://crrm51jmovvon" path="res://scenes/station/interior/door_double.tscn" id="2_0o3lh"]
 [ext_resource type="PackedScene" uid="uid://b0uf1y0c75xpc" path="res://scenes/station/interior/window_single.tscn" id="3_wckr1"]
 [ext_resource type="Material" uid="uid://b1a0xbuetfwpo" path="res://assets/materials/concrete.tres" id="4_ssju7"]
+[ext_resource type="Material" path="res://assets/materials/OfficeCeiling002_2K-JPG.tres" id="5_mt5em"]
 [ext_resource type="Material" uid="uid://bb4hx1vyakkmf" path="res://assets/materials/plaster.tres" id="5_otath"]
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_irqvq"]
@@ -168,8 +169,9 @@ mesh = SubResource("ArrayMesh_irqvq")
 surface_material_override/0 = ExtResource("4_ssju7")
 
 [node name="RoofChemLab" type="MeshInstance3D" parent="StaticBody3D" unique_id=941413572]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.190598, -4.6854534e-06, -13.920062)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.208, 0, -13.928)
 mesh = SubResource("ArrayMesh_ja8y8")
+surface_material_override/0 = ExtResource("5_mt5em")
 
 [node name="PanelChemLab" type="MeshInstance3D" parent="StaticBody3D" unique_id=142907472]
 transform = Transform3D(0.7071068, 0, -0.7071067, 0, 1, 0, 0.7071067, 0, 0.7071068, 5.348984, -7.5464764e-06, -8.113263)

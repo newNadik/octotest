@@ -3,6 +3,7 @@
 [ext_resource type="PackedScene" uid="uid://daxvawcm2f6v1" path="res://scenes/station/interior/door_single.tscn" id="1_xhnal"]
 [ext_resource type="PackedScene" uid="uid://b0uf1y0c75xpc" path="res://scenes/station/interior/window_single.tscn" id="2_21vip"]
 [ext_resource type="Material" uid="uid://b1a0xbuetfwpo" path="res://assets/materials/concrete.tres" id="3_21vip"]
+[ext_resource type="Material" uid="uid://biog7mv21velq" path="res://assets/materials/OfficeCeiling002_2K-JPG.tres" id="4_44o56"]
 [ext_resource type="Material" uid="uid://bb4hx1vyakkmf" path="res://assets/materials/plaster.tres" id="4_kvu68"]
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_mtf4t"]
@@ -164,6 +165,7 @@ surface_material_override/0 = ExtResource("3_21vip")
 [node name="RoofQuarters" type="MeshInstance3D" parent="StaticBody3D" unique_id=2062910619]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.8054073, -7.5464764e-06, 0.006915656)
 mesh = SubResource("ArrayMesh_a4y7k")
+surface_material_override/0 = ExtResource("4_44o56")
 
 [node name="PanelQuarters" type="MeshInstance3D" parent="StaticBody3D" unique_id=396640906]
 transform = Transform3D(0.9848077, 0, -0.1736482, 0, 1, 0, 0.1736482, 0, 0.9848077, -27.536913, -7.5464764e-06, -12.085474)

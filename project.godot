@@ -32,6 +32,10 @@ window/stretch/aspect="keep_height"
 
 enabled=PackedStringArray("res://addons/extra_snaps/plugin.cfg")
 
+[filesystem]
+
+import/blender/enabled=false
+
 [internationalization]
 
 locale/translations=PackedStringArray("res://i18n/uk_UA.po")

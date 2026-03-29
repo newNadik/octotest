@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://crrm51jmovvon" path="res://scenes/station/interior/door_double.tscn" id="2_ecqnk"]
 [ext_resource type="PackedScene" uid="uid://daxvawcm2f6v1" path="res://scenes/station/interior/door_single.tscn" id="3_wctxe"]
 [ext_resource type="Material" uid="uid://bb4hx1vyakkmf" path="res://assets/materials/plaster.tres" id="5_xg0bo"]
+[ext_resource type="Material" uid="uid://biog7mv21velq" path="res://assets/materials/OfficeCeiling002_2K-JPG.tres" id="7_harmc"]
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_cmvkd"]
 resource_name = "atrium_Plane_123"
@@ -852,10 +853,12 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.47, 0, 19.06)
 [node name="RoofWC" type="MeshInstance3D" parent="StaticBody3D/Roof" unique_id=1504717261]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.8054073, -7.5464764e-06, 0.006915656)
 mesh = SubResource("ArrayMesh_30fjc")
+surface_material_override/0 = ExtResource("7_harmc")
 
 [node name="RoofGiftShop" type="MeshInstance3D" parent="StaticBody3D/Roof" unique_id=168745388]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.212445, 4.68464, 19.679483)
 mesh = SubResource("ArrayMesh_btjsq")
+surface_material_override/0 = ExtResource("7_harmc")
 
 [node name="RoofGlassAtrium_006" type="MeshInstance3D" parent="StaticBody3D/Roof" unique_id=970745404]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.8054073, 10.499993, 0.006915656)
@@ -868,22 +871,27 @@ mesh = SubResource("ArrayMesh_spagu")
 [node name="RoofAtrium_007" type="MeshInstance3D" parent="StaticBody3D/Roof" unique_id=1436992435]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 27.432615, 5.999992, -10.810977)
 mesh = SubResource("ArrayMesh_8cqjv")
+surface_material_override/0 = ExtResource("5_xg0bo")
 
 [node name="RoofAtrium_003" type="MeshInstance3D" parent="StaticBody3D/Roof" unique_id=1341165888]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.612825, 1.588221, -0.49072173)
 mesh = SubResource("ArrayMesh_y3iv4")
+surface_material_override/0 = ExtResource("7_harmc")
 
 [node name="RoofAtrium_002" type="MeshInstance3D" parent="StaticBody3D/Roof" unique_id=1258238520]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -19.63628, 1.1894163, -0.74422675)
 mesh = SubResource("ArrayMesh_swtdy")
+surface_material_override/0 = ExtResource("7_harmc")
 
 [node name="RoofAtrium_001" type="MeshInstance3D" parent="StaticBody3D/Roof" unique_id=805035000]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25.313131, 1.2298976, -0.026496444)
 mesh = SubResource("ArrayMesh_wbg5g")
+surface_material_override/0 = ExtResource("7_harmc")
 
 [node name="RoofAtrium" type="MeshInstance3D" parent="StaticBody3D/Roof" unique_id=1734653679]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.8054073, -7.5464764e-06, 0.006915656)
 mesh = SubResource("ArrayMesh_johwe")
+surface_material_override/0 = ExtResource("7_harmc")
 
 [node name="CollisionsRoof" type="StaticBody3D" parent="StaticBody3D/Roof" unique_id=1047337657]
 collision_layer = 18

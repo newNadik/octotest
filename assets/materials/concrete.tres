@@ -20,4 +20,5 @@ heightmap_enabled = true
 heightmap_texture = ExtResource("2_sbsb2")
 uv1_scale = Vector3(0.5, 0.5, 0.5)
 uv1_triplanar = true
+uv1_triplanar_sharpness = 150.0
 uv1_world_triplanar = true

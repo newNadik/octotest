@@ -1,6 +1,7 @@
 [gd_scene format=4 uid="uid://bsq8i8032qepo"]
 
 [ext_resource type="Material" uid="uid://b1a0xbuetfwpo" path="res://assets/materials/concrete.tres" id="1_84l0q"]
+[ext_resource type="Material" uid="uid://biog7mv21velq" path="res://assets/materials/OfficeCeiling002_2K-JPG.tres" id="1_dxupm"]
 [ext_resource type="Material" uid="uid://bb4hx1vyakkmf" path="res://assets/materials/plaster.tres" id="1_gxskf"]
 [ext_resource type="PackedScene" uid="uid://blnrijpl108tk" path="res://scenes/station/interior/window_double.tscn" id="1_oa1b6"]
 [ext_resource type="PackedScene" uid="uid://crrm51jmovvon" path="res://scenes/station/interior/door_double.tscn" id="2_uvbm7"]
@@ -147,6 +148,7 @@ shape = SubResource("ConcavePolygonShape3D_0cctw")
 [node name="RoofWorkshop" type="MeshInstance3D" parent="StaticBody3D" unique_id=1994682011]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16.895876, -1.0407499e-05, 0.15963061)
 mesh = SubResource("ArrayMesh_cadcp")
+surface_material_override/0 = ExtResource("1_dxupm")
 
 [node name="WallWorkshop" type="MeshInstance3D" parent="StaticBody3D" unique_id=352970011]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 25.793447, -7.5464764e-06, -9.137734)
