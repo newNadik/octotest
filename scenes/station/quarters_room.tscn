@@ -1,25 +1,8 @@
 [gd_scene format=4 uid="uid://c71b0em5lqt7r"]
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_bpcad"]
-resource_name = "Floor"
-cull_mode = 2
-albedo_color = Color(0.28309095, 0.32511598, 0.32909906, 1)
-roughness = 0.5
-
-[sub_resource type="ArrayMesh" id="ArrayMesh_3p61a"]
-_surfaces = [{
-"aabb": AABB(-3.491494, -0.75, -13.206477, 25.385391, 0.975, 13.506476),
-"format": 34359742465,
-"index_count": 78,
-"index_data": PackedByteArray("AAABAAIACAAAAAIACAACAAMAAwACAAEAAAAIAAkAAwAJAAgAAAAJAAYAAwABAAUACgAAAAYACQALAAYABgALAAoACwAJAAMACgAMAAAAAQAAAAwACwAMAAoABQABAAQAAQAMAAQABwADAAUABQAEAAcADAAHAAQACwADAAcABwAMAA0ADQAMAAsACwAHAA0ACwANAA4ADQALAA4A"),
-"lods": [1.0573889, PackedByteArray("AAABAAIAAwACAAEAAwAAAAIAAQAAAAQAAwABAAUABQABAAQAAAADAAYABwADAAUABQAEAAcABgADAAcAAAAHAAQABwAAAAYA")],
-"name": "Floor",
-"primitive": 3,
-"uv_scale": Vector4(0, 0, 0, 0),
-"vertex_count": 15,
-"vertex_data": PackedByteArray("syavQQAAQL8iXcO/7R+PQAAAQL+XsDbB6tZpQQAAQL+7TVPBDrBpQWdmZj74NFPBn3RfwAAAQL810TS98x+PQAAAAACZsDbBtCavQQAAAAAXXcO/oHRfwAAAAAA10TS9OrmWQQAAAACsXNLAVoWtQQAAAABBngbAGMM4QQAAAABwmZg+fUrpQAAAAAB0mZk+tpU4QQAAQL+1Vp6+o3RfwPD//7Qy0DS9ekrpQAAAAAB+mZk+")
-}]
-blend_shape_mode = 0
+[ext_resource type="PackedScene" uid="uid://daxvawcm2f6v1" path="res://scenes/station/interior/door_single.tscn" id="1_xhnal"]
+[ext_resource type="PackedScene" uid="uid://b0uf1y0c75xpc" path="res://scenes/station/interior/window_single.tscn" id="2_21vip"]
+[ext_resource type="Material" uid="uid://blmld45iq1ssb" path="res://assets/materials/floor.tres" id="3_21vip"]
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_mtf4t"]
 resource_name = "quarters_Plane_108"
@@ -30,7 +13,6 @@ _surfaces = [{
 "index_count": 78,
 "index_data": PackedByteArray("AAABAAIAAQAAABgAAQAYAAMABwAZABoAGwAZAAcAGQAbAAUABQAbABwAGQAFAAQABAAFAAYAGQAEAB0AGQAdAB4AHwAMAA8AHwAgAAwACAAJAAoACAALAAkAIQAiACMAIQAkACIAIgAkACUADQAkACEAJAANAA4AEAARABIAEAATABEAFAAmABYAFAAnACYAJwAUABcAJwAXABUA"),
 "lods": [1.0573889, PackedByteArray("AAABAAIAAQAAAAMABAAFAAYABwAFAAQACAAJAAoACAALAAkADAANAA4ADQAMAA8AEAARABIAEAATABEAFAAVABYAFQAUABcA")],
-"material": SubResource("StandardMaterial3D_bpcad"),
 "name": "Floor",
 "primitive": 3,
 "uv_scale": Vector4(0, 0, 0, 0),
@@ -38,7 +20,6 @@ _surfaces = [{
 "vertex_data": PackedByteArray("syavQQAAQL8iXcO/7R+PQAAAQL+XsDbB6tZpQQAAQL+7TVPBn3RfwAAAQL810TS9oHRfwAAAAAA10TS9DrBpQWdmZj74NFPB8x+PQAAAAACZsDbBtCavQQAAAAAXXcO/DrBpQWdmZj74NFPB7R+PQAAAQL+XsDbB8x+PQAAAAACZsDbB6tZpQQAAQL+7TVPBsyavQQAAQL8iXcO/oHRfwAAAAAA10TS9n3RfwAAAQL810TS9tCavQQAAAAAXXcO/8x+PQAAAAACZsDbBn3RfwAAAQL810TS9oHRfwAAAAAA10TS97R+PQAAAQL+XsDbBsyavQQAAQL8iXcO/DrBpQWdmZj74NFPBtCavQQAAAAAXXcO/6tZpQQAAQL+7TVPBtpU4QQAAQL+1Vp6+fUrpQAAAAAB0mZk+GMM4QQAAAABwmZg+VoWtQQAAAABBngbAOrmWQQAAAACsXNLAo3RfwPD//7Qy0DS9ekrpQAAAAAB+mZk+GMM4QQAAAABwmZg+tpU4QQAAQL+1Vp6+o3RfwPD//7Qy0DS9fUrpQAAAAAB0mZk+ekrpQAAAAAB+mZk+tpU4QQAAQL+1Vp6+GMM4QQAAAABwmZg+VoWtQQAAAABBngbAOrmWQQAAAACsXNLA/3///////7//f///SEv/v/9///////+//3///0hL/789gVEAlltgQD2BUQC4QK+/PYFRAI9LVkA9gVEATBrGvyGTuH////8/IZO4f////z8hk7h/////PyGTuH////8/dSHi8////78Z18b/////vxnXxv////+/dSHi8////79Iy/9/////P0jL/3////8/SMv/f////z9Iy/9/////P2A1wYb///8/YDXBhv///z9gNcGG////P2A1wYb///8//3///0hL/789gVEASj+vvz2BUQBcCC1APYFRACIrvL89gVEA////vz2BUQD///+/PYFRAP///791IeLz////v3Uh4vP///+/GdfG/////78Z18b/////vxnXxv////+/GdfG/////78Z18b/////v2A1wYb///8/YDXBhv///z8=")
 }]
 blend_shape_mode = 0
-shadow_mesh = SubResource("ArrayMesh_3p61a")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_4vwfq"]
 resource_name = "Roof"
@@ -169,9 +150,22 @@ data = PackedVector3Array(-0.29999998, 0, -1.0976, 0.29999998, 0, -3, -0.2999999
 collision_layer = 2
 collision_mask = 0
 
+[node name="DoorSingle" parent="StaticBody3D" unique_id=224428218 instance=ExtResource("1_xhnal")]
+transform = Transform3D(0.98163044, 0, -0.19079189, 0, 1, 0, 0.19079189, 0, 0.98163044, -18.2, 0, -10.46)
+
+[node name="DoorSingle2" parent="StaticBody3D" unique_id=809785075 instance=ExtResource("1_xhnal")]
+transform = Transform3D(0.3826834, 0, -0.92387944, 0, 1, 0, 0.92387944, 0, 0.3826834, -7.07, 0, -12.71)
+
+[node name="WindowSingle" parent="StaticBody3D" unique_id=1026944921 instance=ExtResource("2_21vip")]
+transform = Transform3D(0.70710677, -0.6941152, -0.13492236, 0, -0.19080903, 0.98162717, -0.70710677, -0.6941152, -0.13492236, -17.582901, 7.593294, -16.525135)
+
+[node name="WindowSingle2" parent="StaticBody3D" unique_id=326995934 instance=ExtResource("2_21vip")]
+transform = Transform3D(0.70710677, -0.6941152, -0.13492236, 0, -0.19080903, 0.98162717, -0.70710677, -0.6941152, -0.13492236, -20.766197, 7.619459, -13.359323)
+
 [node name="FloorQuarters" type="MeshInstance3D" parent="StaticBody3D" unique_id=1265047529]
-transform = Transform3D(0.9848077, 0, -0.1736482, 0, 1, 0, 0.1736482, 0, 0.9848077, -27.536913, -7.5464764e-06, -12.085474)
+transform = Transform3D(0.9848077, 0, -0.17364822, 0, 1, 0, 0.17364822, 0, 0.9848077, -27.536913, -7.5464764e-06, -12.085474)
 mesh = SubResource("ArrayMesh_mtf4t")
+surface_material_override/0 = ExtResource("3_21vip")
 
 [node name="RoofQuarters" type="MeshInstance3D" parent="StaticBody3D" unique_id=2062910619]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.8054073, -7.5464764e-06, 0.006915656)

@@ -1,24 +1,8 @@
 [gd_scene format=4 uid="uid://c2fxhq255lfu6"]
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_38ab8"]
-resource_name = "Floor"
-cull_mode = 2
-albedo_color = Color(0.28309095, 0.32511598, 0.32909906, 1)
-roughness = 0.5
-
-[sub_resource type="ArrayMesh" id="ArrayMesh_6rx60"]
-_surfaces = [{
-"aabb": AABB(-3.778668, -0.75, -8.650495, 20.65419, 0.75, 13.838963),
-"format": 34359742465,
-"index_count": 36,
-"index_data": PackedByteArray("AAABAAIAAQADAAIAAAAEAAEAAgADAAUAAgAFAAAAAAAGAAQAAAAFAAYABAAHAAEAAQAHAAMABAAGAAcABQADAAcABQAHAAYA"),
-"name": "Floor",
-"primitive": 3,
-"uv_scale": Vector4(0, 0, 0, 0),
-"vertex_count": 8,
-"vertex_data": PackedByteArray("stVxwAAAAADvB6ZAEQGHQQAAAABybea+stVxwAAAAABtaArBstVxwAAAQL9taArBwMozQQAAAADvB6ZAstVxwAAAQL/vB6ZAwMozQQAAQL/vB6ZAEgGHQQAAQL/SEeW+")
-}]
-blend_shape_mode = 0
+[ext_resource type="PackedScene" uid="uid://crrm51jmovvon" path="res://scenes/station/interior/door_double.tscn" id="1_1hvab"]
+[ext_resource type="PackedScene" uid="uid://blnrijpl108tk" path="res://scenes/station/interior/window_double.tscn" id="1_fgm2e"]
+[ext_resource type="Material" uid="uid://blmld45iq1ssb" path="res://assets/materials/floor.tres" id="1_m4qa1"]
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_eoqii"]
 resource_name = "energy_lab_Plane_115"
@@ -28,7 +12,6 @@ _surfaces = [{
 "format": 34359742487,
 "index_count": 36,
 "index_data": PackedByteArray("AAABAAIAAAADAAEABAAFAAYABAAHAAUACAAJAAoACAALAAkADAANAA4ADAAPAA0AEAARABIAEAATABEAFAAVABYAFAAXABUA"),
-"material": SubResource("StandardMaterial3D_38ab8"),
 "name": "Floor",
 "primitive": 3,
 "uv_scale": Vector4(0, 0, 0, 0),
@@ -36,7 +19,6 @@ _surfaces = [{
 "vertex_data": PackedByteArray("stVxwAAAAADvB6ZAEQGHQQAAAABybea+stVxwAAAAABtaArBwMozQQAAAADvB6ZAstVxwAAAQL/vB6ZAEgGHQQAAQL/SEeW+wMozQQAAQL/vB6ZAstVxwAAAQL9taArBstVxwAAAAABtaArBstVxwAAAQL/vB6ZAstVxwAAAAADvB6ZAstVxwAAAQL9taArBEQGHQQAAAABybea+stVxwAAAQL9taArBstVxwAAAAABtaArBEgGHQQAAQL/SEeW+stVxwAAAAADvB6ZAwMozQQAAQL/vB6ZAwMozQQAAAADvB6ZAstVxwAAAQL/vB6ZAwMozQQAAAADvB6ZAEgGHQQAAQL/SEeW+EQGHQQAAAABybea+wMozQQAAQL/vB6ZA/38AAJDg/z//fwAAiun/P/9/AACe2/8//38AAP///z//f///juD/v/9///+J6f+//3///////7//f///nNv/v////3////+/////f////7////9/////v////3////+/qFsngP///z+oWyeA////P6hbJ4D///8/qFsngP///z//////////v/////////+//////////7//////////vx4A7j////+/HgDuP////78eAO4/////vx4A7j////+/")
 }]
 blend_shape_mode = 0
-shadow_mesh = SubResource("ArrayMesh_6rx60")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_fd1cd"]
 resource_name = "Roof"
@@ -166,8 +148,9 @@ collision_layer = 2
 collision_mask = 0
 
 [node name="FloorEnergyLab" type="MeshInstance3D" parent="StaticBody3D" unique_id=1813596186]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.477026, -7.5464764e-06, 14.203456)
+transform = Transform3D(0.99990946, 0, -0.013456083, 0, 1, 0, 0.013456083, 0, 0.99990946, 11.477026, -7.5464764e-06, 14.31557)
 mesh = SubResource("ArrayMesh_eoqii")
+surface_material_override/0 = ExtResource("1_m4qa1")
 
 [node name="RoofEnergyLab" type="MeshInstance3D" parent="StaticBody3D" unique_id=1091524581]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.8054073, -7.5464764e-06, 0.006915656)
@@ -184,3 +167,15 @@ mesh = SubResource("ArrayMesh_jcej8")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D" unique_id=1528829680]
 transform = Transform3D(0.9238795, 0, -0.38268346, 0, 1, 0, 0.38268346, 0, 0.9238795, 19.855833, -7.5464764e-06, 10.913885)
 shape = SubResource("ConcavePolygonShape3D_eqb1h")
+
+[node name="window_double" parent="StaticBody3D" unique_id=779599183 instance=ExtResource("1_fgm2e")]
+transform = Transform3D(0.9238795, 0, -0.38268346, 0, 1, 0, 0.38268346, 0, 0.9238795, 22.993383, 0, 12.188295)
+
+[node name="window_double2" parent="StaticBody3D" unique_id=798075664 instance=ExtResource("1_fgm2e")]
+transform = Transform3D(0.9238795, 0, -0.38268346, 0, 1, 0, 0.38268346, 0, 0.9238795, 11.710003, 0, 7.546467)
+
+[node name="DoorDouble" parent="." unique_id=1045878697 instance=ExtResource("1_1hvab")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.785187, 0, 19.046888)
+
+[node name="DoorDouble2" parent="." unique_id=683268443 instance=ExtResource("1_1hvab")]
+transform = Transform3D(0.9238795, 0, -0.38268346, 0, 1, 0, 0.38268346, 0, 0.9238795, 17.420347, 0, 9.889815)

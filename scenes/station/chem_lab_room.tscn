@@ -1,24 +1,9 @@
 [gd_scene format=4 uid="uid://cg7jo6eyp6d2r"]
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1f3lg"]
-resource_name = "Floor"
-cull_mode = 2
-albedo_color = Color(0.28309095, 0.32511598, 0.32909906, 1)
-roughness = 0.5
-
-[sub_resource type="ArrayMesh" id="ArrayMesh_t3w3x"]
-_surfaces = [{
-"aabb": AABB(-8.50029, -0.75, -12.300739, 25.094345, 0.75, 24.845816),
-"format": 34359742465,
-"index_count": 36,
-"index_data": PackedByteArray("AAABAAIAAQADAAIAAAAEAAEAAgADAAUAAgAFAAAAAAAGAAQAAAAFAAYABAAHAAEAAQAHAAMABAAGAAcABQADAAcABQAHAAYA"),
-"name": "Floor",
-"primitive": 3,
-"uv_scale": Vector4(0, 0, 0, 0),
-"vertex_count": 8,
-"vertex_data": PackedByteArray("nOAHwQAAAABcxQNBoMCEQQAAAABCFYlAACgbPAAAAADUz0TBACgbPAAAQL/Uz0TBPYCGwAAAAAASjkhBMAEIwQAAQL/w5QNB9lyGwAAAQL+iuEhBn8CEQQAAQL8+FYlA")
-}]
-blend_shape_mode = 0
+[ext_resource type="PackedScene" uid="uid://blnrijpl108tk" path="res://scenes/station/interior/window_double.tscn" id="1_2yydf"]
+[ext_resource type="PackedScene" uid="uid://crrm51jmovvon" path="res://scenes/station/interior/door_double.tscn" id="2_0o3lh"]
+[ext_resource type="PackedScene" uid="uid://b0uf1y0c75xpc" path="res://scenes/station/interior/window_single.tscn" id="3_wckr1"]
+[ext_resource type="Material" uid="uid://blmld45iq1ssb" path="res://assets/materials/floor.tres" id="4_ssju7"]
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_irqvq"]
 resource_name = "chem_lab_Plane_095"
@@ -28,7 +13,6 @@ _surfaces = [{
 "format": 34359742487,
 "index_count": 36,
 "index_data": PackedByteArray("AAABAAIAAAADAAEABAAFAAYABAAHAAUACAAJAAoACAALAAkADAANAA4ADAAPAA0AEAARABIAEAATABEAFAAVABYAFAAXABUA"),
-"material": SubResource("StandardMaterial3D_1f3lg"),
 "name": "Floor",
 "primitive": 3,
 "uv_scale": Vector4(0, 0, 0, 0),
@@ -36,7 +20,6 @@ _surfaces = [{
 "vertex_data": PackedByteArray("nOAHwQAAAABcxQNBoMCEQQAAAABCFYlAACgbPAAAAADUz0TBPYCGwAAAAAASjkhBMAEIwQAAQL/w5QNBn8CEQQAAQL8+FYlA9lyGwAAAQL+iuEhBACgbPAAAQL/Uz0TBPYCGwAAAAAASjkhBn8CEQQAAQL8+FYlAoMCEQQAAAABCFYlA9lyGwAAAQL+iuEhBACgbPAAAAADUz0TBMAEIwQAAQL/w5QNBnOAHwQAAAABcxQNBACgbPAAAQL/Uz0TBoMCEQQAAAABCFYlAACgbPAAAQL/Uz0TBACgbPAAAAADUz0TBn8CEQQAAQL8+FYlAnOAHwQAAAABcxQNB9lyGwAAAQL+iuEhBPYCGwAAAAAASjkhBMAEIwQAAQL/w5QNB/38AAPa//z//fwAA+7//P/9/AAD/v/8//38AAOy//z//f////7//v/9/////v/+//3////+//7//f////7//v7wAKiT///+/vAAqJP///7+8ACok////v7wAKiT///+/T9q2f////z9P2rZ/////P0/atn////8/T9q2f////z//P/9/////P/8//3////8//z//f////z//P/9/////Pw//kT////+/D/+RP////78P/5E/////vw//kT////+/")
 }]
 blend_shape_mode = 0
-shadow_mesh = SubResource("ArrayMesh_t3w3x")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_h16dk"]
 resource_name = "Roof"
@@ -167,9 +150,28 @@ data = PackedVector3Array(-2.2656999, 0, 0.29999998, 19.6905, 0, -0.29999998, -2
 collision_layer = 2
 collision_mask = 0
 
+[node name="window_double" parent="StaticBody3D" unique_id=779599183 instance=ExtResource("1_2yydf")]
+transform = Transform3D(0.9238795, 0, 0.38268346, 0, 1, 0, -0.38268346, 0, 0.9238795, 11.717335, 0, -7.5406075)
+
+[node name="window_double2" parent="StaticBody3D" unique_id=84955657 instance=ExtResource("1_2yydf")]
+transform = Transform3D(0.9238795, 0, 0.38268346, 0, 1, 0, -0.38268346, 0, 0.9238795, 22.98284, 0, -12.187072)
+
+[node name="DoorDouble" parent="StaticBody3D" unique_id=1045878697 instance=ExtResource("2_0o3lh")]
+transform = Transform3D(0.9238795, 0, 0.38268346, 0, 1, 0, -0.38268346, 0, 0.9238795, 17.431269, 0, -9.916206)
+
+[node name="WindowSingle" parent="StaticBody3D" unique_id=1026944921 instance=ExtResource("3_wckr1")]
+transform = Transform3D(0.7071067, -0.69411516, -0.13492228, 0, 0.19080892, -0.98162705, 0.7071067, 0.69411516, 0.13492228, 22.807203, 6.359706, -18.680317)
+
+[node name="WindowSingle2" parent="StaticBody3D" unique_id=1420737041 instance=ExtResource("3_wckr1")]
+transform = Transform3D(0.7071067, -0.69411516, -0.13492228, 0, 0.19080892, -0.98162705, 0.7071067, 0.69411516, 0.13492228, 19.62634, 6.3620124, -21.869505)
+
+[node name="WindowSingle3" parent="StaticBody3D" unique_id=1658880185 instance=ExtResource("3_wckr1")]
+transform = Transform3D(0.7071067, -0.69411516, -0.13492228, 0, 0.19080892, -0.98162705, 0.7071067, 0.69411516, 0.13492228, 16.442053, 6.362501, -25.035994)
+
 [node name="FloorChemLab" type="MeshInstance3D" parent="StaticBody3D" unique_id=943433497]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.751543, -7.5464764e-06, -18.030367)
 mesh = SubResource("ArrayMesh_irqvq")
+surface_material_override/0 = ExtResource("4_ssju7")
 
 [node name="RoofChemLab" type="MeshInstance3D" parent="StaticBody3D" unique_id=941413572]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.190598, -4.6854534e-06, -13.920062)

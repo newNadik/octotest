@@ -28,6 +28,10 @@ window/size/viewport_height=720
 window/stretch/mode="canvas_items"
 window/stretch/aspect="keep_height"
 
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/extra_snaps/plugin.cfg")
+
 [internationalization]
 
 locale/translations=PackedStringArray("res://i18n/uk_UA.po")

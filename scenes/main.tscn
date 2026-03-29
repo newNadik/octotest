@@ -7,14 +7,14 @@
 [ext_resource type="Script" uid="uid://b0r404u7bpvr" path="res://scripts/interaction/focus_target.gd" id="5_lmyi0"]
 [ext_resource type="Script" uid="uid://b16fnujp18m7" path="res://scripts/interaction/code_panel.gd" id="6_5e7k2"]
 [ext_resource type="PackedScene" uid="uid://ojtj5eewvf4n" path="res://scenes/ui/in_game_menu.tscn" id="7_o6xl0"]
-[ext_resource type="PackedScene" uid="uid://ddamgf1fl0xs3" path="res://scenes/station/atrium_room.tscn" id="8_jkv2x"]
-[ext_resource type="PackedScene" uid="uid://ct46aw51q70u" path="res://scenes/station/chem_lab_room.tscn" id="9_jbj1t"]
-[ext_resource type="PackedScene" uid="uid://ciyd0ikb6fk2x" path="res://scenes/station/energy_lab_room.tscn" id="10_muem4"]
-[ext_resource type="PackedScene" uid="uid://b0270kahwvyvu" path="res://scenes/station/office_room.tscn" id="11_dp3eg"]
-[ext_resource type="PackedScene" uid="uid://bv6porsyhh2m0" path="res://scenes/station/quarters_room.tscn" id="12_0ld40"]
-[ext_resource type="PackedScene" uid="uid://bobkphx8oiqd7" path="res://scenes/station/systems_room.tscn" id="13_gqmmt"]
-[ext_resource type="PackedScene" uid="uid://b1jsgk8hel14c" path="res://scenes/station/wetroom_room.tscn" id="14_yc10j"]
-[ext_resource type="PackedScene" uid="uid://drlpwsxtwwp5y" path="res://scenes/station/workshop_room.tscn" id="15_jscy8"]
+[ext_resource type="PackedScene" uid="uid://d188rcj55r6g0" path="res://scenes/station/atrium_room.tscn" id="8_jkv2x"]
+[ext_resource type="PackedScene" uid="uid://cg7jo6eyp6d2r" path="res://scenes/station/chem_lab_room.tscn" id="9_jbj1t"]
+[ext_resource type="PackedScene" uid="uid://c2fxhq255lfu6" path="res://scenes/station/energy_lab_room.tscn" id="10_muem4"]
+[ext_resource type="PackedScene" uid="uid://dq8f3vrk631bb" path="res://scenes/station/office_room.tscn" id="11_dp3eg"]
+[ext_resource type="PackedScene" uid="uid://c71b0em5lqt7r" path="res://scenes/station/quarters_room.tscn" id="12_0ld40"]
+[ext_resource type="PackedScene" uid="uid://ceub8e3x43ri7" path="res://scenes/station/systems_room.tscn" id="13_gqmmt"]
+[ext_resource type="PackedScene" uid="uid://b5wbnkdw8pctg" path="res://scenes/station/wetroom_room.tscn" id="14_yc10j"]
+[ext_resource type="PackedScene" uid="uid://bsq8i8032qepo" path="res://scenes/station/workshop_room.tscn" id="15_jscy8"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_7yl8v"]
 sky_top_color = Color(0.44, 0.59, 0.78, 1)
@@ -801,7 +801,7 @@ current = true
 fov = 60.0
 
 [node name="OmniLight3D" type="OmniLight3D" parent="." unique_id=1213994844]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6.2, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.3289566, 8.137341, -0.30015945)
 light_color = Color(1, 0.97, 0.92, 1)
 light_energy = 4.0
 omni_range = 42.0

@@ -1,24 +1,8 @@
 [gd_scene format=4 uid="uid://b5wbnkdw8pctg"]
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_u8h5c"]
-resource_name = "Floor"
-cull_mode = 2
-albedo_color = Color(0.28309095, 0.32511598, 0.32909906, 1)
-roughness = 0.5
-
-[sub_resource type="ArrayMesh" id="ArrayMesh_tck3c"]
-_surfaces = [{
-"aabb": AABB(-6.15057, -0.75, -5.5029564, 16.590336, 0.75, 10.95302),
-"format": 34359742465,
-"index_count": 66,
-"index_data": PackedByteArray("AAABAAIAAQADAAIAAgADAAQAAgAEAAAAAQAFAAMABAADAAUABQABAAYAAQAHAAYABwAFAAYAAAAHAAEABAAFAAgABwAIAAUAAAAEAAkACAAJAAQABwAAAAoAAAAJAAoACwAIAAcABwAKAAsACAAMAAkACgAJAAwACwAMAAgACgAMAAsA"),
-"name": "Floor",
-"primitive": 3,
-"uv_scale": Vector4(0, 0, 0, 0),
-"vertex_count": 13,
-"vertex_data": PackedByteArray("dCQ/wAAAAAARBta/EpIgQAAAAAA4GLDAYVmSwAAAAAA4GLDAYVmSwAAAQL84GLDAdCQ/wAAAQL8RBta/SQknQQAAQL84GLDASQknQQAAAAA4GLDAdGQDvwAAAADoZq5AdGQDvwAAQL/oZq5AddHEwAAAQL/U9r4/ddHEwAAAAADU9r4/dtHEwAAAAADtZq5AeNHEwAAAQL/tZq5A")
-}]
-blend_shape_mode = 0
+[ext_resource type="PackedScene" uid="uid://daxvawcm2f6v1" path="res://scenes/station/interior/door_single.tscn" id="1_f5vnd"]
+[ext_resource type="PackedScene" uid="uid://blnrijpl108tk" path="res://scenes/station/interior/window_double.tscn" id="2_uooyi"]
+[ext_resource type="Material" uid="uid://blmld45iq1ssb" path="res://assets/materials/floor.tres" id="3_uooyi"]
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_l5yu4"]
 resource_name = "wetroom_Plane_121"
@@ -28,7 +12,6 @@ _surfaces = [{
 "format": 34359742487,
 "index_count": 66,
 "index_data": PackedByteArray("AAABAAIAAAADAAEAAQADAAQAAwAAAAUAAwAFAAYABwAIAAkABwAKAAgACQALAAcACQAMAAsADQAOAA8ADQAQAA4AEQASABMAEgARABQAEgAUABUAFgAXABgAFgAZABcAGgAbABwAGgAdABsAHgAfACAAHgAhAB8AIgAjACQAIgAlACMA"),
-"material": SubResource("StandardMaterial3D_u8h5c"),
 "name": "Floor",
 "primitive": 3,
 "uv_scale": Vector4(0, 0, 0, 0),
@@ -36,7 +19,6 @@ _surfaces = [{
 "vertex_data": PackedByteArray("dCQ/wAAAAAARBta/EpIgQAAAAAA4GLDAYVmSwAAAAAA4GLDAdGQDvwAAAADoZq5ASQknQQAAAAA4GLDAddHEwAAAAADU9r4/dtHEwAAAAADtZq5AdCQ/wAAAQL8RBta/SQknQQAAQL84GLDAdGQDvwAAQL/oZq5AYVmSwAAAQL84GLDAddHEwAAAQL/U9r4/eNHEwAAAQL/tZq5AdtHEwAAAAADtZq5AdGQDvwAAQL/oZq5AdGQDvwAAAADoZq5AeNHEwAAAQL/tZq5ASQknQQAAQL84GLDAEpIgQAAAAAA4GLDASQknQQAAAAA4GLDAYVmSwAAAQL84GLDAYVmSwAAAAAA4GLDAdCQ/wAAAAAARBta/ddHEwAAAQL/U9r4/ddHEwAAAAADU9r4/dCQ/wAAAQL8RBta/ddHEwAAAAADU9r4/eNHEwAAAQL/tZq5AdtHEwAAAAADtZq5AddHEwAAAQL/U9r4/dGQDvwAAAADoZq5ASQknQQAAQL84GLDASQknQQAAAAA4GLDAdGQDvwAAQL/oZq5AYVmSwAAAAAA4GLDAdCQ/wAAAQL8RBta/dCQ/wAAAAAARBta/YVmSwAAAQL84GLDA/38AAL7D/z//fwAA2Ob/P/9/AAD///8//38AAC3H/z//fwAA////P/9/AAD///+//38AAP///7//f///T83/v/9///+Tvf+//3////2g/7//f///////v/9///////+//3///////7//////////v/////////+//////////7//////////v/9//3////8//3//f////z//f/9/////P/9//3////8//3//f////z//v/9/////P/+//3////8//7//f////z//v/9/////P////3////+/////f////7////9/////v////3////+/AAD/v////78AAP+/////vwAA/7////+/AAD/v////7///32l////v///faX///+///99pf///7///32l////vw==")
 }]
 blend_shape_mode = 0
-shadow_mesh = SubResource("ArrayMesh_tck3c")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_mttn8"]
 resource_name = "Roof"
@@ -125,9 +107,19 @@ data = PackedVector3Array(-0.29999998, 0, -2.439, 0.29999998, 0, -6.5855, -0.299
 collision_layer = 2
 collision_mask = 0
 
+[node name="DoorSingle2" parent="StaticBody3D" unique_id=224428218 instance=ExtResource("1_f5vnd")]
+transform = Transform3D(-0.3826834, 0, 0.92387956, 0, 1, 0, -0.92387956, 0, -0.3826834, 9.65, 0, 24.85)
+
+[node name="window_double" parent="StaticBody3D" unique_id=779599183 instance=ExtResource("2_uooyi")]
+transform = Transform3D(0.70710677, 0, 0.70710677, 0, 1, 0, -0.70710677, 0, 0.70710677, 16.9, 0, 24.78)
+
+[node name="DoorSingle" parent="StaticBody3D" unique_id=214083956 instance=ExtResource("1_f5vnd")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.81, 0, 30)
+
 [node name="FloorWetroom" type="MeshInstance3D" parent="StaticBody3D" unique_id=1647101433]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.274258, -7.5464764e-06, 24.89488)
 mesh = SubResource("ArrayMesh_l5yu4")
+surface_material_override/0 = ExtResource("3_uooyi")
 
 [node name="RoofWetroom" type="MeshInstance3D" parent="StaticBody3D" unique_id=850791184]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.747784, -8.88325, 20.900995)

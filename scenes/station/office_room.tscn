@@ -1,42 +1,22 @@
 [gd_scene format=4 uid="uid://dq8f3vrk631bb"]
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ri42e"]
-resource_name = "Floor"
-cull_mode = 2
-albedo_color = Color(0.28309095, 0.32511598, 0.32909906, 1)
-roughness = 0.5
-
-[sub_resource type="ArrayMesh" id="ArrayMesh_kmg88"]
-_surfaces = [{
-"aabb": AABB(-6.3276386, -0.75, -15.933217, 11.6098585, 0.75, 16.23322),
-"format": 34359742465,
-"index_count": 36,
-"index_data": PackedByteArray("AAABAAIAAQADAAIAAAAEAAEAAgADAAUAAgAFAAAAAAAGAAQAAAAFAAYABAAHAAEAAQAHAAMABAAGAAcABQADAAcABQAHAAYA"),
-"name": "Floor",
-"primitive": 3,
-"uv_scale": Vector4(0, 0, 0, 0),
-"vertex_count": 8,
-"vertex_data": PackedByteArray("5FDzvwAAAADtmZk+7wepQAAAAAB17n7BBHzKwAAAAAD3/DHBBHzKwAAAQL/3/DHBOOmoQAAAAAB7mZk+7lDzvwAAQL+FmZk+8gepQAAAQL+RmZk+7wepQAAAQL917n7B")
-}]
-blend_shape_mode = 0
+[ext_resource type="PackedScene" uid="uid://crrm51jmovvon" path="res://scenes/station/interior/door_double.tscn" id="1_43emv"]
+[ext_resource type="Material" uid="uid://blmld45iq1ssb" path="res://assets/materials/floor.tres" id="1_iye30"]
+[ext_resource type="PackedScene" uid="uid://b0uf1y0c75xpc" path="res://scenes/station/interior/window_single.tscn" id="1_o46ax"]
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_b4dhb"]
-resource_name = "office_Plane_086"
 _surfaces = [{
 "aabb": AABB(-6.3276386, -0.75, -15.933217, 11.6098585, 0.75, 16.23322),
 "attribute_data": PackedByteArray("AAAAAAAAAAAAAIA/AACAPwAAAAAAAIA/AACAPwAAAAAAAAAAAAAAAAAAgD8AAIA/AACAPwAAAAAAAAAAAACAPwAAgD8AAIA/AAAAAAAAgD8AAAAAAACAPwAAgD8AAIA/AAAAAAAAgD8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAgD8AAAAAAAAAAAAAgD8AAAAAAACAPwAAAAAAAAAAAAAAAAAAgD8AAAAAAACAPwAAgD8AAIA/AACAPwAAgD8AAAAA"),
 "format": 34359742487,
 "index_count": 36,
 "index_data": PackedByteArray("AAABAAIAAAADAAEABAAFAAYABAAHAAUACAAJAAoACAALAAkADAANAA4ADAAPAA0AEAARABIAEAATABEAFAAVABYAFAAXABUA"),
-"material": SubResource("StandardMaterial3D_ri42e"),
 "name": "Floor",
 "primitive": 3,
 "uv_scale": Vector4(0, 0, 0, 0),
 "vertex_count": 24,
 "vertex_data": PackedByteArray("5FDzvwAAAADtmZk+7wepQAAAAAB17n7BBHzKwAAAAAD3/DHBOOmoQAAAAAB7mZk+7lDzvwAAQL+FmZk+7wepQAAAQL917n7B8gepQAAAQL+RmZk+BHzKwAAAQL/3/DHB7wepQAAAAAB17n7BBHzKwAAAQL/3/DHBBHzKwAAAAAD3/DHB7wepQAAAQL917n7BBHzKwAAAAAD3/DHB7lDzvwAAQL+FmZk+5FDzvwAAAADtmZk+BHzKwAAAQL/3/DHB5FDzvwAAAADtmZk+8gepQAAAQL+RmZk+OOmoQAAAAAB7mZk+7lDzvwAAQL+FmZk+OOmoQAAAAAB7mZk+7wepQAAAQL917n7B7wepQAAAAAB17n7B8gepQAAAQL+RmZk+/38AAP//08j/fwAA//82zf9/AAD//73S/38AAP///7//f/////8rN/9//////8ky/3///////z//f/////9BLX2l/3////8/faX/f////z99pf9/////P32l/3////8///++o////7///76j////v///vqP///+///++o////7//////////v/////////+//////////7//////////v1EAqn////+/UQCqf////79RAKp/////v1EAqn////+/")
 }]
-blend_shape_mode = 0
-shadow_mesh = SubResource("ArrayMesh_kmg88")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_6gfxq"]
 resource_name = "Roof"
@@ -168,6 +148,7 @@ collision_mask = 0
 [node name="FloorOffice" type="MeshInstance3D" parent="StaticBody3D" unique_id=915721515]
 transform = Transform3D(0.9238795, 0, -0.38268346, 0, 1, 0, 0.38268346, 0, 0.9238795, 0.78349864, -7.5464764e-06, -17.632153)
 mesh = SubResource("ArrayMesh_b4dhb")
+surface_material_override/0 = ExtResource("1_iye30")
 
 [node name="Roof_Office" type="MeshInstance3D" parent="StaticBody3D" unique_id=1694956170]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.8054073, -7.5464764e-06, 0.006915656)
@@ -184,3 +165,9 @@ mesh = SubResource("ArrayMesh_esto4")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D" unique_id=1680490729]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.5124836, -7.5464764e-06, -30.031107)
 shape = SubResource("ConcavePolygonShape3D_8erxb")
+
+[node name="WindowSingle" parent="StaticBody3D" unique_id=1026944921 instance=ExtResource("1_o46ax")]
+transform = Transform3D(1, 0, 0, 0, -0.19080903, 0.98162717, 0, -0.98162717, -0.19080903, 2.504, 7.62, -23.401)
+
+[node name="DoorDouble" parent="." unique_id=1045878697 instance=ExtResource("1_43emv")]
+transform = Transform3D(0.9238795, 0, -0.38268346, 0, 1, 0, 0.38268346, 0, 0.9238795, 2.5, 0, -16.9)
