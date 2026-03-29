@@ -1,7 +1,8 @@
 [gd_scene format=4 uid="uid://bwdy63omrocxt"]
 
-[ext_resource type="Script" path="res://scripts/station/interior/door_slide.gd" id="1_door_slide_script"]
+[ext_resource type="Script" uid="uid://bn0uskuvjfkg2" path="res://scripts/station/interior/door_slide.gd" id="1_door_slide_script"]
 [ext_resource type="Script" uid="uid://bt8vvmy3m63u7" path="res://scripts/interaction/interactable.gd" id="2_interactable_script"]
+[ext_resource type="Material" path="res://assets/materials/glass.tres" id="3_glass_material"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_bn8yx"]
 resource_name = "Walls"
@@ -289,7 +290,9 @@ mesh = SubResource("ArrayMesh_hbn31")
 mesh = SubResource("ArrayMesh_t8plu")
 
 [node name="glass" type="MeshInstance3D" parent="StaticBody3D" unique_id=791007890]
+material_override = ExtResource("3_glass_material")
 mesh = SubResource("ArrayMesh_8qq83")
+surface_material_override/0 = ExtResource("3_glass_material")
 
 [node name="InnerFrame" type="MeshInstance3D" parent="StaticBody3D" unique_id=622718978]
 mesh = SubResource("ArrayMesh_wt60d")

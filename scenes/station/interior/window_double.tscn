@@ -1,5 +1,7 @@
 [gd_scene format=4 uid="uid://blnrijpl108tk"]
 
+[ext_resource type="Material" uid="uid://bm05hnbasm1cg" path="res://assets/materials/glass.tres" id="1_glass_material"]
+
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_f4pk3"]
 resource_name = "win_frame"
 cull_mode = 2
@@ -93,8 +95,10 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.8014315, 0)
 mesh = SubResource("ArrayMesh_yxidm")
 
 [node name="DoubleWindowGlass" type="MeshInstance3D" parent="StaticBody3D" unique_id=148925831]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.807783, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.805, 0)
+material_override = ExtResource("1_glass_material")
 mesh = SubResource("ArrayMesh_buwti")
+surface_material_override/0 = ExtResource("1_glass_material")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D" unique_id=1051865949]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.2448444, 0)

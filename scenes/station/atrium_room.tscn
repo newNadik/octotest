@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://crrm51jmovvon" path="res://scenes/station/interior/door_double.tscn" id="2_ecqnk"]
 [ext_resource type="PackedScene" uid="uid://daxvawcm2f6v1" path="res://scenes/station/interior/door_single.tscn" id="3_wctxe"]
 [ext_resource type="Material" uid="uid://bb4hx1vyakkmf" path="res://assets/materials/plaster.tres" id="5_xg0bo"]
+[ext_resource type="Material" path="res://assets/materials/glass.tres" id="6_hnfiw"]
 [ext_resource type="Material" uid="uid://biog7mv21velq" path="res://assets/materials/ceiling.tres" id="7_harmc"]
 [ext_resource type="Material" uid="uid://ca2db0a60mj50" path="res://assets/materials/metal.tres" id="8_xp3kh"]
 
@@ -791,6 +792,7 @@ surface_material_override/0 = ExtResource("5_xg0bo")
 [node name="DeckWindowGlass" type="MeshInstance3D" parent="StaticBody3D/Walls" unique_id=2098803375]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 41.708317, -60.43569, 0.33965084)
 mesh = SubResource("ArrayMesh_3k8fa")
+surface_material_override/0 = ExtResource("6_hnfiw")
 
 [node name="DeckWindowFrame" type="MeshInstance3D" parent="StaticBody3D/Walls" unique_id=615076352]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 41.708317, -60.43569, 0.33965084)
@@ -865,6 +867,7 @@ surface_material_override/0 = ExtResource("7_harmc")
 [node name="RoofGlassAtrium_006" type="MeshInstance3D" parent="StaticBody3D/Roof" unique_id=970745404]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.8054073, 10.499993, 0.006915656)
 mesh = SubResource("ArrayMesh_21rtx")
+surface_material_override/0 = ExtResource("6_hnfiw")
 
 [node name="RoofFrameAtrium_005" type="MeshInstance3D" parent="StaticBody3D/Roof" unique_id=1736323983]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.8054073, 10.499993, 0.006915656)
