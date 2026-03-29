@@ -8,7 +8,6 @@
 [resource]
 cull_mode = 2
 albedo_texture = ExtResource("1_wq26l")
-metallic_specular = 0.0
 roughness_texture = ExtResource("4_acd4b")
 normal_enabled = true
 normal_texture = ExtResource("3_bdq4u")

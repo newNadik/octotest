@@ -1,8 +1,9 @@
 [gd_scene format=4 uid="uid://dq8f3vrk631bb"]
 
 [ext_resource type="PackedScene" uid="uid://crrm51jmovvon" path="res://scenes/station/interior/door_double.tscn" id="1_43emv"]
-[ext_resource type="Material" uid="uid://blmld45iq1ssb" path="res://assets/materials/floor.tres" id="1_iye30"]
+[ext_resource type="Material" uid="uid://b1a0xbuetfwpo" path="res://assets/materials/concrete.tres" id="1_iye30"]
 [ext_resource type="PackedScene" uid="uid://b0uf1y0c75xpc" path="res://scenes/station/interior/window_single.tscn" id="1_o46ax"]
+[ext_resource type="Material" uid="uid://bb4hx1vyakkmf" path="res://assets/materials/plaster.tres" id="2_b06y5"]
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_b4dhb"]
 _surfaces = [{
@@ -98,12 +99,6 @@ _surfaces = [{
 blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_p0hpx")
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_8gvr5"]
-resource_name = "Walls"
-cull_mode = 2
-albedo_color = Color(0.6859516, 0.76433384, 0.90633965, 1)
-roughness = 0.5
-
 [sub_resource type="ArrayMesh" id="ArrayMesh_khask"]
 _surfaces = [{
 "aabb": AABB(-6.6000004, 0, -0.3, 13.059221, 8.772229, 15.22715),
@@ -126,7 +121,6 @@ _surfaces = [{
 "format": 34359742487,
 "index_count": 768,
 "index_data": PackedByteArray("AAABAAIAAAADAAEAAQAEAAIAAQAFAAQABgAHAAgABgAJAAcACgALAAwACgANAAsADgAPABAADgARAA8AEgATABQAEgAVABMAFgAXABgAFgAZABcAGgAbABwAGgAdABsAHgAfACAAHgAhAB8AIgAjACQAIgAlACMAJgAnACgAJgApACcAKgArACwAKgAtACsALgAvADAALgAxAC8AMgAzADQAMgA1ADMANgA3ADgANgA5ADcAOgA7ADwAOgA9ADsAPgA/AEAAPgBBAD8AQgBDAEQAQgBFAEMARgBHAEgARgBJAEcASgBLAEwASgBNAEsATgBPAFAATgBRAE8AUgBTAFQAUgBVAFMAVgBXAFgAVgBZAFcAWgBbAFwAWgBdAFsAXgBfAGAAXgBhAF8AYgBjAGQAYgBlAGMAZgBnAGgAZgBpAGcAagBrAGwAagBtAGsAbgBvAHAAbgBxAG8AcgBzAHQAcgB1AHMAdgB3AHgAdgB5AHcAegB7AHwAegB9AHsAfgB/AIAAfgCBAH8AggCDAIQAggCFAIMAhgCHAIgAhgCJAIcAigCLAIwAigCNAIsAjgCPAJAAjgCRAI8AkgCRAJMAkgCTAJQAlQCWAJcAlQCYAJYAmQCaAJcAmQCbAJoAnACdAJ4AnACfAJ0AoAChAKIAoACjAKEApAClAKYApACnAKUApACoAKcApACpAKgApACqAKkApACrAKoArACrAKQArACtAKsArACuAK0ArACvAK4ArACwAK8AsACsALEAsQCsALIAsgCsALMAswCsALQAtACsALUAtQCsALYAtgCsALcAtwCsALgAuACsALkAuQCsALoAugCsALsAugC8AL0AvgC8ALoAvwC8AL4AwAC8AL8AwQC8AMAAwgC8AMEAwwC8AMIAxAC8AMMAxQC8AMQAxgC8AMUAxwC8AMYAvADHAMgAvADIAMkAvADJAMoAvADKAMsAvADLAMwAzADLAM0AzADNAM4AzADOAM8AzADPANAAzADQAKUAzAClANEA0gDTANQA0gDVANMA1gDXANgA1gDZANcA2gDbANwA2gDdANsA3gDfAOAA3gDhAN8A4gDjAOQA4gDlAOMA4gDmAOUA4gDnAOYA4gDoAOcA4gDpAOgA4gDqAOkA4gDrAOoA4gDsAOsA4gDtAOwA4gDuAO0A7gDiAO8A7wDiAPAA8ADiAPEA8QDiAPIA8gDiAPMA8gDzAPQA9ADzAPUA9QDzAPYA9gDzAPcA9wDzAPgA+ADzAPkA+gD7APwA+gD9APsA+gD+AP0A+gD/AP4A+gAAAf8A+gABAQAB+gACAQEB+gADAQIB+gAEAQMB+gAFAQQB+gAGAQUBBgH6AAcBBwH6AAgBCAH6AAkBCQH6AAoBCgH6AAsBCgELAQwBDAELAQ0BDQELAQ4BDgELAQ8BDwELARABEAELAREBEgETARQBEgEVARMBFgEXARgBFgEZARcBGgEbARwBGgEdARsBHgEfASABHgEhAR8BIgEjASQBIgElASMBJgEnASgBJgEpAScBKgErASwBKgEtASsBLgEvATABLgExAS8BMgEzATQBMgE1ATMBNgE3ATgBNgE5ATcBOgE7ATwBOgE9ATsBPgE/AUABPgFBAT8BQgFDAUQBQgFFAUMBRgFHAUgBRgFJAUcBSgFLAUwBSgFNAUsBTgFPAVABTgFRAU8BUgFTAVQBUgFVAVMBVgFXAVgBVgFZAVcBWgFbAVwBWgFdAVsBXgFfAWABXgFhAV8BYgFjAWQBYgFlAWMBZgFnAWgBZgFpAWcBagFrAWwBagFtAWsBbgFvAXABbgFxAW8BcgFzAXQBcgF1AXMBdgF3AXgBdgF5AXcBegF7AXwBegF9AXsBfgF/AYABfgGBAX8BggGDAYQBggGFAYMBhgGHAYgBhgGJAYcBigGLAYwBigGNAYsBjgGPAZABjgGRAY8BkgGTAZQBkgGVAZMBlgGXAZQBlgGYAZcBmQGaAZsBmQGcAZoBnQGeAZ8BnQGgAZ4BoQGiAaMBoQGkAaIBpQGmAaMBpQGnAaYB"),
-"material": SubResource("StandardMaterial3D_8gvr5"),
 "name": "Walls",
 "primitive": 3,
 "uv_scale": Vector4(0, 0, 0, 0),
@@ -161,6 +155,7 @@ mesh = SubResource("ArrayMesh_yht7h")
 [node name="WallOffice" type="MeshInstance3D" parent="StaticBody3D" unique_id=998317410]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.5124836, -7.5464764e-06, -30.031107)
 mesh = SubResource("ArrayMesh_esto4")
+surface_material_override/0 = ExtResource("2_b06y5")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D" unique_id=1680490729]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.5124836, -7.5464764e-06, -30.031107)

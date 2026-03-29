@@ -1,0 +1,12 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://bb4hx1vyakkmf"]
+
+[ext_resource type="Texture2D" uid="uid://b2nbwajx0dmbe" path="res://assets/textures/Plaster002_4K-JPG/Plaster002_4K_Displacement.jpg" id="1_4bp8t"]
+
+[resource]
+cull_mode = 2
+normal_enabled = true
+heightmap_enabled = true
+heightmap_texture = ExtResource("1_4bp8t")
+uv1_scale = Vector3(0.5, 0.5, 0.5)
+uv1_triplanar = true
+uv1_world_triplanar = true
