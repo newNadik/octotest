@@ -118,6 +118,8 @@ surface_material_override/0 = ExtResource("3_uooyi")
 
 [node name="RoofWetroom" type="MeshInstance3D" parent="StaticBody3D" unique_id=850791184]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.747784, -8.88325, 20.900995)
+instance_shader_parameters/offset_xz = Vector2(1, 1)
+instance_shader_parameters/rotation_deg = 45.0
 mesh = SubResource("ArrayMesh_5w8w2")
 surface_material_override/0 = ExtResource("4_hoakw")
 

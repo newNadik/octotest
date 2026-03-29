@@ -131,6 +131,8 @@ surface_material_override/0 = ExtResource("1_iye30")
 
 [node name="Roof_Office" type="MeshInstance3D" parent="StaticBody3D" unique_id=1694956170]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.8054073, -7.5464764e-06, 0.006915656)
+instance_shader_parameters/offset_xz = Vector2(1.2, 0)
+instance_shader_parameters/rotation_deg = 0.0
 mesh = SubResource("ArrayMesh_wpmcj")
 surface_material_override/0 = ExtResource("2_2ykdr")
 

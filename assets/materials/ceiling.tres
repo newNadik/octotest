@@ -1,4 +1,4 @@
-[gd_resource type="StandardMaterial3D" format=3 uid="uid://biog7mv21velq"]
+[gd_resource type="ShaderMaterial" format=3 uid="uid://biog7mv21velq"]
 
 [ext_resource type="Texture2D" uid="uid://uc7yltjepe6v" path="res://assets/textures/OfficeCeiling/OfficeCeiling002_2K-JPG_Color.jpg" id="1_ek5or"]
 [ext_resource type="Texture2D" uid="uid://bbv8qqhiu7y4q" path="res://assets/textures/OfficeCeiling/OfficeCeiling002_2K-JPG_AmbientOcclusion.jpg" id="2_f8op0"]
@@ -7,23 +7,70 @@
 [ext_resource type="Texture2D" uid="uid://5mtctrt4gsen" path="res://assets/textures/OfficeCeiling/OfficeCeiling002_2K-JPG_NormalGL.jpg" id="5_m7yqx"]
 [ext_resource type="Texture2D" uid="uid://cqv1wk45fuhre" path="res://assets/textures/OfficeCeiling/OfficeCeiling002_2K-JPG_Roughness.jpg" id="6_ly4pc"]
 
+[sub_resource type="Shader" id="Shader_ceiling_rotatable"]
+code = "shader_type spatial;
+render_mode cull_back;
+
+uniform sampler2D albedo_tex : source_color;
+uniform sampler2D ao_tex;
+uniform sampler2D emission_tex : source_color;
+uniform sampler2D metallic_tex;
+uniform sampler2D normal_tex : hint_normal;
+uniform sampler2D roughness_tex;
+
+uniform float uv_scale = 0.15;
+instance uniform float rotation_deg = -45.0;
+instance uniform vec2 offset_xz = vec2(0.0, 0.0);
+uniform float metallic_scalar = 1.0;
+uniform float roughness_scalar = 1.0;
+uniform float normal_strength : hint_range(0.0, 4.0) = 1.0;
+varying vec3 world_pos;
+
+vec2 rotate2d(vec2 v, float angle_rad) {
+	float c = cos(angle_rad);
+	float s = sin(angle_rad);
+	return vec2(
+		c * v.x - s * v.y,
+		s * v.x + c * v.y
+	);
+}
+
+void vertex() {
+	world_pos = (MODEL_MATRIX * vec4(VERTEX, 1.0)).xyz;
+}
+
+void fragment() {
+	// Ceiling surfaces are mostly horizontal, so world-space XZ projection is stable and easy to rotate.
+	vec2 uv = (world_pos.xz + offset_xz) * uv_scale;
+	uv = rotate2d(uv, radians(rotation_deg));
+
+	vec4 albedo_s = texture(albedo_tex, uv);
+	vec4 ao_s = texture(ao_tex, uv);
+	vec4 emission_s = texture(emission_tex, uv);
+	vec4 metallic_s = texture(metallic_tex, uv);
+	vec4 roughness_s = texture(roughness_tex, uv);
+	vec3 normal_s = texture(normal_tex, uv).rgb;
+
+	ALBEDO = albedo_s.rgb;
+	AO = ao_s.a;
+	EMISSION = emission_s.rgb;
+	METALLIC = metallic_scalar * metallic_s.a;
+	ROUGHNESS = roughness_scalar * roughness_s.a;
+	NORMAL_MAP = normal_s;
+	NORMAL_MAP_DEPTH = normal_strength;
+}
+"
+
 [resource]
-albedo_texture = ExtResource("1_ek5or")
-metallic = 1.0
-metallic_texture = ExtResource("4_xddng")
-metallic_texture_channel = 4
-roughness_texture = ExtResource("6_ly4pc")
-roughness_texture_channel = 4
-emission_enabled = true
-emission_texture = ExtResource("3_eo376")
-normal_enabled = true
-normal_texture = ExtResource("5_m7yqx")
-ao_enabled = true
-ao_texture = ExtResource("2_f8op0")
-ao_texture_channel = 4
-heightmap_enabled = true
-heightmap_scale = 1.0
-heightmap_texture = ExtResource("1_ek5or")
-uv1_scale = Vector3(0.15, 0.15, 0.15)
-uv1_triplanar = true
-uv1_triplanar_sharpness = 150.0
+render_priority = 0
+shader = SubResource("Shader_ceiling_rotatable")
+shader_parameter/albedo_tex = ExtResource("1_ek5or")
+shader_parameter/ao_tex = ExtResource("2_f8op0")
+shader_parameter/emission_tex = ExtResource("3_eo376")
+shader_parameter/metallic_tex = ExtResource("4_xddng")
+shader_parameter/normal_tex = ExtResource("5_m7yqx")
+shader_parameter/roughness_tex = ExtResource("6_ly4pc")
+shader_parameter/uv_scale = 0.15
+shader_parameter/metallic_scalar = 1.0
+shader_parameter/roughness_scalar = 1.0
+shader_parameter/normal_strength = 1.0

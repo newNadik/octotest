@@ -171,6 +171,7 @@ surface_material_override/0 = ExtResource("4_ssju7")
 
 [node name="RoofChemLab" type="MeshInstance3D" parent="StaticBody3D" unique_id=941413572]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.208, 0, -13.928)
+instance_shader_parameters/offset_xz = Vector2(0.8, 5)
 mesh = SubResource("ArrayMesh_ja8y8")
 surface_material_override/0 = ExtResource("5_mt5em")
 

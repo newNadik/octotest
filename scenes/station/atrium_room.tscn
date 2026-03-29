@@ -851,7 +851,6 @@ shape = SubResource("BoxShape3D_5jbdu")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.47, 0, 19.06)
 
 [node name="Roof" type="Node3D" parent="StaticBody3D" unique_id=1383701249]
-visible = false
 
 [node name="RoofWC" type="MeshInstance3D" parent="StaticBody3D/Roof" unique_id=1504717261]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.8054073, -7.5464764e-06, 0.006915656)

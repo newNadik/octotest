@@ -147,7 +147,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 25.793447, -7.5464764e-06, -9
 shape = SubResource("ConcavePolygonShape3D_0cctw")
 
 [node name="RoofWorkshop" type="MeshInstance3D" parent="StaticBody3D" unique_id=1994682011]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16.895876, -1.0407499e-05, 0.15963061)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16.85707, -0.051368713, 0.14948273)
+instance_shader_parameters/offset_xz = Vector2(0, 2.5)
+instance_shader_parameters/rotation_deg = 0.0
 mesh = SubResource("ArrayMesh_cadcp")
 surface_material_override/0 = ExtResource("1_dxupm")
 

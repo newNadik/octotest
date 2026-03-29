@@ -165,6 +165,7 @@ surface_material_override/0 = ExtResource("3_21vip")
 
 [node name="RoofQuarters" type="MeshInstance3D" parent="StaticBody3D" unique_id=2062910619]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.8054073, -7.5464764e-06, 0.006915656)
+instance_shader_parameters/offset_xz = Vector2(2, 3.5)
 mesh = SubResource("ArrayMesh_a4y7k")
 surface_material_override/0 = ExtResource("4_44o56")
 
