@@ -3,8 +3,9 @@
 [ext_resource type="PackedScene" uid="uid://crrm51jmovvon" path="res://scenes/station/interior/door_double.tscn" id="1_4de62"]
 [ext_resource type="Material" uid="uid://b1a0xbuetfwpo" path="res://assets/materials/concrete.tres" id="2_pnk4a"]
 [ext_resource type="PackedScene" uid="uid://b0uf1y0c75xpc" path="res://scenes/station/interior/window_single.tscn" id="2_ua4mq"]
-[ext_resource type="Material" uid="uid://biog7mv21velq" path="res://assets/materials/OfficeCeiling002_2K-JPG.tres" id="3_fb2ae"]
+[ext_resource type="Material" uid="uid://biog7mv21velq" path="res://assets/materials/ceiling.tres" id="3_fb2ae"]
 [ext_resource type="Material" uid="uid://bb4hx1vyakkmf" path="res://assets/materials/plaster.tres" id="3_mlt4v"]
+[ext_resource type="Material" uid="uid://ca2db0a60mj50" path="res://assets/materials/metal.tres" id="4_0ar6p"]
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_lf4d5"]
 resource_name = "system_Plane_099"
@@ -158,6 +159,7 @@ surface_material_override/0 = ExtResource("3_fb2ae")
 [node name="PanelSystem" type="MeshInstance3D" parent="StaticBody3D" unique_id=965637031]
 transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -0.7875159, -7.5464764e-06, -23.73111)
 mesh = SubResource("ArrayMesh_4a3io")
+surface_material_override/0 = ExtResource("4_0ar6p")
 
 [node name="WallSystem" type="MeshInstance3D" parent="StaticBody3D" unique_id=187089986]
 transform = Transform3D(0.9238795, 0, 0.38268346, 0, 1, 0, -0.38268346, 0, 0.9238795, -2.438414, -7.5464764e-06, -17.85042)

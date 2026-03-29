@@ -2,7 +2,40 @@
 
 [ext_resource type="Texture2D" uid="uid://b2nbwajx0dmbe" path="res://assets/textures/Plaster002_4K-JPG/Plaster002_4K_Displacement.jpg" id="1_4bp8t"]
 
+[sub_resource type="Shader" id="Shader_plaster_lower_band"]
+code = "shader_type spatial;
+render_mode cull_back;
+
+uniform vec4 tint_color : source_color = vec4(0.18144298, 0.3341242, 0.430378, 1.0);
+uniform float global_floor_y = 0.0;
+uniform float band_height = 1.5;
+uniform float roughness = 0.5;
+varying float world_y;
+
+void vertex() {
+	world_y = (MODEL_MATRIX * vec4(VERTEX, 1.0)).y;
+}
+
+void fragment() {
+	if (world_y > global_floor_y + band_height) {
+		discard;
+	}
+	ALBEDO = tint_color.rgb;
+	ROUGHNESS = roughness;
+	METALLIC = 0.0;
+}
+"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_plaster_lower_band"]
+render_priority = 1
+shader = SubResource("Shader_plaster_lower_band")
+shader_parameter/tint_color = Color(0.18144298, 0.3341242, 0.430378, 1)
+shader_parameter/global_floor_y = 0.0
+shader_parameter/band_height = 1.5
+shader_parameter/roughness = 0.5
+
 [resource]
+next_pass = SubResource("ShaderMaterial_plaster_lower_band")
 cull_mode = 2
 normal_enabled = true
 heightmap_enabled = true
