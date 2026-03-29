@@ -30,36 +30,12 @@ background_mode = 2
 sky = SubResource("Sky_tavjh")
 ambient_light_sky_contribution = 0.65
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_floor"]
-albedo_color = Color(0.37, 0.4, 0.46, 1)
-roughness = 0.95
-
-[sub_resource type="BoxMesh" id="BoxMesh_floor"]
-size = Vector3(7, 1, 9)
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_floor"]
-size = Vector3(7, 1, 9)
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_window"]
-transparency = 1
-albedo_color = Color(0.72, 0.86, 0.92, 0.36)
-roughness = 0.15
-
-[sub_resource type="BoxMesh" id="BoxMesh_window"]
-size = Vector3(1.2, 0.2, 0.8)
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_window"]
-size = Vector3(1.2, 0.2, 0.8)
-
 [sub_resource type="BoxShape3D" id="BoxShape3D_chair_leg"]
 size = Vector3(0.06, 0.5, 0.06)
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_wall_ns_center"]
-size = Vector3(7, 3, 1)
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_card_reader"]
-albedo_color = Color(0.22, 0.23, 0.26, 1)
-roughness = 0.35
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ramp"]
+albedo_color = Color(0.5, 0.58, 0.52, 1)
+roughness = 0.9
 
 [sub_resource type="BoxMesh" id="BoxMesh_chair_seat"]
 size = Vector3(0.5, 0.08, 0.5)
@@ -77,10 +53,6 @@ emission_energy_multiplier = 4.0
 [sub_resource type="BoxMesh" id="BoxMesh_card_reader_led"]
 size = Vector3(0.44, 0.44, 0.12)
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ramp"]
-albedo_color = Color(0.5, 0.58, 0.52, 1)
-roughness = 0.9
-
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_chair"]
 albedo_color = Color(0.42, 0.29, 0.2, 1)
 roughness = 0.75
@@ -94,17 +66,6 @@ size = Vector3(0.5, 0.45, 0.08)
 [sub_resource type="BoxShape3D" id="BoxShape3D_box_interactable"]
 size = Vector3(0.85, 0.85, 0.85)
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_box_interactable"]
-albedo_color = Color(0.76, 0.56, 0.42, 1)
-roughness = 0.72
-
-[sub_resource type="BoxMesh" id="BoxMesh_box_interactable"]
-size = Vector3(0.85, 0.85, 0.85)
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_wall"]
-albedo_color = Color(0.62, 0.71, 0.74, 1)
-roughness = 0.88
-
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_button"]
 albedo_color = Color(0.84, 0.24, 0.2, 1)
 roughness = 0.5
@@ -117,6 +78,10 @@ size = Vector3(1.2, 0.22, 1.2)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_button_interaction"]
 size = Vector3(1.3, 0.4, 1.3)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_card_reader"]
+albedo_color = Color(0.22, 0.23, 0.26, 1)
+roughness = 0.35
 
 [sub_resource type="BoxMesh" id="BoxMesh_card_reader"]
 size = Vector3(1.1, 1.2, 0.14)
@@ -146,6 +111,13 @@ size = Vector3(0.38, 0.42, 0.38)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_mug_interaction"]
 size = Vector3(0.45, 0.5, 0.45)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_box_interactable"]
+albedo_color = Color(0.76, 0.56, 0.42, 1)
+roughness = 0.72
+
+[sub_resource type="BoxMesh" id="BoxMesh_box_interactable"]
+size = Vector3(0.85, 0.85, 0.85)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_box_interaction"]
 
@@ -188,45 +160,6 @@ environment = SubResource("Environment_1w5qu")
 
 [node name="Room" type="Node3D" parent="." unique_id=477736357]
 transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 0, 0, 0)
-visible = false
-
-[node name="Floor" type="StaticBody3D" parent="Room" unique_id=1609940887]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18.356457, -0.5, 0)
-collision_layer = 2
-collision_mask = 0
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Room/Floor" unique_id=1529015122]
-material_override = SubResource("StandardMaterial3D_floor")
-mesh = SubResource("BoxMesh_floor")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Room/Floor" unique_id=921518467]
-shape = SubResource("BoxShape3D_floor")
-
-[node name="TankSkylight" type="StaticBody3D" parent="Room" unique_id=1529591550]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.4, 2.99, -3.7)
-collision_layer = 2
-collision_mask = 0
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Room/TankSkylight" unique_id=299379342]
-material_override = SubResource("StandardMaterial3D_window")
-mesh = SubResource("BoxMesh_window")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Room/TankSkylight" unique_id=1335798953]
-shape = SubResource("BoxShape3D_window")
-
-[node name="NorthWindow" type="StaticBody3D" parent="Room" unique_id=206707019]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 2, -4.95)
-collision_layer = 2
-collision_mask = 0
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Room/NorthWindow" unique_id=1330534410]
-transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0)
-material_override = SubResource("StandardMaterial3D_window")
-mesh = SubResource("BoxMesh_window")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Room/NorthWindow" unique_id=1471774055]
-transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0)
-shape = SubResource("BoxShape3D_window")
 
 [node name="OfficeSet" type="Node3D" parent="Room" unique_id=1955849823]
 
@@ -237,57 +170,6 @@ collision_mask = 0
 [node name="DoorCollision" type="CollisionShape3D" parent="Room/OfficeSet/SystemsDoorLeft" unique_id=100197388]
 transform = Transform3D(0.18, 0, 0, 0, 2.2, 0, 0, 0, 2, 0, 0, 0)
 shape = SubResource("BoxShape3D_chair_leg")
-
-[node name="BackDoorRight" type="StaticBody3D" parent="Room/OfficeSet" unique_id=1720181225]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.17, 4.45)
-collision_mask = 0
-
-[node name="DoorCollision" type="CollisionShape3D" parent="Room/OfficeSet/BackDoorRight" unique_id=1695061533]
-transform = Transform3D(0.165, 0, 0, 0, 0.78, 0, 0, 0, 0.27, 0, 0, 0)
-shape = SubResource("BoxShape3D_wall_ns_center")
-
-[node name="SensorConsole" type="StaticBody3D" parent="Room/OfficeSet" unique_id=1243022372]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.95, -4.25)
-collision_mask = 0
-
-[node name="ConsoleBody" type="MeshInstance3D" parent="Room/OfficeSet/SensorConsole" unique_id=1539181157]
-transform = Transform3D(10, 0, 0, 0, 1.6, 0, 0, 0, 0.8, 0, 0, 0)
-material_override = SubResource("StandardMaterial3D_card_reader")
-mesh = SubResource("BoxMesh_chair_seat")
-
-[node name="ConsoleCollision" type="CollisionShape3D" parent="Room/OfficeSet/SensorConsole" unique_id=857363825]
-transform = Transform3D(10, 0, 0, 0, 1.6, 0, 0, 0, 0.8, 0, 0, 0)
-shape = SubResource("BoxShape3D_chair_seat")
-
-[node name="MonitorA" type="MeshInstance3D" parent="Room/OfficeSet/SensorConsole" unique_id=2119980739]
-transform = Transform3D(1.3, 0, 0, 0, 2.4, 0, 0, 0, 0.2, -1.25, 0.35, -0.05)
-material_override = SubResource("StandardMaterial3D_card_reader_led")
-mesh = SubResource("BoxMesh_card_reader_led")
-
-[node name="MonitorB" type="MeshInstance3D" parent="Room/OfficeSet/SensorConsole" unique_id=1979507568]
-transform = Transform3D(1.3, 0, 0, 0, 2.4, 0, 0, 0, 0.2, -0.75, 0.35, -0.05)
-material_override = SubResource("StandardMaterial3D_card_reader_led")
-mesh = SubResource("BoxMesh_card_reader_led")
-
-[node name="MonitorC" type="MeshInstance3D" parent="Room/OfficeSet/SensorConsole" unique_id=1179788404]
-transform = Transform3D(1.3, 0, 0, 0, 2.4, 0, 0, 0, 0.2, -0.25, 0.35, -0.05)
-material_override = SubResource("StandardMaterial3D_card_reader_led")
-mesh = SubResource("BoxMesh_card_reader_led")
-
-[node name="MonitorD" type="MeshInstance3D" parent="Room/OfficeSet/SensorConsole" unique_id=1024998825]
-transform = Transform3D(1.3, 0, 0, 0, 2.4, 0, 0, 0, 0.2, 0.25, 0.35, -0.05)
-material_override = SubResource("StandardMaterial3D_card_reader_led")
-mesh = SubResource("BoxMesh_card_reader_led")
-
-[node name="MonitorE" type="MeshInstance3D" parent="Room/OfficeSet/SensorConsole" unique_id=810321217]
-transform = Transform3D(1.3, 0, 0, 0, 2.4, 0, 0, 0, 0.2, 0.75, 0.35, -0.05)
-material_override = SubResource("StandardMaterial3D_card_reader_led")
-mesh = SubResource("BoxMesh_card_reader_led")
-
-[node name="MonitorF" type="MeshInstance3D" parent="Room/OfficeSet/SensorConsole" unique_id=2066210201]
-transform = Transform3D(1.3, 0, 0, 0, 2.4, 0, 0, 0, 0.2, 1.25, 0.35, -0.05)
-material_override = SubResource("StandardMaterial3D_card_reader_led")
-mesh = SubResource("BoxMesh_card_reader_led")
 
 [node name="DeskA" type="StaticBody3D" parent="Room/OfficeSet" unique_id=420380840]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 0, 0.6)
@@ -377,53 +259,12 @@ collision_mask = 0
 transform = Transform3D(0.7, 0, 0, 0, 2.6, 0, 0, 0, 1.2, 0, 0, 0)
 shape = SubResource("BoxShape3D_box_interactable")
 
-[node name="StackedCaseA" type="StaticBody3D" parent="Room/OfficeSet" unique_id=848905284]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.25, 0.44, 2.9)
-collision_mask = 0
-
-[node name="CaseMesh" type="MeshInstance3D" parent="Room/OfficeSet/StackedCaseA" unique_id=1222848873]
-transform = Transform3D(0.92, 0, 0, 0, 1.04, 0, 0, 0, 0.92, 0, 0, 0)
-material_override = SubResource("StandardMaterial3D_box_interactable")
-mesh = SubResource("BoxMesh_box_interactable")
-
-[node name="CaseCollisionShape" type="CollisionShape3D" parent="Room/OfficeSet/StackedCaseA" unique_id=916148836]
-transform = Transform3D(0.92, 0, 0, 0, 1.04, 0, 0, 0, 0.92, 0, 0, 0)
-shape = SubResource("BoxShape3D_box_interactable")
-
 [node name="StackedCaseB" type="StaticBody3D" parent="Room/OfficeSet" unique_id=396888209]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.25, 1.28, 2.9)
 collision_mask = 0
 
-[node name="OctoTank" type="StaticBody3D" parent="Room/OfficeSet" unique_id=1399280410]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.4, 0.15, -3.7)
-collision_mask = 0
-
-[node name="Stand" type="MeshInstance3D" parent="Room/OfficeSet/OctoTank" unique_id=939560678]
-transform = Transform3D(1.176, 0, 0, 0, 0.353, 0, 0, 0, 0.706, 0, 0.15, 0)
-material_override = SubResource("StandardMaterial3D_wall")
-mesh = SubResource("BoxMesh_box_interactable")
-
-[node name="StandCollision" type="CollisionShape3D" parent="Room/OfficeSet/OctoTank" unique_id=2004563450]
-transform = Transform3D(1.176, 0, 0, 0, 0.353, 0, 0, 0, 0.706, 0, 0.15, 0)
-shape = SubResource("BoxShape3D_box_interactable")
-
-[node name="TankFrame" type="MeshInstance3D" parent="Room/OfficeSet/OctoTank" unique_id=1848239676]
-transform = Transform3D(1.176, 0, 0, 0, 1.294, 0, 0, 0, 0.706, 0, 0.78, 0)
-material_override = SubResource("StandardMaterial3D_wall")
-mesh = SubResource("BoxMesh_box_interactable")
-
-[node name="TankCollision" type="CollisionShape3D" parent="Room/OfficeSet/OctoTank" unique_id=417567097]
-transform = Transform3D(1.176, 0, 0, 0, 1.294, 0, 0, 0, 0.706, 0, 0.78, 0)
-shape = SubResource("BoxShape3D_box_interactable")
-
-[node name="Water" type="MeshInstance3D" parent="Room/OfficeSet/OctoTank" unique_id=1970338257]
-transform = Transform3D(0.94, 0, 0, 0, 1.05, 0, 0, 0, 0.56, 0, 0.78, 0)
-material_override = SubResource("StandardMaterial3D_window")
-mesh = SubResource("BoxMesh_box_interactable")
-
 [node name="Interactables" type="Node3D" parent="." unique_id=1482770779]
 transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 0, 0, 0)
-visible = false
 
 [node name="LightButton" type="StaticBody3D" parent="Interactables" unique_id=127297531]
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 2.2, -16)
