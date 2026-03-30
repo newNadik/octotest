@@ -22,6 +22,11 @@ const CAMERA_NEAR_CLIP := 0.12
 @export var focus_tween_duration := 0.24
 @export var camera_follow_lerp_speed := 10.0
 @export var camera_follow_deadzone := 0.03
+@export var underwater_light_motion_enabled := true
+@export var underwater_light_motion_speed := 0.22
+@export var underwater_light_pitch_amplitude := 2.0
+@export var underwater_light_yaw_amplitude := 3.5
+@export var underwater_light_energy_amplitude := 0.06
 
 @onready var player: CharacterBody3D = $Player
 @onready var camera_pivot: Node3D = $CameraPivot
@@ -35,7 +40,9 @@ const CAMERA_NEAR_CLIP := 0.12
 @onready var in_game_resume_button: Button = $UI/InGameMenu/MenuCenter/MenuPanel/MenuMargin/MenuButtons/ResumeButton
 @onready var in_game_main_menu_button: Button = $UI/InGameMenu/MenuCenter/MenuPanel/MenuMargin/MenuButtons/MainMenuButton
 @onready var in_game_settings_button: Button = $UI/InGameMenu/MenuCenter/MenuPanel/MenuMargin/MenuButtons/SettingsButton
-@onready var room_light: OmniLight3D = $OmniLight3D
+@onready var room_light: OmniLight3D = get_node_or_null("OmniLight3D") as OmniLight3D
+@onready var sun_light: DirectionalLight3D = get_node_or_null("DirectionalLight3D") as DirectionalLight3D
+@onready var skylight_hero_light: SpotLight3D = get_node_or_null("station/SkylightHeroLight") as SpotLight3D
 
 var _interaction_controller
 var _orbiting := false
@@ -51,13 +58,17 @@ var _focus_tween: Tween
 var _saved_spring_length := 9.0
 var _player_visual_root: Node3D
 var _settings_overlay: Control
+var _underwater_light_time := 0.0
+var _sun_base_rotation := Vector3.ZERO
+var _sun_base_energy := 0.0
+var _hero_base_energy := 0.0
 
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	in_game_menu.process_mode = Node.PROCESS_MODE_WHEN_PAUSED
 	player.process_mode = Node.PROCESS_MODE_PAUSABLE
-	player.global_position = Vector3(0.0, OCTO_START_Y, 0.0)
+	player.global_position = Vector3(0.0, OCTO_START_Y, 16.0)
 	var follow_position := player.global_position + Vector3(0.0, CAMERA_FOLLOW_HEIGHT, 0.0)
 	follow_position.y = maxf(follow_position.y, CAMERA_MIN_WORLD_Y)
 	camera_pivot.global_position = follow_position
@@ -75,6 +86,8 @@ func _ready() -> void:
 
 
 func _physics_process(delta: float) -> void:
+	_animate_underwater_light(delta)
+
 	if not _focus_mode:
 		var follow_position := player.global_position + Vector3(0.0, CAMERA_FOLLOW_HEIGHT, 0.0)
 		follow_position.y = maxf(follow_position.y, CAMERA_MIN_WORLD_Y)
@@ -423,3 +436,25 @@ func _close_settings_overlay() -> void:
 	_settings_overlay = null
 	in_game_menu.visible = true
 	in_game_resume_button.grab_focus()
+
+
+func _animate_underwater_light(delta: float) -> void:
+	if not underwater_light_motion_enabled or sun_light == null:
+		return
+	if _underwater_light_time == 0.0:
+		_sun_base_rotation = sun_light.rotation_degrees
+		_sun_base_energy = sun_light.light_energy
+		if skylight_hero_light != null:
+			_hero_base_energy = skylight_hero_light.light_energy
+
+	_underwater_light_time += delta * maxf(underwater_light_motion_speed, 0.0)
+	var sway_a := sin(_underwater_light_time)
+	var sway_b := sin(_underwater_light_time * 0.67 + 1.2)
+	sun_light.rotation_degrees = Vector3(
+		_sun_base_rotation.x + sway_a * underwater_light_pitch_amplitude,
+		_sun_base_rotation.y + sway_b * underwater_light_yaw_amplitude,
+		_sun_base_rotation.z
+	)
+	sun_light.light_energy = maxf(0.0, _sun_base_energy + sway_b * underwater_light_energy_amplitude)
+	if skylight_hero_light != null:
+		skylight_hero_light.light_energy = maxf(0.0, _hero_base_energy + sway_a * underwater_light_energy_amplitude * 0.7)

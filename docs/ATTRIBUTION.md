@@ -18,6 +18,11 @@ Source: [Flaticon](https://www.flaticon.com/)
   Provider: TurboSquid  
   License: Per purchase terms on TurboSquid
 
+- "Mashraba - Dahab Egypt" (https://skfb.ly/onRGu) by imadFarhat is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+- "Underwater Terrain - #AgisoftNatureChallenge" (https://skfb.ly/oo8xC) by yuma.jp is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+- "Coral Block Lighthouse" (https://skfb.ly/oEstA) by smusegadse is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+
+
 ## Textures
 
 - https://cc0-textures.com

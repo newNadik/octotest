@@ -144,7 +144,7 @@ collision_layer = 2
 collision_mask = 0
 
 [node name="FloorEnergyLab" type="MeshInstance3D" parent="StaticBody3D" unique_id=1813596186]
-transform = Transform3D(0.99990946, 0, -0.013456083, 0, 1, 0, 0.013456083, 0, 0.99990946, 11.477026, -7.5464764e-06, 14.31557)
+transform = Transform3D(1.0999005, 0, -0.014801691, 0, 1, 0, 0.014801691, 0, 1.0999005, 10.323774, -7.5464764e-06, 14.31557)
 mesh = SubResource("ArrayMesh_eoqii")
 surface_material_override/0 = ExtResource("1_m4qa1")
 

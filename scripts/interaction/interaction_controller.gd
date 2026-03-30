@@ -75,14 +75,15 @@ var _hint_builder = InteractionHintBuilderScript.new()
 var _octo_rig: OctoRigScript
 
 
-func initialize(player: CharacterBody3D, camera: Camera3D, hint_label: Label, world_root: Node3D, room_light: OmniLight3D) -> void:
+func initialize(player: CharacterBody3D, camera: Camera3D, hint_label: Label, world_root: Node3D, room_light: OmniLight3D = null) -> void:
 	_player = player
 	_camera = camera
 	_hint_label = hint_label
 	_world_root = world_root
 	_room_light = room_light
 	_base_move_speed = _player.move_speed
-	_default_light_energy = _room_light.light_energy
+	if _room_light != null:
+		_default_light_energy = _room_light.light_energy
 	_focus_reject_feedback.duration = focus_reject_feedback_duration
 	_ensure_hand_sockets()
 	_resolve_octo_rig()
@@ -1174,6 +1175,9 @@ func _trigger_blocked_move_feedback() -> void:
 
 
 func _setup_scene_interactables() -> void:
+	if _room_light == null:
+		return
+
 	var button = _world_root.get_node_or_null("Interactables/LightButton/Interactable")
 	if button == null:
 		return
@@ -1213,6 +1217,9 @@ func _make_material(color: Color, roughness: float) -> StandardMaterial3D:
 
 
 func _on_button_clicked(_interactable, _actor: Node, button_body: StaticBody3D) -> void:
+	if _room_light == null:
+		return
+
 	_light_toggle_on = not _light_toggle_on
 	_room_light.light_energy = _default_light_energy if _light_toggle_on else 0.35
 

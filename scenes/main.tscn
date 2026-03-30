@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://ddcirs8kpfb2k"]
 
 [ext_resource type="Script" uid="uid://km7y0f0xluw6" path="res://scripts/core/main.gd" id="1_4f72t"]
+[ext_resource type="PackedScene" uid="uid://drkdj8tkrup8" path="res://assets/models/underwater/underwater_terrain_-_agisoftnaturechallenge.glb" id="2_muem4"]
 [ext_resource type="PackedScene" uid="uid://63bbsnp8k0ew" path="res://scenes/player.tscn" id="2_vrsh6"]
 [ext_resource type="Script" uid="uid://bt8vvmy3m63u7" path="res://scripts/interaction/interactable.gd" id="3_3ygbf"]
 [ext_resource type="Script" uid="uid://df0uvmmccqeho" path="res://scripts/interaction/card_reader.gd" id="4_b6dyj"]
@@ -15,12 +16,13 @@
 [ext_resource type="PackedScene" uid="uid://ceub8e3x43ri7" path="res://scenes/station/systems_room.tscn" id="13_gqmmt"]
 [ext_resource type="PackedScene" uid="uid://b5wbnkdw8pctg" path="res://scenes/station/wetroom_room.tscn" id="14_yc10j"]
 [ext_resource type="PackedScene" uid="uid://bsq8i8032qepo" path="res://scenes/station/workshop_room.tscn" id="15_jscy8"]
+[ext_resource type="Script" uid="uid://cdsji1uitym1j" path="res://scripts/lighting/god_rays.gd" id="16_godrays"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_7yl8v"]
-sky_top_color = Color(0.44, 0.59, 0.78, 1)
-sky_horizon_color = Color(0.78, 0.84, 0.91, 1)
-ground_bottom_color = Color(0.33, 0.37, 0.33, 1)
-ground_horizon_color = Color(0.55, 0.56, 0.52, 1)
+sky_top_color = Color(0.04, 0.12, 0.18, 1)
+sky_horizon_color = Color(0.13, 0.31, 0.39, 1)
+ground_bottom_color = Color(0.01, 0.05, 0.07, 1)
+ground_horizon_color = Color(0.07, 0.16, 0.2, 1)
 
 [sub_resource type="Sky" id="Sky_tavjh"]
 sky_material = SubResource("ProceduralSkyMaterial_7yl8v")
@@ -28,10 +30,15 @@ sky_material = SubResource("ProceduralSkyMaterial_7yl8v")
 [sub_resource type="Environment" id="Environment_1w5qu"]
 background_mode = 2
 sky = SubResource("Sky_tavjh")
-ambient_light_sky_contribution = 0.65
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_chair_leg"]
-size = Vector3(0.06, 0.5, 0.06)
+ambient_light_sky_contribution = 0.72
+fog_enabled = true
+fog_light_color = Color(0.12, 0.36, 0.44, 1)
+fog_density = 0.014
+fog_sky_affect = 0.75
+volumetric_fog_enabled = true
+volumetric_fog_density = 0.09
+volumetric_fog_albedo = Color(0.13, 0.47, 0.58, 1)
+volumetric_fog_ambient_inject = 0.05
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ramp"]
 albedo_color = Color(0.5, 0.58, 0.52, 1)
@@ -62,9 +69,6 @@ size = Vector3(0.5, 0.45, 0.08)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_chair_back"]
 size = Vector3(0.5, 0.45, 0.08)
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_box_interactable"]
-size = Vector3(0.85, 0.85, 0.85)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_button"]
 albedo_color = Color(0.84, 0.24, 0.2, 1)
@@ -119,6 +123,9 @@ roughness = 0.72
 [sub_resource type="BoxMesh" id="BoxMesh_box_interactable"]
 size = Vector3(0.85, 0.85, 0.85)
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_box_interactable"]
+size = Vector3(0.85, 0.85, 0.85)
+
 [sub_resource type="BoxShape3D" id="BoxShape3D_box_interaction"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_card"]
@@ -139,6 +146,9 @@ script = ExtResource("1_4f72t")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1133585732]
 environment = SubResource("Environment_1w5qu")
+
+[node name="Sketchfab_Scene3" parent="." unique_id=1338297115 instance=ExtResource("2_muem4")]
+transform = Transform3D(0.84947854, 0, 0.5276231, 0, 1, 0, -0.5276231, 0, 0.84947854, -36.674065, 0.038806915, 15.491203)
 
 [node name="station" type="Node3D" parent="." unique_id=680235138]
 
@@ -162,14 +172,6 @@ environment = SubResource("Environment_1w5qu")
 transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 0, 0, 0)
 
 [node name="OfficeSet" type="Node3D" parent="Room" unique_id=1955849823]
-
-[node name="SystemsDoorLeft" type="StaticBody3D" parent="Room/OfficeSet" unique_id=309733548]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.98, 1.1, 0.8)
-collision_mask = 0
-
-[node name="DoorCollision" type="CollisionShape3D" parent="Room/OfficeSet/SystemsDoorLeft" unique_id=100197388]
-transform = Transform3D(0.18, 0, 0, 0, 2.2, 0, 0, 0, 2, 0, 0, 0)
-shape = SubResource("BoxShape3D_chair_leg")
 
 [node name="DeskA" type="StaticBody3D" parent="Room/OfficeSet" unique_id=420380840]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 0, 0.6)
@@ -251,23 +253,12 @@ mesh = SubResource("BoxMesh_chair_back")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.77, 0.21)
 shape = SubResource("BoxShape3D_chair_back")
 
-[node name="LeftStorageShelf" type="StaticBody3D" parent="Room/OfficeSet" unique_id=1298514686]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.45, 1.1, 1.4)
-collision_mask = 0
-
-[node name="ShelfCollision" type="CollisionShape3D" parent="Room/OfficeSet/LeftStorageShelf" unique_id=182275870]
-transform = Transform3D(0.7, 0, 0, 0, 2.6, 0, 0, 0, 1.2, 0, 0, 0)
-shape = SubResource("BoxShape3D_box_interactable")
-
-[node name="StackedCaseB" type="StaticBody3D" parent="Room/OfficeSet" unique_id=396888209]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.25, 1.28, 2.9)
-collision_mask = 0
-
 [node name="Interactables" type="Node3D" parent="." unique_id=1482770779]
 transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 0, 0, 0)
 
 [node name="LightButton" type="StaticBody3D" parent="Interactables" unique_id=127297531]
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 2.2, -16)
+visible = false
 collision_mask = 0
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Interactables/LightButton" unique_id=1259073663]
@@ -624,7 +615,7 @@ hold_offset = Vector3(0, -0.02, 0.06)
 shape = SubResource("BoxShape3D_card_interaction")
 
 [node name="Player" parent="." unique_id=445333378 instance=ExtResource("2_vrsh6")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.15232408, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.152, 18)
 
 [node name="CameraPivot" type="Node3D" parent="." unique_id=161127609]
 
@@ -640,12 +631,6 @@ margin = 0.2
 [node name="Camera3D" type="Camera3D" parent="CameraPivot/CameraYaw/CameraPitch/SpringArm3D" unique_id=1477719398]
 current = true
 fov = 60.0
-
-[node name="OmniLight3D" type="OmniLight3D" parent="." unique_id=1213994844]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.3289566, 8.137341, -0.30015945)
-light_color = Color(1, 0.97, 0.92, 1)
-light_energy = 4.0
-omni_range = 42.0
 
 [node name="UI" type="CanvasLayer" parent="." unique_id=618850917]
 
@@ -692,3 +677,37 @@ vertical_alignment = 1
 
 [node name="InGameMenu" parent="UI" unique_id=2124539444 instance=ExtResource("7_o6xl0")]
 visible = false
+
+[node name="Node3D" type="Node3D" parent="." unique_id=1594734138]
+
+[node name="SkylightHeroLight" type="SpotLight3D" parent="Node3D" unique_id=622259033]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, -0.805, 36, 0.007)
+light_color = Color(0.62, 0.86, 0.93, 1)
+light_energy = 0.6
+shadow_enabled = true
+spot_range = 48.0
+spot_angle = 18.0
+
+[node name="GodRays" type="Node3D" parent="Node3D" unique_id=901234000]
+script = ExtResource("16_godrays")
+
+[node name="RoofShaft" type="SpotLight3D" parent="Node3D/GodRays" unique_id=901234001]
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, -0.805, 14, 0.007)
+light_color = Color(0.72, 0.92, 1, 1)
+light_energy = 7.0
+light_volumetric_fog_energy = 32.0
+light_size = 1.0
+shadow_enabled = true
+spot_range = 20.0
+spot_angle = 14.0
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="Node3D" unique_id=210934476]
+transform = Transform3D(0.9902681, -0.13908833, 0.0048570717, 0, 0.0348995, 0.99939084, -0.13917312, -0.98966485, 0.034559857, -0.805, 76.67352, 0.007)
+light_color = Color(0.66, 0.84, 0.89, 1)
+light_energy = 2.0
+shadow_enabled = true
+shadow_bias = 0.02
+shadow_normal_bias = 0.2
+shadow_blur = 0.4
+directional_shadow_fade_start = 0.85
+directional_shadow_max_distance = 80.0

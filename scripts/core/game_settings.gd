@@ -5,20 +5,26 @@ const SETTINGS_PATH := "user://settings.cfg"
 const SECTION_GENERAL := "general"
 const SECTION_AUDIO := "audio"
 const SECTION_ACCESSIBILITY := "accessibility"
+const SECTION_GRAPHICS := "graphics"
 const KEY_LOCALE := "locale"
 const KEY_MUSIC_VOLUME := "music_volume"
 const KEY_SOUND_VOLUME := "sound_volume"
 const KEY_SUBTITLES_ENABLED := "subtitles_enabled"
+const KEY_GOD_RAYS_ENABLED := "god_rays_enabled"
 const DEFAULT_LOCALE := "en_GB"
 const DEFAULT_MUSIC_VOLUME := 1.0
 const DEFAULT_SOUND_VOLUME := 1.0
 const DEFAULT_SUBTITLES_ENABLED := true
+const DEFAULT_GOD_RAYS_ENABLED := true
+
+signal god_rays_enabled_changed(enabled: bool)
 
 var _config := ConfigFile.new()
 var _locale := DEFAULT_LOCALE
 var _music_volume := DEFAULT_MUSIC_VOLUME
 var _sound_volume := DEFAULT_SOUND_VOLUME
 var _subtitles_enabled := DEFAULT_SUBTITLES_ENABLED
+var _god_rays_enabled := DEFAULT_GOD_RAYS_ENABLED
 
 
 func _ready() -> void:
@@ -78,6 +84,18 @@ func set_subtitles_enabled(enabled: bool) -> void:
 	save_settings()
 
 
+func get_god_rays_enabled() -> bool:
+	return _god_rays_enabled
+
+
+func set_god_rays_enabled(enabled: bool) -> void:
+	if _god_rays_enabled == enabled:
+		return
+	_god_rays_enabled = enabled
+	god_rays_enabled_changed.emit(enabled)
+	save_settings()
+
+
 func load_settings() -> void:
 	var error := _config.load(SETTINGS_PATH)
 	if error == OK:
@@ -85,17 +103,20 @@ func load_settings() -> void:
 		_music_volume = float(_config.get_value(SECTION_AUDIO, KEY_MUSIC_VOLUME, DEFAULT_MUSIC_VOLUME))
 		_sound_volume = float(_config.get_value(SECTION_AUDIO, KEY_SOUND_VOLUME, DEFAULT_SOUND_VOLUME))
 		_subtitles_enabled = bool(_config.get_value(SECTION_ACCESSIBILITY, KEY_SUBTITLES_ENABLED, DEFAULT_SUBTITLES_ENABLED))
+		_god_rays_enabled = bool(_config.get_value(SECTION_GRAPHICS, KEY_GOD_RAYS_ENABLED, DEFAULT_GOD_RAYS_ENABLED))
 	elif error == ERR_FILE_NOT_FOUND:
 		_locale = DEFAULT_LOCALE
 		_music_volume = DEFAULT_MUSIC_VOLUME
 		_sound_volume = DEFAULT_SOUND_VOLUME
 		_subtitles_enabled = DEFAULT_SUBTITLES_ENABLED
+		_god_rays_enabled = DEFAULT_GOD_RAYS_ENABLED
 	else:
 		push_warning("Failed to load settings file: %s" % SETTINGS_PATH)
 		_locale = DEFAULT_LOCALE
 		_music_volume = DEFAULT_MUSIC_VOLUME
 		_sound_volume = DEFAULT_SOUND_VOLUME
 		_subtitles_enabled = DEFAULT_SUBTITLES_ENABLED
+		_god_rays_enabled = DEFAULT_GOD_RAYS_ENABLED
 
 	if _locale.is_empty():
 		_locale = DEFAULT_LOCALE
@@ -108,6 +129,7 @@ func save_settings() -> void:
 	_config.set_value(SECTION_AUDIO, KEY_MUSIC_VOLUME, _music_volume)
 	_config.set_value(SECTION_AUDIO, KEY_SOUND_VOLUME, _sound_volume)
 	_config.set_value(SECTION_ACCESSIBILITY, KEY_SUBTITLES_ENABLED, _subtitles_enabled)
+	_config.set_value(SECTION_GRAPHICS, KEY_GOD_RAYS_ENABLED, _god_rays_enabled)
 	var error := _config.save(SETTINGS_PATH)
 	if error != OK:
 		push_warning("Failed to save settings file: %s" % SETTINGS_PATH)

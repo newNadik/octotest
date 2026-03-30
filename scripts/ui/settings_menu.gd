@@ -25,6 +25,10 @@ const COLOR_MID_BLUE := Color(0.007843138, 0.2627451, 0.43137255, 1.0) # 02436e
 @onready var subtitles_prev_button: Button = $TopContainer/MainContainer/SettingsRows/SubtitlesRow/SubtitlesSelector/SubtitlesPrevButton
 @onready var subtitles_value_label: Label = $TopContainer/MainContainer/SettingsRows/SubtitlesRow/SubtitlesSelector/SubtitlesValueLabel
 @onready var subtitles_next_button: Button = $TopContainer/MainContainer/SettingsRows/SubtitlesRow/SubtitlesSelector/SubtitlesNextButton
+@onready var god_rays_label: Label = $TopContainer/MainContainer/SettingsRows/GodRaysRow/GodRaysLabel
+@onready var god_rays_prev_button: Button = $TopContainer/MainContainer/SettingsRows/GodRaysRow/GodRaysSelector/GodRaysPrevButton
+@onready var god_rays_value_label: Label = $TopContainer/MainContainer/SettingsRows/GodRaysRow/GodRaysSelector/GodRaysValueLabel
+@onready var god_rays_next_button: Button = $TopContainer/MainContainer/SettingsRows/GodRaysRow/GodRaysSelector/GodRaysNextButton
 @onready var language_label: Label = $TopContainer/MainContainer/SettingsRows/LanguageRow/LanguageLabel
 @onready var language_prev_button: Button = $TopContainer/MainContainer/SettingsRows/LanguageRow/LanguageSelector/LanguagePrevButton
 @onready var language_value_label: Label = $TopContainer/MainContainer/SettingsRows/LanguageRow/LanguageSelector/LanguageValueLabel
@@ -41,6 +45,8 @@ func _ready() -> void:
 	sounds_slider.value_changed.connect(_on_sounds_changed)
 	subtitles_prev_button.pressed.connect(_on_subtitles_cycle.bind(-1))
 	subtitles_next_button.pressed.connect(_on_subtitles_cycle.bind(1))
+	god_rays_prev_button.pressed.connect(_on_god_rays_cycle.bind(-1))
+	god_rays_next_button.pressed.connect(_on_god_rays_cycle.bind(1))
 	language_prev_button.pressed.connect(_on_language_cycle.bind(-1))
 	language_next_button.pressed.connect(_on_language_cycle.bind(1))
 	_apply_slider_grabber_icons()
@@ -97,6 +103,17 @@ func _on_subtitles_cycle(_direction: int) -> void:
 	_update_subtitles_value(enabled)
 
 
+func _on_god_rays_cycle(_direction: int) -> void:
+	var settings := _get_game_settings()
+	var enabled := true
+	if settings != null and settings.has_method("get_god_rays_enabled"):
+		enabled = bool(settings.call("get_god_rays_enabled"))
+	enabled = not enabled
+	if settings != null and settings.has_method("set_god_rays_enabled"):
+		settings.call("set_god_rays_enabled", enabled)
+	_update_god_rays_value(enabled)
+
+
 func _on_language_cycle(direction: int) -> void:
 	var current_locale := _get_active_locale()
 	var current_index := LOCALES.find(current_locale)
@@ -118,6 +135,7 @@ func _load_settings_into_ui() -> void:
 	var music := 1.0
 	var sounds := 1.0
 	var subtitles_enabled := true
+	var god_rays_enabled := true
 	var locale: String = TranslationServer.get_locale()
 	if settings != null:
 		if settings.has_method("get_music_volume"):
@@ -126,6 +144,8 @@ func _load_settings_into_ui() -> void:
 			sounds = float(settings.call("get_sound_volume"))
 		if settings.has_method("get_subtitles_enabled"):
 			subtitles_enabled = bool(settings.call("get_subtitles_enabled"))
+		if settings.has_method("get_god_rays_enabled"):
+			god_rays_enabled = bool(settings.call("get_god_rays_enabled"))
 		if settings.has_method("get_locale"):
 			locale = str(settings.call("get_locale"))
 
@@ -134,6 +154,7 @@ func _load_settings_into_ui() -> void:
 	_update_percent_label(music_value, music)
 	_update_percent_label(sounds_value, sounds)
 	_update_subtitles_value(subtitles_enabled)
+	_update_god_rays_value(god_rays_enabled)
 	_update_language_value(locale)
 	_is_updating_ui = false
 
@@ -143,8 +164,10 @@ func _apply_localized_text() -> void:
 	music_label.text = tr("Music")
 	sounds_label.text = tr("Sound Effects")
 	subtitles_label.text = tr("Subtitles")
+	god_rays_label.text = tr("God Rays")
 	language_label.text = tr("Language")
 	_update_subtitles_value(_get_subtitles_enabled())
+	_update_god_rays_value(_get_god_rays_enabled())
 	_update_language_value(_get_active_locale())
 
 
@@ -154,6 +177,17 @@ func _update_percent_label(label: Label, value: float) -> void:
 
 func _update_subtitles_value(enabled: bool) -> void:
 	subtitles_value_label.text = tr("On") if enabled else tr("Off")
+
+
+func _update_god_rays_value(enabled: bool) -> void:
+	god_rays_value_label.text = tr("On") if enabled else tr("Off")
+
+
+func _get_god_rays_enabled() -> bool:
+	var settings := _get_game_settings()
+	if settings != null and settings.has_method("get_god_rays_enabled"):
+		return bool(settings.call("get_god_rays_enabled"))
+	return true
 
 
 func _update_language_value(locale: String) -> void:

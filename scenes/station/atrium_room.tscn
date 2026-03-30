@@ -6,7 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://crrm51jmovvon" path="res://scenes/station/interior/door_double.tscn" id="2_ecqnk"]
 [ext_resource type="PackedScene" uid="uid://daxvawcm2f6v1" path="res://scenes/station/interior/door_single.tscn" id="3_wctxe"]
 [ext_resource type="Material" uid="uid://bb4hx1vyakkmf" path="res://assets/materials/plaster.tres" id="5_xg0bo"]
-[ext_resource type="Material" path="res://assets/materials/glass.tres" id="6_hnfiw"]
+[ext_resource type="Material" uid="uid://bm05hnbasm1cg" path="res://assets/materials/glass.tres" id="6_hnfiw"]
 [ext_resource type="Material" uid="uid://biog7mv21velq" path="res://assets/materials/ceiling.tres" id="7_harmc"]
 [ext_resource type="Material" uid="uid://ca2db0a60mj50" path="res://assets/materials/metal.tres" id="8_xp3kh"]
 
@@ -135,6 +135,12 @@ blend_shape_mode = 0
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_lbrst"]
 size = Vector3(80, 1, 80)
+
+[sub_resource type="BoxMesh" id="BoxMesh_j75yi"]
+size = Vector3(10, 1, 20)
+
+[sub_resource type="BoxMesh" id="BoxMesh_vucpf"]
+size = Vector3(15, 1, 1)
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_h5buu"]
 resource_name = "atrium_Plane_080"
@@ -606,6 +612,9 @@ _surfaces = [{
 blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_boof7")
 
+[sub_resource type="BoxMesh" id="BoxMesh_hnfiw"]
+size = Vector3(1, 20, 25)
+
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_a6tfi"]
 resource_name = "wall_panel"
 cull_mode = 2
@@ -763,6 +772,16 @@ surface_material_override/0 = ExtResource("1_ijnmb")
 [node name="CollisionFloor" type="CollisionShape3D" parent="StaticBody3D/Floor" unique_id=1204948238]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
 shape = SubResource("BoxShape3D_lbrst")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="StaticBody3D/Floor" unique_id=41582672]
+transform = Transform3D(0.99999976, 0, 0, 0, 1, 0, 0, 0, 0.99999976, 3.9934654, -1.1, 15.20546)
+mesh = SubResource("BoxMesh_j75yi")
+surface_material_override/0 = ExtResource("1_ijnmb")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="StaticBody3D/Floor" unique_id=307950335]
+transform = Transform3D(0.93358034, 0, -0.35836792, 0, 1, 0, 0.35836792, 0, 0.93358034, 21.317589, -0.50277567, 11.580947)
+mesh = SubResource("BoxMesh_vucpf")
+surface_material_override/0 = ExtResource("1_ijnmb")
 
 [node name="Walls" type="StaticBody3D" parent="StaticBody3D" unique_id=1938661988]
 
@@ -933,6 +952,11 @@ shape = SubResource("BoxShape3D_5jbdu")
 [node name="CollisionRoof8" type="CollisionShape3D" parent="StaticBody3D/Roof/CollisionsRoof" unique_id=1362083545]
 transform = Transform3D(-0.13492231, 0.69411504, -0.7071067, -0.98162687, -0.19080897, 0, -0.13492231, 0.69411504, 0.7071067, 10.083683, 9.385013, 10.769505)
 shape = SubResource("BoxShape3D_5jbdu")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="StaticBody3D/Roof" unique_id=1393817843]
+transform = Transform3D(-0.13492236, 0.6941152, -0.70710677, -0.98162717, -0.19080903, 0, -0.13492236, 0.6941152, 0.70710677, 14.250179, 8.506401, 14.441645)
+mesh = SubResource("BoxMesh_hnfiw")
+surface_material_override/0 = ExtResource("5_xg0bo")
 
 [node name="Panels" type="Node3D" parent="StaticBody3D" unique_id=1486752996]
 

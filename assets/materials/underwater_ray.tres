@@ -1,0 +1,17 @@
+[gd_resource type="ShaderMaterial" format=3 uid="uid://brhkan0fwb4sr"]
+
+[ext_resource type="Shader" uid="uid://s5jhpvg3uqnt" path="res://assets/shaders/underwater_ray.gdshader" id="1_7w84q"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_7w84q")
+shader_parameter/ray_color = Color(0.52, 0.86, 0.95, 1)
+shader_parameter/intensity = 1.55
+shader_parameter/alpha_strength = 0.28
+shader_parameter/edge_softness = 1.8
+shader_parameter/stripe_density = 6.5
+shader_parameter/scroll_speed = 0.12
+shader_parameter/cone_tip_width = 0.2
+shader_parameter/cone_power = 1.15
+shader_parameter/camera_fade_start = 2.6
+shader_parameter/camera_fade_end = 9.0
