@@ -1,7 +1,6 @@
 [gd_scene format=3 uid="uid://tsltkwaxfsas"]
 
 [ext_resource type="PackedScene" uid="uid://drkdj8tkrup8" path="res://assets/models/underwater/underwater_terrain_-_agisoftnaturechallenge.glb" id="1_8na60"]
-[ext_resource type="PackedScene" path="res://scenes/station/fish_school.tscn" id="2_fish"]
 [ext_resource type="PackedScene" uid="uid://dtbah3xt5hfeu" path="res://assets/models/underwater/mashraba_-_dahab_egypt.glb" id="3_j57mn"]
 
 [node name="surroundings" type="Node3D" unique_id=1002961838]
@@ -20,6 +19,3 @@ transform = Transform3D(1.4477067, -0.087414056, -1.3771355, 0.23650569, 1.98216
 
 [node name="Sketchfab_Scene4" parent="." unique_id=380036292 instance=ExtResource("1_8na60")]
 transform = Transform3D(-1.7216728, 0.61381507, 0.8118331, 0.6234202, 1.897038, -0.11222124, -0.80448115, 0.15645267, -1.8243713, -20.896034, 5.8969154, 20.46903)
-
-[node name="FishSchool" parent="." instance=ExtResource("2_fish")]
-transform = Transform3D(0.99939084, 0, -0.034899496, 0, 1, 0, 0.034899496, 0, 0.99939084, -18.5, 4.4, 11.0)

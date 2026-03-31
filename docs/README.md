@@ -27,6 +27,7 @@ Godot `4.6.1` 3D isometric prototype with:
 23. Camera defaults now support a closer gameplay view with increased zoom-in range.
 24. Display stretch configured for fixed design height with adaptive width (`canvas_items` + `keep_height`) for desktop/tablet fullscreen layouts.
 25. Click movement now prefers navmesh path following via `NavigationAgent3D` when navigation data is available, with automatic fallback to direct movement when navmesh is missing or target is unreachable.
+26. Procedural animated fish-school system with per-volume schooling controls, timed school waves, species randomization (1-2 types per school), and directional flow modes (`Two-Way`, `Four-Way XZ`, `Fixed Direction`).
 
 ## Canonical Branch
 

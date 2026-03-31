@@ -13,6 +13,7 @@ This document describes the current runtime architecture of the prototype and mu
 7. `Room` contains authored static geometry for the office layout (floor, ceiling, walls, windows, doors, desks, chairs, console, storage/tank props).
 8. `Interactables` contains authored clickable and pickup objects (`Area3D` + `RigidBody3D`/`StaticBody3D`), including focus-enabled objects such as `CardReader` and `CodePanel`.
 9. `WorldEnvironment` provides sky/background visuals visible through wall openings.
+10. `FishSchool` instances (for example `FishSchoolSkylight`) run procedural animated fish waves inside authored swim volumes around/over the station.
 
 ## Scene Graph Responsibilities
 
@@ -60,6 +61,13 @@ This document describes the current runtime architecture of the prototype and mu
 8. Camera rig:
 - `CameraPivot -> CameraYaw -> CameraPitch -> SpringArm3D -> Camera3D`.
 - Pivot follows player position.
+9. `FishSchool` (`Node3D`):
+- Scene: `res://scenes/station/fish_school.tscn`.
+- Runtime children:
+  - `FishRoot` hosts spawned animated fish instances.
+  - `SwimVolume/CollisionShape3D` provides optional authored volume source.
+  - `VolumePreview` is editor-only sizing preview.
+- Supports timed school lifecycle (spawn -> cross volume -> despawn -> random delay), species selection limits per school, and directional modes.
 
 ## Script Architecture
 
@@ -178,6 +186,15 @@ This document describes the current runtime architecture of the prototype and mu
 17. `res://scripts/station/interior/door_lock_group.gd`
 - Single/double door group controller.
 - Propagates lock state to leaf doors, fans open requests across all leaves, applies per-leaf open-distance overrides, and synchronizes double-door highlight state.
+18. `res://scripts/station/fish_school.gd`
+- School controller for animated fish waves:
+  - spawns fish scene instances from folder/pool,
+  - simulates schooling motion (flow/cohesion/alignment/separation),
+  - supports per-wave direction modes and random heading variation,
+  - enforces compact pack movement through a configured volume,
+  - handles wave timing and despawn/restart cycle.
+19. `res://scripts/station/fish_school_utils.gd`
+- Utility helpers for fish-school direction selection, heading variation, random ranges, and species subset selection.
 
 ## Script Directory Layout
 
@@ -201,6 +218,9 @@ Scripts are grouped by runtime domain to keep ownership boundaries clear:
 6. `res://scripts/station/interior/`
 - Station interior interactive door controllers.
 - Current files: `door_slide.gd`, `door_lock_group.gd`.
+7. `res://scripts/station/`
+- Station ambient/world simulation systems.
+- Current files: `fish_school.gd`, `fish_school_utils.gd`.
 
 ## Movement Data Flow
 
