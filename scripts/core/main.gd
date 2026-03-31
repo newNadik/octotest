@@ -29,7 +29,7 @@ const CAMERA_NEAR_CLIP := 0.12
 @export var underwater_light_energy_amplitude := 0.24
 @export var sync_main_light_with_god_rays := true
 @export var main_light_sway_enabled := false
-@export var main_light_min_factor := 0.45
+@export var main_light_min_factor := 0.3
 @export var main_light_max_factor := 1.0
 
 @onready var player: CharacterBody3D = $Player
@@ -45,9 +45,9 @@ const CAMERA_NEAR_CLIP := 0.12
 @onready var in_game_main_menu_button: Button = $UI/InGameMenu/MenuCenter/MenuPanel/MenuMargin/MenuButtons/MainMenuButton
 @onready var in_game_settings_button: Button = $UI/InGameMenu/MenuCenter/MenuPanel/MenuMargin/MenuButtons/SettingsButton
 @onready var room_light: OmniLight3D = get_node_or_null("OmniLight3D") as OmniLight3D
-@onready var sun_light: DirectionalLight3D = get_node_or_null("Node3D/DirectionalLight3D") as DirectionalLight3D
-@onready var skylight_hero_light: SpotLight3D = get_node_or_null("Node3D/SkylightHeroLight") as SpotLight3D
-@onready var god_rays_node: Node = get_node_or_null("Node3D/GodRays")
+@onready var sun_light: DirectionalLight3D = get_node_or_null("lights/DirectionalLight3D") as DirectionalLight3D
+@onready var skylight_hero_light: SpotLight3D = get_node_or_null("lights/SkylightHeroLight") as SpotLight3D
+@onready var god_rays_node: Node = get_node_or_null("lights/GodRays")
 
 var _interaction_controller
 var _orbiting := false

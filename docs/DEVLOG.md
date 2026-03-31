@@ -2,6 +2,30 @@
 
 ## 2026-03-31
 
+### Step 43 - Animated fish-school wave system, directional modes, and editor swim-volume preview
+
+- Implemented a new fish-school setup on branch `fish-school-setup` using animated fish scene instances from `res://assets/models/fish/`:
+  - one school wave at a time per volume,
+  - each wave uses 1-2 fish species max,
+  - each wave crosses the volume, despawns, then respawns after random delay.
+- Replaced the earlier close/mid multimesh scaffold with scene-instance fish spawning in:
+  - `res://scripts/station/fish_school.gd`,
+  - `res://scenes/station/fish_school.tscn`.
+- Added directional behavior controls:
+  - `Two-Way`, `Four-Way XZ`, and `Fixed Direction` modes,
+  - optional reverse-direction randomization,
+  - heading variation per spawned school (default `+/- 15` degrees).
+- Added school-packing controls to keep fish as a coherent moving group:
+  - anchor-based cluster pull and max distance clamp around the moving school center.
+- Added editor-only volume preview mesh and runtime hiding:
+  - visible in editor for sizing/tuning,
+  - explicitly hidden in gameplay runtime.
+- Added reusable helper module:
+  - `res://scripts/station/fish_school_utils.gd` for direction/species/random helpers.
+- Updated main scene fish-school instance tuning in `res://scenes/main.tscn`:
+  - configured for `Four-Way XZ`,
+  - set compact school parameters and adjusted volume sizing for test pass.
+
 ### Step 42 - Underwater lighting/art pass: exterior haze, synchronized godray pulse, and shadow softness
 
 - Reworked gameplay lighting in `res://scenes/main.tscn` for underwater readability:
