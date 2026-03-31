@@ -32,6 +32,8 @@ This document describes the current runtime architecture of the prototype and mu
 - `InGameMenu` blocks world input while visible and routes pause actions.
 3. `WorldEnvironment`:
 - Provides procedural sky and ambient environment settings.
+- Owns underwater depth readability profile via exponential + depth fog plus volumetric fog.
+- Current tuning intent: near exterior terrain visible through windows, far exterior fades into dark ocean.
 4. `Room`:
 - `Floor` uses ground collision layer for click-to-move raycast targeting.
 - `Ceiling` and wall pieces use wall collision layer for physical boundaries.
@@ -75,6 +77,12 @@ This document describes the current runtime architecture of the prototype and mu
 - Opens `res://scenes/ui/settings_menu.tscn` as an overlay from pause menu and closes it with back/`Esc`.
 - Routes click-to-move and delegates interact/drop input to `InteractionController`.
 - Owns focus-mode transitions (auto-enter after approach, movement lock, click-based exit rules).
+- Drives underwater directional-light animation/pulse behavior.
+- Reads shared pulse from `Node3D/GodRays` and applies synchronized `DirectionalLight3D` energy pulsing using:
+  - `main_light_min_factor`
+  - `main_light_max_factor`
+  - `main_light_sway_enabled`
+  - `sync_main_light_with_god_rays`
 3. `res://scripts/ui/settings_menu.gd`
 - Shared settings UI controller used from both startup and pause flows.
 - Supports overlay mode (close signal + fast close path) and standalone scene mode.
@@ -118,6 +126,10 @@ This document describes the current runtime architecture of the prototype and mu
 - Handles wall-switch callback, HUD interaction hints, and focus-mode interaction routing.
 - Uses world-geometry-focused LOS checks for blocked state while still allowing focus interaction against target-host colliders.
 - Preserves held item global scale while attached/focused.
+8. `res://scripts/lighting/god_rays.gd`
+- Controls center volumetric shaft presentation (`RoofShaft`, `RoofShaftFillA`, `RoofShaftFillB`).
+- Animates shaft sway and pulse over time.
+- Exposes shared pulse values (`master_pulse_normalized`, `master_pulse_01`) so other lighting systems can lock to the same phase.
 - Provides a unified focus-held item application pipeline with extension points:
   - `_can_focus_target_accept_held_item(...)`,
   - `_apply_held_item_to_focus_target(...)`,

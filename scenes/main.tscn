@@ -4,6 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://drkdj8tkrup8" path="res://assets/models/underwater/underwater_terrain_-_agisoftnaturechallenge.glb" id="2_muem4"]
 [ext_resource type="PackedScene" uid="uid://63bbsnp8k0ew" path="res://scenes/player.tscn" id="2_vrsh6"]
 [ext_resource type="Script" uid="uid://bt8vvmy3m63u7" path="res://scripts/interaction/interactable.gd" id="3_3ygbf"]
+[ext_resource type="Texture2D" uid="uid://cw7wevre1wx2x" path="res://assets/models/underwater/underwater_terrain_-_agisoftnaturechallenge_0.jpg" id="3_dp3eg"]
 [ext_resource type="Script" uid="uid://df0uvmmccqeho" path="res://scripts/interaction/card_reader.gd" id="4_b6dyj"]
 [ext_resource type="Script" uid="uid://b0r404u7bpvr" path="res://scripts/interaction/focus_target.gd" id="5_lmyi0"]
 [ext_resource type="Script" uid="uid://b16fnujp18m7" path="res://scripts/interaction/code_panel.gd" id="6_5e7k2"]
@@ -19,10 +20,10 @@
 [ext_resource type="Script" uid="uid://cdsji1uitym1j" path="res://scripts/lighting/god_rays.gd" id="16_godrays"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_7yl8v"]
-sky_top_color = Color(0.04, 0.12, 0.18, 1)
-sky_horizon_color = Color(0.13, 0.31, 0.39, 1)
-ground_bottom_color = Color(0.01, 0.05, 0.07, 1)
-ground_horizon_color = Color(0.07, 0.16, 0.2, 1)
+sky_top_color = Color(0.07, 0.22, 0.3, 1)
+sky_horizon_color = Color(0.2, 0.47, 0.56, 1)
+ground_bottom_color = Color(0.02, 0.08, 0.11, 1)
+ground_horizon_color = Color(0.11, 0.24, 0.29, 1)
 
 [sub_resource type="Sky" id="Sky_tavjh"]
 sky_material = SubResource("ProceduralSkyMaterial_7yl8v")
@@ -30,15 +31,23 @@ sky_material = SubResource("ProceduralSkyMaterial_7yl8v")
 [sub_resource type="Environment" id="Environment_1w5qu"]
 background_mode = 2
 sky = SubResource("Sky_tavjh")
-ambient_light_sky_contribution = 0.72
+ambient_light_sky_contribution = 0.9
 fog_enabled = true
-fog_light_color = Color(0.12, 0.36, 0.44, 1)
-fog_density = 0.014
-fog_sky_affect = 0.75
+fog_light_color = Color(0.05, 0.14, 0.18, 1)
+fog_density = 0.03
+fog_sky_affect = 0.25
+fog_depth_begin = 2.0
+fog_depth_end = 16.0
 volumetric_fog_enabled = true
-volumetric_fog_density = 0.09
-volumetric_fog_albedo = Color(0.13, 0.47, 0.58, 1)
-volumetric_fog_ambient_inject = 0.05
+volumetric_fog_density = 0.13
+volumetric_fog_albedo = Color(0.06, 0.16, 0.2, 1)
+volumetric_fog_ambient_inject = 0.12
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_0ld40"]
+size = Vector2(40, 40)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gqmmt"]
+albedo_texture = ExtResource("3_dp3eg")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ramp"]
 albedo_color = Color(0.5, 0.58, 0.52, 1)
@@ -147,8 +156,26 @@ script = ExtResource("1_4f72t")
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1133585732]
 environment = SubResource("Environment_1w5qu")
 
-[node name="Sketchfab_Scene3" parent="." unique_id=1338297115 instance=ExtResource("2_muem4")]
-transform = Transform3D(0.84947854, 0, 0.5276231, 0, 1, 0, -0.5276231, 0, 0.84947854, -36.674065, 0.038806915, 15.491203)
+[node name="surroundings" type="Node3D" parent="." unique_id=2018482125]
+
+[node name="Sketchfab_Scene3" parent="surroundings" unique_id=1338297115 instance=ExtResource("2_muem4")]
+transform = Transform3D(0.9855089, 0.16792162, 0.023964858, -0.16787198, 0.9858003, -0.0040821834, -0.024310052, 0, 0.9997044, -36.42167, 0.038806915, 10.1165695)
+
+[node name="Sketchfab_Scene5" parent="surroundings" unique_id=898482209 instance=ExtResource("2_muem4")]
+transform = Transform3D(-0.6379937, 0.11568261, -0.7613023, -0.118133925, 0.96224374, 0.2452161, 0.76092565, 0.24638204, -0.6002396, -36.842487, -0.14329624, -1.1673899)
+
+[node name="Sketchfab_Scene4" parent="surroundings" unique_id=1812172442 instance=ExtResource("2_muem4")]
+transform = Transform3D(-0.67482144, 0.13900024, -0.7247725, 0.23246944, 0.9721407, -0.030006006, 0.70041007, -0.18873611, -0.6883347, -29.72319, 0.038806915, 19.586237)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="surroundings" unique_id=583527681]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -50.597782, -1.4213452, 15.964766)
+mesh = SubResource("PlaneMesh_0ld40")
+surface_material_override/0 = SubResource("StandardMaterial3D_gqmmt")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="surroundings" unique_id=563248215]
+transform = Transform3D(0.70710677, 0, 0.70710677, 0, 1, 0, -0.70710677, 0, 0.70710677, -38.27349, -1.7500162, 30.725462)
+mesh = SubResource("PlaneMesh_0ld40")
+surface_material_override/0 = SubResource("StandardMaterial3D_gqmmt")
 
 [node name="station" type="Node3D" parent="." unique_id=680235138]
 
@@ -615,7 +642,7 @@ hold_offset = Vector3(0, -0.02, 0.06)
 shape = SubResource("BoxShape3D_card_interaction")
 
 [node name="Player" parent="." unique_id=445333378 instance=ExtResource("2_vrsh6")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.152, 18)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 18)
 
 [node name="CameraPivot" type="Node3D" parent="." unique_id=161127609]
 
@@ -683,31 +710,63 @@ visible = false
 [node name="SkylightHeroLight" type="SpotLight3D" parent="Node3D" unique_id=622259033]
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, -0.805, 36, 0.007)
 light_color = Color(0.62, 0.86, 0.93, 1)
-light_energy = 0.6
+light_energy = 0.85
+light_indirect_energy = 0.5
+light_volumetric_fog_energy = 5.0
+light_specular = 2.0
 shadow_enabled = true
+shadow_blur = 1.9
 spot_range = 48.0
-spot_angle = 18.0
+spot_angle = 20.0
 
 [node name="GodRays" type="Node3D" parent="Node3D" unique_id=901234000]
 script = ExtResource("16_godrays")
+sway_speed = 0.8
+sway_pitch_degrees = 4.0
+sway_yaw_degrees = 4.0
+energy_pulse_strength = 0.2
+volumetric_pulse_strength = 1.0
 
 [node name="RoofShaft" type="SpotLight3D" parent="Node3D/GodRays" unique_id=901234001]
 transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, -0.805, 14, 0.007)
-light_color = Color(0.72, 0.92, 1, 1)
-light_energy = 7.0
-light_volumetric_fog_energy = 32.0
-light_size = 1.0
+light_color = Color(0.78, 0.94, 1, 1)
+light_energy = 5.4
+light_volumetric_fog_energy = 72.0
+light_size = 1.4
 shadow_enabled = true
-spot_range = 20.0
-spot_angle = 14.0
+shadow_blur = 2.1
+spot_range = 24.0
+spot_angle = 12.0
+
+[node name="RoofShaftFillA" type="SpotLight3D" parent="Node3D/GodRays" unique_id=901234002]
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, -2.7, 14, -0.65)
+light_color = Color(0.67, 0.9, 0.98, 1)
+light_energy = 2.6
+light_volumetric_fog_energy = 36.0
+light_size = 0.9
+shadow_enabled = true
+shadow_blur = 2.2
+spot_range = 18.0
+spot_angle = 10.0
+
+[node name="RoofShaftFillB" type="SpotLight3D" parent="Node3D/GodRays" unique_id=901234003]
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 1.6, 14, 0.9)
+light_color = Color(0.63, 0.87, 0.96, 1)
+light_energy = 2.1
+light_volumetric_fog_energy = 30.0
+light_size = 0.8
+shadow_enabled = true
+shadow_blur = 2.2
+spot_range = 17.0
+spot_angle = 9.0
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="Node3D" unique_id=210934476]
 transform = Transform3D(0.9902681, -0.13908833, 0.0048570717, 0, 0.0348995, 0.99939084, -0.13917312, -0.98966485, 0.034559857, -0.805, 76.67352, 0.007)
 light_color = Color(0.66, 0.84, 0.89, 1)
-light_energy = 2.0
+light_energy = 3.0
 shadow_enabled = true
 shadow_bias = 0.02
 shadow_normal_bias = 0.2
-shadow_blur = 0.4
+shadow_blur = 1.9
 directional_shadow_fade_start = 0.85
-directional_shadow_max_distance = 80.0
+directional_shadow_max_distance = 95.0

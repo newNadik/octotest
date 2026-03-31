@@ -615,6 +615,9 @@ shadow_mesh = SubResource("ArrayMesh_boof7")
 [sub_resource type="BoxMesh" id="BoxMesh_hnfiw"]
 size = Vector3(1, 20, 25)
 
+[sub_resource type="BoxMesh" id="BoxMesh_srhdw"]
+size = Vector3(1, 15, 25)
+
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_a6tfi"]
 resource_name = "wall_panel"
 cull_mode = 2
@@ -956,6 +959,11 @@ shape = SubResource("BoxShape3D_5jbdu")
 [node name="MeshInstance3D" type="MeshInstance3D" parent="StaticBody3D/Roof" unique_id=1393817843]
 transform = Transform3D(-0.13492236, 0.6941152, -0.70710677, -0.98162717, -0.19080903, 0, -0.13492236, 0.6941152, 0.70710677, 14.250179, 8.506401, 14.441645)
 mesh = SubResource("BoxMesh_hnfiw")
+surface_material_override/0 = ExtResource("5_xg0bo")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="StaticBody3D/Roof" unique_id=1118728090]
+transform = Transform3D(-0.1354113, 0.6966304, 0.7045352, -0.98162717, -0.19080901, -1.4462055e-08, 0.13443163, -0.6915907, 0.709669, 10.62557, 10.136442, -11.248523)
+mesh = SubResource("BoxMesh_srhdw")
 surface_material_override/0 = ExtResource("5_xg0bo")
 
 [node name="Panels" type="Node3D" parent="StaticBody3D" unique_id=1486752996]

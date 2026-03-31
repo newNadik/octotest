@@ -1,5 +1,32 @@
 # Dev Log
 
+## 2026-03-31
+
+### Step 42 - Underwater lighting/art pass: exterior haze, synchronized godray pulse, and shadow softness
+
+- Reworked gameplay lighting in `res://scenes/main.tscn` for underwater readability:
+  - tuned `WorldEnvironment` fog/volumetric fog so near outside terrain remains visible while distance falls into dark ocean haze,
+  - retuned procedural sky colors and ambient contribution for underwater mood,
+  - softened direct and shaft-cast shadows to feel filtered through water.
+- Upgraded center godray composition:
+  - kept a primary shaft (`RoofShaft`) and layered fills (`RoofShaftFillA/B`) for richer beam structure,
+  - raised volumetric contribution while reducing hard floor hotspot dominance.
+- Added dynamic godray behavior in `res://scripts/lighting/god_rays.gd`:
+  - animated sway and energy pulses for shafts,
+  - exposed tuning exports (`sway_speed`, `sway_pitch_degrees`, `sway_yaw_degrees`, `energy_pulse_strength`, `volumetric_pulse_strength`),
+  - added shared pulse outputs (`master_pulse_normalized`, `master_pulse_01`) for other systems.
+- Synced main directional light pulse with godray pulse in `res://scripts/core/main.gd`:
+  - fixed light node paths to runtime scene locations under `Node3D`,
+  - directional light now uses the exact godray pulse phase/value,
+  - added pulse range controls via `main_light_min_factor` / `main_light_max_factor`,
+  - disabled directional sway by default while keeping pulsing active.
+- Improved window readability and outside visibility:
+  - updated `res://assets/materials/glass.tres` (less tint/roughness, refraction disabled),
+  - final fog tuning starts close to camera with strong falloff to dark distance.
+- Improved player floor contact perception:
+  - lowered octo start height in `res://scripts/core/main.gd`,
+  - lowered octo visual offset in `res://scenes/player.tscn`.
+
 ## 2026-03-29
 
 ### Step 41 - Station sliding door system (single/double), safety auto-close, and visual polish

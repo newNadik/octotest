@@ -6,7 +6,7 @@ const CAMERA_OBSTACLE_COLLISION_MASK := (1 << 0) | (1 << 1)
 const MAIN_MENU_SCENE_PATH := "res://scenes/main_menu.tscn"
 const SETTINGS_MENU_SCENE := preload("res://scenes/ui/settings_menu.tscn")
 const InteractionControllerScript = preload("res://scripts/interaction/interaction_controller.gd")
-const OCTO_START_Y := 0.26
+const OCTO_START_Y := 0.08
 const CAMERA_FOLLOW_HEIGHT := 0.65
 const CAMERA_MIN_WORLD_Y := 1.25
 const CAMERA_PROBE_RADIUS := 0.32
@@ -23,10 +23,14 @@ const CAMERA_NEAR_CLIP := 0.12
 @export var camera_follow_lerp_speed := 10.0
 @export var camera_follow_deadzone := 0.03
 @export var underwater_light_motion_enabled := true
-@export var underwater_light_motion_speed := 0.22
-@export var underwater_light_pitch_amplitude := 2.0
-@export var underwater_light_yaw_amplitude := 3.5
-@export var underwater_light_energy_amplitude := 0.06
+@export var underwater_light_motion_speed := 0.58
+@export var underwater_light_pitch_amplitude := 5.8
+@export var underwater_light_yaw_amplitude := 9.5
+@export var underwater_light_energy_amplitude := 0.24
+@export var sync_main_light_with_god_rays := true
+@export var main_light_sway_enabled := false
+@export var main_light_min_factor := 0.45
+@export var main_light_max_factor := 1.0
 
 @onready var player: CharacterBody3D = $Player
 @onready var camera_pivot: Node3D = $CameraPivot
@@ -41,8 +45,9 @@ const CAMERA_NEAR_CLIP := 0.12
 @onready var in_game_main_menu_button: Button = $UI/InGameMenu/MenuCenter/MenuPanel/MenuMargin/MenuButtons/MainMenuButton
 @onready var in_game_settings_button: Button = $UI/InGameMenu/MenuCenter/MenuPanel/MenuMargin/MenuButtons/SettingsButton
 @onready var room_light: OmniLight3D = get_node_or_null("OmniLight3D") as OmniLight3D
-@onready var sun_light: DirectionalLight3D = get_node_or_null("DirectionalLight3D") as DirectionalLight3D
-@onready var skylight_hero_light: SpotLight3D = get_node_or_null("station/SkylightHeroLight") as SpotLight3D
+@onready var sun_light: DirectionalLight3D = get_node_or_null("Node3D/DirectionalLight3D") as DirectionalLight3D
+@onready var skylight_hero_light: SpotLight3D = get_node_or_null("Node3D/SkylightHeroLight") as SpotLight3D
+@onready var god_rays_node: Node = get_node_or_null("Node3D/GodRays")
 
 var _interaction_controller
 var _orbiting := false
@@ -447,14 +452,29 @@ func _animate_underwater_light(delta: float) -> void:
 		if skylight_hero_light != null:
 			_hero_base_energy = skylight_hero_light.light_energy
 
-	_underwater_light_time += delta * maxf(underwater_light_motion_speed, 0.0)
+	var motion_speed := maxf(underwater_light_motion_speed, 0.0)
+	if sync_main_light_with_god_rays and god_rays_node != null:
+		var rays_speed = god_rays_node.get("sway_speed")
+		if rays_speed is float or rays_speed is int:
+			motion_speed = maxf(float(rays_speed), 0.0)
+
+	_underwater_light_time += delta * motion_speed
 	var sway_a := sin(_underwater_light_time)
 	var sway_b := sin(_underwater_light_time * 0.67 + 1.2)
-	sun_light.rotation_degrees = Vector3(
-		_sun_base_rotation.x + sway_a * underwater_light_pitch_amplitude,
-		_sun_base_rotation.y + sway_b * underwater_light_yaw_amplitude,
-		_sun_base_rotation.z
-	)
-	sun_light.light_energy = maxf(0.0, _sun_base_energy + sway_b * underwater_light_energy_amplitude)
+	if main_light_sway_enabled:
+		sun_light.rotation_degrees = Vector3(
+			_sun_base_rotation.x + sway_a * underwater_light_pitch_amplitude,
+			_sun_base_rotation.y + sway_b * underwater_light_yaw_amplitude,
+			_sun_base_rotation.z
+		)
+	else:
+		sun_light.rotation_degrees = _sun_base_rotation
+	var pulse_01 := 0.5 + 0.5 * sin(_underwater_light_time + 0.4)
+	if sync_main_light_with_god_rays and god_rays_node != null:
+		var ray_pulse = god_rays_node.get("master_pulse_01")
+		if ray_pulse is float or ray_pulse is int:
+			pulse_01 = clampf(float(ray_pulse), 0.0, 1.0)
+	var light_factor := lerpf(main_light_min_factor, main_light_max_factor, pulse_01)
+	sun_light.light_energy = maxf(0.0, _sun_base_energy * light_factor)
 	if skylight_hero_light != null:
 		skylight_hero_light.light_energy = maxf(0.0, _hero_base_energy + sway_a * underwater_light_energy_amplitude * 0.7)
