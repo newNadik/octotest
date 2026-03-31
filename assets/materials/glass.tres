@@ -9,5 +9,4 @@ roughness = 0.04
 clearcoat_enabled = true
 clearcoat = 0.85
 clearcoat_roughness = 0.02
-refraction_enabled = false
 refraction_scale = 0.0

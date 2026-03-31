@@ -838,6 +838,7 @@ transform = Transform3D(0.9238795, 0, 0.38268346, 0, 1, 0, -0.38268346, 0, 0.923
 shape = SubResource("ConcavePolygonShape3D_5jbdu")
 
 [node name="Collisions" type="StaticBody3D" parent="StaticBody3D/Walls" unique_id=1758667007]
+collision_layer = 17
 
 [node name="CollisionWall3" type="CollisionShape3D" parent="StaticBody3D/Walls/Collisions" unique_id=1036100621]
 transform = Transform3D(0.70710677, 0, 0.70710677, 0, 1, 0, -0.70710677, 0, 0.70710677, -22.971312, 3, 20.515867)

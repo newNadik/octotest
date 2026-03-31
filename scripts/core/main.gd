@@ -2,15 +2,15 @@ extends Node3D
 
 
 const CLICK_TARGET_COLLISION_MASK := (1 << 0) | (1 << 1)
-const CAMERA_OBSTACLE_COLLISION_MASK := (1 << 0) | (1 << 1)
+const CAMERA_OBSTACLE_COLLISION_MASK := (1 << 0) | (1 << 1) | (1 << 4)
 const MAIN_MENU_SCENE_PATH := "res://scenes/main_menu.tscn"
 const SETTINGS_MENU_SCENE := preload("res://scenes/ui/settings_menu.tscn")
 const InteractionControllerScript = preload("res://scripts/interaction/interaction_controller.gd")
 const OCTO_START_Y := 0.08
 const CAMERA_FOLLOW_HEIGHT := 0.65
 const CAMERA_MIN_WORLD_Y := 1.25
-const CAMERA_PROBE_RADIUS := 0.32
-const CAMERA_MIN_MARGIN := 0.4
+const CAMERA_PROBE_RADIUS := 0.72
+const CAMERA_MIN_MARGIN := 0.7
 const CAMERA_NEAR_CLIP := 0.12
 
 @export var orbit_sensitivity := 0.2
@@ -323,7 +323,8 @@ func _create_interaction_controller() -> void:
 
 func _configure_camera_collision() -> void:
 	# Imported station meshes can end up on layer 1 while manual blockers use layer 2.
-	# Keep camera collision on both so SpringArm prevents wall clipping consistently.
+	# Layer 5 is reserved for authored camera blockers.
+	# Keep camera collision on all three so SpringArm prevents wall clipping consistently.
 	spring_arm.collision_mask = CAMERA_OBSTACLE_COLLISION_MASK
 	if spring_arm.margin < CAMERA_MIN_MARGIN:
 		spring_arm.margin = CAMERA_MIN_MARGIN
