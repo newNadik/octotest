@@ -1,0 +1,52 @@
+[gd_scene load_steps=6 format=3]
+
+[ext_resource type="Script" path="res://scripts/station/fish_school.gd" id="1_fishscript"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_close"]
+albedo_color = Color(0.62, 0.85, 0.93, 1)
+roughness = 0.85
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_mid"]
+albedo_color = Color(0.35, 0.63, 0.7, 1)
+roughness = 0.95
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_close"]
+material = SubResource("StandardMaterial3D_close")
+radius = 0.08
+height = 0.34
+radial_segments = 8
+rings = 2
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_mid"]
+material = SubResource("StandardMaterial3D_mid")
+radius = 0.055
+height = 0.24
+radial_segments = 6
+rings = 2
+
+[node name="FishSchool" type="Node3D"]
+script = ExtResource("1_fishscript")
+close_count = 22
+close_bounds = Vector3(10, 3, 8)
+close_center = Vector3(0, 0, 0)
+close_speed_min = 0.8
+close_speed_max = 1.45
+close_turn_strength = 1.0
+close_bob_amplitude = 0.2
+close_bob_speed = 1.6
+close_mesh = SubResource("CapsuleMesh_close")
+mid_count = 84
+mid_bounds = Vector3(30, 8, 20)
+mid_center = Vector3(6, -1.6, 4)
+mid_speed_min = 1.0
+mid_speed_max = 2.2
+mid_turn_strength = 0.6
+mid_bob_amplitude = 0.24
+mid_bob_speed = 1.1
+mid_mesh = SubResource("CapsuleMesh_mid")
+
+[node name="CloseFish" type="MultiMeshInstance3D" parent="."]
+cast_shadow = 0
+
+[node name="MidFish" type="MultiMeshInstance3D" parent="."]
+cast_shadow = 0
