@@ -1,10 +1,9 @@
 [gd_scene format=3 uid="uid://ddcirs8kpfb2k"]
 
 [ext_resource type="Script" uid="uid://km7y0f0xluw6" path="res://scripts/core/main.gd" id="1_4f72t"]
-[ext_resource type="PackedScene" uid="uid://drkdj8tkrup8" path="res://assets/models/underwater/underwater_terrain_-_agisoftnaturechallenge.glb" id="2_muem4"]
+[ext_resource type="PackedScene" uid="uid://tsltkwaxfsas" path="res://scenes/station/surroundings.tscn" id="2_muem4"]
 [ext_resource type="PackedScene" uid="uid://63bbsnp8k0ew" path="res://scenes/player.tscn" id="2_vrsh6"]
 [ext_resource type="Script" uid="uid://bt8vvmy3m63u7" path="res://scripts/interaction/interactable.gd" id="3_3ygbf"]
-[ext_resource type="Texture2D" uid="uid://cw7wevre1wx2x" path="res://assets/models/underwater/underwater_terrain_-_agisoftnaturechallenge_0.jpg" id="3_dp3eg"]
 [ext_resource type="Script" uid="uid://df0uvmmccqeho" path="res://scripts/interaction/card_reader.gd" id="4_b6dyj"]
 [ext_resource type="Script" uid="uid://b0r404u7bpvr" path="res://scripts/interaction/focus_target.gd" id="5_lmyi0"]
 [ext_resource type="Script" uid="uid://b16fnujp18m7" path="res://scripts/interaction/code_panel.gd" id="6_5e7k2"]
@@ -42,12 +41,6 @@ volumetric_fog_enabled = true
 volumetric_fog_density = 0.13
 volumetric_fog_albedo = Color(0.06, 0.16, 0.2, 1)
 volumetric_fog_ambient_inject = 0.12
-
-[sub_resource type="PlaneMesh" id="PlaneMesh_0ld40"]
-size = Vector2(40, 40)
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gqmmt"]
-albedo_texture = ExtResource("3_dp3eg")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ramp"]
 albedo_color = Color(0.5, 0.58, 0.52, 1)
@@ -156,26 +149,11 @@ script = ExtResource("1_4f72t")
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1133585732]
 environment = SubResource("Environment_1w5qu")
 
-[node name="surroundings" type="Node3D" parent="." unique_id=2018482125]
+[node name="surroundings" parent="." unique_id=1002961838 instance=ExtResource("2_muem4")]
+transform = Transform3D(0.9997807, 0, 0.02094242, 0, 1, 0, -0.02094242, 0, 0.9997807, -25.812, -3.5834541, 2.8101158)
 
-[node name="Sketchfab_Scene3" parent="surroundings" unique_id=1338297115 instance=ExtResource("2_muem4")]
-transform = Transform3D(0.9855089, 0.16792162, 0.023964858, -0.16787198, 0.9858003, -0.0040821834, -0.024310052, 0, 0.9997044, -36.42167, 0.038806915, 10.1165695)
-
-[node name="Sketchfab_Scene5" parent="surroundings" unique_id=898482209 instance=ExtResource("2_muem4")]
-transform = Transform3D(-0.6379937, 0.11568261, -0.7613023, -0.118133925, 0.96224374, 0.2452161, 0.76092565, 0.24638204, -0.6002396, -36.842487, -0.14329624, -1.1673899)
-
-[node name="Sketchfab_Scene4" parent="surroundings" unique_id=1812172442 instance=ExtResource("2_muem4")]
-transform = Transform3D(-0.67482144, 0.13900024, -0.7247725, 0.23246944, 0.9721407, -0.030006006, 0.70041007, -0.18873611, -0.6883347, -29.72319, 0.038806915, 19.586237)
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="surroundings" unique_id=583527681]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -50.597782, -1.4213452, 15.964766)
-mesh = SubResource("PlaneMesh_0ld40")
-surface_material_override/0 = SubResource("StandardMaterial3D_gqmmt")
-
-[node name="MeshInstance3D2" type="MeshInstance3D" parent="surroundings" unique_id=563248215]
-transform = Transform3D(0.70710677, 0, 0.70710677, 0, 1, 0, -0.70710677, 0, 0.70710677, -38.27349, -1.7500162, 30.725462)
-mesh = SubResource("PlaneMesh_0ld40")
-surface_material_override/0 = SubResource("StandardMaterial3D_gqmmt")
+[node name="surroundings2" parent="." unique_id=1427495372 instance=ExtResource("2_muem4")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 24.569073, -3.5834541, -4.339819)
 
 [node name="station" type="Node3D" parent="." unique_id=680235138]
 

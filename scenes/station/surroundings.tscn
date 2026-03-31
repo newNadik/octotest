@@ -1,0 +1,21 @@
+[gd_scene format=3 uid="uid://tsltkwaxfsas"]
+
+[ext_resource type="PackedScene" uid="uid://drkdj8tkrup8" path="res://assets/models/underwater/underwater_terrain_-_agisoftnaturechallenge.glb" id="1_8na60"]
+[ext_resource type="PackedScene" uid="uid://dtbah3xt5hfeu" path="res://assets/models/underwater/mashraba_-_dahab_egypt.glb" id="3_j57mn"]
+
+[node name="surroundings" type="Node3D" unique_id=1002961838]
+
+[node name="Sketchfab_Scene2" parent="." unique_id=668583354 instance=ExtResource("3_j57mn")]
+transform = Transform3D(-9.744917, 2.2442384, -8.5192767e-07, 2.2442384, 9.744917, 1.9619753e-07, 8.742277e-07, 9.316607e-15, -9.999999, -23.523314, 3.4900513, -16.27198)
+
+[node name="Sketchfab_Scene6" parent="." unique_id=1510818016 instance=ExtResource("3_j57mn")]
+transform = Transform3D(7.0558314, -0.38933542, 7.0755687, -1.0537488, 9.816238, 1.5909505, -7.0074863, -1.8681352, 6.885143, -0.09951782, 4.0232296, 37.699585)
+
+[node name="Sketchfab_Scene" parent="." unique_id=1338297115 instance=ExtResource("1_8na60")]
+transform = Transform3D(1.745922, 0.70715207, 0.6720822, -0.6642226, 1.8707783, -0.24289376, -0.7145398, -0.011169425, 1.8679689, -12.309661, 5.671075, -2.9014807)
+
+[node name="Sketchfab_Scene3" parent="." unique_id=2008871641 instance=ExtResource("1_8na60")]
+transform = Transform3D(1.4477067, -0.087414056, -1.3771355, 0.23650569, 1.9821663, 0.12280673, 1.3594887, -0.25174436, 1.4451348, -9.411564, 4.054476, 24.37019)
+
+[node name="Sketchfab_Scene4" parent="." unique_id=380036292 instance=ExtResource("1_8na60")]
+transform = Transform3D(-1.7216728, 0.61381507, 0.8118331, 0.6234202, 1.897038, -0.11222124, -0.80448115, 0.15645267, -1.8243713, -20.896034, 5.8969154, 20.46903)
