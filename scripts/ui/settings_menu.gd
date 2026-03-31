@@ -164,7 +164,7 @@ func _apply_localized_text() -> void:
 	music_label.text = tr("Music")
 	sounds_label.text = tr("Sound Effects")
 	subtitles_label.text = tr("Subtitles")
-	god_rays_label.text = tr("God Rays")
+	god_rays_label.text = tr("Light Effects")
 	language_label.text = tr("Language")
 	_update_subtitles_value(_get_subtitles_enabled())
 	_update_god_rays_value(_get_god_rays_enabled())
@@ -191,7 +191,7 @@ func _get_god_rays_enabled() -> bool:
 
 
 func _update_language_value(locale: String) -> void:
-	language_value_label.text = tr("Ukrainian") if locale.begins_with("uk") else tr("English (UK)")
+	language_value_label.text = tr("Ukrainian") if locale.begins_with("uk") else tr("English")
 
 
 func _get_active_locale() -> String:

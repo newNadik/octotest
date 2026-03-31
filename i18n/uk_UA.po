@@ -194,6 +194,9 @@ msgstr "Субтитри"
 msgid "Language"
 msgstr "Мова"
 
+msgid "Light Effects"
+msgstr "Світлові ефекти"
+
 msgid "On"
 msgstr "Увімкнено"
 
@@ -202,6 +205,9 @@ msgstr "Вимкнено"
 
 msgid "English"
 msgstr "Англійська"
+
+msgid "English (UK)"
+msgstr "Англійська (Велика Британія)"
 
 msgid "Ukrainian"
 msgstr "Українська"
