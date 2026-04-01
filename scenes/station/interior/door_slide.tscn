@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://bn0uskuvjfkg2" path="res://scripts/station/interior/door_slide.gd" id="1_door_slide_script"]
 [ext_resource type="Script" uid="uid://bt8vvmy3m63u7" path="res://scripts/interaction/interactable.gd" id="2_interactable_script"]
-[ext_resource type="Material" path="res://assets/materials/glass.tres" id="3_glass_material"]
+[ext_resource type="Material" uid="uid://bm05hnbasm1cg" path="res://assets/materials/glass.tres" id="3_glass_material"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_bn8yx"]
 resource_name = "Walls"

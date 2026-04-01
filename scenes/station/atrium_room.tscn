@@ -991,7 +991,63 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.78, 0, -10.1)
 transform = Transform3D(0.70710677, 0, 0.70710677, 0, 1, 0, -0.70710677, 0, 0.70710677, -7.95, 0, -7.15)
 
 [node name="DoorSingle2" parent="." unique_id=460529865 instance=ExtResource("3_wctxe")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25.7, 0, -4.38)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25.751604, 0, -4.38)
 
 [node name="DoorDouble2" parent="." unique_id=1171473448 instance=ExtResource("2_ecqnk")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14, 0, 18.35)
+
+[node name="OmniLight3D" type="OmniLight3D" parent="." unique_id=97034713]
+transform = Transform3D(0.99859184, 0.05305054, 0, -0.05305054, 0.99859184, 0, 0, 0, 1, 4.787113, 7.3716865, 13.305269)
+light_energy = 3.0
+light_indirect_energy = 5.0
+shadow_enabled = true
+shadow_blur = 2.0
+omni_range = 10.0
+
+[node name="OmniLight3D2" type="OmniLight3D" parent="." unique_id=457497258]
+transform = Transform3D(0.99859184, 0.05305054, 0, -0.05305054, 0.99859184, 0, 0, 0, 1, -16.55413, 5.3057494, 20.430243)
+light_energy = 3.0
+light_indirect_energy = 5.0
+shadow_enabled = true
+shadow_blur = 2.0
+omni_range = 10.0
+
+[node name="OmniLight3D3" type="OmniLight3D" parent="." unique_id=1741211957]
+transform = Transform3D(0.99859184, 0.05305054, 0, -0.05305054, 0.99859184, 0, 0, 0, 1, -9.470189, 4.42035, 27.540323)
+light_energy = 3.0
+light_indirect_energy = 5.0
+shadow_enabled = true
+shadow_blur = 2.0
+omni_range = 10.0
+
+[node name="OmniLight3D4" type="OmniLight3D" parent="." unique_id=1497351891]
+transform = Transform3D(0.99859184, 0.05305054, 0, -0.05305054, 0.99859184, 0, 0, 0, 1, -0.012839317, 7.9655137, -13.44833)
+light_energy = 3.0
+light_indirect_energy = 5.0
+shadow_enabled = true
+shadow_blur = 2.0
+omni_range = 10.0
+
+[node name="OmniLight3D5" type="OmniLight3D" parent="." unique_id=891396756]
+transform = Transform3D(0.99859184, 0.05305054, 0, -0.05305054, 0.99859184, 0, 0, 0, 1, -11.889512, 8.404058, -7.8618965)
+light_energy = 3.0
+light_indirect_energy = 5.0
+shadow_enabled = true
+shadow_blur = 2.0
+omni_range = 10.0
+
+[node name="OmniLight3D6" type="OmniLight3D" parent="." unique_id=1731989625]
+transform = Transform3D(0.99859184, 0.05305054, 0, -0.05305054, 0.99859184, 0, 0, 0, 1, -16.728157, 7.57978, -7.8618965)
+light_energy = 3.0
+light_indirect_energy = 5.0
+shadow_enabled = true
+shadow_blur = 2.0
+omni_range = 10.0
+
+[node name="OmniLight3D7" type="OmniLight3D" parent="." unique_id=657653905]
+transform = Transform3D(0.99859184, 0.05305054, 0, -0.05305054, 0.99859184, 0, 0, 0, 1, -26.009556, 5.9123816, -7.8618965)
+light_energy = 3.0
+light_indirect_energy = 5.0
+shadow_enabled = true
+shadow_blur = 2.0
+omni_range = 10.0

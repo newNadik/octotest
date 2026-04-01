@@ -81,9 +81,9 @@ current = true
 fov = 60.0
 
 [node name="UI" type="CanvasLayer" parent="." unique_id=618850917]
-visible = false
 
 [node name="HUD" type="Control" parent="UI" unique_id=827704546]
+visible = false
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -220,10 +220,10 @@ directional_shadow_max_distance = 95.0
 [node name="surrounding" type="Node3D" parent="." unique_id=1316489020]
 
 [node name="surroundings" parent="surrounding" unique_id=1002961838 instance=ExtResource("2_muem4")]
-transform = Transform3D(0.9997807, 0, 0.02094242, 0, 1, 0, -0.02094242, 0, 0.9997807, -25.812, -3.5834541, 2.8101158)
+transform = Transform3D(0.9983359, 0, -0.05766857, 0, 1, 0, 0.05766857, 0, 0.9983359, -28.281834, -3.5834541, 3.4941978)
 
 [node name="surroundings2" parent="surrounding" unique_id=2092085712 instance=ExtResource("2_muem4")]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 24.569073, -3.5834541, -4.339819)
+transform = Transform3D(-0.7428878, 0, 0.6694159, 0, 1, 0, -0.6694159, 0, -0.7428878, 21.034111, -3.5834541, 13.66193)
 
 [node name="FishSchoolSkylight" parent="surrounding" unique_id=1875453523 instance=ExtResource("17_fishschool")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.4184046, 14.344449, 0.90247345)
@@ -244,7 +244,7 @@ stream_recycle_front_distance = 5.0
 mesh_rotation_offset_degrees = Vector3(0, 90, 0)
 
 [node name="FishSchoolSkylight3" parent="surrounding" unique_id=426942162 instance=ExtResource("17_fishschool")]
-transform = Transform3D(-0.38855964, 0.15088126, 0.90898633, 0.033672146, 0.9881683, -0.14963087, -0.920808, -0.027532995, -0.38904288, -38.233215, 5.507917, 17.429081)
+transform = Transform3D(-0.38855964, 0.15088126, 0.90898633, 0.033672146, 0.9881683, -0.14963087, -0.920808, -0.027532995, -0.38904288, -39.850914, 5.507917, 17.429081)
 species_per_school_max = 4
 fish_count_max = 13
 fish_count = 7
@@ -263,7 +263,7 @@ stream_recycle_front_distance = 5.0
 mesh_rotation_offset_degrees = Vector3(0, 90, 0)
 
 [node name="FishSchoolSkylight4" parent="surrounding" unique_id=9479908 instance=ExtResource("17_fishschool")]
-transform = Transform3D(0.035056617, -0.25723398, 0.9657131, 0.009331776, 0.9663491, 0.25706467, -0.9993418, 0, 0.036277384, 38.392647, 4.0795546, -0.9388447)
+transform = Transform3D(0.035056617, -0.25723398, 0.9657131, 0.009331776, 0.9663491, 0.25706467, -0.9993418, 0, 0.036277384, 41.708145, 7.444499, -0.9388447)
 species_per_school_max = 5
 fish_count_max = 15
 fish_count = 5

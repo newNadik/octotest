@@ -6,7 +6,7 @@ const CLICK_SOUND_DEFAULT: AudioStream = preload("res://assets/sound/light-switc
 
 signal toggled(is_on: bool)
 
-@export var start_on := true
+@export var start_on := false
 @export var click_sound: AudioStream = CLICK_SOUND_DEFAULT
 @export var click_sound_volume_db := -7.0
 @export var click_pitch_min := 0.97
