@@ -1,0 +1,28 @@
+[gd_scene format=3 uid="uid://b7vd8cvq5kxdt"]
+
+[ext_resource type="Script" uid="uid://bljjnisjw4gft" path="res://scenes/station/interior/light_switch.gd" id="1_i6xla"]
+[ext_resource type="PackedScene" uid="uid://bmr88rwrf4u5u" path="res://assets/models/interior/light_switch.glb" id="1_kfmci"]
+[ext_resource type="Script" uid="uid://bt8vvmy3m63u7" path="res://scripts/interaction/interactable.gd" id="3_interactable"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_switch_interaction"]
+size = Vector3(0.15, 0.15, 0.1)
+
+[node name="LightSwitch" type="Node3D" unique_id=1802619805]
+script = ExtResource("1_i6xla")
+
+[node name="Sketchfab_Scene" parent="." unique_id=1523677443 instance=ExtResource("1_kfmci")]
+transform = Transform3D(-2, 0, -1.7484555e-07, 0, 2, 0, 1.7484555e-07, 0, -2, 0, 1.7, 0)
+
+[node name="Interactable" type="Area3D" parent="." unique_id=1894477021]
+collision_layer = 8
+collision_mask = 0
+script = ExtResource("3_interactable")
+display_name = "Light Switch"
+interaction_range = 2.8
+prompt_action = "Toggle"
+visual_root_path = NodePath("../Sketchfab_Scene")
+pickup_root_path = NodePath("../Sketchfab_Scene")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Interactable" unique_id=1046012325]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.7, 0)
+shape = SubResource("BoxShape3D_switch_interaction")

@@ -1,0 +1,101 @@
+# RoomLighting.gd
+extends Node3D
+
+@export var light_switch: LightSwitch
+@export var ceiling_mesh: MeshInstance3D
+@export var ceiling_surface := 0
+@export var emission_on_color := Color(0.95, 0.97, 1.0)
+@export var emission_off_color := Color(0, 0, 0)
+@export var emission_energy_on := 2.0
+@export var emission_energy_off := 0.0
+@export var ceiling_albedo_boost_on := 1.18
+@export var ceiling_albedo_boost_off := 0.78
+@export var auto_collect_lamp_lights := true
+@export var lamp_lights: Array[Light3D] = []
+
+@export_group("Flicker")
+@export var flicker_on_startup := true         # flicker when switched on
+@export var flicker_count_min := 1             # minimum blink count
+@export var flicker_count_max := 2             # maximum blink count
+@export var flicker_off_time_min := 0.04       # seconds light stays off per blink
+@export var flicker_off_time_max := 0.18
+@export var flicker_on_time_min := 0.03        # seconds light stays on between blinks
+@export var flicker_on_time_max := 0.12
+@export var flicker_settle_delay := 0.3        # pause before final stable on
+
+var _ceiling_mat: Material
+var _is_on := false
+var _flickering := false
+
+func _ready() -> void:
+	_make_ceiling_material_unique()
+	_populate_lamp_lights_if_needed()
+	if light_switch != null:
+		light_switch.toggled.connect(_on_switch_toggled)
+		_on_switch_toggled(light_switch.start_on)
+	else:
+		_on_switch_toggled(false)
+
+func _make_ceiling_material_unique() -> void:
+	if ceiling_mesh == null:
+		return
+	var src := ceiling_mesh.get_active_material(ceiling_surface)
+	if src == null:
+		return
+	_ceiling_mat = src.duplicate()
+	ceiling_mesh.set_surface_override_material(ceiling_surface, _ceiling_mat)
+
+func _on_switch_toggled(is_on: bool) -> void:
+	_is_on = is_on
+	if is_on and flicker_on_startup:
+		flicker()
+	else:
+		_apply_state(is_on)
+
+# Call this from anywhere — e.g. a faulty wire event, a horror moment, etc.
+func flicker() -> void:
+	if _flickering:
+		return
+	_flickering = true
+
+	var blinks := randi_range(flicker_count_min, flicker_count_max)
+	for i in blinks:
+		_apply_state(true)
+		await get_tree().create_timer(randf_range(flicker_on_time_min, flicker_on_time_max)).timeout
+		_apply_state(false)
+		await get_tree().create_timer(randf_range(flicker_off_time_min, flicker_off_time_max)).timeout
+
+	# Brief pause then settle into final state
+	await get_tree().create_timer(flicker_settle_delay).timeout
+	_apply_state(_is_on)
+	_flickering = false
+
+func _apply_state(is_on: bool) -> void:
+	for l in lamp_lights:
+		l.visible = is_on
+	if _ceiling_mat is StandardMaterial3D:
+		var mat := _ceiling_mat as StandardMaterial3D
+		mat.emission_enabled = true
+		mat.emission = emission_on_color if is_on else emission_off_color
+		mat.emission_energy_multiplier = emission_energy_on if is_on else emission_energy_off
+	elif _ceiling_mat is ShaderMaterial:
+		var shader_mat := _ceiling_mat as ShaderMaterial
+		shader_mat.set_shader_parameter("emission_tint", emission_on_color if is_on else emission_off_color)
+		shader_mat.set_shader_parameter("emission_strength", emission_energy_on if is_on else emission_energy_off)
+		shader_mat.set_shader_parameter("albedo_boost", ceiling_albedo_boost_on if is_on else ceiling_albedo_boost_off)
+
+func _populate_lamp_lights_if_needed() -> void:
+	if not auto_collect_lamp_lights or not lamp_lights.is_empty():
+		return
+	var discovered := _collect_switch_lights(self)
+	for light in discovered:
+		lamp_lights.append(light)
+
+func _collect_switch_lights(node: Node) -> Array[Light3D]:
+	var result: Array[Light3D] = []
+	for child in node.get_children():
+		if child is OmniLight3D or child is SpotLight3D or child is DirectionalLight3D:
+			result.append(child as Light3D)
+		if child is Node:
+			result.append_array(_collect_switch_lights(child))
+	return result

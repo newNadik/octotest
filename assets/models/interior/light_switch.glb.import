@@ -3,13 +3,13 @@
 importer="scene"
 importer_version=1
 type="PackedScene"
-uid="uid://cx82tytcr6k5r"
-path="res://.godot/imported/door_single.glb-d774a2fd973dbc0d007243fbe34698b7.scn"
+uid="uid://bmr88rwrf4u5u"
+path="res://.godot/imported/light_switch.glb-fe79d0cecebdf73ad3e600a57bdda4af.scn"
 
 [deps]
 
-source_file="res://assets/models/door_single.glb"
-dest_files=["res://.godot/imported/door_single.glb-d774a2fd973dbc0d007243fbe34698b7.scn"]
+source_file="res://assets/models/interior/light_switch.glb"
+dest_files=["res://.godot/imported/light_switch.glb-fe79d0cecebdf73ad3e600a57bdda4af.scn"]
 
 [params]
 

@@ -3,13 +3,13 @@
 importer="scene"
 importer_version=1
 type="PackedScene"
-uid="uid://dlqytu68qnf4y"
-path="res://.godot/imported/door_double.glb-3831cd8a521744eaaa39a486647e06d8.scn"
+uid="uid://m4pnocc2slx4"
+path="res://.godot/imported/door_slide.glb-9479f11a5c0357267cf9e1caef1b6ae0.scn"
 
 [deps]
 
-source_file="res://assets/models/door_double.glb"
-dest_files=["res://.godot/imported/door_double.glb-3831cd8a521744eaaa39a486647e06d8.scn"]
+source_file="res://assets/models/interior/door_slide.glb"
+dest_files=["res://.godot/imported/door_slide.glb-9479f11a5c0357267cf9e1caef1b6ae0.scn"]
 
 [params]
 

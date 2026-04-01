@@ -21,6 +21,9 @@ uniform sampler2D roughness_tex;
 uniform float uv_scale = 0.15;
 instance uniform float rotation_deg = -45.0;
 instance uniform vec2 offset_xz = vec2(0.0, 0.0);
+uniform float albedo_boost = 1.0;
+uniform vec3 emission_tint : source_color = vec3(1.0, 1.0, 1.0);
+uniform float emission_strength = 0.0;
 uniform float metallic_scalar = 1.0;
 uniform float roughness_scalar = 1.0;
 uniform float normal_strength : hint_range(0.0, 4.0) = 1.0;
@@ -51,9 +54,9 @@ void fragment() {
 	vec4 roughness_s = texture(roughness_tex, uv);
 	vec3 normal_s = texture(normal_tex, uv).rgb;
 
-	ALBEDO = albedo_s.rgb;
+	ALBEDO = albedo_s.rgb * albedo_boost;
 	AO = ao_s.a;
-	EMISSION = emission_s.rgb;
+	EMISSION = emission_s.rgb * emission_tint * emission_strength;
 	METALLIC = metallic_scalar * metallic_s.a;
 	ROUGHNESS = roughness_scalar * roughness_s.a;
 	NORMAL_MAP = normal_s;
@@ -71,6 +74,9 @@ shader_parameter/metallic_tex = ExtResource("4_xddng")
 shader_parameter/normal_tex = ExtResource("5_m7yqx")
 shader_parameter/roughness_tex = ExtResource("6_ly4pc")
 shader_parameter/uv_scale = 0.15
+shader_parameter/albedo_boost = 1.0
+shader_parameter/emission_tint = Color(1, 1, 1, 1)
+shader_parameter/emission_strength = 1.0
 shader_parameter/metallic_scalar = 1.0
 shader_parameter/roughness_scalar = 1.0
 shader_parameter/normal_strength = 1.0
