@@ -21,6 +21,9 @@ const COLOR_MID_BLUE := Color(0.007843138, 0.2627451, 0.43137255, 1.0) # 02436e
 @onready var sounds_label: Label = $TopContainer/MainContainer/SettingsRows/SoundsRow/SoundsLabel
 @onready var sounds_slider: HSlider = $TopContainer/MainContainer/SettingsRows/SoundsRow/SoundsSlider
 @onready var sounds_value: Label = $TopContainer/MainContainer/SettingsRows/SoundsRow/SoundsValue
+@onready var ambience_label: Label = $TopContainer/MainContainer/SettingsRows/AmbienceRow/AmbienceLabel
+@onready var ambience_slider: HSlider = $TopContainer/MainContainer/SettingsRows/AmbienceRow/AmbienceSlider
+@onready var ambience_value: Label = $TopContainer/MainContainer/SettingsRows/AmbienceRow/AmbienceValue
 @onready var subtitles_label: Label = $TopContainer/MainContainer/SettingsRows/SubtitlesRow/SubtitlesLabel
 @onready var subtitles_prev_button: Button = $TopContainer/MainContainer/SettingsRows/SubtitlesRow/SubtitlesSelector/SubtitlesPrevButton
 @onready var subtitles_value_label: Label = $TopContainer/MainContainer/SettingsRows/SubtitlesRow/SubtitlesSelector/SubtitlesValueLabel
@@ -43,6 +46,7 @@ func _ready() -> void:
 	back_button.pressed.connect(_on_back_pressed)
 	music_slider.value_changed.connect(_on_music_changed)
 	sounds_slider.value_changed.connect(_on_sounds_changed)
+	ambience_slider.value_changed.connect(_on_ambience_changed)
 	subtitles_prev_button.pressed.connect(_on_subtitles_cycle.bind(-1))
 	subtitles_next_button.pressed.connect(_on_subtitles_cycle.bind(1))
 	god_rays_prev_button.pressed.connect(_on_god_rays_cycle.bind(-1))
@@ -92,6 +96,15 @@ func _on_sounds_changed(value: float) -> void:
 	_update_percent_label(sounds_value, value)
 
 
+func _on_ambience_changed(value: float) -> void:
+	if _is_updating_ui:
+		return
+	var settings := _get_game_settings()
+	if settings != null and settings.has_method("set_ambience_volume"):
+		settings.call("set_ambience_volume", value)
+	_update_percent_label(ambience_value, value)
+
+
 func _on_subtitles_cycle(_direction: int) -> void:
 	var settings := _get_game_settings()
 	var enabled := true
@@ -134,6 +147,7 @@ func _load_settings_into_ui() -> void:
 	var settings := _get_game_settings()
 	var music := 1.0
 	var sounds := 1.0
+	var ambience := 1.0
 	var subtitles_enabled := true
 	var god_rays_enabled := true
 	var locale: String = TranslationServer.get_locale()
@@ -142,6 +156,8 @@ func _load_settings_into_ui() -> void:
 			music = float(settings.call("get_music_volume"))
 		if settings.has_method("get_sound_volume"):
 			sounds = float(settings.call("get_sound_volume"))
+		if settings.has_method("get_ambience_volume"):
+			ambience = float(settings.call("get_ambience_volume"))
 		if settings.has_method("get_subtitles_enabled"):
 			subtitles_enabled = bool(settings.call("get_subtitles_enabled"))
 		if settings.has_method("get_god_rays_enabled"):
@@ -151,8 +167,10 @@ func _load_settings_into_ui() -> void:
 
 	music_slider.value = music
 	sounds_slider.value = sounds
+	ambience_slider.value = ambience
 	_update_percent_label(music_value, music)
 	_update_percent_label(sounds_value, sounds)
+	_update_percent_label(ambience_value, ambience)
 	_update_subtitles_value(subtitles_enabled)
 	_update_god_rays_value(god_rays_enabled)
 	_update_language_value(locale)
@@ -163,6 +181,7 @@ func _apply_localized_text() -> void:
 	title_label.text = tr("Settings")
 	music_label.text = tr("Music")
 	sounds_label.text = tr("Sound Effects")
+	ambience_label.text = tr("Ambience")
 	subtitles_label.text = tr("Subtitles")
 	god_rays_label.text = tr("Light Effects")
 	language_label.text = tr("Language")
@@ -218,6 +237,8 @@ func _apply_slider_grabber_icons() -> void:
 	music_slider.add_theme_icon_override("grabber_highlight", grabber)
 	sounds_slider.add_theme_icon_override("grabber", grabber)
 	sounds_slider.add_theme_icon_override("grabber_highlight", grabber)
+	ambience_slider.add_theme_icon_override("grabber", grabber)
+	ambience_slider.add_theme_icon_override("grabber_highlight", grabber)
 
 
 func _build_slider_grabber_texture() -> Texture2D:

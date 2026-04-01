@@ -16,6 +16,8 @@ const CAMERA_NEAR_CLIP := 0.12
 
 @export var orbit_sensitivity := 0.2
 @export var drag_orbit_threshold_px := 10.0
+@export var orbit_pitch_min_degrees := -80.0
+@export var orbit_pitch_max_degrees := 20.0
 @export var min_zoom := 2.4
 @export var max_zoom := 10.0
 @export var zoom_step := 1.0
@@ -211,7 +213,7 @@ func _update_primary_pointer_drag(screen_position: Vector2, relative: Vector2) -
 		return true
 	_orbiting = true
 	_yaw -= relative.x * orbit_sensitivity
-	_pitch = clampf(_pitch - relative.y * orbit_sensitivity, -80.0, -10.0)
+	_pitch = clampf(_pitch - relative.y * orbit_sensitivity, orbit_pitch_min_degrees, orbit_pitch_max_degrees)
 	_apply_camera_angles()
 	return true
 

@@ -6,6 +6,7 @@
 [ext_resource type="Material" uid="uid://biog7mv21velq" path="res://assets/materials/ceiling.tres" id="3_fb2ae"]
 [ext_resource type="Material" uid="uid://bb4hx1vyakkmf" path="res://assets/materials/plaster.tres" id="3_mlt4v"]
 [ext_resource type="Material" uid="uid://ca2db0a60mj50" path="res://assets/materials/metal.tres" id="4_0ar6p"]
+[ext_resource type="AudioStream" uid="uid://cpvgrh463bnmg" path="res://assets/sound/machine_room.wav" id="5_machine_amb"]
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_lf4d5"]
 resource_name = "system_Plane_099"
@@ -157,3 +158,11 @@ shape = SubResource("ConcavePolygonShape3D_pskqp")
 
 [node name="WindowSingle" parent="StaticBody3D" unique_id=1026944921 instance=ExtResource("2_ua4mq")]
 transform = Transform3D(1, 0, 0, 0, -0.19080903, 0.98162717, 0, -0.98162717, -0.19080903, -4.0922575, 7.62, -23.401)
+
+[node name="MachineRoomAmbient" type="AudioStreamPlayer3D" parent="." unique_id=2005131281]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.25, 1.4, -18.2)
+stream = ExtResource("5_machine_amb")
+volume_db = 2.0
+autoplay = true
+max_distance = 32.0
+bus = &"Ambience"

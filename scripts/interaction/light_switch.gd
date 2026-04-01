@@ -8,7 +8,7 @@ signal toggled(is_on: bool)
 
 @export var start_on := true
 @export var click_sound: AudioStream = CLICK_SOUND_DEFAULT
-@export var click_sound_volume_db := -10.0
+@export var click_sound_volume_db := -7.0
 @export var click_pitch_min := 0.97
 @export var click_pitch_max := 1.03
 var is_on := true

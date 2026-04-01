@@ -179,6 +179,9 @@ msgstr "Дослідження"
 msgid "Sound Effects"
 msgstr "Звукові ефекти"
 
+msgid "Ambience"
+msgstr "Атмосфера"
+
 msgid "Settings"
 msgstr "Налаштування"
 

@@ -15,6 +15,9 @@ signal door_opened(source: Node)
 @export var slide_sound: AudioStream = SLIDE_SOUND_DEFAULT
 @export var slide_sound_volume_db := -6.0
 @export var slide_sound_pitch_scale := 1.0
+@export var slide_sound_pitch_min := 0.94
+@export var slide_sound_pitch_max := 1.08
+@export var slide_sound_volume_jitter_db := 1.5
 
 @onready var _door_body: Node3D = $StaticBody3D
 @onready var _button_mesh: MeshInstance3D = $StaticBody3D/button
@@ -27,6 +30,7 @@ var _is_moving := false
 var _auto_close_ticket := 0
 var _group_highlight := false
 var _slide_player: AudioStreamPlayer3D
+var _rng := RandomNumberGenerator.new()
 var _button_green_material: StandardMaterial3D
 var _button_red_material: StandardMaterial3D
 var _button_green_highlight_material: StandardMaterial3D
@@ -36,6 +40,7 @@ var _button_red_highlight_material: StandardMaterial3D
 func _ready() -> void:
 	add_to_group("save_state_provider")
 	add_to_group("autosave_door")
+	_rng.randomize()
 	_closed_position = _door_body.position
 	if _close_sensor != null:
 		# Player is on layer 4, loose items are on layer 8.
@@ -288,8 +293,10 @@ func _play_slide_sound() -> void:
 		return
 	_ensure_audio_player()
 	_slide_player.stream = slide_sound
-	_slide_player.volume_db = slide_sound_volume_db
-	_slide_player.pitch_scale = slide_sound_pitch_scale
+	var random_volume_jitter := _rng.randf_range(-absf(slide_sound_volume_jitter_db), absf(slide_sound_volume_jitter_db))
+	_slide_player.volume_db = slide_sound_volume_db + random_volume_jitter
+	var random_pitch := _rng.randf_range(minf(slide_sound_pitch_min, slide_sound_pitch_max), maxf(slide_sound_pitch_min, slide_sound_pitch_max))
+	_slide_player.pitch_scale = slide_sound_pitch_scale * random_pitch
 	if _slide_player.playing:
 		_slide_player.stop()
 	_slide_player.play()
