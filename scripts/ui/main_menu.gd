@@ -49,7 +49,6 @@ var _popup_layer: CanvasLayer
 func _ready() -> void:
 	continue_button.pressed.connect(_on_continue_pressed)
 	play_button.pressed.connect(_on_play_pressed)
-	load_game_button.pressed.connect(_on_load_game_pressed)
 	settings_button.pressed.connect(_on_settings_pressed)
 	quit_button.pressed.connect(_on_quit_pressed)
 	slide_timer.timeout.connect(_on_slide_timer_timeout)
@@ -68,8 +67,8 @@ func _ready() -> void:
 
 
 func _on_play_pressed() -> void:
-	GameSave.clear_load_request()
-	GameSave.clear_save()
+	_clear_pending_load_request()
+	_clear_saved_game()
 	var error := get_tree().change_scene_to_file(GAME_SCENE_PATH)
 	if error != OK:
 		push_error("Failed to load game scene: %s" % GAME_SCENE_PATH)
@@ -79,30 +78,61 @@ func _on_quit_pressed() -> void:
 	get_tree().quit()
 
 
-func _on_load_game_pressed() -> void:
-	_try_load_or_continue()
-
-
 func _on_continue_pressed() -> void:
 	_try_load_or_continue()
 
 
 func _try_load_or_continue() -> void:
-	if not GameSave.has_save():
+	if not _has_saved_game():
 		push_warning("No saved game found.")
 		_refresh_save_buttons()
 		return
-	GameSave.request_load_on_next_game_start()
+	_request_load_on_next_game_start()
 	var error := get_tree().change_scene_to_file(GAME_SCENE_PATH)
 	if error != OK:
 		push_error("Failed to load game scene: %s" % GAME_SCENE_PATH)
 
 
 func _refresh_save_buttons() -> void:
-	var has_saved_game := GameSave.has_save()
+	var has_saved_game: bool = _has_saved_game()
 	continue_button.visible = has_saved_game
 	continue_button.disabled = not has_saved_game
-	load_game_button.disabled = not has_saved_game
+	load_game_button.visible = false
+
+
+func _get_game_save() -> Node:
+	var tree := get_tree()
+	if tree == null or tree.root == null:
+		return null
+	return tree.root.get_node_or_null("GameSave")
+
+
+func _has_saved_game() -> bool:
+	var game_save := _get_game_save()
+	if game_save == null:
+		return false
+	return bool(game_save.call("has_save"))
+
+
+func _request_load_on_next_game_start() -> void:
+	var game_save := _get_game_save()
+	if game_save == null:
+		return
+	game_save.call("request_load_on_next_game_start")
+
+
+func _clear_pending_load_request() -> void:
+	var game_save := _get_game_save()
+	if game_save == null:
+		return
+	game_save.call("clear_load_request")
+
+
+func _clear_saved_game() -> void:
+	var game_save := _get_game_save()
+	if game_save == null:
+		return
+	game_save.call("clear_save")
 
 
 func _on_settings_pressed() -> void:

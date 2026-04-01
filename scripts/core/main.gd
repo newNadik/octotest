@@ -41,6 +41,7 @@ const CAMERA_NEAR_CLIP := 0.12
 @onready var camera: Camera3D = $CameraPivot/CameraYaw/CameraPitch/SpringArm3D/Camera3D
 @onready var hud_root: Control = $UI/HUD
 @onready var hint_label: Label = $UI/HUD/HintPanel/HintMargin/HintLabel
+@onready var save_status_label: Label = $UI/HUD/SaveStatusLabel
 @onready var in_game_menu: Control = $UI/InGameMenu
 @onready var in_game_resume_button: Button = $UI/InGameMenu/MenuCenter/MenuPanel/MenuMargin/MenuButtons/ResumeButton
 @onready var in_game_save_button: Button = $UI/InGameMenu/MenuCenter/MenuPanel/MenuMargin/MenuButtons/SaveButton
@@ -71,6 +72,7 @@ var _sun_base_energy := 0.0
 var _hero_base_energy := 0.0
 var _loaded_save_data: Dictionary = {}
 var _last_save_unix_time := -1000.0
+var _save_status_tween: Tween
 
 
 func _ready() -> void:
@@ -78,8 +80,8 @@ func _ready() -> void:
 	in_game_menu.process_mode = Node.PROCESS_MODE_WHEN_PAUSED
 	player.process_mode = Node.PROCESS_MODE_PAUSABLE
 	var starting_position := Vector3(0.0, OCTO_START_Y, 16.0)
-	if GameSave.consume_load_request():
-		_loaded_save_data = GameSave.load_game()
+	if _consume_pending_load_request():
+		_loaded_save_data = _load_saved_game()
 		starting_position = _extract_player_position(_loaded_save_data, starting_position)
 	player.global_position = starting_position
 	var follow_position := player.global_position + Vector3(0.0, CAMERA_FOLLOW_HEIGHT, 0.0)
@@ -420,7 +422,7 @@ func _make_click_through(node: Node) -> void:
 
 func _on_main_menu_pressed() -> void:
 	get_tree().paused = false
-	GameSave.clear_load_request()
+	_clear_pending_load_request()
 	var error := get_tree().change_scene_to_file(MAIN_MENU_SCENE_PATH)
 	if error != OK:
 		push_error("Failed to load main menu scene: %s" % MAIN_MENU_SCENE_PATH)
@@ -432,8 +434,10 @@ func _on_resume_pressed() -> void:
 
 func _on_save_pressed() -> void:
 	var save_ok := _save_game(false)
-	if not save_ok:
-		push_warning("Save failed.")
+	if save_ok:
+		_show_save_feedback("Game Saved", false)
+	else:
+		_show_save_feedback("Save Failed", true)
 
 
 func _on_settings_pressed() -> void:
@@ -477,7 +481,8 @@ func _connect_autosave_doors() -> void:
 
 
 func _on_autosave_door_opened(_source: Node) -> void:
-	_save_game(true)
+	if _save_game(true):
+		_show_save_feedback("Autosaved", false)
 
 
 func _apply_loaded_world_state() -> void:
@@ -521,7 +526,7 @@ func _save_game(is_autosave: bool) -> bool:
 		},
 		"world": _capture_world_state()
 	}
-	var save_ok := GameSave.save_game(payload)
+	var save_ok := _save_payload(payload)
 	if save_ok:
 		_last_save_unix_time = now
 	return save_ok
@@ -571,6 +576,63 @@ func _resolve_node_from_save_key(path_key: String) -> Node:
 		if not relative_from_self.is_empty():
 			return get_node_or_null(NodePath(relative_from_self))
 	return null
+
+
+func _get_game_save() -> Node:
+	var tree := get_tree()
+	if tree == null or tree.root == null:
+		return null
+	return tree.root.get_node_or_null("GameSave")
+
+
+func _consume_pending_load_request() -> bool:
+	var game_save := _get_game_save()
+	if game_save == null:
+		return false
+	return bool(game_save.call("consume_load_request"))
+
+
+func _load_saved_game() -> Dictionary:
+	var game_save := _get_game_save()
+	if game_save == null:
+		return {}
+	var loaded = game_save.call("load_game")
+	if loaded is Dictionary:
+		return loaded as Dictionary
+	return {}
+
+
+func _save_payload(payload: Dictionary) -> bool:
+	var game_save := _get_game_save()
+	if game_save == null:
+		return false
+	return bool(game_save.call("save_game", payload))
+
+
+func _clear_pending_load_request() -> void:
+	var game_save := _get_game_save()
+	if game_save == null:
+		return
+	game_save.call("clear_load_request")
+
+
+func _show_save_feedback(message: String, is_error: bool) -> void:
+	if save_status_label == null:
+		return
+	if _save_status_tween != null:
+		_save_status_tween.kill()
+	_save_status_tween = null
+	save_status_label.text = message
+	save_status_label.modulate = Color(1.0, 0.75, 0.75, 0.0) if is_error else Color(0.88, 0.98, 1.0, 0.0)
+	save_status_label.visible = true
+	_save_status_tween = create_tween()
+	_save_status_tween.set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_SINE)
+	_save_status_tween.tween_property(save_status_label, "modulate:a", 1.0, 0.14)
+	_save_status_tween.tween_interval(1.0)
+	_save_status_tween.tween_property(save_status_label, "modulate:a", 0.0, 0.35)
+	_save_status_tween.finished.connect(func() -> void:
+		save_status_label.visible = false
+	)
 
 
 func _animate_underwater_light(delta: float) -> void:
