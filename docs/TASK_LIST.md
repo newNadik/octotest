@@ -76,10 +76,10 @@ Scope lock for this version:
 
 ### 3. Add save/load (simple first)
 
-- [ ] Create `GameState` singleton.
-- [ ] Save current room ID, spawn point, solved puzzle states, and important moved object states.
-- [ ] Autosave when entering a room.
-- [ ] Load on "Continue" from main menu.
+- [x] Create `GameSave` singleton.
+- [x] Save current room ID, spawn point, solved puzzle states, and important moved object states.
+- [x] Autosave when entering a room.
+- [x] Load on "Continue" from main menu.
 - [ ] Add one automated test for save -> quit -> load -> correct room.
 
 ### 4. Build reusable puzzle modules

@@ -107,25 +107,25 @@ grow_horizontal = 2
 grow_vertical = 0
 mouse_filter = 2
 
-[node name="SaveStatusLabel" type="Label" parent="UI/HUD" unique_id=652215703]
+[node name="SaveStatusLabel" type="Label" parent="UI" unique_id=652215703]
 visible = false
 modulate = Color(1, 1, 1, 0)
 layout_mode = 1
-anchors_preset = 7
-anchor_left = 0.5
+anchors_preset = 3
+anchor_left = 1.0
 anchor_top = 1.0
-anchor_right = 0.5
+anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -140.0
-offset_top = -76.0
-offset_right = 140.0
-offset_bottom = -44.0
-grow_horizontal = 2
+offset_left = -250.0
+offset_top = -84.0
+offset_right = -16.0
+offset_bottom = -52.0
+grow_horizontal = 0
 grow_vertical = 0
 theme_override_colors/font_color = Color(0.88, 0.98, 1, 1)
 theme_override_font_sizes/font_size = 20
 text = "Game Saved"
-horizontal_alignment = 1
+horizontal_alignment = 2
 
 [node name="HintMargin" type="MarginContainer" parent="UI/HUD/HintPanel" unique_id=38593493]
 layout_mode = 2

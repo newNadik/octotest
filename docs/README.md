@@ -84,20 +84,26 @@ GODOT_BIN=/absolute/path/to/godot ./scripts/check.sh
 
 1. Main menu actions:
 - `New Game` starts gameplay.
-- `Load Game` is a placeholder (not implemented yet).
+- `Continue` appears only when a save exists and loads the latest save.
 - `Settings` opens the shared settings overlay.
 - `Quit` exits the app.
 2. In-game pause menu actions:
 - `Resume` closes pause menu.
+- `Save Game` writes current state to `user://save_game.json`.
 - `Settings` opens the shared settings overlay.
 - `Main Menu` returns to startup menu.
-3. Settings menu controls:
+3. Save behavior:
+- Autosave triggers when opening station doors (room traversal flow).
+- Manual save is available from pause menu.
+- Saved state currently includes player position and key interactable state (doors and room lights/switches).
+- In-game save feedback is shown as a bottom-right toast (`Game Saved`, `Autosaved`, `Save Failed`).
+4. Settings menu controls:
 - `Music` and `Sound Effects` sliders persist audio values.
 - `Subtitles` toggles with `<`/`>`.
 - `Language` switches between `English (UK)` and `Ukrainian` with `<`/`>`.
 - Language preference is saved to `user://settings.cfg` and applied on startup.
-4. `Esc` on the startup main menu does not quit the app.
-5. Text policy:
+5. `Esc` on the startup main menu does not quit the app.
+6. Text policy:
 - Player-visible source text should use UK English.
 - New/changed text should include Ukrainian translation coverage in `i18n/uk_UA.po`.
 

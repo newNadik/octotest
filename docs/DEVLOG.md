@@ -1,5 +1,37 @@
 # Dev Log
 
+## 2026-04-01
+
+### Step 44 - Save/load system, Continue flow, autosave hooks, and save feedback UI
+
+- Added persistent save backend:
+  - new autoload singleton `res://scripts/core/game_save.gd`,
+  - save file path `user://save_game.json`,
+  - API for save/load/clear plus pending-load request handling for menu-to-game transitions.
+- Implemented gameplay save/load integration in `res://scripts/core/main.gd`:
+  - load-on-start when entering from `Continue`,
+  - save payload includes player position and world provider states,
+  - provider system based on `save_state_provider` group with `get_save_state` / `apply_save_state`.
+- Added world-state persistence providers:
+  - `res://scripts/station/interior/door_slide.gd` (locked/open state),
+  - `res://scripts/interaction/room_light.gd` (light on/off state),
+  - `res://scenes/station/interior/light_switch.gd` (switch on/off state).
+- Added autosave trigger path:
+  - `door_slide` now emits `door_opened`,
+  - main scene listens to door events (`autosave_door` group) and autosaves with rate limiting.
+- Updated menu flow:
+  - main menu now uses `New Game` + conditional `Continue` (visible only when save exists),
+  - `New Game` clears existing save and starts fresh,
+  - legacy `Load Game` path hidden in UI.
+- Updated pause flow:
+  - added `Save Game` action in in-game pause menu.
+- Added in-game save feedback:
+  - bottom-right toast under `UI` root for `Game Saved`, `Autosaved`, and `Save Failed`.
+
+### Validation commands (pass)
+1. `/Applications/Godot.app/Contents/MacOS/godot --headless --path . --quit`
+   - Result: boot smoke PASS and scripts parse cleanly.
+
 ## 2026-03-31
 
 ### Step 43 - Animated fish-school wave system, directional modes, and editor swim-volume preview
