@@ -152,7 +152,8 @@ func _spawn_school() -> void:
 		_rng.randf_range(-half.z * 0.35, half.z * 0.35)
 	)
 	var spawn_axis := (-_travel_half_extent(half) - maxf(stream_spawn_outside_distance, 0.0)) if _travel_sign > 0.0 else (_travel_half_extent(half) + maxf(stream_spawn_outside_distance, 0.0))
-	spawn_axis += _rng.randf_range(-1.0, 1.0)
+	# Keep initial school spawn clearly outside the volume on the travel axis.
+	spawn_axis += _rng.randf_range(-0.35, 0.35)
 	if _travel_axis == 0:
 		_cluster_center.x = school_center.x + spawn_axis
 	else:
@@ -175,6 +176,11 @@ func _spawn_school() -> void:
 			_rng.randf_range(-0.6, 0.6),
 			_rng.randf_range(-1.0, 1.0)
 		).normalized() * _rng.randf_range(0.1, school_cluster_radius)
+		# Prevent part of a school popping in inside the volume at spawn.
+		if _travel_axis == 0:
+			radial.x = 0.0
+		else:
+			radial.z = 0.0
 		var pos := _cluster_center + radial
 		var random_dir := Vector3(
 			_rng.randf_range(-1.0, 1.0),
@@ -315,15 +321,19 @@ func _step_school(delta: float) -> void:
 func _is_school_finished() -> bool:
 	if _positions.is_empty():
 		return true
-	var avg_travel_axis := 0.0
+	var min_axis := INF
+	var max_axis := -INF
 	for pos in _positions:
 		var local := pos - school_center
-		avg_travel_axis += local.x if _travel_axis == 0 else local.z
-	avg_travel_axis /= float(_positions.size())
+		var axis_value := local.x if _travel_axis == 0 else local.z
+		min_axis = minf(min_axis, axis_value)
+		max_axis = maxf(max_axis, axis_value)
 	var half_extent := (school_bounds.x * 0.5) if _travel_axis == 0 else (school_bounds.z * 0.5)
 	if _travel_sign > 0.0:
-		return avg_travel_axis > (half_extent + maxf(stream_recycle_front_distance, 0.0))
-	return avg_travel_axis < (-half_extent - maxf(stream_recycle_front_distance, 0.0))
+		# Recycle only after the trailing fish has also cleared the volume.
+		return min_axis > (half_extent + maxf(stream_recycle_front_distance, 0.0))
+	# Recycle only after the trailing fish has also cleared the volume.
+	return max_axis < (-half_extent - maxf(stream_recycle_front_distance, 0.0))
 
 
 func _clear_school() -> void:
