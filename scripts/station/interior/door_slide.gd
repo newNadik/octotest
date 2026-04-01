@@ -1,5 +1,7 @@
 extends Node3D
 
+const SLIDE_SOUND_DEFAULT: AudioStream = preload("res://assets/sound/sliding-noise.wav")
+
 signal open_requested(source: Node)
 signal door_opened(source: Node)
 
@@ -9,6 +11,10 @@ signal door_opened(source: Node)
 @export var auto_close_delay := 2.8
 @export var auto_close_retry_interval := 0.65
 @export var locked := false
+@export_group("Audio")
+@export var slide_sound: AudioStream = SLIDE_SOUND_DEFAULT
+@export var slide_sound_volume_db := -6.0
+@export var slide_sound_pitch_scale := 1.0
 
 @onready var _door_body: Node3D = $StaticBody3D
 @onready var _button_mesh: MeshInstance3D = $StaticBody3D/button
@@ -20,6 +26,7 @@ var _is_open := false
 var _is_moving := false
 var _auto_close_ticket := 0
 var _group_highlight := false
+var _slide_player: AudioStreamPlayer3D
 var _button_green_material: StandardMaterial3D
 var _button_red_material: StandardMaterial3D
 var _button_green_highlight_material: StandardMaterial3D
@@ -35,6 +42,7 @@ func _ready() -> void:
 		_close_sensor.collision_mask = 12
 	_build_button_materials()
 	_update_button_state()
+	_ensure_audio_player()
 	if _interactable != null and not _interactable.clicked.is_connected(_on_door_clicked):
 		_interactable.clicked.connect(_on_door_clicked)
 
@@ -106,6 +114,7 @@ func _on_door_clicked(_interactable_ref: Interactable, _actor: Node) -> void:
 func _animate_open() -> void:
 	_is_moving = true
 	_update_button_state()
+	_play_slide_sound()
 
 	var open_position := _closed_position + Vector3(-open_distance, 0.0, 0.0)
 	var tween := create_tween()
@@ -118,6 +127,7 @@ func _animate_open() -> void:
 func _on_open_tween_finished() -> void:
 	_is_open = true
 	_is_moving = false
+	_stop_slide_sound()
 	_update_button_state()
 	emit_signal("door_opened", self)
 	_schedule_auto_close(auto_close_delay)
@@ -126,6 +136,7 @@ func _on_open_tween_finished() -> void:
 func _animate_close() -> void:
 	_is_moving = true
 	_update_button_state()
+	_play_slide_sound()
 
 	var tween := create_tween()
 	tween.set_ease(Tween.EASE_IN_OUT)
@@ -137,6 +148,7 @@ func _animate_close() -> void:
 func _on_close_tween_finished() -> void:
 	_is_open = false
 	_is_moving = false
+	_stop_slide_sound()
 	_update_button_state()
 
 
@@ -243,6 +255,7 @@ func apply_save_state(state: Dictionary) -> void:
 func _set_open_state_immediate(is_open: bool) -> void:
 	_auto_close_ticket += 1
 	_is_moving = false
+	_stop_slide_sound()
 	_is_open = is_open and not locked
 	if _door_body != null:
 		if _is_open:
@@ -252,3 +265,42 @@ func _set_open_state_immediate(is_open: bool) -> void:
 	_update_button_state()
 	if _is_open:
 		_schedule_auto_close(auto_close_delay)
+
+
+func _ensure_audio_player() -> void:
+	if _slide_player != null:
+		return
+	_slide_player = AudioStreamPlayer3D.new()
+	_slide_player.name = "SlideAudio"
+	_slide_player.stream = slide_sound
+	_slide_player.volume_db = slide_sound_volume_db
+	_slide_player.pitch_scale = slide_sound_pitch_scale
+	_slide_player.max_distance = 16.0
+	_slide_player.bus = _resolve_sfx_bus_name()
+	if _door_body != null:
+		_door_body.add_child(_slide_player)
+	else:
+		add_child(_slide_player)
+
+
+func _play_slide_sound() -> void:
+	if slide_sound == null:
+		return
+	_ensure_audio_player()
+	_slide_player.stream = slide_sound
+	_slide_player.volume_db = slide_sound_volume_db
+	_slide_player.pitch_scale = slide_sound_pitch_scale
+	if _slide_player.playing:
+		_slide_player.stop()
+	_slide_player.play()
+
+
+func _stop_slide_sound() -> void:
+	if _slide_player == null:
+		return
+	if _slide_player.playing:
+		_slide_player.stop()
+
+
+func _resolve_sfx_bus_name() -> String:
+	return "SFX" if AudioServer.get_bus_index("SFX") >= 0 else "Master"
