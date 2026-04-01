@@ -190,7 +190,9 @@ func try_handle_interaction_click(screen_position: Vector2) -> bool:
 		return true
 
 	var in_range = _is_interactable_in_range(target)
-	var blocked = not _has_line_of_sight(target)
+	var blocked := false
+	if target.requires_line_of_sight:
+		blocked = not _has_line_of_sight(target)
 	if _is_focus_reader_interactable(target):
 		in_range = true
 		blocked = false
@@ -500,7 +502,9 @@ func _update_hovered_interactable() -> void:
 		return
 
 	var in_range = _is_interactable_in_range(target)
-	var blocked = not _has_line_of_sight(target)
+	var blocked := false
+	if target.requires_line_of_sight:
+		blocked = not _has_line_of_sight(target)
 	if _is_focus_reader_interactable(target):
 		in_range = true
 		blocked = false

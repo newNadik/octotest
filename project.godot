@@ -19,8 +19,8 @@ config/icon="uid://bveo1mgp8bkut"
 
 [autoload]
 
-GameSave="*res://scripts/core/game_save.gd"
 GameSettings="*res://scripts/core/game_settings.gd"
+GameSave="*res://scripts/core/game_save.gd"
 
 [display]
 

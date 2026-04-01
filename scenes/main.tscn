@@ -28,13 +28,11 @@ sky_material = SubResource("ProceduralSkyMaterial_7yl8v")
 background_mode = 2
 sky = SubResource("Sky_tavjh")
 ambient_light_sky_contribution = 0.9
-fog_enabled = false
 fog_light_color = Color(0.05, 0.14, 0.18, 1)
 fog_density = 0.03
 fog_sky_affect = 0.25
 fog_depth_begin = 2.0
 fog_depth_end = 16.0
-volumetric_fog_enabled = false
 volumetric_fog_density = 0.13
 volumetric_fog_albedo = Color(0.06, 0.16, 0.2, 1)
 volumetric_fog_ambient_inject = 0.12
@@ -107,26 +105,6 @@ grow_horizontal = 2
 grow_vertical = 0
 mouse_filter = 2
 
-[node name="SaveStatusLabel" type="Label" parent="UI" unique_id=652215703]
-visible = false
-modulate = Color(1, 1, 1, 0)
-layout_mode = 1
-anchors_preset = 3
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -250.0
-offset_top = -84.0
-offset_right = -16.0
-offset_bottom = -52.0
-grow_horizontal = 0
-grow_vertical = 0
-theme_override_colors/font_color = Color(0.88, 0.98, 1, 1)
-theme_override_font_sizes/font_size = 20
-text = "Game Saved"
-horizontal_alignment = 2
-
 [node name="HintMargin" type="MarginContainer" parent="UI/HUD/HintPanel" unique_id=38593493]
 layout_mode = 2
 mouse_filter = 2
@@ -143,6 +121,25 @@ Mouse Wheel Zoom
 Esc In-Game Menu"
 horizontal_alignment = 2
 vertical_alignment = 1
+
+[node name="SaveStatusLabel" type="Label" parent="UI" unique_id=652215703]
+visible = false
+modulate = Color(1, 1, 1, 0)
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -250.0
+offset_top = -84.0
+offset_right = -16.0
+offset_bottom = -52.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_colors/font_color = Color(0.88, 0.98, 1, 1)
+theme_override_font_sizes/font_size = 20
+text = "Game Saved"
+horizontal_alignment = 2
 
 [node name="InGameMenu" parent="UI" unique_id=2124539444 instance=ExtResource("7_o6xl0")]
 visible = false
@@ -230,7 +227,6 @@ max_distance_from_cluster = 10.0
 cluster_pull_strength = 2.2
 direction_mode = 1
 flow_direction = Vector3(1, 0, 1)
-direction_variation_degrees = null
 speed_min = 0.8
 speed_max = 3.0
 school_speed_scale_min = 0.95
@@ -251,7 +247,6 @@ cluster_pull_strength = 2.2
 delay_between_schools_min = 0.5
 delay_between_schools_max = 30.0
 flow_direction = Vector3(1, 0, 1)
-direction_variation_degrees = null
 speed_min = 0.8
 speed_max = 3.0
 school_speed_scale_min = 0.95
@@ -269,7 +264,6 @@ school_cluster_radius = 5.0
 max_distance_from_cluster = 10.0
 cluster_pull_strength = 2.2
 flow_direction = Vector3(1, 0, 1)
-direction_variation_degrees = null
 speed_min = 0.8
 speed_max = 3.0
 school_speed_scale_min = 0.95
@@ -287,7 +281,6 @@ max_distance_from_cluster = 10.0
 cluster_pull_strength = 2.2
 direction_mode = 1
 flow_direction = Vector3(1, 0, 1)
-direction_variation_degrees = null
 speed_min = 0.8
 speed_max = 3.0
 school_speed_scale_min = 0.95

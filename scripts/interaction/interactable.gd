@@ -31,6 +31,7 @@ enum VisualState {
 @export var display_name := "Interactable"
 @export var interaction_range := 2.6
 @export var prompt_action := "Interact"
+@export var requires_line_of_sight := true
 @export var focus_offset := Vector3.ZERO
 @export var hold_offset := Vector3(0.0, -0.1, 0.35)
 @export var hold_rotation_degrees := Vector3.ZERO

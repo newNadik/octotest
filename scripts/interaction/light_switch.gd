@@ -48,4 +48,5 @@ func get_save_state() -> Dictionary:
 func apply_save_state(state: Dictionary) -> void:
 	if state.is_empty():
 		return
-	set_switch_state(bool(state.get("is_on", start_on)), true)
+	# Save-load restoration should not retrigger startup/toggle effects.
+	set_switch_state(bool(state.get("is_on", start_on)), false)
