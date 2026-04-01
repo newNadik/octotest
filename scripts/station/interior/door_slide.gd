@@ -1,6 +1,7 @@
 extends Node3D
 
 signal open_requested(source: Node)
+signal door_opened(source: Node)
 
 @export var open_distance := 1.35
 @export var open_duration := 0.55
@@ -26,6 +27,8 @@ var _button_red_highlight_material: StandardMaterial3D
 
 
 func _ready() -> void:
+	add_to_group("save_state_provider")
+	add_to_group("autosave_door")
 	_closed_position = _door_body.position
 	if _close_sensor != null:
 		# Player is on layer 4, loose items are on layer 8.
@@ -116,6 +119,7 @@ func _on_open_tween_finished() -> void:
 	_is_open = true
 	_is_moving = false
 	_update_button_state()
+	emit_signal("door_opened", self)
 	_schedule_auto_close(auto_close_delay)
 
 
@@ -218,3 +222,33 @@ func _build_button_materials() -> void:
 	_button_red_highlight_material = _button_red_material.duplicate()
 	_button_red_highlight_material.albedo_color = _button_red_material.albedo_color.lightened(0.32)
 	_button_red_highlight_material.emission = _button_red_material.emission.lightened(0.45)
+
+
+func get_save_state() -> Dictionary:
+	return {
+		"locked": locked,
+		"is_open": _is_open
+	}
+
+
+func apply_save_state(state: Dictionary) -> void:
+	if state.is_empty():
+		return
+	if state.has("locked"):
+		set_locked(bool(state["locked"]))
+	var should_be_open := bool(state.get("is_open", false))
+	_set_open_state_immediate(should_be_open)
+
+
+func _set_open_state_immediate(is_open: bool) -> void:
+	_auto_close_ticket += 1
+	_is_moving = false
+	_is_open = is_open and not locked
+	if _door_body != null:
+		if _is_open:
+			_door_body.position = _closed_position + Vector3(-open_distance, 0.0, 0.0)
+		else:
+			_door_body.position = _closed_position
+	_update_button_state()
+	if _is_open:
+		_schedule_auto_close(auto_close_delay)

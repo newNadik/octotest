@@ -28,6 +28,7 @@ var _is_on := false
 var _flickering := false
 
 func _ready() -> void:
+	add_to_group("save_state_provider")
 	_make_ceiling_material_unique()
 	_populate_lamp_lights_if_needed()
 	if light_switch != null:
@@ -99,3 +100,18 @@ func _collect_switch_lights(node: Node) -> Array[Light3D]:
 		if child is Node:
 			result.append_array(_collect_switch_lights(child))
 	return result
+
+
+func get_save_state() -> Dictionary:
+	return {
+		"is_on": _is_on
+	}
+
+
+func apply_save_state(state: Dictionary) -> void:
+	if state.is_empty():
+		return
+	var target_on := bool(state.get("is_on", false))
+	_is_on = target_on
+	_flickering = false
+	_apply_state(target_on)

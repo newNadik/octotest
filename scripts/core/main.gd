@@ -7,6 +7,7 @@ const MAIN_MENU_SCENE_PATH := "res://scenes/main_menu.tscn"
 const SETTINGS_MENU_SCENE := preload("res://scenes/ui/settings_menu.tscn")
 const InteractionControllerScript = preload("res://scripts/interaction/interaction_controller.gd")
 const OCTO_START_Y := 0.08
+const AUTOSAVE_MIN_INTERVAL_SEC := 1.0
 const CAMERA_FOLLOW_HEIGHT := 0.65
 const CAMERA_MIN_WORLD_Y := 1.25
 const CAMERA_PROBE_RADIUS := 0.72
@@ -42,6 +43,7 @@ const CAMERA_NEAR_CLIP := 0.12
 @onready var hint_label: Label = $UI/HUD/HintPanel/HintMargin/HintLabel
 @onready var in_game_menu: Control = $UI/InGameMenu
 @onready var in_game_resume_button: Button = $UI/InGameMenu/MenuCenter/MenuPanel/MenuMargin/MenuButtons/ResumeButton
+@onready var in_game_save_button: Button = $UI/InGameMenu/MenuCenter/MenuPanel/MenuMargin/MenuButtons/SaveButton
 @onready var in_game_main_menu_button: Button = $UI/InGameMenu/MenuCenter/MenuPanel/MenuMargin/MenuButtons/MainMenuButton
 @onready var in_game_settings_button: Button = $UI/InGameMenu/MenuCenter/MenuPanel/MenuMargin/MenuButtons/SettingsButton
 @onready var room_light: OmniLight3D = get_node_or_null("OmniLight3D") as OmniLight3D
@@ -67,13 +69,19 @@ var _underwater_light_time := 0.0
 var _sun_base_rotation := Vector3.ZERO
 var _sun_base_energy := 0.0
 var _hero_base_energy := 0.0
+var _loaded_save_data: Dictionary = {}
+var _last_save_unix_time := -1000.0
 
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	in_game_menu.process_mode = Node.PROCESS_MODE_WHEN_PAUSED
 	player.process_mode = Node.PROCESS_MODE_PAUSABLE
-	player.global_position = Vector3(0.0, OCTO_START_Y, 16.0)
+	var starting_position := Vector3(0.0, OCTO_START_Y, 16.0)
+	if GameSave.consume_load_request():
+		_loaded_save_data = GameSave.load_game()
+		starting_position = _extract_player_position(_loaded_save_data, starting_position)
+	player.global_position = starting_position
 	var follow_position := player.global_position + Vector3(0.0, CAMERA_FOLLOW_HEIGHT, 0.0)
 	follow_position.y = maxf(follow_position.y, CAMERA_MIN_WORLD_Y)
 	camera_pivot.global_position = follow_position
@@ -85,8 +93,11 @@ func _ready() -> void:
 	if _player_visual_root == null:
 		_player_visual_root = player.get_node_or_null("MeshInstance3D") as Node3D
 	in_game_resume_button.pressed.connect(_on_resume_pressed)
+	in_game_save_button.pressed.connect(_on_save_pressed)
 	in_game_settings_button.pressed.connect(_on_settings_pressed)
 	in_game_main_menu_button.pressed.connect(_on_main_menu_pressed)
+	_connect_autosave_doors()
+	_apply_loaded_world_state()
 	_set_in_game_menu_visible(false)
 
 
@@ -409,6 +420,7 @@ func _make_click_through(node: Node) -> void:
 
 func _on_main_menu_pressed() -> void:
 	get_tree().paused = false
+	GameSave.clear_load_request()
 	var error := get_tree().change_scene_to_file(MAIN_MENU_SCENE_PATH)
 	if error != OK:
 		push_error("Failed to load main menu scene: %s" % MAIN_MENU_SCENE_PATH)
@@ -416,6 +428,12 @@ func _on_main_menu_pressed() -> void:
 
 func _on_resume_pressed() -> void:
 	_set_in_game_menu_visible(false)
+
+
+func _on_save_pressed() -> void:
+	var save_ok := _save_game(false)
+	if not save_ok:
+		push_warning("Save failed.")
 
 
 func _on_settings_pressed() -> void:
@@ -442,6 +460,117 @@ func _close_settings_overlay() -> void:
 	_settings_overlay = null
 	in_game_menu.visible = true
 	in_game_resume_button.grab_focus()
+
+
+func _connect_autosave_doors() -> void:
+	for node in get_tree().get_nodes_in_group("autosave_door"):
+		if not (node is Node):
+			continue
+		var door := node as Node
+		if not is_ancestor_of(door):
+			continue
+		if not door.has_signal("door_opened"):
+			continue
+		var handler := Callable(self, "_on_autosave_door_opened")
+		if not door.is_connected("door_opened", handler):
+			door.connect("door_opened", handler)
+
+
+func _on_autosave_door_opened(_source: Node) -> void:
+	_save_game(true)
+
+
+func _apply_loaded_world_state() -> void:
+	if _loaded_save_data.is_empty():
+		return
+	var world_state = _loaded_save_data.get("world", {})
+	if not (world_state is Dictionary):
+		return
+	var providers := world_state as Dictionary
+	for key in providers.keys():
+		var node := _resolve_node_from_save_key(str(key))
+		if node == null or not node.has_method("apply_save_state"):
+			continue
+		var state = providers[key]
+		if state is Dictionary:
+			node.call("apply_save_state", state)
+	_loaded_save_data.clear()
+
+
+func _extract_player_position(save_data: Dictionary, fallback: Vector3) -> Vector3:
+	if save_data.is_empty():
+		return fallback
+	var player_data = save_data.get("player", {})
+	if not (player_data is Dictionary):
+		return fallback
+	var position_data = (player_data as Dictionary).get("position", [])
+	if position_data is Array and (position_data as Array).size() == 3:
+		var p := position_data as Array
+		return Vector3(float(p[0]), float(p[1]), float(p[2]))
+	return fallback
+
+
+func _save_game(is_autosave: bool) -> bool:
+	var now := Time.get_unix_time_from_system()
+	if is_autosave and (now - _last_save_unix_time) < AUTOSAVE_MIN_INTERVAL_SEC:
+		return false
+
+	var payload := {
+		"player": {
+			"position": [player.global_position.x, player.global_position.y, player.global_position.z]
+		},
+		"world": _capture_world_state()
+	}
+	var save_ok := GameSave.save_game(payload)
+	if save_ok:
+		_last_save_unix_time = now
+	return save_ok
+
+
+func _capture_world_state() -> Dictionary:
+	var result := {}
+	for provider in _collect_save_providers():
+		if provider == null or not is_instance_valid(provider):
+			continue
+		if not provider.has_method("get_save_state"):
+			continue
+		var state = provider.call("get_save_state")
+		if not (state is Dictionary):
+			continue
+		result[_node_path_to_save_key(provider)] = state
+	return result
+
+
+func _collect_save_providers() -> Array[Node]:
+	var providers: Array[Node] = []
+	for node in get_tree().get_nodes_in_group("save_state_provider"):
+		if not (node is Node):
+			continue
+		var provider := node as Node
+		if is_ancestor_of(provider):
+			providers.append(provider)
+	return providers
+
+
+func _node_path_to_save_key(node: Node) -> String:
+	return str(node.get_path())
+
+
+func _resolve_node_from_save_key(path_key: String) -> Node:
+	var node := get_node_or_null(NodePath(path_key))
+	if node != null:
+		return node
+	var this_path := str(get_path())
+	var prefix := "/root/%s/" % name
+	if path_key.begins_with(prefix):
+		var relative := path_key.trim_prefix(prefix)
+		if not relative.is_empty():
+			return get_node_or_null(NodePath(relative))
+	elif path_key.begins_with("%s/" % this_path):
+		var relative_from_self := path_key.trim_prefix("%s/" % this_path)
+		if not relative_from_self.is_empty():
+			return get_node_or_null(NodePath(relative_from_self))
+	return null
 
 
 func _animate_underwater_light(delta: float) -> void:

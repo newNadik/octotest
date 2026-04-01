@@ -23,6 +23,7 @@ const DISPLAY_REFLECTION_MAX_OFFSET := Vector2(0.06, 0.04)
 const DISPLAY_REFLECTION_SMOOTH_SPEED := 10.0
 
 @onready var play_button: Button = $MainVBoxContainer/MainContainer/HBoxContainer/LeftContent/MenuButtons/PlayButton
+@onready var continue_button: Button = $MainVBoxContainer/MainContainer/HBoxContainer/LeftContent/MenuButtons/ContinueButton
 @onready var load_game_button: Button = $MainVBoxContainer/MainContainer/HBoxContainer/LeftContent/MenuButtons/LoadGameButton
 @onready var settings_button: Button = $MainVBoxContainer/MainContainer/HBoxContainer/LeftContent/MenuButtons/SettingsButton
 @onready var quit_button: Button = $MainVBoxContainer/MainContainer/HBoxContainer/LeftContent/MenuButtons/QuitButton
@@ -46,6 +47,7 @@ var _popup_layer: CanvasLayer
 
 
 func _ready() -> void:
+	continue_button.pressed.connect(_on_continue_pressed)
 	play_button.pressed.connect(_on_play_pressed)
 	load_game_button.pressed.connect(_on_load_game_pressed)
 	settings_button.pressed.connect(_on_settings_pressed)
@@ -58,10 +60,16 @@ func _ready() -> void:
 	_setup_language_select()
 	_setup_display_parallax()
 	_ensure_popup_layer()
-	play_button.grab_focus()
+	_refresh_save_buttons()
+	if continue_button.visible and continue_button.disabled == false:
+		continue_button.grab_focus()
+	else:
+		play_button.grab_focus()
 
 
 func _on_play_pressed() -> void:
+	GameSave.clear_load_request()
+	GameSave.clear_save()
 	var error := get_tree().change_scene_to_file(GAME_SCENE_PATH)
 	if error != OK:
 		push_error("Failed to load game scene: %s" % GAME_SCENE_PATH)
@@ -72,7 +80,29 @@ func _on_quit_pressed() -> void:
 
 
 func _on_load_game_pressed() -> void:
-	push_warning("Load Game is not implemented yet.")
+	_try_load_or_continue()
+
+
+func _on_continue_pressed() -> void:
+	_try_load_or_continue()
+
+
+func _try_load_or_continue() -> void:
+	if not GameSave.has_save():
+		push_warning("No saved game found.")
+		_refresh_save_buttons()
+		return
+	GameSave.request_load_on_next_game_start()
+	var error := get_tree().change_scene_to_file(GAME_SCENE_PATH)
+	if error != OK:
+		push_error("Failed to load game scene: %s" % GAME_SCENE_PATH)
+
+
+func _refresh_save_buttons() -> void:
+	var has_saved_game := GameSave.has_save()
+	continue_button.visible = has_saved_game
+	continue_button.disabled = not has_saved_game
+	load_game_button.disabled = not has_saved_game
 
 
 func _on_settings_pressed() -> void:
