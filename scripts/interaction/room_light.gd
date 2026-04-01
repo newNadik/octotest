@@ -1,6 +1,8 @@
 # RoomLighting.gd
 extends Node3D
 
+const LAMP_ON_SOUND_DEFAULT: AudioStream = preload("res://assets/sound/lamp-on.wav")
+
 @export var light_switch: LightSwitch
 @export var ceiling_mesh: MeshInstance3D
 @export var ceiling_surface := 0
@@ -22,20 +24,27 @@ extends Node3D
 @export var flicker_on_time_min := 0.03        # seconds light stays on between blinks
 @export var flicker_on_time_max := 0.12
 @export var flicker_settle_delay := 0.3        # pause before final stable on
+@export_group("Audio")
+@export var lamp_on_sound: AudioStream = LAMP_ON_SOUND_DEFAULT
+@export var lamp_on_volume_db := 10.0
 
 var _ceiling_mat: Material
 var _is_on := false
 var _flickering := false
+var _lamp_on_player: AudioStreamPlayer3D
+var _allow_runtime_toggle_fx := false
 
 func _ready() -> void:
 	add_to_group("save_state_provider")
 	_make_ceiling_material_unique()
 	_populate_lamp_lights_if_needed()
+	_ensure_audio_player()
 	if light_switch != null:
 		light_switch.toggled.connect(_on_switch_toggled)
 		_on_switch_toggled(light_switch.start_on)
 	else:
 		_on_switch_toggled(false)
+	_allow_runtime_toggle_fx = true
 
 func _make_ceiling_material_unique() -> void:
 	if ceiling_mesh == null:
@@ -48,6 +57,8 @@ func _make_ceiling_material_unique() -> void:
 
 func _on_switch_toggled(is_on: bool) -> void:
 	_is_on = is_on
+	if _allow_runtime_toggle_fx and is_on:
+		_play_lamp_on_sound()
 	if is_on and flicker_on_startup:
 		flicker()
 	else:
@@ -115,3 +126,46 @@ func apply_save_state(state: Dictionary) -> void:
 	_is_on = target_on
 	_flickering = false
 	_apply_state(target_on)
+
+
+func _ensure_audio_player() -> void:
+	if _lamp_on_player != null:
+		return
+	_lamp_on_player = AudioStreamPlayer3D.new()
+	_lamp_on_player.name = "LampOnAudio"
+	_lamp_on_player.stream = lamp_on_sound
+	_lamp_on_player.volume_db = lamp_on_volume_db
+	_lamp_on_player.max_distance = 18.0
+	_lamp_on_player.bus = _resolve_sfx_bus_name()
+	add_child(_lamp_on_player)
+
+
+func _play_lamp_on_sound() -> void:
+	if lamp_on_sound == null:
+		return
+	_ensure_audio_player()
+	_lamp_on_player.global_position = _get_lamp_audio_origin()
+	_lamp_on_player.stream = lamp_on_sound
+	_lamp_on_player.volume_db = lamp_on_volume_db
+	_lamp_on_player.pitch_scale = randf_range(0.98, 1.02)
+	_lamp_on_player.play()
+
+
+func _resolve_sfx_bus_name() -> String:
+	return "SFX" if AudioServer.get_bus_index("SFX") >= 0 else "Master"
+
+
+func _get_lamp_audio_origin() -> Vector3:
+	if not lamp_lights.is_empty():
+		var sum := Vector3.ZERO
+		var count := 0
+		for light in lamp_lights:
+			if light == null:
+				continue
+			sum += light.global_position
+			count += 1
+		if count > 0:
+			return sum / float(count)
+	if light_switch != null:
+		return light_switch.global_position
+	return global_position
