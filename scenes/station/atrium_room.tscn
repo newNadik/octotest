@@ -9,6 +9,7 @@
 [ext_resource type="Material" uid="uid://bm05hnbasm1cg" path="res://assets/materials/glass.tres" id="6_hnfiw"]
 [ext_resource type="Material" uid="uid://biog7mv21velq" path="res://assets/materials/ceiling.tres" id="7_harmc"]
 [ext_resource type="Material" uid="uid://ca2db0a60mj50" path="res://assets/materials/metal.tres" id="8_xp3kh"]
+[ext_resource type="PackedScene" uid="uid://c1nq1i0twyqej" path="res://scenes/station/interior/garden.tscn" id="10_vucpf"]
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_cmvkd"]
 resource_name = "atrium_Plane_123"
@@ -1051,3 +1052,6 @@ light_indirect_energy = 5.0
 shadow_enabled = true
 shadow_blur = 2.0
 omni_range = 10.0
+
+[node name="garden" parent="." unique_id=679455543 instance=ExtResource("10_vucpf")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, -0.11054075, 0)
