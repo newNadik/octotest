@@ -1,0 +1,36 @@
+[gd_scene format=3 uid="uid://c5tv72lyq8d8h"]
+
+[ext_resource type="Script" uid="uid://b7hy5yv2n7w3r" path="res://scripts/lighting/caustic_rig.gd" id="1_caustic"]
+[ext_resource type="Texture2D" uid="uid://c31uub48ygle" path="res://assets/textures/caustics.png" id="2_cookie"]
+
+[node name="CausticRig" type="Node3D" unique_id=7604608]
+script = ExtResource("1_caustic")
+projector_texture = ExtResource("2_cookie")
+
+[node name="CausticLightA" type="SpotLight3D" parent="." unique_id=1561316298]
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, -1.75, 0, -0.9)
+light_color = Color(0.8007638, 0.94367695, 0.9669501, 1)
+light_energy = 20.0
+light_indirect_energy = 10.0
+light_volumetric_fog_energy = 0.0
+light_projector = ExtResource("2_cookie")
+light_specular = 0.95
+shadow_enabled = true
+shadow_normal_bias = 0.35
+shadow_blur = 0.55
+spot_range = 24.0
+spot_angle = 44.0
+
+[node name="CausticLightB" type="SpotLight3D" parent="." unique_id=1468076404]
+transform = Transform3D(0.95881975, 0, 0.28401536, -0.28401536, 0, 0.95881975, 0, -1, 0, 1.55, 0, 0.95)
+light_color = Color(0.8, 0.94509804, 0.96862745, 1)
+light_energy = 20.0
+light_indirect_energy = 10.0
+light_volumetric_fog_energy = 0.0
+light_projector = ExtResource("2_cookie")
+light_specular = 0.82
+shadow_enabled = true
+shadow_normal_bias = 0.35
+shadow_blur = 0.6
+spot_range = 22.0
+spot_angle = 40.0

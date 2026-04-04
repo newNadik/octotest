@@ -2,6 +2,22 @@
 
 ## 2026-04-04
 
+### Step 47 - Projected underwater caustics rig for exterior light breakup
+
+- Added a reusable projected-caustics rig:
+  - `res://scenes/effects/caustic_rig.tscn`
+  - `res://scripts/lighting/caustic_rig.gd`
+- The rig uses two animated `SpotLight3D` nodes with `light_projector` textures to fake underwater caustic motion on nearby geometry.
+- Added authored projector texture asset `res://assets/textures/caustics.png`.
+- Integrated one or more caustics rig instances into `res://scenes/main.tscn` under the main light stack and tuned them for readable underwater shimmer against the existing skylight/fog setup.
+- Kept the rig reusable by supporting either an authored `projector_texture` or a generated fallback cookie when no texture is assigned.
+- Final tuning favored visible projected breakup rather than low numeric light-energy values, since the caustics texture masks most of the emitted light.
+
+### Validation
+1. `HOME=/tmp XDG_DATA_HOME=/tmp XDG_CONFIG_HOME=/tmp /Applications/Godot.app/Contents/MacOS/godot --headless --path . --scene res://scenes/main.tscn --quit-after 2`
+   - Result: scene boot PASS.
+   - Note: existing material/fish import warnings still appear and were not introduced by the caustics rig.
+
 ### Step 46 - Gameplay cohesion art pass for the underwater facility interior
 
 - Added a dedicated gameplay fullscreen shader in `res://assets/shaders/gameplay_cohesion.gdshader` and applied it from `res://scenes/main.tscn` as a scene-only overlay above 3D and below HUD.

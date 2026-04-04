@@ -14,6 +14,7 @@ This document describes the current runtime architecture of the prototype and mu
 8. `Interactables` contains authored clickable and pickup objects (`Area3D` + `RigidBody3D`/`StaticBody3D`), including focus-enabled objects such as `CardReader` and `CodePanel`.
 9. `WorldEnvironment` provides sky/background visuals visible through wall openings.
 10. `FishSchool` instances (for example `FishSchoolSkylight`) run procedural animated fish waves inside authored swim volumes around/over the station.
+11. `CausticRig` instances under `lights` project animated caustics onto nearby geometry using spotlight projector textures.
 
 ## Scene Graph Responsibilities
 
@@ -68,6 +69,12 @@ This document describes the current runtime architecture of the prototype and mu
   - `SwimVolume/CollisionShape3D` provides optional authored volume source.
   - `VolumePreview` is editor-only sizing preview.
 - Supports timed school lifecycle (spawn -> cross volume -> despawn -> random delay), species selection limits per school, and directional modes.
+10. `CausticRig` (`Node3D`):
+- Scene: `res://scenes/effects/caustic_rig.tscn`.
+- Script: `res://scripts/lighting/caustic_rig.gd`.
+- Hosts projected `SpotLight3D` caustic lights.
+- Applies `light_projector` textures to child lights and animates slow counter-rotation plus mild energy pulsing.
+- Supports either an authored `projector_texture` or a generated fallback cookie when no texture is assigned.
 
 ## Script Architecture
 
@@ -142,20 +149,25 @@ This document describes the current runtime architecture of the prototype and mu
   - `_can_focus_target_accept_held_item(...)`,
   - `_apply_held_item_to_focus_target(...)`,
   - `_get_focus_item_target_position(...)`.
-8. `res://scripts/interaction/focus_target.gd`
+9. `res://scripts/lighting/caustic_rig.gd`
+- Controls the projected caustics spotlight rig.
+- Assigns projector cookies to child spotlights at runtime.
+- Animates counter-rotation and subtle brightness pulsing.
+- Generates a procedural fallback projector texture if no authored texture is supplied.
+10. `res://scripts/interaction/focus_target.gd`
 - Configures per-object focus behavior (anchor, click-outside threshold, optional angle overrides, solved-state auto-exit).
-9. `res://scripts/interaction/card_reader.gd`
+11. `res://scripts/interaction/card_reader.gd`
 - Manages card reader state (`EMPTY`, `WRONG`, `CORRECT`), LED state, insertion/ejection, and slot anchors.
 - Preserves inserted card world scale when snapping into the slot.
-10. `res://scripts/interaction/focus_reject_feedback.gd`
+12. `res://scripts/interaction/focus_reject_feedback.gd`
 - Encapsulates short "apply failed" item motion toward slot and return.
-11. `res://scripts/interaction/interaction_hint_builder.gd`
+13. `res://scripts/interaction/interaction_hint_builder.gd`
 - Builds HUD hint text from controller state so text policy is not embedded in interaction flow logic.
-12. `res://scripts/interaction/code_panel.gd`
+14. `res://scripts/interaction/code_panel.gd`
 - Runtime-builds keypad geometry and interactables.
 - Enforces focus-gated keypad input.
 - Handles code-entry state (`ENTER CODE`, masked input, `DENIED`, latched `GRANTED`) and LED material-state transitions.
-13. `res://scripts/rig/OctoRig.gd`
+15. `res://scripts/rig/OctoRig.gd`
 - Procedural rig bootstrap around imported octopus skeleton.
 - Accepts manual bone assignment for head + arms using `HEAD_BONE_NAMES` and `ARM_CONFIGS`.
 - Applies section-based arm bend targets (`base/mid/tip`, each with `bend` + `bend_angle`).
@@ -175,25 +187,25 @@ This document describes the current runtime architecture of the prototype and mu
 - Supports editor-time preview modes (`Static Targets`, `Idle`, `Crawl`, `Mixer`, `Hold`) while temporarily suspending local `AnimationPlayer` playback.
 - Crawl preview uses the same cycle-speed math as gameplay, with `preview_motion_speed` as the preview-side speed input.
 - Validates rig data on startup and prints debug summaries.
-14. `res://scripts/rig/OctoArm.gd`
+16. `res://scripts/rig/OctoArm.gd`
 - Per-arm data model with role metadata (`side`, `role_bias`), resolved indices, base/mid/tip partitions, and rest rotation cache.
 - Stores runtime control fields (`current_state`, `phase_offset`, held-item/target references) and bend parameters.
-15. `res://scripts/rig/OctoHead.gd`
+17. `res://scripts/rig/OctoHead.gd`
 - Head-chain data model mirroring arm setup patterns (resolved indices, grouped parts, rest pose caches).
-16. `res://scripts/station/interior/door_slide.gd`
+18. `res://scripts/station/interior/door_slide.gd`
 - Sliding-door leaf controller.
 - Handles open/close tweening, lock state, clickable open requests, indicator-button materials, auto-close timing, and doorway blockage checks.
-17. `res://scripts/station/interior/door_lock_group.gd`
+19. `res://scripts/station/interior/door_lock_group.gd`
 - Single/double door group controller.
 - Propagates lock state to leaf doors, fans open requests across all leaves, applies per-leaf open-distance overrides, and synchronizes double-door highlight state.
-18. `res://scripts/station/fish_school.gd`
+20. `res://scripts/station/fish_school.gd`
 - School controller for animated fish waves:
   - spawns fish scene instances from folder/pool,
   - simulates schooling motion (flow/cohesion/alignment/separation),
   - supports per-wave direction modes and random heading variation,
   - enforces compact pack movement through a configured volume,
   - handles wave timing and despawn/restart cycle.
-19. `res://scripts/station/fish_school_utils.gd`
+21. `res://scripts/station/fish_school_utils.gd`
 - Utility helpers for fish-school direction selection, heading variation, random ranges, and species subset selection.
 
 ## Script Directory Layout
@@ -215,10 +227,13 @@ Scripts are grouped by runtime domain to keep ownership boundaries clear:
 5. `res://scripts/rig/`
 - Procedural octopus rig wrapper and arm/head data models.
 - Current files: `OctoRig.gd`, `OctoSurfaceLocomotion.gd`, `OctoArm.gd`, `OctoHead.gd`.
-6. `res://scripts/station/interior/`
+6. `res://scripts/lighting/`
+- Lighting presentation controllers.
+- Current files: `god_rays.gd`, `caustic_rig.gd`, `sun_ray_rig.gd`.
+7. `res://scripts/station/interior/`
 - Station interior interactive door controllers.
 - Current files: `door_slide.gd`, `door_lock_group.gd`.
-7. `res://scripts/station/`
+8. `res://scripts/station/`
 - Station ambient/world simulation systems.
 - Current files: `fish_school.gd`, `fish_school_utils.gd`.
 

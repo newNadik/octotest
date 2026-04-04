@@ -15,7 +15,8 @@
 [ext_resource type="Script" uid="uid://cdsji1uitym1j" path="res://scripts/lighting/god_rays.gd" id="16_godrays"]
 [ext_resource type="PackedScene" uid="uid://6qexu3mk541a" path="res://scenes/station/fish_school.tscn" id="17_fishschool"]
 [ext_resource type="AudioStream" uid="uid://d3qno7atcke7y" path="res://assets/sound/underwater-loop-amb.wav" id="18_underwater"]
-[ext_resource type="Shader" path="res://assets/shaders/gameplay_cohesion.gdshader" id="19_gameplayfx"]
+[ext_resource type="Shader" uid="uid://b5rx1t38of3h7" path="res://assets/shaders/gameplay_cohesion.gdshader" id="19_gameplayfx"]
+[ext_resource type="PackedScene" uid="uid://c5tv72lyq8d8h" path="res://scenes/effects/caustic_rig.tscn" id="20_caustic"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_7yl8v"]
 sky_top_color = Color(0.055, 0.135, 0.17, 1)
@@ -25,6 +26,23 @@ ground_horizon_color = Color(0.07, 0.11, 0.12, 1)
 
 [sub_resource type="Sky" id="Sky_tavjh"]
 sky_material = SubResource("ProceduralSkyMaterial_7yl8v")
+
+[sub_resource type="Environment" id="Environment_1w5qu"]
+background_mode = 2
+sky = SubResource("Sky_tavjh")
+ambient_light_sky_contribution = 0.74
+fog_light_color = Color(0.11, 0.15, 0.16, 1)
+fog_density = 0.024
+fog_sky_affect = 0.14
+fog_depth_begin = 2.8
+fog_depth_end = 20.0
+volumetric_fog_density = 0.09
+volumetric_fog_albedo = Color(0.09, 0.13, 0.14, 1)
+volumetric_fog_ambient_inject = 0.08
+adjustment_enabled = true
+adjustment_brightness = 1.02
+adjustment_contrast = 0.97
+adjustment_saturation = 0.95
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_gameplay_fx"]
 shader = ExtResource("19_gameplayfx")
@@ -39,23 +57,6 @@ shader_parameter/edge_tint = Vector3(0.72, 0.86, 0.9)
 shader_parameter/edge_tint_strength = 0.035
 shader_parameter/caustic_strength = 0.014
 shader_parameter/caustic_speed = 0.16
-
-[sub_resource type="Environment" id="Environment_1w5qu"]
-background_mode = 2
-sky = SubResource("Sky_tavjh")
-ambient_light_sky_contribution = 0.74
-adjustment_enabled = true
-adjustment_brightness = 1.02
-adjustment_contrast = 0.97
-adjustment_saturation = 0.95
-fog_light_color = Color(0.11, 0.15, 0.16, 1)
-fog_density = 0.024
-fog_sky_affect = 0.14
-fog_depth_begin = 2.8
-fog_depth_end = 20.0
-volumetric_fog_density = 0.09
-volumetric_fog_albedo = Color(0.09, 0.13, 0.14, 1)
-volumetric_fog_ambient_inject = 0.08
 
 [node name="Main" type="Node3D" unique_id=1731456763]
 script = ExtResource("1_4f72t")
@@ -103,14 +104,12 @@ fov = 60.0
 
 [node name="GameplayFX" type="ColorRect" parent="UI" unique_id=1902257100]
 material = SubResource("ShaderMaterial_gameplay_fx")
-layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-color = Color(1, 1, 1, 1)
 
 [node name="HUD" type="Control" parent="UI" unique_id=827704546]
 visible = false
@@ -236,10 +235,23 @@ shadow_blur = 2.2
 spot_range = 17.0
 spot_angle = 9.0
 
+[node name="Caustics" parent="lights" unique_id=118230011 instance=ExtResource("20_caustic")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.805, 13.880316, 0.007)
+rotation_speed_a_degrees = 4.2
+rotation_speed_b_degrees = -5.8
+energy_pulse_speed = 0.34
+energy_pulse_strength = 0.06
+
+[node name="Caustics2" parent="lights" unique_id=7604608 instance=ExtResource("20_caustic")]
+transform = Transform3D(0.2668087, -0.66073227, 0.70160246, 0.780207, 0.57544845, 0.2452264, -0.56576496, 0.4819666, 0.66904247, -27.704458, 5.4356356, 11.229486)
+rotation_speed_a_degrees = 4.2
+rotation_speed_b_degrees = -5.8
+energy_pulse_speed = 0.34
+energy_pulse_strength = 0.06
+
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="lights" unique_id=210934476]
 transform = Transform3D(0.9902681, -0.13908833, 0.0048570717, 0, 0.0348995, 0.99939084, -0.13917312, -0.98966485, 0.034559857, -0.805, 76.67352, 0.007)
 light_color = Color(0.72, 0.82, 0.84, 1)
-light_energy = 2.5
 shadow_enabled = true
 shadow_bias = 0.02
 shadow_normal_bias = 0.2

@@ -32,8 +32,8 @@ const CAMERA_NEAR_CLIP := 0.12
 @export var underwater_light_energy_amplitude := 0.24
 @export var sync_main_light_with_god_rays := true
 @export var main_light_sway_enabled := false
-@export var main_light_min_factor := 0.3
-@export var main_light_max_factor := 1.0
+@export var main_light_min_factor := 0.5
+@export var main_light_max_factor := 0.8
 
 @onready var player: CharacterBody3D = $Player
 @onready var camera_pivot: Node3D = $CameraPivot
