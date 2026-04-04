@@ -28,6 +28,7 @@ Godot `4.6.1` 3D isometric prototype with:
 24. Display stretch configured for fixed design height with adaptive width (`canvas_items` + `keep_height`) for desktop/tablet fullscreen layouts.
 25. Click movement now prefers navmesh path following via `NavigationAgent3D` when navigation data is available, with automatic fallback to direct movement when navmesh is missing or target is unreachable.
 26. Procedural animated fish-school system with per-volume schooling controls, timed school waves, species randomization (1-2 types per school), and directional flow modes (`Two-Way`, `Four-Way XZ`, `Fixed Direction`).
+27. Desktop rendering defaults now target cleaner 3D output in debug and regular play: `Forward Plus`, `1600x900` default window, `MSAA 4x`, screen-space AA, and full-resolution 3D scaling.
 
 ## Canonical Branch
 
@@ -62,6 +63,18 @@ You can still force a specific binary:
 ```bash
 GODOT_BIN=/absolute/path/to/godot ./scripts/check.sh
 ```
+
+## Rendering Defaults
+
+Desktop quality defaults are configured in [`project.godot`](/Users/nadiiaiv/Documents/GodotProjects/Octotest/project.godot):
+
+1. Renderer: `Forward Plus`
+2. Default window size: `1600x900`
+3. `MSAA 3D`: `4x`
+4. Screen-space AA: enabled
+5. 3D scaling: `1.0` (full-resolution render, no undersampling)
+
+If you see performance issues on lower-end hardware, reduce window size first, then lower AA quality before changing gameplay content or scene lighting.
 
 ## Controls
 

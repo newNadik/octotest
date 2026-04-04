@@ -1,5 +1,21 @@
 # Dev Log
 
+## 2026-04-04
+
+### Step 45 - Desktop rendering quality defaults and debug clarity pass
+
+- Updated `res://project.godot` desktop rendering defaults to improve visible 3D edge quality during normal play and debug runs:
+  - switched project renderer from `GL Compatibility` to `Forward Plus`,
+  - increased default window size from `1280x720` to `1600x900`,
+  - enabled `MSAA 3D` (`4x`),
+  - enabled screen-space AA, debanding, and roughness limiting,
+  - kept 3D render scale at `1.0` to avoid undersampled output.
+- Updated `docs/README.md` with the new rendering defaults and the recommended order for reducing quality if performance tuning is needed later.
+
+### Validation
+1. Manual visual check in-editor/gameplay debug run
+   - Result: noticeably cleaner edges and improved scene readability versus previous defaults.
+
 ## 2026-04-01
 
 ### Step 44 - Save/load system, Continue flow, autosave hooks, and save feedback UI
