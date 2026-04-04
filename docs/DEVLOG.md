@@ -2,6 +2,23 @@
 
 ## 2026-04-04
 
+### Step 46 - Gameplay cohesion art pass for the underwater facility interior
+
+- Added a dedicated gameplay fullscreen shader in `res://assets/shaders/gameplay_cohesion.gdshader` and applied it from `res://scenes/main.tscn` as a scene-only overlay above 3D and below HUD.
+- Tuned the pass to support an indoor-underwater-station look instead of a full blue submersion filter:
+  - mild desaturation,
+  - softened contrast,
+  - slightly lifted blacks,
+  - teal-leaning shadow tint,
+  - restrained edge cooling,
+  - faint animated light wash for exterior water influence.
+- Retuned `WorldEnvironment` and key light colours in `res://scenes/main.tscn` so the scene keeps a dusty, readable interior palette while exterior haze remains cool and aquatic.
+
+### Validation
+1. `./scripts/check.sh`
+   - Result: boot smoke PASS, `movement_math_test: PASS`, `slope_movement_test: PASS`.
+   - Note: existing `card_reader_interaction_test` still fails (`card reader should exist`, `focus target should exist`, `card interactables should exist`); this was not touched by the visual pass.
+
 ### Step 45 - Desktop rendering quality defaults and debug clarity pass
 
 - Updated `res://project.godot` desktop rendering defaults to improve visible 3D edge quality during normal play and debug runs:

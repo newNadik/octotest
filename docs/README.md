@@ -29,6 +29,7 @@ Godot `4.6.1` 3D isometric prototype with:
 25. Click movement now prefers navmesh path following via `NavigationAgent3D` when navigation data is available, with automatic fallback to direct movement when navmesh is missing or target is unreachable.
 26. Procedural animated fish-school system with per-volume schooling controls, timed school waves, species randomization (1-2 types per school), and directional flow modes (`Two-Way`, `Four-Way XZ`, `Fixed Direction`).
 27. Desktop rendering defaults now target cleaner 3D output in debug and regular play: `Forward Plus`, `1600x900` default window, `MSAA 4x`, screen-space AA, and full-resolution 3D scaling.
+28. Gameplay visual cohesion pass now layers a restrained facility grade over the 3D view: softer saturation/contrast, lifted blacks, teal-leaning shadow tint, and a faint moving light wash for ocean influence without a full blue underwater filter.
 
 ## Canonical Branch
 
@@ -75,6 +76,19 @@ Desktop quality defaults are configured in [`project.godot`](/Users/nadiiaiv/Doc
 5. 3D scaling: `1.0` (full-resolution render, no undersampling)
 
 If you see performance issues on lower-end hardware, reduce window size first, then lower AA quality before changing gameplay content or scene lighting.
+
+## Gameplay Look
+
+Gameplay rendering is tuned to read as an interior research facility surrounded by water, not a fully submerged camera:
+
+1. Interior colours stay relatively neutral and dusty instead of being pushed fully blue.
+2. Shadows and distance haze carry most of the cool underwater influence.
+3. A light gameplay post-process adds cohesion only: mild desaturation, slightly lifted blacks, subtle edge cooling, and a very restrained moving light wash.
+
+Main tuning points:
+
+1. [`scenes/main.tscn`](/Users/nadiiaiv/Documents/GodotProjects/Octotest/scenes/main.tscn) for `WorldEnvironment`, light colours, and gameplay overlay placement.
+2. [`assets/shaders/gameplay_cohesion.gdshader`](/Users/nadiiaiv/Documents/GodotProjects/Octotest/assets/shaders/gameplay_cohesion.gdshader) for the fullscreen grade and motion behavior.
 
 ## Controls
 
