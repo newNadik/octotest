@@ -1,0 +1,12 @@
+[gd_resource type="ShaderMaterial" format=3]
+
+[ext_resource type="Shader" path="res://assets/shaders/plaster_mobile.gdshader" id="1_plaster_mobile_shader"]
+
+[resource]
+shader = ExtResource("1_plaster_mobile_shader")
+shader_parameter/upper_color = Color(0.96, 0.97, 0.98, 1)
+shader_parameter/lower_color = Color(0.18144298, 0.3341242, 0.430378, 1)
+shader_parameter/global_floor_y = 0.0
+shader_parameter/band_height = 1.5
+shader_parameter/band_softness = 0.04
+shader_parameter/roughness = 0.58

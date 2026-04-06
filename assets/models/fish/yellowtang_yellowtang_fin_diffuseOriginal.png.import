@@ -4,8 +4,9 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://chxmlnvt5jawx"
 path.s3tc="res://.godot/imported/yellowtang_yellowtang_fin_diffuseOriginal.png-7c40990ecb92c8cb702b9f91e39117e3.s3tc.ctex"
+path.etc2="res://.godot/imported/yellowtang_yellowtang_fin_diffuseOriginal.png-7c40990ecb92c8cb702b9f91e39117e3.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 generator_parameters={
@@ -15,7 +16,7 @@ generator_parameters={
 [deps]
 
 source_file="res://assets/models/fish/yellowtang_yellowtang_fin_diffuseOriginal.png"
-dest_files=["res://.godot/imported/yellowtang_yellowtang_fin_diffuseOriginal.png-7c40990ecb92c8cb702b9f91e39117e3.s3tc.ctex"]
+dest_files=["res://.godot/imported/yellowtang_yellowtang_fin_diffuseOriginal.png-7c40990ecb92c8cb702b9f91e39117e3.s3tc.ctex", "res://.godot/imported/yellowtang_yellowtang_fin_diffuseOriginal.png-7c40990ecb92c8cb702b9f91e39117e3.etc2.ctex"]
 
 [params]
 

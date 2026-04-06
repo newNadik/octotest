@@ -4,8 +4,9 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://b4iylqix7peh4"
 path.s3tc="res://.godot/imported/cactus_plant_Image_20.png-6803c6cd1ce0c8cc8be6e900c9976d90.s3tc.ctex"
+path.etc2="res://.godot/imported/cactus_plant_Image_20.png-6803c6cd1ce0c8cc8be6e900c9976d90.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 generator_parameters={
@@ -15,7 +16,7 @@ generator_parameters={
 [deps]
 
 source_file="res://assets/models/interior/plants/pots/cactus_plant_Image_20.png"
-dest_files=["res://.godot/imported/cactus_plant_Image_20.png-6803c6cd1ce0c8cc8be6e900c9976d90.s3tc.ctex"]
+dest_files=["res://.godot/imported/cactus_plant_Image_20.png-6803c6cd1ce0c8cc8be6e900c9976d90.s3tc.ctex", "res://.godot/imported/cactus_plant_Image_20.png-6803c6cd1ce0c8cc8be6e900c9976d90.etc2.ctex"]
 
 [params]
 

@@ -4,8 +4,9 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://c41h1c47tj7dw"
 path.s3tc="res://.godot/imported/suefish_ps1_diffuseOriginal.jpg-856b4a9b8a5ec2746e66242732942e77.s3tc.ctex"
+path.etc2="res://.godot/imported/suefish_ps1_diffuseOriginal.jpg-856b4a9b8a5ec2746e66242732942e77.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 generator_parameters={
@@ -15,7 +16,7 @@ generator_parameters={
 [deps]
 
 source_file="res://assets/models/fish/suefish_ps1_diffuseOriginal.jpg"
-dest_files=["res://.godot/imported/suefish_ps1_diffuseOriginal.jpg-856b4a9b8a5ec2746e66242732942e77.s3tc.ctex"]
+dest_files=["res://.godot/imported/suefish_ps1_diffuseOriginal.jpg-856b4a9b8a5ec2746e66242732942e77.s3tc.ctex", "res://.godot/imported/suefish_ps1_diffuseOriginal.jpg-856b4a9b8a5ec2746e66242732942e77.etc2.ctex"]
 
 [params]
 

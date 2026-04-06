@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://uc7yltjepe6v"
 path.s3tc="res://.godot/imported/OfficeCeiling002_2K-JPG_Color.jpg-a21a473647c1333dbd0252d48eaabc43.s3tc.ctex"
+path.etc2="res://.godot/imported/OfficeCeiling002_2K-JPG_Color.jpg-a21a473647c1333dbd0252d48eaabc43.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/OfficeCeiling/OfficeCeiling002_2K-JPG_Color.jpg"
-dest_files=["res://.godot/imported/OfficeCeiling002_2K-JPG_Color.jpg-a21a473647c1333dbd0252d48eaabc43.s3tc.ctex"]
+dest_files=["res://.godot/imported/OfficeCeiling002_2K-JPG_Color.jpg-a21a473647c1333dbd0252d48eaabc43.s3tc.ctex", "res://.godot/imported/OfficeCeiling002_2K-JPG_Color.jpg-a21a473647c1333dbd0252d48eaabc43.etc2.ctex"]
 
 [params]
 

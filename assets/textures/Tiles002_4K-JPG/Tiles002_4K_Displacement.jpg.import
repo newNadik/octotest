@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://bran3wsoq8o2n"
 path.s3tc="res://.godot/imported/Tiles002_4K_Displacement.jpg-3cd9713d40fb4b69767fb005a4ed9d6a.s3tc.ctex"
+path.etc2="res://.godot/imported/Tiles002_4K_Displacement.jpg-3cd9713d40fb4b69767fb005a4ed9d6a.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/Tiles002_4K-JPG/Tiles002_4K_Displacement.jpg"
-dest_files=["res://.godot/imported/Tiles002_4K_Displacement.jpg-3cd9713d40fb4b69767fb005a4ed9d6a.s3tc.ctex"]
+dest_files=["res://.godot/imported/Tiles002_4K_Displacement.jpg-3cd9713d40fb4b69767fb005a4ed9d6a.s3tc.ctex", "res://.godot/imported/Tiles002_4K_Displacement.jpg-3cd9713d40fb4b69767fb005a4ed9d6a.etc2.ctex"]
 
 [params]
 

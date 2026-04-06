@@ -1,5 +1,7 @@
 extends Node3D
 
+const MOBILE_OS_NAMES := ["iOS", "Android"]
+
 @export var sway_speed := 1.25
 @export var sway_pitch_degrees := 1.8
 @export var sway_yaw_degrees := 3.1
@@ -74,4 +76,9 @@ func _apply(enabled: bool) -> void:
 	visible = enabled
 	var world := get_world_3d()
 	if world != null and world.environment != null:
-		world.environment.volumetric_fog_enabled = enabled
+		if _should_control_volumetric_fog():
+			world.environment.volumetric_fog_enabled = enabled
+
+
+func _should_control_volumetric_fog() -> bool:
+	return not OS.has_feature("mobile") and not MOBILE_OS_NAMES.has(OS.get_name())

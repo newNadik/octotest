@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://cifvsg88dl1ht"
 path.s3tc="res://.godot/imported/rocks_ground_02_nor_gl_4k.jpg-1d258f8e05d0cb584f5c50379f71f624.s3tc.ctex"
+path.etc2="res://.godot/imported/rocks_ground_02_nor_gl_4k.jpg-1d258f8e05d0cb584f5c50379f71f624.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/rocks_ground_02/rocks_ground_02_nor_gl_4k.jpg"
-dest_files=["res://.godot/imported/rocks_ground_02_nor_gl_4k.jpg-1d258f8e05d0cb584f5c50379f71f624.s3tc.ctex"]
+dest_files=["res://.godot/imported/rocks_ground_02_nor_gl_4k.jpg-1d258f8e05d0cb584f5c50379f71f624.s3tc.ctex", "res://.godot/imported/rocks_ground_02_nor_gl_4k.jpg-1d258f8e05d0cb584f5c50379f71f624.etc2.ctex"]
 
 [params]
 

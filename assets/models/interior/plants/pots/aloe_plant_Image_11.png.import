@@ -4,8 +4,9 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://s4c572c35mqo"
 path.s3tc="res://.godot/imported/aloe_plant_Image_11.png-4e227b1728904d6af0af05972b683109.s3tc.ctex"
+path.etc2="res://.godot/imported/aloe_plant_Image_11.png-4e227b1728904d6af0af05972b683109.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 generator_parameters={
@@ -15,7 +16,7 @@ generator_parameters={
 [deps]
 
 source_file="res://assets/models/interior/plants/pots/aloe_plant_Image_11.png"
-dest_files=["res://.godot/imported/aloe_plant_Image_11.png-4e227b1728904d6af0af05972b683109.s3tc.ctex"]
+dest_files=["res://.godot/imported/aloe_plant_Image_11.png-4e227b1728904d6af0af05972b683109.s3tc.ctex", "res://.godot/imported/aloe_plant_Image_11.png-4e227b1728904d6af0af05972b683109.etc2.ctex"]
 
 [params]
 

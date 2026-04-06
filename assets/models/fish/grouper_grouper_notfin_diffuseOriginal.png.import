@@ -4,8 +4,9 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://b34ktjiom6u1l"
 path.s3tc="res://.godot/imported/grouper_grouper_notfin_diffuseOriginal.png-4ff3508db8e39ef392604d78bc52df51.s3tc.ctex"
+path.etc2="res://.godot/imported/grouper_grouper_notfin_diffuseOriginal.png-4ff3508db8e39ef392604d78bc52df51.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 generator_parameters={
@@ -15,7 +16,7 @@ generator_parameters={
 [deps]
 
 source_file="res://assets/models/fish/grouper_grouper_notfin_diffuseOriginal.png"
-dest_files=["res://.godot/imported/grouper_grouper_notfin_diffuseOriginal.png-4ff3508db8e39ef392604d78bc52df51.s3tc.ctex"]
+dest_files=["res://.godot/imported/grouper_grouper_notfin_diffuseOriginal.png-4ff3508db8e39ef392604d78bc52df51.s3tc.ctex", "res://.godot/imported/grouper_grouper_notfin_diffuseOriginal.png-4ff3508db8e39ef392604d78bc52df51.etc2.ctex"]
 
 [params]
 

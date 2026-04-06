@@ -4,8 +4,9 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://12xpxxw6jgi2"
 path.s3tc="res://.godot/imported/free_pothos_potted_plant_-_money_plant_0.png-8d1b8fe4749c8e85d3a9e31165694598.s3tc.ctex"
+path.etc2="res://.godot/imported/free_pothos_potted_plant_-_money_plant_0.png-8d1b8fe4749c8e85d3a9e31165694598.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 generator_parameters={
@@ -15,7 +16,7 @@ generator_parameters={
 [deps]
 
 source_file="res://assets/models/interior/plants/pots/free_pothos_potted_plant_-_money_plant_0.png"
-dest_files=["res://.godot/imported/free_pothos_potted_plant_-_money_plant_0.png-8d1b8fe4749c8e85d3a9e31165694598.s3tc.ctex"]
+dest_files=["res://.godot/imported/free_pothos_potted_plant_-_money_plant_0.png-8d1b8fe4749c8e85d3a9e31165694598.s3tc.ctex", "res://.godot/imported/free_pothos_potted_plant_-_money_plant_0.png-8d1b8fe4749c8e85d3a9e31165694598.etc2.ctex"]
 
 [params]
 

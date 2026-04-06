@@ -4,8 +4,9 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://k2354gsplq4y"
 path.s3tc="res://.godot/imported/platy_platybody_normal.png-03f1d3080dd253d169855fccd9c8d1a7.s3tc.ctex"
+path.etc2="res://.godot/imported/platy_platybody_normal.png-03f1d3080dd253d169855fccd9c8d1a7.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 generator_parameters={
@@ -15,7 +16,7 @@ generator_parameters={
 [deps]
 
 source_file="res://assets/models/fish/platy_platybody_normal.png"
-dest_files=["res://.godot/imported/platy_platybody_normal.png-03f1d3080dd253d169855fccd9c8d1a7.s3tc.ctex"]
+dest_files=["res://.godot/imported/platy_platybody_normal.png-03f1d3080dd253d169855fccd9c8d1a7.s3tc.ctex", "res://.godot/imported/platy_platybody_normal.png-03f1d3080dd253d169855fccd9c8d1a7.etc2.ctex"]
 
 [params]
 

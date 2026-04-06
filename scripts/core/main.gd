@@ -6,6 +6,11 @@ const CAMERA_OBSTACLE_COLLISION_MASK := (1 << 0) | (1 << 1) | (1 << 4)
 const MAIN_MENU_SCENE_PATH := "res://scenes/main_menu.tscn"
 const SETTINGS_MENU_SCENE := preload("res://scenes/ui/settings_menu.tscn")
 const InteractionControllerScript = preload("res://scripts/interaction/interaction_controller.gd")
+const PLASTER_MATERIAL := preload("res://assets/materials/plaster.tres")
+const PLASTER_MOBILE_MATERIAL := preload("res://assets/materials/plaster_mobile.tres")
+const CONCRETE_MATERIAL := preload("res://assets/materials/concrete.tres")
+const FLOOR_MATERIAL := preload("res://assets/materials/floor.tres")
+const GROUND_MATERIAL := preload("res://assets/materials/ground.tres")
 const OCTO_START_Y := 0.08
 const AUTOSAVE_MIN_INTERVAL_SEC := 1.0
 const CAMERA_FOLLOW_HEIGHT := 0.65
@@ -13,6 +18,7 @@ const CAMERA_MIN_WORLD_Y := 1.25
 const CAMERA_PROBE_RADIUS := 0.72
 const CAMERA_MIN_MARGIN := 0.7
 const CAMERA_NEAR_CLIP := 0.12
+const MOBILE_OS_NAMES := ["iOS", "Android"]
 
 @export var orbit_sensitivity := 0.2
 @export var drag_orbit_threshold_px := 10.0
@@ -54,6 +60,7 @@ const CAMERA_NEAR_CLIP := 0.12
 @onready var sun_light: DirectionalLight3D = get_node_or_null("lights/DirectionalLight3D") as DirectionalLight3D
 @onready var skylight_hero_light: SpotLight3D = get_node_or_null("lights/SkylightHeroLight") as SpotLight3D
 @onready var god_rays_node: Node = get_node_or_null("lights/GodRays")
+@onready var world_environment: WorldEnvironment = $WorldEnvironment
 
 var _interaction_controller
 var _orbiting := false
@@ -82,6 +89,7 @@ func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	in_game_menu.process_mode = Node.PROCESS_MODE_WHEN_PAUSED
 	player.process_mode = Node.PROCESS_MODE_PAUSABLE
+	_apply_platform_visual_overrides()
 	var starting_position := Vector3(0.0, OCTO_START_Y, 16.0)
 	if _consume_pending_load_request():
 		_loaded_save_data = _load_saved_game()
@@ -104,6 +112,123 @@ func _ready() -> void:
 	_connect_autosave_doors()
 	_apply_loaded_world_state()
 	_set_in_game_menu_visible(false)
+
+
+func _apply_platform_visual_overrides() -> void:
+	if not _should_use_mobile_visual_fallbacks():
+		return
+	#_apply_mobile_environment_fallbacks()
+	_apply_mobile_material_fallbacks()
+	#_apply_mobile_light_fallbacks()
+	#_apply_mobile_omni_fallbacks()
+
+
+func _should_use_mobile_visual_fallbacks() -> bool:
+	return OS.has_feature("mobile") or MOBILE_OS_NAMES.has(OS.get_name())
+
+
+func _apply_mobile_environment_fallbacks() -> void:
+	var environment := world_environment.environment
+	if environment == null:
+		return
+
+	# iOS/Metal drops or changes several desktop-biased features; lean on plain depth fog instead.
+	environment.fog_enabled = true
+	environment.fog_density = 0.026
+	environment.fog_depth_begin = 2.6
+	environment.fog_depth_end = 20.0
+	environment.fog_sky_affect = 0.16
+	environment.volumetric_fog_enabled = false
+	environment.ambient_light_sky_contribution = 0.58
+	environment.adjustment_brightness = 1.0
+	environment.adjustment_contrast = 1.0
+	environment.adjustment_saturation = 0.96
+
+
+func _apply_mobile_material_fallbacks() -> void:
+	_replace_plaster_with_mobile_fallback()
+	_simplify_mobile_standard_material(PLASTER_MATERIAL, true)
+	_simplify_mobile_standard_material(CONCRETE_MATERIAL)
+	_simplify_mobile_standard_material(FLOOR_MATERIAL)
+	_simplify_mobile_standard_material(GROUND_MATERIAL)
+
+
+func _replace_plaster_with_mobile_fallback() -> void:
+	_replace_material_references_recursive(self, PLASTER_MATERIAL, PLASTER_MOBILE_MATERIAL)
+
+
+func _replace_material_references_recursive(node: Node, source_material: Material, replacement_material: Material) -> void:
+	if node is MeshInstance3D:
+		var mesh_instance := node as MeshInstance3D
+		if mesh_instance.material_override == source_material:
+			mesh_instance.material_override = replacement_material
+		var surface_count := mesh_instance.get_surface_override_material_count()
+		for surface_index in surface_count:
+			if mesh_instance.get_surface_override_material(surface_index) == source_material:
+				mesh_instance.set_surface_override_material(surface_index, replacement_material)
+
+	for child in node.get_children():
+		_replace_material_references_recursive(child, source_material, replacement_material)
+
+
+func _simplify_mobile_standard_material(material: Material, remove_next_pass: bool = false) -> void:
+	if material == null or not material is StandardMaterial3D:
+		return
+
+	var standard_material := material as StandardMaterial3D
+	standard_material.heightmap_enabled = false
+	if remove_next_pass:
+		standard_material.next_pass = null
+
+
+func _apply_mobile_light_fallbacks() -> void:
+	if sun_light != null:
+		sun_light.shadow_enabled = false
+		sun_light.shadow_blur = 0.0
+		sun_light.light_energy = 0.24
+
+	if skylight_hero_light != null:
+		skylight_hero_light.shadow_enabled = true
+		skylight_hero_light.shadow_blur = 0.0
+		skylight_hero_light.shadow_bias = 0.03
+		skylight_hero_light.shadow_normal_bias = 0.18
+		skylight_hero_light.light_volumetric_fog_energy = 0.0
+		skylight_hero_light.light_energy = 1.05
+		skylight_hero_light.light_indirect_energy = 0.42
+
+	_set_mobile_spot_light("lights/GodRays/RoofShaft", false, 0.0, 0.0)
+	_set_mobile_spot_light("lights/GodRays/RoofShaftFillA", false, 0.0, 0.0)
+	_set_mobile_spot_light("lights/GodRays/RoofShaftFillB", false, 0.0, 0.0)
+	_set_mobile_spot_light("lights/Caustics/CausticLightA", false, 0.0, 20.0)
+	_set_mobile_spot_light("lights/Caustics/CausticLightB", false, 0.0, 20.0)
+	_set_mobile_spot_light("lights/Caustics2/CausticLightA", false, 0.0, 20.0)
+	_set_mobile_spot_light("lights/Caustics2/CausticLightB", false, 0.0, 20.0)
+
+
+func _set_mobile_spot_light(light_path: String, keep_shadow: bool, blur: float, energy: float) -> void:
+	var spot_light := get_node_or_null(light_path) as SpotLight3D
+	if spot_light == null:
+		return
+	spot_light.shadow_enabled = keep_shadow
+	spot_light.shadow_blur = blur
+	spot_light.light_volumetric_fog_energy = 0.0
+	spot_light.light_energy = energy
+
+
+func _apply_mobile_omni_fallbacks() -> void:
+	for omni_light in _collect_omni_lights(self):
+		omni_light.shadow_enabled = false
+		omni_light.light_indirect_energy = 0.0
+		omni_light.light_energy = 0.0
+
+
+func _collect_omni_lights(node: Node) -> Array[OmniLight3D]:
+	var lights: Array[OmniLight3D] = []
+	if node is OmniLight3D:
+		lights.append(node as OmniLight3D)
+	for child in node.get_children():
+		lights.append_array(_collect_omni_lights(child))
+	return lights
 
 
 func _physics_process(delta: float) -> void:

@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://c83mi4b5x5h3k"
 path.s3tc="res://.godot/imported/Plaster002_4K_Roughness.jpg-6d97e14ff302d905f9bdb9bd63fc2315.s3tc.ctex"
+path.etc2="res://.godot/imported/Plaster002_4K_Roughness.jpg-6d97e14ff302d905f9bdb9bd63fc2315.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/Plaster002_4K-JPG/Plaster002_4K_Roughness.jpg"
-dest_files=["res://.godot/imported/Plaster002_4K_Roughness.jpg-6d97e14ff302d905f9bdb9bd63fc2315.s3tc.ctex"]
+dest_files=["res://.godot/imported/Plaster002_4K_Roughness.jpg-6d97e14ff302d905f9bdb9bd63fc2315.s3tc.ctex", "res://.godot/imported/Plaster002_4K_Roughness.jpg-6d97e14ff302d905f9bdb9bd63fc2315.etc2.ctex"]
 
 [params]
 

@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://bg2f1c7ddo2su"
 path.s3tc="res://.godot/imported/4K-concretetile_4_roughness.jpg-2e8328f3c0c7e1966c338753c065dd52.s3tc.ctex"
+path.etc2="res://.godot/imported/4K-concretetile_4_roughness.jpg-2e8328f3c0c7e1966c338753c065dd52.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/textures/clean_concrete_tile-4K/4K-concretetile_4_roughness.jpg"
-dest_files=["res://.godot/imported/4K-concretetile_4_roughness.jpg-2e8328f3c0c7e1966c338753c065dd52.s3tc.ctex"]
+dest_files=["res://.godot/imported/4K-concretetile_4_roughness.jpg-2e8328f3c0c7e1966c338753c065dd52.s3tc.ctex", "res://.godot/imported/4K-concretetile_4_roughness.jpg-2e8328f3c0c7e1966c338753c065dd52.etc2.ctex"]
 
 [params]
 

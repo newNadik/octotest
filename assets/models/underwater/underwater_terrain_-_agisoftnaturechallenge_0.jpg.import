@@ -4,8 +4,9 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://cw7wevre1wx2x"
 path.s3tc="res://.godot/imported/underwater_terrain_-_agisoftnaturechallenge_0.jpg-d94cd0ba93a0a3600b62b0851d3bd91a.s3tc.ctex"
+path.etc2="res://.godot/imported/underwater_terrain_-_agisoftnaturechallenge_0.jpg-d94cd0ba93a0a3600b62b0851d3bd91a.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 generator_parameters={
@@ -15,7 +16,7 @@ generator_parameters={
 [deps]
 
 source_file="res://assets/models/underwater/underwater_terrain_-_agisoftnaturechallenge_0.jpg"
-dest_files=["res://.godot/imported/underwater_terrain_-_agisoftnaturechallenge_0.jpg-d94cd0ba93a0a3600b62b0851d3bd91a.s3tc.ctex"]
+dest_files=["res://.godot/imported/underwater_terrain_-_agisoftnaturechallenge_0.jpg-d94cd0ba93a0a3600b62b0851d3bd91a.s3tc.ctex", "res://.godot/imported/underwater_terrain_-_agisoftnaturechallenge_0.jpg-d94cd0ba93a0a3600b62b0851d3bd91a.etc2.ctex"]
 
 [params]
 

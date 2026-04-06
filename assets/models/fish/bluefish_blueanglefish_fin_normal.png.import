@@ -4,8 +4,9 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://ck4g50xj3k6g3"
 path.s3tc="res://.godot/imported/bluefish_blueanglefish_fin_normal.png-81f85062c80aeed164520b7c964d0214.s3tc.ctex"
+path.etc2="res://.godot/imported/bluefish_blueanglefish_fin_normal.png-81f85062c80aeed164520b7c964d0214.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 generator_parameters={
@@ -15,7 +16,7 @@ generator_parameters={
 [deps]
 
 source_file="res://assets/models/fish/bluefish_blueanglefish_fin_normal.png"
-dest_files=["res://.godot/imported/bluefish_blueanglefish_fin_normal.png-81f85062c80aeed164520b7c964d0214.s3tc.ctex"]
+dest_files=["res://.godot/imported/bluefish_blueanglefish_fin_normal.png-81f85062c80aeed164520b7c964d0214.s3tc.ctex", "res://.godot/imported/bluefish_blueanglefish_fin_normal.png-81f85062c80aeed164520b7c964d0214.etc2.ctex"]
 
 [params]
 

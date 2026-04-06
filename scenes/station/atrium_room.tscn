@@ -986,6 +986,54 @@ transform = Transform3D(0.9238795, 0, 0.38268346, 0, 1, 0, -0.38268346, 0, 0.923
 mesh = SubResource("ArrayMesh_utks8")
 surface_material_override/0 = ExtResource("8_xp3kh")
 
+[node name="OmniLight3D" type="OmniLight3D" parent="StaticBody3D" unique_id=384785715]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.1045132, 7.1677155, -13.987336)
+light_energy = 3.0
+light_indirect_energy = 5.0
+shadow_enabled = true
+shadow_blur = 2.0
+omni_range = 10.0
+
+[node name="OmniLight3D2" type="OmniLight3D" parent="StaticBody3D" unique_id=325701896]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.862787, 8.173773, -7.7405987)
+light_energy = 3.0
+light_indirect_energy = 5.0
+shadow_enabled = true
+shadow_blur = 2.0
+omni_range = 10.0
+
+[node name="OmniLight3D3" type="OmniLight3D" parent="StaticBody3D" unique_id=289899946]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -18.39268, 6.475928, -7.7405987)
+light_energy = 3.0
+light_indirect_energy = 5.0
+shadow_enabled = true
+shadow_blur = 2.0
+omni_range = 10.0
+
+[node name="OmniLight3D4" type="OmniLight3D" parent="StaticBody3D" unique_id=1301489520]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25.917599, 5.4427094, -7.7405987)
+light_energy = 3.0
+light_indirect_energy = 5.0
+shadow_enabled = true
+shadow_blur = 2.0
+omni_range = 10.0
+
+[node name="OmniLight3D5" type="OmniLight3D" parent="StaticBody3D" unique_id=971586734]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.292988, 6.475928, 14.124443)
+light_energy = 3.0
+light_indirect_energy = 5.0
+shadow_enabled = true
+shadow_blur = 2.0
+omni_range = 10.0
+
+[node name="OmniLight3D6" type="OmniLight3D" parent="StaticBody3D" unique_id=210417179]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.279755, 4.673018, 22.940992)
+light_energy = 3.0
+light_indirect_energy = 5.0
+shadow_enabled = true
+shadow_blur = 2.0
+omni_range = 10.0
+
 [node name="DoorDouble" parent="." unique_id=1685186809 instance=ExtResource("2_ecqnk")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.78, 0, -10.1)
 

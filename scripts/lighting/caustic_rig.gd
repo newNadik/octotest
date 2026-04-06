@@ -1,5 +1,7 @@
 extends Node3D
 
+const MOBILE_OS_NAMES := ["iOS", "Android"]
+
 @export var projector_texture: Texture2D
 @export_range(64, 512, 1) var projector_resolution := 256
 @export_range(8, 48, 1) var primary_point_count := 18
@@ -21,12 +23,16 @@ func _ready() -> void:
 	_cache_lights()
 	_projector_texture = projector_texture if projector_texture != null else _generate_projector_texture()
 	for light in _lights:
-		light.light_projector = _projector_texture
+		light.light_projector = _projector_texture if _supports_light_projector() else null
 	var settings := get_node_or_null("/root/GameSettings")
 	if settings == null:
 		return
 	_apply(bool(settings.call("get_god_rays_enabled")))
 	settings.god_rays_enabled_changed.connect(_apply)
+
+
+func _supports_light_projector() -> bool:
+	return not OS.has_feature("mobile") and not MOBILE_OS_NAMES.has(OS.get_name())
 
 
 func _process(delta: float) -> void:

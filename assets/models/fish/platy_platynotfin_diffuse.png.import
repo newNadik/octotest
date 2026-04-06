@@ -4,8 +4,9 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://cuy1iln8waumd"
 path.s3tc="res://.godot/imported/platy_platynotfin_diffuse.png-1ff1898c1939f1cfed84c2a8495fe5c6.s3tc.ctex"
+path.etc2="res://.godot/imported/platy_platynotfin_diffuse.png-1ff1898c1939f1cfed84c2a8495fe5c6.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 generator_parameters={
@@ -15,7 +16,7 @@ generator_parameters={
 [deps]
 
 source_file="res://assets/models/fish/platy_platynotfin_diffuse.png"
-dest_files=["res://.godot/imported/platy_platynotfin_diffuse.png-1ff1898c1939f1cfed84c2a8495fe5c6.s3tc.ctex"]
+dest_files=["res://.godot/imported/platy_platynotfin_diffuse.png-1ff1898c1939f1cfed84c2a8495fe5c6.s3tc.ctex", "res://.godot/imported/platy_platynotfin_diffuse.png-1ff1898c1939f1cfed84c2a8495fe5c6.etc2.ctex"]
 
 [params]
 

@@ -1,8 +1,5 @@
 [gd_scene format=4 uid="uid://c1nq1i0twyqej"]
 
-[ext_resource type="Texture2D" uid="uid://tqi2h25nqrvk" path="res://assets/models/interior/plants/rocks/rocks_circle_Image_0.jpg" id="1_wjrfi"]
-[ext_resource type="Texture2D" uid="uid://leb4pntatnes" path="res://assets/models/interior/plants/rocks/rocks_circle_Image_1.png" id="2_its03"]
-[ext_resource type="Texture2D" uid="uid://bou46i1tw4ug1" path="res://assets/models/interior/plants/rocks/rocks_circle_Image_2.png" id="3_o0yo2"]
 [ext_resource type="Material" uid="uid://dnrool01x7tw0" path="res://assets/materials/ground.tres" id="4_mub02"]
 [ext_resource type="PackedScene" uid="uid://bjh1hi515qcew" path="res://assets/models/interior/plants/garden_plants.glb" id="8_pdk73"]
 [ext_resource type="Texture2D" uid="uid://bni311diveawp" path="res://assets/models/interior/plants/rocks/rocks_circle_Image_9.jpg" id="9_qpaiv"]
@@ -12,13 +9,9 @@
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gsbu1"]
 resource_name = "Ground"
 cull_mode = 2
-albedo_texture = ExtResource("1_wjrfi")
-metallic_texture = ExtResource("2_its03")
 metallic_texture_channel = 2
-roughness_texture = ExtResource("2_its03")
 roughness_texture_channel = 1
 normal_enabled = true
-normal_texture = ExtResource("3_o0yo2")
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_6w1qm"]
 _surfaces = [{
