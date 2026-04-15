@@ -119,10 +119,13 @@ Main tuning points:
 - `Save Game` writes current state to `user://save_game.json`.
 - `Settings` opens the shared settings overlay.
 - `Main Menu` returns to startup menu.
+ - `Load Game` is intentionally not shown in pause menu; use `Main Menu` -> `Continue`.
 3. Save behavior:
 - Autosave triggers when opening station doors (room traversal flow).
 - Manual save is available from pause menu.
-- Saved state currently includes player position and key interactable state (doors and room lights/switches).
+- Saved state includes player position and save providers in world state.
+- Interactables persist enabled state and pickup-object world transform.
+- If an item was held at save time, on load it is restored as dropped near Octo on the floor (not floating in-hand), with slot spreading to avoid overlap stacking.
 - In-game save feedback is shown as a bottom-right toast (`Game Saved`, `Autosaved`, `Save Failed`).
 4. Settings menu controls:
 - `Music` and `Sound Effects` sliders persist audio values.

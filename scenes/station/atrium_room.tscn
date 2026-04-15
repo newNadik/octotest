@@ -9,6 +9,7 @@
 [ext_resource type="Material" uid="uid://bm05hnbasm1cg" path="res://assets/materials/glass.tres" id="6_hnfiw"]
 [ext_resource type="Material" uid="uid://biog7mv21velq" path="res://assets/materials/ceiling.tres" id="7_harmc"]
 [ext_resource type="Material" uid="uid://ca2db0a60mj50" path="res://assets/materials/metal.tres" id="8_xp3kh"]
+[ext_resource type="PackedScene" uid="uid://bu4rpvaec4jla" path="res://scenes/station/interior/cactus_plant.tscn" id="10_srhdw"]
 [ext_resource type="PackedScene" uid="uid://c1nq1i0twyqej" path="res://scenes/station/interior/garden.tscn" id="10_vucpf"]
 [ext_resource type="PackedScene" uid="uid://6vcqkboq1fps" path="res://scenes/effects/floor_marker_light.tscn" id="11_floorlight"]
 
@@ -1077,3 +1078,15 @@ transform = Transform3D(0.99859184, 0.05305054, 0, -0.05305054, 0.99859184, 0, 0
 
 [node name="garden" parent="." unique_id=679455543 instance=ExtResource("10_vucpf")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, -0.11054075, 0)
+
+[node name="cactus" parent="." unique_id=589026095 instance=ExtResource("10_srhdw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.08566, 0, 14.993629)
+
+[node name="cactus2" parent="." unique_id=673860927 instance=ExtResource("10_srhdw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.357236, 0, 14.993629)
+
+[node name="cactus3" parent="." unique_id=1441293302 instance=ExtResource("10_srhdw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 0.99999994, -2.357236, 0, 12.837379)
+
+[node name="cactus4" parent="." unique_id=446944527 instance=ExtResource("10_srhdw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 0.99999994, -1.4692659, 0, 12.837379)

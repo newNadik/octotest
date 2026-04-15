@@ -1,5 +1,35 @@
 # Dev Log
 
+## 2026-04-15
+
+### Step 48 - Interactable pickup workflow cleanup, deterministic drop behavior, and interactable save/load persistence
+
+- Reworked cactus into a clean scene-authoring pattern:
+  - dedicated pickup body (`StaticBody3D`) plus child `Interactable` `Area3D`,
+  - corrected interaction collision to prevent atrium wall-wide false highlights.
+- Simplified `Interactable` authoring:
+  - grouped exports into `Interaction`, `Pickup`, `Advanced`,
+  - added smart defaults for empty `display_name` and `prompt_action`,
+  - reduced required per-object manual parameter setup.
+- Made held-item drop behavior deterministic and floor-aware in `interaction_controller.gd`:
+  - drop always resolves in front of Octo,
+  - drop distance scales by item width (with minimum),
+  - floor snap via raycast and removed upward throw impulse.
+- Added interactable save/load persistence:
+  - `Interactable` now participates in `save_state_provider`,
+  - persists interaction enabled state and pickup transform for pickup items,
+  - supports stable provider save keys to remain resolvable after runtime reparenting.
+- Added held-at-save restore rule:
+  - items saved while held restore as dropped near Octo on floor,
+  - multi-item restore uses nearby slot search to avoid stacked overlaps/blocking.
+- Menu decision/documentation:
+  - kept pause menu without `Load Game` entry,
+  - load flow remains `Main Menu` -> `Continue`.
+
+### Validation
+1. `godot --headless --path . --quit-after 1`
+   - Result: startup/parse PASS after each interaction/save-load change batch.
+
 ## 2026-04-04
 
 ### Step 47 - Projected underwater caustics rig for exterior light breakup

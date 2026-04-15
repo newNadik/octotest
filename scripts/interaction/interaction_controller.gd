@@ -3,6 +3,8 @@ class_name InteractionController
 
 
 const WALL_COLLISION_MASK := 1 << 0
+const GROUND_COLLISION_MASK := 1 << 1
+const DROP_SURFACE_COLLISION_MASK := WALL_COLLISION_MASK | GROUND_COLLISION_MASK
 const INTERACTABLE_COLLISION_MASK := 1 << 3
 const CardReaderScript = preload("res://scripts/interaction/card_reader.gd")
 const CodePanelScript = preload("res://scripts/interaction/code_panel.gd")
@@ -37,7 +39,10 @@ const ARM_SOCKET_ANGLE_BY_NAME := {
 @export var hand_socket_height = 0.34
 @export var held_item_min_world_height = 0.46
 @export var held_item_clearance_max = 0.62
-@export var drop_clamp_extent = 15.2
+@export var drop_width_distance_multiplier = 2.0
+@export var drop_min_forward_distance = 0.45
+@export var drop_probe_height = 1.2
+@export var drop_probe_depth = 2.4
 @export var debug_interaction_logs = false
 @export var focus_reject_feedback_duration = 0.32
 
@@ -785,20 +790,145 @@ func _drop_held_item_by_index(index: int) -> void:
 	item.set_held(false)
 	item.drop(_player)
 
-	var lateral_offset = _player.global_basis.x * (0.2 * float(index % 3 - 1))
-	var drop_position: Vector3 = _player.global_position + _player.global_basis.z * 1.25 + Vector3(0.0, 0.6, 0.0) + lateral_offset
-	drop_position.x = clampf(drop_position.x, -drop_clamp_extent, drop_clamp_extent)
-	drop_position.z = clampf(drop_position.z, -drop_clamp_extent, drop_clamp_extent)
+	var forward = _get_drop_forward_direction(pickup_root)
+	var item_width = _estimate_drop_horizontal_width(pickup_root)
+	var drop_distance = maxf(drop_min_forward_distance, item_width * drop_width_distance_multiplier)
+	var desired_drop_position: Vector3 = _player.global_position + forward * drop_distance
+	var drop_position := _resolve_drop_position(desired_drop_position, item, pickup_root)
 	pickup_root.global_position = drop_position
 	if pickup_root is RigidBody3D:
 		var body = pickup_root as RigidBody3D
-		body.linear_velocity = _player.velocity * 0.35 + Vector3(0.0, 0.5, 0.0)
+		body.linear_velocity = _player.velocity * 0.2
 
 	if _hovered_interactable == item:
 		_set_hovered_interactable(null, false, false)
 
 	_cancel_card_selection_mode()
 	_update_hint_text()
+
+
+func _resolve_drop_position(desired_position: Vector3, item, pickup_root: Node3D) -> Vector3:
+	var from = desired_position + Vector3.UP * drop_probe_height
+	var to = desired_position + Vector3.DOWN * drop_probe_depth
+	var query := PhysicsRayQueryParameters3D.create(from, to)
+	query.collision_mask = DROP_SURFACE_COLLISION_MASK
+	query.collide_with_areas = false
+	query.exclude = [_player, pickup_root]
+	if item != null:
+		query.exclude.append(item)
+
+	var result = _world_root.get_world_3d().direct_space_state.intersect_ray(query)
+	if result.is_empty():
+		var player_probe_from = _player.global_position + Vector3.UP * drop_probe_height
+		var player_probe_to = _player.global_position + Vector3.DOWN * drop_probe_depth
+		var player_query := PhysicsRayQueryParameters3D.create(player_probe_from, player_probe_to)
+		player_query.collision_mask = DROP_SURFACE_COLLISION_MASK
+		player_query.collide_with_areas = false
+		player_query.exclude = [_player, pickup_root]
+		if item != null:
+			player_query.exclude.append(item)
+		var player_floor_result = _world_root.get_world_3d().direct_space_state.intersect_ray(player_query)
+		if player_floor_result.is_empty():
+			return desired_position
+		var player_floor_position = player_floor_result.position as Vector3
+		var fallback_base_offset = _estimate_drop_base_offset(pickup_root)
+		return Vector3(desired_position.x, player_floor_position.y + fallback_base_offset, desired_position.z)
+
+	var floor_position = result.position as Vector3
+	var base_offset = _estimate_drop_base_offset(pickup_root)
+	return Vector3(desired_position.x, floor_position.y + base_offset, desired_position.z)
+
+
+func _get_drop_forward_direction(pickup_root: Node3D) -> Vector3:
+	if pickup_root != null:
+		var carry_direction = pickup_root.global_position - _player.global_position
+		carry_direction.y = 0.0
+		if carry_direction.length_squared() > 0.0001:
+			return carry_direction.normalized()
+
+	var facing = -_player.global_basis.z
+	facing.y = 0.0
+	if facing.length_squared() <= 0.0001:
+		return Vector3.FORWARD
+	return facing.normalized()
+
+
+func _estimate_drop_base_offset(root: Node3D) -> float:
+	if root == null:
+		return 0.0
+
+	var min_y = INF
+	var found = false
+	var stack: Array[Node] = [root]
+	while not stack.is_empty():
+		var node = stack.pop_back()
+		if node is MeshInstance3D:
+			var mesh_instance = node as MeshInstance3D
+			if mesh_instance.mesh != null:
+				var aabb = mesh_instance.mesh.get_aabb()
+				var corners = [
+					Vector3(aabb.position.x, aabb.position.y, aabb.position.z),
+					Vector3(aabb.end.x, aabb.position.y, aabb.position.z),
+					Vector3(aabb.position.x, aabb.end.y, aabb.position.z),
+					Vector3(aabb.position.x, aabb.position.y, aabb.end.z),
+					Vector3(aabb.end.x, aabb.end.y, aabb.position.z),
+					Vector3(aabb.end.x, aabb.position.y, aabb.end.z),
+					Vector3(aabb.position.x, aabb.end.y, aabb.end.z),
+					Vector3(aabb.end.x, aabb.end.y, aabb.end.z),
+				]
+				for corner in corners:
+					var world_corner = mesh_instance.global_transform * corner
+					min_y = minf(min_y, world_corner.y)
+					found = true
+		for child in node.get_children():
+			stack.append(child)
+
+	if not found:
+		return 0.0
+
+	return maxf(0.0, root.global_position.y - min_y)
+
+
+func _estimate_drop_horizontal_width(root: Node3D) -> float:
+	if root == null:
+		return 0.4
+
+	var min_x = INF
+	var max_x = -INF
+	var min_z = INF
+	var max_z = -INF
+	var found = false
+	var stack: Array[Node] = [root]
+	while not stack.is_empty():
+		var node = stack.pop_back()
+		if node is MeshInstance3D:
+			var mesh_instance = node as MeshInstance3D
+			if mesh_instance.mesh != null:
+				var aabb = mesh_instance.mesh.get_aabb()
+				var corners = [
+					Vector3(aabb.position.x, aabb.position.y, aabb.position.z),
+					Vector3(aabb.end.x, aabb.position.y, aabb.position.z),
+					Vector3(aabb.position.x, aabb.end.y, aabb.position.z),
+					Vector3(aabb.position.x, aabb.position.y, aabb.end.z),
+					Vector3(aabb.end.x, aabb.end.y, aabb.position.z),
+					Vector3(aabb.end.x, aabb.position.y, aabb.end.z),
+					Vector3(aabb.position.x, aabb.end.y, aabb.end.z),
+					Vector3(aabb.end.x, aabb.end.y, aabb.end.z),
+				]
+				for corner in corners:
+					var world_corner = mesh_instance.global_transform * corner
+					min_x = minf(min_x, world_corner.x)
+					max_x = maxf(max_x, world_corner.x)
+					min_z = minf(min_z, world_corner.z)
+					max_z = maxf(max_z, world_corner.z)
+					found = true
+		for child in node.get_children():
+			stack.append(child)
+
+	if not found:
+		return 0.4
+
+	return maxf(0.2, maxf(max_x - min_x, max_z - min_z))
 
 
 func _update_held_item_transform(delta: float) -> void:

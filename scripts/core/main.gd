@@ -672,7 +672,7 @@ func _capture_world_state() -> Dictionary:
 		var state = provider.call("get_save_state")
 		if not (state is Dictionary):
 			continue
-		result[_node_path_to_save_key(provider)] = state
+		result[_provider_to_save_key(provider)] = state
 	return result
 
 
@@ -691,8 +691,21 @@ func _node_path_to_save_key(node: Node) -> String:
 	return str(node.get_path())
 
 
+func _provider_to_save_key(provider: Node) -> String:
+	if provider != null and provider.has_method("get_save_key"):
+		var custom_key = provider.call("get_save_key")
+		if custom_key is String:
+			var key := (custom_key as String).strip_edges()
+			if not key.is_empty():
+				return key
+	return _node_path_to_save_key(provider)
+
+
 func _resolve_node_from_save_key(path_key: String) -> Node:
 	var node := get_node_or_null(NodePath(path_key))
+	if node != null:
+		return node
+	node = _resolve_provider_by_custom_save_key(path_key)
 	if node != null:
 		return node
 	var this_path := str(get_path())
@@ -705,6 +718,18 @@ func _resolve_node_from_save_key(path_key: String) -> Node:
 		var relative_from_self := path_key.trim_prefix("%s/" % this_path)
 		if not relative_from_self.is_empty():
 			return get_node_or_null(NodePath(relative_from_self))
+	return null
+
+
+func _resolve_provider_by_custom_save_key(path_key: String) -> Node:
+	for provider in _collect_save_providers():
+		if provider == null or not is_instance_valid(provider):
+			continue
+		if not provider.has_method("get_save_key"):
+			continue
+		var custom_key = provider.call("get_save_key")
+		if custom_key is String and str(custom_key) == path_key:
+			return provider
 	return null
 
 
