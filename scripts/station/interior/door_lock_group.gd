@@ -16,6 +16,7 @@ func _ready() -> void:
 	_apply_open_distance_overrides()
 	_connect_slide_signals()
 	_apply_locked_state()
+	_configure_group_indicator()
 	set_process(synchronize_hover_highlight and _slide_nodes.size() > 1)
 
 
@@ -110,3 +111,35 @@ func is_group_doorway_blocked() -> bool:
 		if slide.has_method("is_doorway_blocked") and bool(slide.call("is_doorway_blocked")):
 			return true
 	return false
+
+
+func _configure_group_indicator() -> void:
+	if _slide_nodes.size() < 2:
+		return
+	var interactables: Array = []
+	for slide in _slide_nodes:
+		if slide == null or not is_instance_valid(slide):
+			continue
+		if slide.has_method("get_interactable"):
+			var interactable = slide.call("get_interactable")
+			if interactable != null:
+				interactables.append(interactable)
+	if interactables.size() < 2:
+		return
+
+	var midpoint := Vector3.ZERO
+	for interactable in interactables:
+		if interactable != null and interactable.has_method("get_focus_position"):
+			midpoint += interactable.call("get_focus_position")
+	midpoint /= float(interactables.size())
+
+	var primary = interactables[0]
+	if primary != null and primary.has_method("set_indicator_visible"):
+		primary.call("set_indicator_visible", true)
+	if primary != null and primary.has_method("set_indicator_world_position_override"):
+		primary.call("set_indicator_world_position_override", midpoint + Vector3(0.0, 0.08, 0.0), true)
+
+	for i in range(1, interactables.size()):
+		var secondary = interactables[i]
+		if secondary != null and secondary.has_method("set_indicator_visible"):
+			secondary.call("set_indicator_visible", false)

@@ -238,7 +238,7 @@ spot_range = 17.0
 spot_angle = 9.0
 
 [node name="Caustics" parent="lights" unique_id=118230011 instance=ExtResource("20_caustic")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.805, 13.880316, 0.007)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.805, 10.670206, 0.007)
 rotation_speed_a_degrees = 4.2
 rotation_speed_b_degrees = -5.8
 energy_pulse_speed = 0.34

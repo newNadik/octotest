@@ -102,6 +102,10 @@ func is_highlight_active_for_group() -> bool:
 		or state == Interactable.VisualState.BLOCKED
 
 
+func get_interactable() -> Interactable:
+	return _interactable
+
+
 func close_if_clear() -> void:
 	if not _is_open or _is_moving:
 		return

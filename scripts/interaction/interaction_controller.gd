@@ -186,6 +186,7 @@ func try_handle_interaction_click(screen_position: Vector2) -> bool:
 
 	if _is_item_currently_held(target):
 		_queued_interaction_target = null
+		_mark_interactable_clicked(target)
 		if _focus_locked:
 			_try_apply_focus_held_item(target)
 			_update_hint_text()
@@ -210,6 +211,7 @@ func try_handle_interaction_click(screen_position: Vector2) -> bool:
 		return true
 
 	if _hovered_in_range:
+		_mark_interactable_clicked(target)
 		_queued_interaction_target = null
 		var reader = _get_card_reader_for_interactable(target)
 		if reader != null:
@@ -643,6 +645,13 @@ func _describe_interactable(item) -> String:
 	if item == null:
 		return "null"
 	return "%s(id=%s)" % [item.display_name, item.item_id]
+
+
+func _mark_interactable_clicked(item) -> void:
+	if item == null or not is_instance_valid(item):
+		return
+	if item.has_method("trigger_click_feedback"):
+		item.trigger_click_feedback()
 
 
 func _set_hovered_interactable(target, in_range: bool, blocked: bool) -> void:

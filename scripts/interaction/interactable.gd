@@ -2,6 +2,7 @@ extends Area3D
 class_name Interactable
 
 const DROP_SURFACE_COLLISION_MASK := (1 << 0) | (1 << 1)
+const OUTLINE_SHADER := preload("res://assets/shaders/interaction_outline.gdshader")
 
 signal interacted(interactable: Interactable, actor: Node)
 signal clicked(interactable: Interactable, actor: Node)
@@ -44,16 +45,21 @@ enum VisualState {
 @export var visual_root_path: NodePath
 @export var pickup_root_path: NodePath
 @export var save_key_override := ""
-@export var hover_color := Color(1.0, 0.83, 0.25, 0.55)
-@export var in_range_color := Color(0.33, 0.95, 0.48, 0.48)
-@export var blocked_color := Color(0.96, 0.3, 0.3, 0.6)
+@export var show_indicator := true
+@export var hover_color := Color(1.0, 1.0, 1.0, 0.0)
+@export var in_range_color := Color(1.0, 1.0, 1.0, 0.9)
+@export var blocked_color := Color(1.0, 1.0, 1.0, 0.0)
+@export var click_color := Color(1.0, 1.0, 1.0, 0.96)
+@export var click_feedback_duration := 0.14
 @export_group("")
 
 var _visual_root: Node3D
 var _pickup_root: Node3D
-var _mesh_nodes: Array[MeshInstance3D] = []
-var _state_materials: Dictionary = {}
+var _source_mesh_nodes: Array[MeshInstance3D] = []
 var _current_state: VisualState = VisualState.IDLE
+var _outline_next_pass_materials: Dictionary = {}
+var _original_surface_overrides: Dictionary = {}
+var _outlined_surface_overrides_cache: Dictionary = {}
 var _saved_area_layer := 0
 var _saved_area_mask := 0
 var _saved_pickup_layer := 0
@@ -62,6 +68,11 @@ var _has_saved_pickup_collision := false
 var _interaction_enabled := true
 var _is_currently_held := false
 var _initial_save_key := ""
+var _indicator_root: Node3D
+var _indicator_dot: Sprite3D
+var _indicator_override_enabled := false
+var _indicator_override_world_position := Vector3.ZERO
+var _click_feedback_time_left := 0.0
 
 
 func _ready() -> void:
@@ -75,12 +86,23 @@ func _ready() -> void:
 		_visual_root = _pickup_root
 
 	_collect_meshes(_visual_root)
-	_build_materials()
+	_cache_original_surface_overrides()
+	_build_outline_next_pass_materials()
+	_build_interaction_indicator()
 	_saved_area_layer = collision_layer
 	_saved_area_mask = collision_mask
 	_initial_save_key = str(get_path())
 	_apply_smart_defaults()
 	_set_visual_state(VisualState.IDLE)
+	set_process(true)
+
+
+func _process(delta: float) -> void:
+	if _click_feedback_time_left > 0.0:
+		_click_feedback_time_left = maxf(0.0, _click_feedback_time_left - delta)
+		if _click_feedback_time_left <= 0.0:
+			_apply_visuals()
+	_update_indicator_world_position()
 
 
 func get_focus_position() -> Vector3:
@@ -116,6 +138,7 @@ func set_interaction_enabled(is_enabled: bool) -> void:
 	else:
 		collision_layer = 0
 		collision_mask = 0
+	_refresh_indicator_visuals()
 
 
 func interact(actor: Node) -> void:
@@ -177,19 +200,32 @@ func _set_visual_state(state: VisualState) -> void:
 		return
 
 	_current_state = state
-	var overlay_material: Material = null
-	match state:
-		VisualState.HOVERED:
-			overlay_material = _state_materials.get("hover")
-		VisualState.IN_RANGE:
-			overlay_material = _state_materials.get("in_range")
-		VisualState.BLOCKED:
-			overlay_material = _state_materials.get("blocked")
-		_:
-			overlay_material = null
+	_apply_visuals()
+	_refresh_indicator_visuals()
 
-	for mesh in _mesh_nodes:
-		mesh.material_overlay = overlay_material
+
+func trigger_click_feedback() -> void:
+	if click_feedback_duration <= 0.0:
+		return
+	_click_feedback_time_left = click_feedback_duration
+	_apply_visuals()
+
+
+func _apply_visuals() -> void:
+	var outline_state := ""
+	if _click_feedback_time_left > 0.0:
+		outline_state = "click"
+	else:
+		match _current_state:
+			VisualState.IN_RANGE:
+				outline_state = "in_range"
+			VisualState.HOVERED:
+				outline_state = "in_range"
+			VisualState.HELD:
+				outline_state = ""
+			_:
+				outline_state = ""
+	_apply_outline_state(outline_state)
 
 
 func _collect_meshes(node: Node) -> void:
@@ -197,25 +233,90 @@ func _collect_meshes(node: Node) -> void:
 		return
 
 	if node is MeshInstance3D:
-		_mesh_nodes.append(node as MeshInstance3D)
+		_source_mesh_nodes.append(node as MeshInstance3D)
 
 	for child: Node in node.get_children():
 		_collect_meshes(child)
 
 
-func _build_materials() -> void:
-	_state_materials["hover"] = _make_overlay_material(hover_color)
-	_state_materials["in_range"] = _make_overlay_material(in_range_color)
-	_state_materials["blocked"] = _make_overlay_material(blocked_color)
+func _build_outline_next_pass_materials() -> void:
+	_outline_next_pass_materials.clear()
+	_outline_next_pass_materials["in_range"] = _make_outline_next_pass_material(in_range_color, 4.0)
+	_outline_next_pass_materials["click"] = _make_outline_next_pass_material(click_color, 6.0)
 
 
-func _make_overlay_material(color: Color) -> StandardMaterial3D:
-	var material := StandardMaterial3D.new()
-	material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
-	material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
-	material.albedo_color = color
-	material.no_depth_test = false
+func _make_outline_next_pass_material(color: Color, width: float) -> ShaderMaterial:
+	var material := ShaderMaterial.new()
+	material.shader = OUTLINE_SHADER
+	material.set_shader_parameter("outline_color", color)
+	material.set_shader_parameter("outline_width", width)
 	return material
+
+
+func _cache_original_surface_overrides() -> void:
+	_original_surface_overrides.clear()
+	for source_mesh in _source_mesh_nodes:
+		if source_mesh == null or source_mesh.mesh == null:
+			continue
+		var mesh_id := source_mesh.get_instance_id()
+		var surface_count := source_mesh.mesh.get_surface_count()
+		var originals: Array = []
+		originals.resize(surface_count)
+		for i in range(surface_count):
+			originals[i] = source_mesh.get_surface_override_material(i)
+		_original_surface_overrides[mesh_id] = originals
+
+
+func _apply_outline_state(state_name: String) -> void:
+	for source_mesh in _source_mesh_nodes:
+		if source_mesh == null or source_mesh.mesh == null:
+			continue
+		var mesh_id := source_mesh.get_instance_id()
+		var surface_count := source_mesh.mesh.get_surface_count()
+		if state_name.is_empty():
+			var originals: Array = _original_surface_overrides.get(mesh_id, [])
+			for i in range(surface_count):
+				var original_override = null
+				if i < originals.size():
+					original_override = originals[i]
+				source_mesh.set_surface_override_material(i, original_override)
+			continue
+		var outlined: Array = _get_or_build_surface_overrides_for_state(source_mesh, state_name)
+		for i in range(surface_count):
+			var mat: Material = null
+			if i < outlined.size():
+				mat = outlined[i]
+			source_mesh.set_surface_override_material(i, mat)
+
+
+func _get_or_build_surface_overrides_for_state(source_mesh: MeshInstance3D, state_name: String) -> Array:
+	var mesh_id := source_mesh.get_instance_id()
+	if not _outlined_surface_overrides_cache.has(mesh_id):
+		_outlined_surface_overrides_cache[mesh_id] = {}
+	var mesh_cache: Dictionary = _outlined_surface_overrides_cache[mesh_id]
+	if mesh_cache.has(state_name):
+		return mesh_cache[state_name]
+
+	var surface_count := source_mesh.mesh.get_surface_count()
+	var originals: Array = _original_surface_overrides.get(mesh_id, [])
+	var result: Array = []
+	result.resize(surface_count)
+	var next_pass_material: Material = _outline_next_pass_materials.get(state_name)
+	for i in range(surface_count):
+		var base: Material = null
+		if i < originals.size():
+			base = originals[i]
+		if base == null:
+			base = source_mesh.get_active_material(i)
+		if base == null:
+			result[i] = null
+			continue
+		var duplicated: Material = base.duplicate(true)
+		duplicated.set("next_pass", next_pass_material)
+		result[i] = duplicated
+	mesh_cache[state_name] = result
+	_outlined_surface_overrides_cache[mesh_id] = mesh_cache
+	return result
 
 
 func _resolve_target_root(path: NodePath) -> Node3D:
@@ -238,6 +339,133 @@ func _apply_smart_defaults() -> void:
 			prompt_action = "Pick up"
 		else:
 			prompt_action = "Interact"
+
+
+func _build_interaction_indicator() -> void:
+	if _pickup_root == null:
+		return
+
+	_indicator_root = Node3D.new()
+	_indicator_root.name = "InteractionIndicator"
+	_indicator_root.top_level = true
+	_indicator_root.position = focus_offset + Vector3(0.0, 0.08, 0.0)
+	add_child(_indicator_root)
+
+	_indicator_dot = Sprite3D.new()
+	_indicator_dot.name = "Dot"
+	_indicator_dot.texture = _make_dot_texture(64, 0.28, 0.11)
+	_indicator_dot.modulate = Color(1.0, 1.0, 1.0, 0.86)
+	_indicator_dot.billboard = BaseMaterial3D.BILLBOARD_ENABLED
+	_indicator_dot.shaded = false
+	# Show above the interactable's own geometry. Occlusion by other objects is handled via LOS raycast.
+	_indicator_dot.no_depth_test = true
+	_indicator_dot.pixel_size = 0.0028
+	_indicator_root.add_child(_indicator_dot)
+
+	_refresh_indicator_visuals()
+
+
+func _refresh_indicator_visuals() -> void:
+	if _indicator_root == null:
+		return
+
+	_indicator_root.position = focus_offset + Vector3(0.0, 0.08, 0.0)
+	var should_show_base = show_indicator and _interaction_enabled and not _is_currently_held
+	_update_indicator_world_position()
+	if not should_show_base:
+		_indicator_root.visible = false
+		return
+
+	var dot_alpha = 0.88
+	match _current_state:
+		VisualState.HOVERED:
+			dot_alpha = 1.0
+		VisualState.IN_RANGE:
+			dot_alpha = 1.0
+		VisualState.BLOCKED:
+			dot_alpha = 0.78
+		VisualState.HELD:
+			dot_alpha = 0.0
+		_:
+			dot_alpha = 0.88
+
+	if _indicator_dot != null:
+		_indicator_dot.modulate = Color(1.0, 1.0, 1.0, dot_alpha)
+
+
+func _update_indicator_world_position() -> void:
+	if _indicator_root == null:
+		return
+	var target_world_position = get_focus_position() + Vector3(0.0, 0.08, 0.0)
+	if _indicator_override_enabled:
+		target_world_position = _indicator_override_world_position
+	_indicator_root.global_position = target_world_position
+	var should_show = show_indicator and _interaction_enabled and not _is_currently_held
+	if should_show and _is_indicator_occluded_by_world(target_world_position):
+		should_show = false
+	_indicator_root.visible = should_show
+
+
+func _is_indicator_occluded_by_world(target_world_position: Vector3) -> bool:
+	var viewport := get_viewport()
+	if viewport == null:
+		return false
+	var camera := viewport.get_camera_3d()
+	if camera == null:
+		return false
+	var world := get_world_3d()
+	if world == null:
+		return false
+	var query := PhysicsRayQueryParameters3D.create(camera.global_position, target_world_position)
+	query.collide_with_areas = false
+	query.exclude = [self]
+	var hit = world.direct_space_state.intersect_ray(query)
+	if hit.is_empty():
+		return false
+	var collider = hit.get("collider")
+	if collider == null:
+		return true
+	if collider == self:
+		return false
+	if collider is Node:
+		var collider_node := collider as Node
+		if _is_same_interactable_object(collider_node):
+			return false
+	return true
+
+
+func _is_same_interactable_object(collider_node: Node) -> bool:
+	if collider_node == self or is_ancestor_of(collider_node) or collider_node.is_ancestor_of(self):
+		return true
+	if _pickup_root != null and (collider_node == _pickup_root or _pickup_root.is_ancestor_of(collider_node) or collider_node.is_ancestor_of(_pickup_root)):
+		return true
+	var parent_node := get_parent()
+	if parent_node != null and (parent_node == collider_node or parent_node.is_ancestor_of(collider_node) or collider_node.is_ancestor_of(parent_node)):
+		return true
+	return false
+
+
+func _make_dot_texture(size: int, radius: float, softness: float) -> Texture2D:
+	var image := Image.create(size, size, false, Image.FORMAT_RGBA8)
+	for y in range(size):
+		for x in range(size):
+			var uv = Vector2((float(x) + 0.5) / float(size), (float(y) + 0.5) / float(size))
+			var p = uv * 2.0 - Vector2.ONE
+			var d = p.length()
+			var alpha = 1.0 - smoothstep(radius, radius + maxf(0.001, softness), d)
+			image.set_pixel(x, y, Color(1.0, 1.0, 1.0, clampf(alpha, 0.0, 1.0)))
+	return ImageTexture.create_from_image(image)
+
+
+func set_indicator_visible(is_visible: bool) -> void:
+	show_indicator = is_visible
+	_refresh_indicator_visuals()
+
+
+func set_indicator_world_position_override(world_position: Vector3, enabled: bool = true) -> void:
+	_indicator_override_enabled = enabled
+	_indicator_override_world_position = world_position
+	_refresh_indicator_visuals()
 
 
 func get_save_key() -> String:
@@ -271,6 +499,7 @@ func apply_save_state(state: Dictionary) -> void:
 			_pickup_root.global_transform = restored as Transform3D
 	if was_held:
 		_restore_saved_held_item_as_dropped()
+		set_interaction_enabled(true)
 	if _pickup_root is RigidBody3D:
 		var body := _pickup_root as RigidBody3D
 		body.freeze = false

@@ -1045,7 +1045,7 @@ transform = Transform3D(0.70710677, 0, 0.70710677, 0, 1, 0, -0.70710677, 0, 0.70
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25.751604, 0, -4.38)
 
 [node name="DoorDouble2" parent="." unique_id=1171473448 instance=ExtResource("2_ecqnk")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14, 0, 18.35)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13.986389, 0, 18.35)
 
 [node name="PathLights" type="Node3D" parent="." unique_id=1497399200]
 
@@ -1075,6 +1075,38 @@ transform = Transform3D(0.99859184, 0.05305054, 0, -0.05305054, 0.99859184, 0, 0
 
 [node name="FloorMarkerLightH2" parent="PathLights" unique_id=445975673 instance=ExtResource("11_floorlight")]
 transform = Transform3D(0.99859184, 0.05305054, 0, -0.05305054, 0.99859184, 0, 0, 0, 1, -11.864712, 0, 4.755432)
+
+[node name="OmniLight3D" type="OmniLight3D" parent="PathLights" unique_id=1479962631]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.738, 1.5, 17.878)
+light_energy = 0.15
+light_specular = 0.0
+light_bake_mode = 0
+omni_range = 20.0
+omni_attenuation = 0.1
+
+[node name="OmniLight3D2" type="OmniLight3D" parent="PathLights" unique_id=859261439]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.146, 1.5, 9.75)
+light_energy = 0.15
+light_specular = 0.0
+light_bake_mode = 0
+omni_range = 20.0
+omni_attenuation = 0.1
+
+[node name="OmniLight3D3" type="OmniLight3D" parent="PathLights" unique_id=8791833]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.462963, 1.5, -5.18669)
+light_energy = 0.15
+light_specular = 0.0
+light_bake_mode = 0
+omni_range = 20.0
+omni_attenuation = 0.1
+
+[node name="OmniLight3D4" type="OmniLight3D" parent="PathLights" unique_id=597421634]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.888935, 1.5, -3.6325827)
+light_energy = 0.15
+light_specular = 0.0
+light_bake_mode = 0
+omni_range = 20.0
+omni_attenuation = 0.1
 
 [node name="garden" parent="." unique_id=679455543 instance=ExtResource("10_vucpf")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, -0.11054075, 0)
