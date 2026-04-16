@@ -12,6 +12,7 @@
 [ext_resource type="PackedScene" uid="uid://bu4rpvaec4jla" path="res://scenes/station/interior/cactus_plant.tscn" id="10_srhdw"]
 [ext_resource type="PackedScene" uid="uid://c1nq1i0twyqej" path="res://scenes/station/interior/garden.tscn" id="10_vucpf"]
 [ext_resource type="PackedScene" uid="uid://6vcqkboq1fps" path="res://scenes/effects/floor_marker_light.tscn" id="11_floorlight"]
+[ext_resource type="PackedScene" uid="uid://b7vnunwlus20w" path="res://scenes/station/interior/toilet.tscn" id="14_hefio"]
 [ext_resource type="PackedScene" uid="uid://can7o07havaxf" path="res://scenes/station/interior/wet_floor_sign.tscn" id="16_o6nh8"]
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_cmvkd"]
@@ -791,6 +792,7 @@ mesh = SubResource("BoxMesh_vucpf")
 surface_material_override/0 = ExtResource("1_ijnmb")
 
 [node name="Walls" type="StaticBody3D" parent="StaticBody3D" unique_id=1938661988]
+collision_layer = 31
 
 [node name="DoorDouble" parent="StaticBody3D/Walls" unique_id=1045878697 instance=ExtResource("2_ecqnk")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.8, 0, 22.6)
@@ -1127,3 +1129,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5179149, 0.013957629, 11.6
 
 [node name="StaticBody3D7" parent="." unique_id=396757281 instance=ExtResource("16_o6nh8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.4905014, 0.013957629, 11.6915045)
+
+[node name="Node3D" parent="." unique_id=2117090278 instance=ExtResource("14_hefio")]
+transform = Transform3D(-5.2453668e-08, 0, -1.2, 0, 1.2, 0, 1.2, 0, -5.2453668e-08, 7.002975, 0, 10.765328)
+
+[node name="wt_floor_sign" parent="." unique_id=1207511351 instance=ExtResource("16_o6nh8")]
+transform = Transform3D(0.8835369, 0, -0.46836165, 0, 1, 0, 0.46836165, 0, 0.8835369, 5.5680075, 0.013957152, 15.300981)
