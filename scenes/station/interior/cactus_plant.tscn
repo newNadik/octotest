@@ -4,7 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://tgcj0r7i5bo2" path="res://assets/models/interior/plants/pots/cactus_plant_Image_18.png" id="2_0wnn3"]
 [ext_resource type="Texture2D" uid="uid://ddrbvgphyl2j2" path="res://assets/models/interior/plants/pots/cactus_plant_Image_19.png" id="3_p0p0n"]
 [ext_resource type="Texture2D" uid="uid://b4iylqix7peh4" path="res://assets/models/interior/plants/pots/cactus_plant_Image_20.png" id="4_h3i2o"]
-[ext_resource type="Texture2D" uid="uid://daqusoeeqw4ab" path="res://assets/models/interior/plants/pots/cactus_plant_Image_6.png" id="5_27wxj"]
+[ext_resource type="Texture2D" uid="uid://eyky6ii8a2yx" path="res://assets/models/interior/plants/pots/cactus_plant_Image_6.png" id="5_27wxj"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_cp4ws"]
 resource_name = "Cactus_A"

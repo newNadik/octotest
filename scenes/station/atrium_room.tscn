@@ -12,9 +12,6 @@
 [ext_resource type="PackedScene" uid="uid://bu4rpvaec4jla" path="res://scenes/station/interior/cactus_plant.tscn" id="10_srhdw"]
 [ext_resource type="PackedScene" uid="uid://c1nq1i0twyqej" path="res://scenes/station/interior/garden.tscn" id="10_vucpf"]
 [ext_resource type="PackedScene" uid="uid://6vcqkboq1fps" path="res://scenes/effects/floor_marker_light.tscn" id="11_floorlight"]
-[ext_resource type="PackedScene" uid="uid://d0abd2ne6qpp8" path="res://scenes/station/interior/money_plant.tscn" id="11_onyce"]
-[ext_resource type="PackedScene" uid="uid://b55kryvd17ry2" path="res://scenes/station/interior/rhyzone_plant.tscn" id="12_hefio"]
-[ext_resource type="PackedScene" uid="uid://b7vnunwlus20w" path="res://scenes/station/interior/toilet.tscn" id="13_fy6p5"]
 [ext_resource type="PackedScene" uid="uid://can7o07havaxf" path="res://scenes/station/interior/wet_floor_sign.tscn" id="16_o6nh8"]
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_cmvkd"]
@@ -1125,20 +1122,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.08566, 0, 14.993629)
 [node name="cactus2" parent="." unique_id=673860927 instance=ExtResource("10_srhdw")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.357236, 0, 14.993629)
 
-[node name="cactus3" parent="." unique_id=1441293302 instance=ExtResource("10_srhdw")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 0.99999994, -2.357236, 0, 12.837379)
+[node name="StaticBody3D6" parent="." unique_id=534925038 instance=ExtResource("16_o6nh8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5179149, 0.013957629, 11.6915045)
 
-[node name="cactus4" parent="." unique_id=446944527 instance=ExtResource("10_srhdw")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 0.99999994, -1.4692659, 0, 12.837379)
-
-[node name="Node3D" parent="." unique_id=212926635 instance=ExtResource("11_onyce")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.1999345, 0, 22.268715)
-
-[node name="Node3D2" parent="." unique_id=19005477 instance=ExtResource("12_hefio")]
-transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -20.554, 0, 19.538427)
-
-[node name="Node3D3" parent="." unique_id=2117090278 instance=ExtResource("13_fy6p5")]
-transform = Transform3D(-5.4639237e-08, 0, -1.25, 0, 1.25, 0, 1.25, 0, -5.4639237e-08, 7.0950856, 0, 10.567008)
-
-[node name="Node3D4" parent="." unique_id=1958658107 instance=ExtResource("16_o6nh8")]
-transform = Transform3D(0.74758947, 0, -0.6641611, 0, 1, 0, 0.6641611, 0, 0.74758947, 5.81084, 0.009305102, 15.255694)
+[node name="StaticBody3D7" parent="." unique_id=396757281 instance=ExtResource("16_o6nh8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.4905014, 0.013957629, 11.6915045)

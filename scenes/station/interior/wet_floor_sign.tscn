@@ -71,16 +71,15 @@ _surfaces = [{
 }]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_qjjw4"]
-size = Vector3(0.3, 0.6, 0.4)
+size = Vector3(0.5, 1, 0.6)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_pxa1g"]
-size = Vector3(0.4, 0.6, 0.4)
+size = Vector3(0.5, 1, 0.6)
 
-[node name="StaticBody3D" type="StaticBody3D" unique_id=1207511351]
-transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 0, 0, 0)
+[node name="wt_floor_sign" type="StaticBody3D" unique_id=1207511351]
 
 [node name="Floor_Sign" type="MeshInstance3D" parent="." unique_id=2127711502]
-transform = Transform3D(0.009993908, 0.00034899494, -4.160344e-11, 0, -1.1920929e-09, -0.01, -0.00034899494, 0.009993908, -1.1913667e-09, 0, 0, 0)
+transform = Transform3D(0.014990862, 0.0005234924, -2.288258e-11, 0, -6.556708e-10, -0.015, -0.0005234924, 0.014990862, -6.552714e-10, 0, 0, 0)
 mesh = SubResource("ArrayMesh_rm73g")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Floor_Sign" unique_id=660854134]
@@ -92,15 +91,16 @@ collision_layer = 8
 collision_mask = 0
 script = ExtResource("1_pxa1g")
 interaction_type = 1
-hold_offset = Vector3(-0.25, -0.6, -0.1)
+hold_offset = Vector3(0.1, -0.7, -0.5)
+hold_rotation_degrees = Vector3(0, 90, 0)
 highlight_mesh_paths = Array[NodePath]([NodePath("../Floor_Sign")])
 highlight_visible_paths = Array[NodePath]([NodePath("../Floor_Sign/MeshInstance3D")])
 metadata/_custom_type_script = "uid://bt8vvmy3m63u7"
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Node3D" unique_id=460437034]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 shape = SubResource("BoxShape3D_qjjw4")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=341111656]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 shape = SubResource("BoxShape3D_pxa1g")

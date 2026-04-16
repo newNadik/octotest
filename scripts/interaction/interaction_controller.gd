@@ -1236,8 +1236,9 @@ func _update_hand_sockets_from_rig() -> void:
 		radial = radial.normalized()
 		var world_pos = world_anchor + lift_offset + radial * clearance + Vector3(0.0, clearance * 0.2, 0.0)
 		world_pos.y = maxf(world_pos.y, _player.global_position.y + held_item_min_world_height)
-		var local_anchor = _player.to_local(world_pos)
-		_hand_sockets[socket_index].position = local_anchor
+		var socket = _hand_sockets[socket_index]
+		socket.global_position = world_pos
+		_align_socket_basis(socket, radial)
 
 
 func _get_item_id_for_socket(socket_index: int) -> int:
@@ -1245,6 +1246,19 @@ func _get_item_id_for_socket(socket_index: int) -> int:
 		if int(_held_socket_by_item_id[item_id_variant]) == socket_index:
 			return int(item_id_variant)
 	return -1
+
+
+func _align_socket_basis(socket: Node3D, outward: Vector3) -> void:
+	var z_axis = outward
+	if z_axis.length_squared() <= 0.0001:
+		z_axis = -_player.global_basis.z
+	z_axis = z_axis.normalized()
+	var up_axis = Vector3.UP
+	if absf(z_axis.dot(up_axis)) > 0.98:
+		up_axis = _player.global_basis.x.normalized()
+	var x_axis = up_axis.cross(z_axis).normalized()
+	var y_axis = z_axis.cross(x_axis).normalized()
+	socket.global_basis = Basis(x_axis, y_axis, z_axis)
 
 
 func _reapply_held_global_scale(item_id: int, pickup_root: Node3D) -> void:
