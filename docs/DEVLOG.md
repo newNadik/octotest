@@ -2,6 +2,22 @@
 
 ## 2026-04-16
 
+### Step 50 - Interactable highlight modes, authored reveal meshes, and double-door feedback sync
+
+- Extended `res://scripts/interaction/interactable.gd` with authored highlight configuration:
+  - `highlight_mode` now supports shader-outline or reveal-mesh presentation,
+  - `highlight_visible_paths` lets scenes toggle dedicated highlight geometry instead of forcing the shader path.
+- Retuned/iterated the interaction outline shader during authoring and kept cactus on shader-based highlight while allowing hard-surface props to use authored reveal meshes.
+- Configured `res://scenes/station/interior/light_switch.tscn` to use reveal-mesh highlight for its dedicated hidden outline mesh.
+- Updated double-door group feedback flow:
+  - both `door_slide` leaves now mirror highlight state when either side is hovered,
+  - group sync avoids self-sustaining highlight loops by separating source hover from mirrored override state,
+  - grouped double doors keep one shared midpoint indicator while idle.
+
+### Validation
+1. Manual in-editor gameplay check
+   - Result: cactus shader highlight remains usable, light switch reveal-mesh highlight works, double doors now highlight both leaves with one shared idle indicator.
+
 ### Step 49 - Interactable indicator overhaul (visibility, placement, and door-specific tuning)
 
 - Reworked interactable indicator-dot behavior in `res://scripts/interaction/interactable.gd`:

@@ -25,17 +25,22 @@ func _process(_delta: float) -> void:
 		return
 
 	var any_highlight := false
+	var synced_visual_state := 0
+	var source_slide: Node = null
 	for slide in _slide_nodes:
 		if slide == null or not is_instance_valid(slide):
 			continue
 		if slide.has_method("is_highlight_active_for_group") and bool(slide.call("is_highlight_active_for_group")):
 			any_highlight = true
+			source_slide = slide
+			if slide.has_method("get_group_visual_state"):
+				synced_visual_state = int(slide.call("get_group_visual_state"))
 			break
 
-	if any_highlight == _group_highlight_active:
-		return
-	_group_highlight_active = any_highlight
-	_apply_group_hover_highlight(any_highlight)
+	if any_highlight != _group_highlight_active:
+		_group_highlight_active = any_highlight
+		_apply_group_hover_highlight(any_highlight)
+	_apply_group_visual_state(source_slide, synced_visual_state, any_highlight)
 
 
 func set_locked(value: bool) -> void:
@@ -104,6 +109,18 @@ func _apply_group_hover_highlight(active: bool) -> void:
 			slide.call("set_group_highlight", active)
 
 
+func _apply_group_visual_state(source_slide: Node, state: int, active: bool) -> void:
+	for slide in _slide_nodes:
+		if slide == null or not is_instance_valid(slide):
+			continue
+		if slide == source_slide:
+			if slide.has_method("clear_group_visual_state"):
+				slide.call("clear_group_visual_state")
+			continue
+		if slide.has_method("apply_group_visual_state"):
+			slide.call("apply_group_visual_state", state, active)
+
+
 func is_group_doorway_blocked() -> bool:
 	for slide in _slide_nodes:
 		if slide == null or not is_instance_valid(slide):
@@ -145,3 +162,5 @@ func _configure_group_indicator() -> void:
 		var secondary = interactables[i]
 		if secondary != null and secondary.has_method("set_indicator_visible"):
 			secondary.call("set_indicator_visible", false)
+		if secondary != null and secondary.has_method("set_indicator_world_position_override"):
+			secondary.call("set_indicator_world_position_override", Vector3.ZERO, false)

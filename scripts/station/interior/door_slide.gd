@@ -29,6 +29,7 @@ var _is_open := false
 var _is_moving := false
 var _auto_close_ticket := 0
 var _group_highlight := false
+var _group_visual_override_active := false
 var _slide_player: AudioStreamPlayer3D
 var _rng := RandomNumberGenerator.new()
 var _button_green_material: StandardMaterial3D
@@ -96,10 +97,44 @@ func is_highlight_active_for_group() -> bool:
 		return false
 	if not _interactable.has_method("get_visual_state"):
 		return false
+	if _group_visual_override_active:
+		return false
 	var state := int(_interactable.call("get_visual_state"))
 	return state == Interactable.VisualState.HOVERED \
 		or state == Interactable.VisualState.IN_RANGE \
 		or state == Interactable.VisualState.BLOCKED
+
+
+func get_group_visual_state() -> int:
+	if _interactable == null:
+		return Interactable.VisualState.IDLE
+	if not _interactable.has_method("get_visual_state"):
+		return Interactable.VisualState.IDLE
+	return int(_interactable.call("get_visual_state"))
+
+
+func apply_group_visual_state(state: int, active: bool) -> void:
+	if _interactable == null:
+		return
+	_group_visual_override_active = active
+	var desired_state := Interactable.VisualState.IDLE
+	if active:
+		match state:
+			Interactable.VisualState.HOVERED:
+				desired_state = Interactable.VisualState.HOVERED
+			Interactable.VisualState.IN_RANGE:
+				desired_state = Interactable.VisualState.IN_RANGE
+			Interactable.VisualState.BLOCKED:
+				desired_state = Interactable.VisualState.BLOCKED
+			_:
+				desired_state = Interactable.VisualState.IDLE
+	_interactable.set_visual_state(desired_state)
+
+
+func clear_group_visual_state() -> void:
+	if _interactable == null:
+		return
+	_group_visual_override_active = false
 
 
 func get_interactable() -> Interactable:

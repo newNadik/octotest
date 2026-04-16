@@ -27,6 +27,11 @@ enum VisualState {
 	HELD,
 }
 
+enum HighlightMode {
+	SHADER_OUTLINE,
+	REVEAL_MESHES,
+}
+
 @export_group("Interaction")
 @export var interaction_type: InteractionType = InteractionType.CLICK
 @export var display_name := ""
@@ -43,7 +48,9 @@ enum VisualState {
 
 @export_group("Advanced")
 @export var visual_root_path: NodePath
+@export var highlight_mode: HighlightMode = HighlightMode.SHADER_OUTLINE
 @export var highlight_mesh_paths: Array[NodePath] = []
+@export var highlight_visible_paths: Array[NodePath] = []
 @export var pickup_root_path: NodePath
 @export var indicator_anchor_path: NodePath
 @export var save_key_override := ""
@@ -60,10 +67,12 @@ enum VisualState {
 var _visual_root: Node3D
 var _pickup_root: Node3D
 var _source_mesh_nodes: Array[MeshInstance3D] = []
+var _highlight_reveal_nodes: Array[VisualInstance3D] = []
 var _current_state: VisualState = VisualState.IDLE
 var _outline_next_pass_materials: Dictionary = {}
 var _original_surface_overrides: Dictionary = {}
 var _outlined_surface_overrides_cache: Dictionary = {}
+var _highlight_reveal_original_visibility: Dictionary = {}
 var _saved_area_layer := 0
 var _saved_area_mask := 0
 var _saved_pickup_layer := 0
@@ -91,6 +100,7 @@ func _ready() -> void:
 		_visual_root = _pickup_root
 
 	_collect_highlight_meshes()
+	_collect_reveal_highlight_nodes()
 	_cache_original_surface_overrides()
 	_build_outline_next_pass_materials()
 	_indicator_anchor_local = _compute_indicator_anchor_local()
@@ -231,12 +241,20 @@ func _apply_visuals() -> void:
 				outline_state = ""
 			_:
 				outline_state = ""
-	_apply_outline_state(outline_state)
+	var should_show_highlight := not outline_state.is_empty()
+	if highlight_mode == HighlightMode.REVEAL_MESHES:
+		_apply_outline_state("")
+		_apply_reveal_highlight_state(should_show_highlight)
+	else:
+		_apply_reveal_highlight_state(false)
+		_apply_outline_state(outline_state)
 
 
 func _collect_highlight_meshes() -> void:
 	_source_mesh_nodes.clear()
 	var seen_mesh_ids: Dictionary = {}
+	if highlight_mode == HighlightMode.REVEAL_MESHES:
+		return
 	if not highlight_mesh_paths.is_empty():
 		for mesh_path in highlight_mesh_paths:
 			if mesh_path == NodePath(""):
@@ -271,6 +289,43 @@ func _append_unique_source_mesh(mesh_node: MeshInstance3D, seen_mesh_ids: Dictio
 		return
 	seen_mesh_ids[mesh_id] = true
 	_source_mesh_nodes.append(mesh_node)
+
+
+func _collect_reveal_highlight_nodes() -> void:
+	_highlight_reveal_nodes.clear()
+	_highlight_reveal_original_visibility.clear()
+	var seen_node_ids: Dictionary = {}
+	for node_path in highlight_visible_paths:
+		if node_path == NodePath(""):
+			continue
+		var target = get_node_or_null(node_path)
+		if target == null:
+			continue
+		_collect_reveal_nodes(target, seen_node_ids)
+	_apply_reveal_highlight_state(false)
+
+
+func _collect_reveal_nodes(node: Node, seen_node_ids: Dictionary) -> void:
+	if node == null:
+		return
+	if node is VisualInstance3D:
+		var visual_node := node as VisualInstance3D
+		var node_id := visual_node.get_instance_id()
+		if not seen_node_ids.has(node_id):
+			seen_node_ids[node_id] = true
+			_highlight_reveal_nodes.append(visual_node)
+			_highlight_reveal_original_visibility[node_id] = visual_node.visible
+	for child: Node in node.get_children():
+		_collect_reveal_nodes(child, seen_node_ids)
+
+
+func _apply_reveal_highlight_state(is_visible: bool) -> void:
+	for visual_node in _highlight_reveal_nodes:
+		if visual_node == null:
+			continue
+		var node_id := visual_node.get_instance_id()
+		var original_visible := bool(_highlight_reveal_original_visibility.get(node_id, visual_node.visible))
+		visual_node.visible = is_visible or original_visible
 
 
 func _build_outline_next_pass_materials() -> void:

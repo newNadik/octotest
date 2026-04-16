@@ -7,8 +7,8 @@ Godot `4.6.1` 3D isometric prototype with:
 3. Gravity locomotion with authored climb/mantle movement for low elevated surfaces (chairs/desks).
 4. Authored data-office room geometry (walls, windows, doors, console, desks, chairs, storage, tank).
 5. UI flow with a startup main menu (browser-frame styled), in-game pause menu, and gameplay HUD hints.
-6. Interactable object system with hover/in-range/blocked visualization.
-7. World-space interactable marker dots with per-object anchor/offset overrides (including door-specific midpoint/height tuning) and automatic camera-facing orientation.
+6. Interactable object system with hover/in-range/blocked visualization, supporting either shader-outline highlight or authored reveal-mesh highlight per item.
+7. World-space interactable marker dots with per-object anchor/offset overrides, including shared midpoint markers for grouped double doors and automatic camera-facing orientation.
 8. Clickable wall light switch.
 9. Multi-item octopus carry system (up to 8 held items) with overload movement penalties.
 10. Focus-mode interaction system for precision objects (e.g. card reader).

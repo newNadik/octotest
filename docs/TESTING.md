@@ -52,27 +52,30 @@ HOME=/tmp XDG_DATA_HOME=/tmp XDG_CONFIG_HOME=/tmp godot --headless --path /path/
 23. Confirm hover color state when out of range.
 24. Confirm in-range interaction color state.
 25. Confirm blocked interaction color state.
-26. Confirm click on out-of-range interactable moves player closer and auto-interacts when in range.
-27. Confirm octopus can hold up to 8 pickup items.
-28. Confirm movement slows at heavy carry threshold and stops when fully loaded.
-29. Confirm `LMB` on held item drops that specific item.
-30. Confirm `F` drops last held item and `Shift + F` drops all.
-31. Confirm clicking a focus-enabled object enters focus mode after approach (e.g. `CardReader`).
-32. In focus mode, confirm held items appear at the bottom and can be selected by click.
-33. Confirm clicking outside focus interaction area exits focus immediately.
-34. Confirm card reader LED states: yellow (empty), red (wrong), green (correct).
-35. Confirm reader holds one card at a time: second card cannot replace inserted card.
-36. Confirm clicking inserted card retrieves/ejects it back to held items (when a slot is available).
-37. Confirm non-applicable held item click in focus (e.g. mug on reader) animates toward slot and returns.
-38. Confirm code panel can be clicked to enter focus mode.
-39. Confirm code panel keypad is only clickable while focused.
-40. Confirm code panel input supports `0-9`, `<<` (backspace), and `OK`.
-41. Confirm default code `1234` sets display to `GRANTED` and latches green LED.
-42. Confirm wrong code sets display to `DENIED`, red LED, then resets to `ENTER CODE` + yellow LED.
-43. Confirm code panel LED colors match card reader colors for idle/wrong/correct states.
-44. Confirm non-applicable held item click in code panel focus animates toward panel and returns.
-45. Confirm all code panel button columns are clickable (no blocked `2/3`, `5/6`, `8/9`, `0/OK` patterns).
-46. Confirm pickup item size stays consistent through hold -> reader insert -> eject -> hold cycles.
+26. For interactables authored with reveal-mesh highlight, confirm the dedicated highlight mesh appears only while highlighted and returns to its original hidden state after hover ends.
+27. Confirm double doors show one midpoint indicator when idle.
+28. Confirm hovering either double-door leaf highlights both leaves and removes highlight from both when hover ends.
+29. Confirm click on out-of-range interactable moves player closer and auto-interacts when in range.
+30. Confirm octopus can hold up to 8 pickup items.
+31. Confirm movement slows at heavy carry threshold and stops when fully loaded.
+32. Confirm `LMB` on held item drops that specific item.
+33. Confirm `F` drops last held item and `Shift + F` drops all.
+34. Confirm clicking a focus-enabled object enters focus mode after approach (e.g. `CardReader`).
+35. In focus mode, confirm held items appear at the bottom and can be selected by click.
+36. Confirm clicking outside focus interaction area exits focus immediately.
+37. Confirm card reader LED states: yellow (empty), red (wrong), green (correct).
+38. Confirm reader holds one card at a time: second card cannot replace inserted card.
+39. Confirm clicking inserted card retrieves/ejects it back to held items (when a slot is available).
+40. Confirm non-applicable held item click in focus (e.g. mug on reader) animates toward slot and returns.
+41. Confirm code panel can be clicked to enter focus mode.
+42. Confirm code panel keypad is only clickable while focused.
+43. Confirm code panel input supports `0-9`, `<<` (backspace), and `OK`.
+44. Confirm default code `1234` sets display to `GRANTED` and latches green LED.
+45. Confirm wrong code sets display to `DENIED`, red LED, then resets to `ENTER CODE` + yellow LED.
+46. Confirm code panel LED colors match card reader colors for idle/wrong/correct states.
+47. Confirm non-applicable held item click in code panel focus animates toward panel and returns.
+48. Confirm all code panel button columns are clickable (no blocked `2/3`, `5/6`, `8/9`, `0/OK` patterns).
+49. Confirm pickup item size stays consistent through hold -> reader insert -> eject -> hold cycles.
 
 ## Regression Focus Areas
 

@@ -129,6 +129,9 @@ This document describes the current runtime architecture of the prototype and mu
 6. `res://scripts/interaction/interactable.gd`
 - Reusable `Area3D` interaction component.
 - Encapsulates interaction type (`CLICK`, `PICKUP`), range, prompts, held-state toggles, and visual overlays.
+- Supports two highlight presentation modes:
+  - shader-outline highlight for meshes collected from `visual_root_path` / `highlight_mesh_paths`,
+  - reveal-mesh highlight for authored nodes listed in `highlight_visible_paths`.
 - Owns world-space indicator-dot rendering and placement:
   - per-object anchor path override (`indicator_anchor_path`),
   - per-object local offset (`indicator_local_offset`) and camera-facing bias (`indicator_camera_bias`),
@@ -199,6 +202,7 @@ This document describes the current runtime architecture of the prototype and mu
 18. `res://scripts/station/interior/door_slide.gd`
 - Sliding-door leaf controller.
 - Handles open/close tweening, lock state, clickable open requests, indicator-button materials, auto-close timing, and doorway blockage checks.
+ - Exposes group-highlight source/override helpers so double-door wrappers can mirror leaf visual state without creating permanent hover-feedback loops.
 19. `res://scripts/station/interior/door_lock_group.gd`
 - Single/double door group controller.
 - Propagates lock state to leaf doors, fans open requests across all leaves, applies per-leaf open-distance overrides, and synchronizes double-door highlight state.
