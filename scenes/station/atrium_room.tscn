@@ -12,6 +12,10 @@
 [ext_resource type="PackedScene" uid="uid://bu4rpvaec4jla" path="res://scenes/station/interior/cactus_plant.tscn" id="10_srhdw"]
 [ext_resource type="PackedScene" uid="uid://c1nq1i0twyqej" path="res://scenes/station/interior/garden.tscn" id="10_vucpf"]
 [ext_resource type="PackedScene" uid="uid://6vcqkboq1fps" path="res://scenes/effects/floor_marker_light.tscn" id="11_floorlight"]
+[ext_resource type="PackedScene" uid="uid://d0abd2ne6qpp8" path="res://scenes/station/interior/money_plant.tscn" id="11_onyce"]
+[ext_resource type="PackedScene" uid="uid://b55kryvd17ry2" path="res://scenes/station/interior/rhyzone_plant.tscn" id="12_hefio"]
+[ext_resource type="PackedScene" uid="uid://b7vnunwlus20w" path="res://scenes/station/interior/toilet.tscn" id="13_fy6p5"]
+[ext_resource type="PackedScene" uid="uid://can7o07havaxf" path="res://scenes/station/interior/wet_floor_sign.tscn" id="16_o6nh8"]
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_cmvkd"]
 resource_name = "atrium_Plane_123"
@@ -741,7 +745,7 @@ mesh = SubResource("ArrayMesh_cmvkd")
 surface_material_override/0 = ExtResource("1_ijnmb")
 
 [node name="FloorWC" type="MeshInstance3D" parent="StaticBody3D/Floor" unique_id=1114233799]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.3483586, -7.5464764e-06, 18.041922)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.348, 0.01, 18.042)
 mesh = SubResource("ArrayMesh_ajh2v")
 surface_material_override/0 = ExtResource("1_7nxm2")
 
@@ -841,7 +845,7 @@ transform = Transform3D(0.9238795, 0, 0.38268346, 0, 1, 0, -0.38268346, 0, 0.923
 shape = SubResource("ConcavePolygonShape3D_5jbdu")
 
 [node name="Collisions" type="StaticBody3D" parent="StaticBody3D/Walls" unique_id=1758667007]
-collision_layer = 17
+collision_layer = 63
 
 [node name="CollisionWall3" type="CollisionShape3D" parent="StaticBody3D/Walls/Collisions" unique_id=1036100621]
 transform = Transform3D(0.70710677, 0, 0.70710677, 0, 1, 0, -0.70710677, 0, 0.70710677, -22.971312, 3, 20.515867)
@@ -876,7 +880,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 29.4, 3, 0)
 shape = SubResource("BoxShape3D_5jbdu")
 
 [node name="DoorSingle" parent="StaticBody3D/Walls" unique_id=224428218 instance=ExtResource("3_wctxe")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.47, 0, 19.06)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.499224, 0, 19.06)
 
 [node name="Roof" type="Node3D" parent="StaticBody3D" unique_id=1383701249]
 
@@ -1126,3 +1130,15 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 0.99999994, -2.357236, 0, 12.837
 
 [node name="cactus4" parent="." unique_id=446944527 instance=ExtResource("10_srhdw")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 0.99999994, -1.4692659, 0, 12.837379)
+
+[node name="Node3D" parent="." unique_id=212926635 instance=ExtResource("11_onyce")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.1999345, 0, 22.268715)
+
+[node name="Node3D2" parent="." unique_id=19005477 instance=ExtResource("12_hefio")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -20.554, 0, 19.538427)
+
+[node name="Node3D3" parent="." unique_id=2117090278 instance=ExtResource("13_fy6p5")]
+transform = Transform3D(-5.4639237e-08, 0, -1.25, 0, 1.25, 0, 1.25, 0, -5.4639237e-08, 7.0950856, 0, 10.567008)
+
+[node name="Node3D4" parent="." unique_id=1958658107 instance=ExtResource("16_o6nh8")]
+transform = Transform3D(0.74758947, 0, -0.6641611, 0, 1, 0, 0.6641611, 0, 0.74758947, 5.81084, 0.009305102, 15.255694)

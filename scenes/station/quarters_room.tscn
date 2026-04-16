@@ -8,6 +8,7 @@
 [ext_resource type="Material" uid="uid://bb4hx1vyakkmf" path="res://assets/materials/plaster.tres" id="4_kvu68"]
 [ext_resource type="Material" uid="uid://ca2db0a60mj50" path="res://assets/materials/metal.tres" id="5_wovnj"]
 [ext_resource type="PackedScene" uid="uid://b7vd8cvq5kxdt" path="res://scenes/station/interior/light_switch.tscn" id="7_hj37j"]
+[ext_resource type="PackedScene" uid="uid://brqdwvvq7xuyc" path="res://scenes/station/interior/orchid_plant.tscn" id="9_mcwsc"]
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_mtf4t"]
 resource_name = "quarters_Plane_108"
@@ -223,3 +224,6 @@ omni_range = 10.0
 
 [node name="LightSwitch" parent="." unique_id=1802619805 instance=ExtResource("7_hj37j")]
 transform = Transform3D(0.38268343, 0, -0.9238796, 0, 1, 0, 0.9238796, 0, 0.38268343, -7.776346, 0, -13.542364)
+
+[node name="Node3D" parent="." unique_id=622791712 instance=ExtResource("9_mcwsc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.413564, 0, -15.301605)

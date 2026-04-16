@@ -2,15 +2,12 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://daqusoeeqw4ab"
+uid="uid://eyky6ii8a2yx"
 path.s3tc="res://.godot/imported/cactus_plant_Image_6.png-cdf7918c6f8a76359368c108a7ca69b7.s3tc.ctex"
 path.etc2="res://.godot/imported/cactus_plant_Image_6.png-cdf7918c6f8a76359368c108a7ca69b7.etc2.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
-}
-generator_parameters={
-"md5": "53c7567c015867e58813f0b883240070"
 }
 
 [deps]

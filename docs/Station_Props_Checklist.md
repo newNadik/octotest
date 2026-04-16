@@ -58,13 +58,13 @@
 - [ ] Wall-mounted PA speaker
 
 ### WC
-- [ ] Toilet stalls (2–3) with doors
-- [ ] Sinks (2) with taps
-- [ ] Mirrors above sinks
+- [x] Toilet stalls (2–3) with doors
+- [x] Sinks (2) with taps
+- [x] Mirrors above sinks
 - [ ] Paper towel dispenser + hand dryer
 - [ ] Trash bins
 - [ ] Soap dispensers
-- [ ] Wet floor sign
+- [x] Wet floor sign
 - [ ] Small plant pot (fake / low maintenance)
 - [ ] Evacuation plan (wall-mounted)
 - [ ] Spare toilet rolls (shelf or holder)

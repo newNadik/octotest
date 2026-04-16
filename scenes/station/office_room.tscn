@@ -8,6 +8,8 @@
 [ext_resource type="Material" uid="uid://bb4hx1vyakkmf" path="res://assets/materials/plaster.tres" id="2_b06y5"]
 [ext_resource type="Material" uid="uid://ca2db0a60mj50" path="res://assets/materials/metal.tres" id="3_umm8t"]
 [ext_resource type="PackedScene" uid="uid://b7vd8cvq5kxdt" path="res://scenes/station/interior/light_switch.tscn" id="7_m7hwl"]
+[ext_resource type="PackedScene" uid="uid://wo8dpvu58cav" path="res://scenes/station/interior/aloe_plant.tscn" id="9_th3od"]
+[ext_resource type="PackedScene" uid="uid://bu4rpvaec4jla" path="res://scenes/station/interior/cactus_plant.tscn" id="10_lhg08"]
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_b4dhb"]
 _surfaces = [{
@@ -188,3 +190,9 @@ light_indirect_energy = 5.0
 shadow_enabled = true
 shadow_blur = 2.0
 omni_range = 10.0
+
+[node name="Node3D" parent="." unique_id=1667817107 instance=ExtResource("9_th3od")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.513465, 2.3841858e-07, -19.814096)
+
+[node name="cactus" parent="." unique_id=589026095 instance=ExtResource("10_lhg08")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.6567717, 0, -20.663298)
