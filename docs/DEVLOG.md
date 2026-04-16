@@ -1,5 +1,29 @@
 # Dev Log
 
+## 2026-04-16
+
+### Step 49 - Interactable indicator overhaul (visibility, placement, and door-specific tuning)
+
+- Reworked interactable indicator-dot behavior in `res://scripts/interaction/interactable.gd`:
+  - stabilized visibility flow (shown only when not highlighted/held/disabled),
+  - fixed-size world marker rendering with camera-facing orientation,
+  - sharpened/brightened dot texture and additive unshaded material for UI-like readability,
+  - support for authored indicator anchors via `indicator_anchor_path`,
+  - support for per-object marker placement via `indicator_local_offset` and `indicator_camera_bias`,
+  - public `get_indicator_world_position()` accessor for group systems.
+- Tuned reusable door leaf interactable marker setup in `res://scenes/station/interior/door_slide.tscn`:
+  - door-specific anchor path, height, and camera bias overrides.
+- Updated `res://scripts/station/interior/door_lock_group.gd` to compute double-door shared indicator override from each leaf’s indicator world position rather than focus/button position.
+- Result:
+  - single-door marker appears at intended button-height region,
+  - double-door marker aligns to center midpoint at same vertical intent,
+  - non-door interactables retain center-based defaults with scene-level override support.
+
+### Validation
+1. `./scripts/check.sh`
+   - Result: boot smoke PASS, `movement_math_test: PASS`, `slope_movement_test: PASS`.
+   - Note: existing `card_reader_interaction_test` still fails (`card reader should exist`, `focus target should exist`, `card interactables should exist`); unrelated to this indicator work.
+
 ## 2026-04-15
 
 ### Step 48 - Interactable pickup workflow cleanup, deterministic drop behavior, and interactable save/load persistence

@@ -129,7 +129,9 @@ func _configure_group_indicator() -> void:
 
 	var midpoint := Vector3.ZERO
 	for interactable in interactables:
-		if interactable != null and interactable.has_method("get_focus_position"):
+		if interactable != null and interactable.has_method("get_indicator_world_position"):
+			midpoint += interactable.call("get_indicator_world_position")
+		elif interactable != null and interactable.has_method("get_focus_position"):
 			midpoint += interactable.call("get_focus_position")
 	midpoint /= float(interactables.size())
 
@@ -137,7 +139,7 @@ func _configure_group_indicator() -> void:
 	if primary != null and primary.has_method("set_indicator_visible"):
 		primary.call("set_indicator_visible", true)
 	if primary != null and primary.has_method("set_indicator_world_position_override"):
-		primary.call("set_indicator_world_position_override", midpoint + Vector3(0.0, 0.08, 0.0), true)
+		primary.call("set_indicator_world_position_override", midpoint, true)
 
 	for i in range(1, interactables.size()):
 		var secondary = interactables[i]

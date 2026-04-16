@@ -129,6 +129,10 @@ This document describes the current runtime architecture of the prototype and mu
 6. `res://scripts/interaction/interactable.gd`
 - Reusable `Area3D` interaction component.
 - Encapsulates interaction type (`CLICK`, `PICKUP`), range, prompts, held-state toggles, and visual overlays.
+- Owns world-space indicator-dot rendering and placement:
+  - per-object anchor path override (`indicator_anchor_path`),
+  - per-object local offset (`indicator_local_offset`) and camera-facing bias (`indicator_camera_bias`),
+  - camera-facing sprite orientation and fixed-size marker rendering.
 - Emits `clicked`, `picked_up`, and `dropped` signals for gameplay-specific reactions.
 - Exposes current visual-state query via `get_visual_state()` for group-level visual sync systems.
 7. `res://scripts/interaction/interaction_controller.gd`
@@ -198,6 +202,7 @@ This document describes the current runtime architecture of the prototype and mu
 19. `res://scripts/station/interior/door_lock_group.gd`
 - Single/double door group controller.
 - Propagates lock state to leaf doors, fans open requests across all leaves, applies per-leaf open-distance overrides, and synchronizes double-door highlight state.
+- For double doors, computes a shared midpoint indicator position from leaf interactable indicator world positions and applies it as the primary override marker.
 20. `res://scripts/station/fish_school.gd`
 - School controller for animated fish waves:
   - spawns fish scene instances from folder/pool,

@@ -8,28 +8,29 @@ Godot `4.6.1` 3D isometric prototype with:
 4. Authored data-office room geometry (walls, windows, doors, console, desks, chairs, storage, tank).
 5. UI flow with a startup main menu (browser-frame styled), in-game pause menu, and gameplay HUD hints.
 6. Interactable object system with hover/in-range/blocked visualization.
-7. Clickable wall light switch.
-8. Multi-item octopus carry system (up to 8 held items) with overload movement penalties.
-9. Focus-mode interaction system for precision objects (e.g. card reader).
-10. Card reader gameplay with one-slot insertion, LED feedback, and clickable card ejection.
-11. Wall-mounted code panel gameplay with focus-first keypad input (`0-9`, `<<`, `OK`), display feedback, and card-reader-matched LED states.
-12. Player extracted into a dedicated scene (`res://scenes/player.tscn`) with imported octo model visual (`res://assets/models/octo/octo.glb`).
-13. Procedural octopus rig wrapper (`OctoRig`) over `Skeleton3D` with manual head/arm bone config and cached rest pose data for future runtime animation.
-14. Section-based arm posing controls (`base/mid/tip` with `bend` + `bend_angle`), smooth cross-section blending, and clamped bend ranges for natural defaults.
-15. Arm animation mixer with per-arm modes (`STATIC`, `IDLE`, `CRAWL`, `HOLD`) so different arms can run different behaviors at the same time.
-16. Idle animation system with subtle global sway plus per-idle-run randomized per-arm offsets/signs to avoid identical settle poses after movement.
-17. Surface crawl is driven by `OctoSurfaceLocomotion` arm-state stepping (`SEARCH/REACH/GRAB/PUSH_PULL/RELEASE`) with role-phase pose synthesis (`plant/load/push/stabilize/recover/swing`).
-18. Crawl->idle handoff is explicit: when movement command drops, non-hold arms switch immediately to idle targets while hold arms remain in hold override.
-19. Crawl propulsion is normalized by active push-arm count to reduce uneven slide spikes when arm participation changes.
-20. Editor rig preview supports `Static Targets`, `Idle`, `Crawl`, `Mixer`, and `Hold`; crawl preview uses the same surface locomotion pipeline and `preview_motion_speed` input as gameplay.
-21. Hold flow assigns items to free arm slots with mid-arm priority, keeps each item in a stable slot, and drives occupied arms in hold animation.
-22. Held-item placement follows real rig arm anchors with size-aware clearance (cards stay close, larger props get extra anti-clipping offset).
-23. Camera defaults now support a closer gameplay view with increased zoom-in range.
-24. Display stretch configured for fixed design height with adaptive width (`canvas_items` + `keep_height`) for desktop/tablet fullscreen layouts.
-25. Click movement now prefers navmesh path following via `NavigationAgent3D` when navigation data is available, with automatic fallback to direct movement when navmesh is missing or target is unreachable.
-26. Procedural animated fish-school system with per-volume schooling controls, timed school waves, species randomization (1-2 types per school), and directional flow modes (`Two-Way`, `Four-Way XZ`, `Fixed Direction`).
-27. Desktop rendering defaults now target cleaner 3D output in debug and regular play: `Forward Plus`, `1600x900` default window, `MSAA 4x`, screen-space AA, and full-resolution 3D scaling.
-28. Gameplay visual cohesion pass now layers a restrained facility grade over the 3D view: softer saturation/contrast, lifted blacks, teal-leaning shadow tint, and a faint moving light wash for ocean influence without a full blue underwater filter.
+7. World-space interactable marker dots with per-object anchor/offset overrides (including door-specific midpoint/height tuning) and automatic camera-facing orientation.
+8. Clickable wall light switch.
+9. Multi-item octopus carry system (up to 8 held items) with overload movement penalties.
+10. Focus-mode interaction system for precision objects (e.g. card reader).
+11. Card reader gameplay with one-slot insertion, LED feedback, and clickable card ejection.
+12. Wall-mounted code panel gameplay with focus-first keypad input (`0-9`, `<<`, `OK`), display feedback, and card-reader-matched LED states.
+13. Player extracted into a dedicated scene (`res://scenes/player.tscn`) with imported octo model visual (`res://assets/models/octo/octo.glb`).
+14. Procedural octopus rig wrapper (`OctoRig`) over `Skeleton3D` with manual head/arm bone config and cached rest pose data for future runtime animation.
+15. Section-based arm posing controls (`base/mid/tip` with `bend` + `bend_angle`), smooth cross-section blending, and clamped bend ranges for natural defaults.
+16. Arm animation mixer with per-arm modes (`STATIC`, `IDLE`, `CRAWL`, `HOLD`) so different arms can run different behaviors at the same time.
+17. Idle animation system with subtle global sway plus per-idle-run randomized per-arm offsets/signs to avoid identical settle poses after movement.
+18. Surface crawl is driven by `OctoSurfaceLocomotion` arm-state stepping (`SEARCH/REACH/GRAB/PUSH_PULL/RELEASE`) with role-phase pose synthesis (`plant/load/push/stabilize/recover/swing`).
+19. Crawl->idle handoff is explicit: when movement command drops, non-hold arms switch immediately to idle targets while hold arms remain in hold override.
+20. Crawl propulsion is normalized by active push-arm count to reduce uneven slide spikes when arm participation changes.
+21. Editor rig preview supports `Static Targets`, `Idle`, `Crawl`, `Mixer`, and `Hold`; crawl preview uses the same surface locomotion pipeline and `preview_motion_speed` input as gameplay.
+22. Hold flow assigns items to free arm slots with mid-arm priority, keeps each item in a stable slot, and drives occupied arms in hold animation.
+23. Held-item placement follows real rig arm anchors with size-aware clearance (cards stay close, larger props get extra anti-clipping offset).
+24. Camera defaults now support a closer gameplay view with increased zoom-in range.
+25. Display stretch configured for fixed design height with adaptive width (`canvas_items` + `keep_height`) for desktop/tablet fullscreen layouts.
+26. Click movement now prefers navmesh path following via `NavigationAgent3D` when navigation data is available, with automatic fallback to direct movement when navmesh is missing or target is unreachable.
+27. Procedural animated fish-school system with per-volume schooling controls, timed school waves, species randomization (1-2 types per school), and directional flow modes (`Two-Way`, `Four-Way XZ`, `Fixed Direction`).
+28. Desktop rendering defaults now target cleaner 3D output in debug and regular play: `Forward Plus`, `1600x900` default window, `MSAA 4x`, screen-space AA, and full-resolution 3D scaling.
+29. Gameplay visual cohesion pass now layers a restrained facility grade over the 3D view: softer saturation/contrast, lifted blacks, teal-leaning shadow tint, and a faint moving light wash for ocean influence without a full blue underwater filter.
 
 ## Canonical Branch
 

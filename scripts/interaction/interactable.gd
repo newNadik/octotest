@@ -44,8 +44,11 @@ enum VisualState {
 @export_group("Advanced")
 @export var visual_root_path: NodePath
 @export var pickup_root_path: NodePath
+@export var indicator_anchor_path: NodePath
 @export var save_key_override := ""
 @export var show_indicator := true
+@export var indicator_local_offset := Vector3.ZERO
+@export var indicator_camera_bias := 0.16
 @export var hover_color := Color(1.0, 1.0, 1.0, 0.0)
 @export var in_range_color := Color(1.0, 1.0, 1.0, 0.9)
 @export var blocked_color := Color(1.0, 1.0, 1.0, 0.0)
@@ -70,6 +73,7 @@ var _is_currently_held := false
 var _initial_save_key := ""
 var _indicator_root: Node3D
 var _indicator_dot: Sprite3D
+var _indicator_anchor_local := Vector3.ZERO
 var _indicator_override_enabled := false
 var _indicator_override_world_position := Vector3.ZERO
 var _click_feedback_time_left := 0.0
@@ -88,6 +92,7 @@ func _ready() -> void:
 	_collect_meshes(_visual_root)
 	_cache_original_surface_overrides()
 	_build_outline_next_pass_materials()
+	_indicator_anchor_local = _compute_indicator_anchor_local()
 	_build_interaction_indicator()
 	_saved_area_layer = collision_layer
 	_saved_area_mask = collision_mask
@@ -348,18 +353,19 @@ func _build_interaction_indicator() -> void:
 	_indicator_root = Node3D.new()
 	_indicator_root.name = "InteractionIndicator"
 	_indicator_root.top_level = true
-	_indicator_root.position = focus_offset + Vector3(0.0, 0.08, 0.0)
+	_indicator_root.position = indicator_local_offset
 	add_child(_indicator_root)
 
 	_indicator_dot = Sprite3D.new()
 	_indicator_dot.name = "Dot"
-	_indicator_dot.texture = _make_dot_texture(64, 0.28, 0.11)
-	_indicator_dot.modulate = Color(1.0, 1.0, 1.0, 0.86)
+	_indicator_dot.texture = _make_dot_texture(64, 0.24, 0.01)
+	_indicator_dot.modulate = Color(1.8, 1.8, 1.8, 1.0)
 	_indicator_dot.billboard = BaseMaterial3D.BILLBOARD_ENABLED
 	_indicator_dot.shaded = false
-	# Show above the interactable's own geometry. Occlusion by other objects is handled via LOS raycast.
-	_indicator_dot.no_depth_test = true
-	_indicator_dot.pixel_size = 0.0028
+	_indicator_dot.material_override = _make_indicator_dot_material(_indicator_dot.texture)
+	_indicator_dot.no_depth_test = false
+	_indicator_dot.fixed_size = true
+	_indicator_dot.pixel_size = 0.0019
 	_indicator_root.add_child(_indicator_dot)
 
 	_refresh_indicator_visuals()
@@ -369,14 +375,14 @@ func _refresh_indicator_visuals() -> void:
 	if _indicator_root == null:
 		return
 
-	_indicator_root.position = focus_offset + Vector3(0.0, 0.08, 0.0)
-	var should_show_base = show_indicator and _interaction_enabled and not _is_currently_held
+	_indicator_root.position = indicator_local_offset
+	var should_show_base = _should_show_indicator_base()
 	_update_indicator_world_position()
 	if not should_show_base:
 		_indicator_root.visible = false
 		return
 
-	var dot_alpha = 0.88
+	var dot_alpha = 1.0
 	match _current_state:
 		VisualState.HOVERED:
 			dot_alpha = 1.0
@@ -387,62 +393,104 @@ func _refresh_indicator_visuals() -> void:
 		VisualState.HELD:
 			dot_alpha = 0.0
 		_:
-			dot_alpha = 0.88
+			dot_alpha = 1.0
 
 	if _indicator_dot != null:
-		_indicator_dot.modulate = Color(1.0, 1.0, 1.0, dot_alpha)
+		_indicator_dot.modulate = Color(1.8, 1.8, 1.8, dot_alpha)
 
 
 func _update_indicator_world_position() -> void:
 	if _indicator_root == null:
 		return
-	var target_world_position = get_focus_position() + Vector3(0.0, 0.08, 0.0)
-	if _indicator_override_enabled:
-		target_world_position = _indicator_override_world_position
-	_indicator_root.global_position = target_world_position
-	var should_show = show_indicator and _interaction_enabled and not _is_currently_held
-	if should_show and _is_indicator_occluded_by_world(target_world_position):
-		should_show = false
-	_indicator_root.visible = should_show
-
-
-func _is_indicator_occluded_by_world(target_world_position: Vector3) -> bool:
+	var target_world_position = _get_indicator_world_position()
 	var viewport := get_viewport()
-	if viewport == null:
-		return false
-	var camera := viewport.get_camera_3d()
-	if camera == null:
-		return false
-	var world := get_world_3d()
-	if world == null:
-		return false
-	var query := PhysicsRayQueryParameters3D.create(camera.global_position, target_world_position)
-	query.collide_with_areas = false
-	query.exclude = [self]
-	var hit = world.direct_space_state.intersect_ray(query)
-	if hit.is_empty():
-		return false
-	var collider = hit.get("collider")
-	if collider == null:
-		return true
-	if collider == self:
-		return false
-	if collider is Node:
-		var collider_node := collider as Node
-		if _is_same_interactable_object(collider_node):
-			return false
-	return true
+	if viewport != null:
+		var camera := viewport.get_camera_3d()
+		if camera != null:
+			var to_camera = camera.global_position - target_world_position
+			if to_camera.length_squared() > 0.000001:
+				target_world_position += to_camera.normalized() * indicator_camera_bias
+	_indicator_root.global_position = target_world_position
+	_indicator_root.visible = _should_show_indicator_base()
 
 
-func _is_same_interactable_object(collider_node: Node) -> bool:
-	if collider_node == self or is_ancestor_of(collider_node) or collider_node.is_ancestor_of(self):
-		return true
-	if _pickup_root != null and (collider_node == _pickup_root or _pickup_root.is_ancestor_of(collider_node) or collider_node.is_ancestor_of(_pickup_root)):
-		return true
-	var parent_node := get_parent()
-	if parent_node != null and (parent_node == collider_node or parent_node.is_ancestor_of(collider_node) or collider_node.is_ancestor_of(parent_node)):
-		return true
-	return false
+func _should_show_indicator_base() -> bool:
+	if not show_indicator or not _interaction_enabled or _is_currently_held:
+		return false
+	return not _is_highlighted_state()
+
+
+func _is_highlighted_state() -> bool:
+	return (
+		_current_state == VisualState.HOVERED
+		or _current_state == VisualState.IN_RANGE
+		or _current_state == VisualState.BLOCKED
+		or _click_feedback_time_left > 0.0
+	)
+
+
+func _get_indicator_world_position() -> Vector3:
+	if _indicator_override_enabled:
+		return _indicator_override_world_position
+	var indicator_anchor := _resolve_target_root(indicator_anchor_path)
+	if indicator_anchor != null:
+		return indicator_anchor.global_position + indicator_anchor.global_basis * indicator_local_offset
+	if _visual_root == null:
+		return get_focus_position() + indicator_local_offset
+	return _visual_root.to_global(_indicator_anchor_local + indicator_local_offset)
+
+
+func _compute_indicator_anchor_local() -> Vector3:
+	if _visual_root == null:
+		return Vector3.ZERO
+
+	var collision_shape := _find_primary_collision_shape()
+	if collision_shape != null:
+		return _visual_root.to_local(collision_shape.global_transform.origin)
+
+	if _source_mesh_nodes.is_empty():
+		return Vector3.ZERO
+
+	var min_world := Vector3(INF, INF, INF)
+	var max_world := Vector3(-INF, -INF, -INF)
+	var found := false
+
+	for mesh_node in _source_mesh_nodes:
+		if mesh_node == null or mesh_node.mesh == null:
+			continue
+		var aabb := mesh_node.mesh.get_aabb()
+		var corners := [
+			Vector3(aabb.position.x, aabb.position.y, aabb.position.z),
+			Vector3(aabb.end.x, aabb.position.y, aabb.position.z),
+			Vector3(aabb.position.x, aabb.end.y, aabb.position.z),
+			Vector3(aabb.position.x, aabb.position.y, aabb.end.z),
+			Vector3(aabb.end.x, aabb.end.y, aabb.position.z),
+			Vector3(aabb.end.x, aabb.position.y, aabb.end.z),
+			Vector3(aabb.position.x, aabb.end.y, aabb.end.z),
+			Vector3(aabb.end.x, aabb.end.y, aabb.end.z),
+		]
+		for corner in corners:
+			var world_corner = mesh_node.global_transform * corner
+			min_world.x = minf(min_world.x, world_corner.x)
+			min_world.y = minf(min_world.y, world_corner.y)
+			min_world.z = minf(min_world.z, world_corner.z)
+			max_world.x = maxf(max_world.x, world_corner.x)
+			max_world.y = maxf(max_world.y, world_corner.y)
+			max_world.z = maxf(max_world.z, world_corner.z)
+			found = true
+
+	if not found:
+		return Vector3.ZERO
+
+	var center_world = (min_world + max_world) * 0.5
+	return _visual_root.to_local(center_world)
+
+
+func _find_primary_collision_shape() -> CollisionShape3D:
+	for child in get_children():
+		if child is CollisionShape3D:
+			return child as CollisionShape3D
+	return null
 
 
 func _make_dot_texture(size: int, radius: float, softness: float) -> Texture2D:
@@ -457,6 +505,22 @@ func _make_dot_texture(size: int, radius: float, softness: float) -> Texture2D:
 	return ImageTexture.create_from_image(image)
 
 
+func _make_indicator_dot_material(dot_texture: Texture2D) -> StandardMaterial3D:
+	var material := StandardMaterial3D.new()
+	material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+	material.billboard_mode = BaseMaterial3D.BILLBOARD_ENABLED
+	material.cull_mode = BaseMaterial3D.CULL_DISABLED
+	material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+	material.blend_mode = BaseMaterial3D.BLEND_MODE_ADD
+	material.albedo_texture = dot_texture
+	material.vertex_color_use_as_albedo = true
+	material.disable_fog = true
+	material.emission_enabled = true
+	material.emission = Color(1.0, 1.0, 1.0, 1.0)
+	material.emission_energy_multiplier = 3.0
+	return material
+
+
 func set_indicator_visible(is_visible: bool) -> void:
 	show_indicator = is_visible
 	_refresh_indicator_visuals()
@@ -466,6 +530,10 @@ func set_indicator_world_position_override(world_position: Vector3, enabled: boo
 	_indicator_override_enabled = enabled
 	_indicator_override_world_position = world_position
 	_refresh_indicator_visuals()
+
+
+func get_indicator_world_position() -> Vector3:
+	return _get_indicator_world_position()
 
 
 func get_save_key() -> String:
