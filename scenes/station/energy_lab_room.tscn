@@ -8,6 +8,7 @@
 [ext_resource type="Material" uid="uid://biog7mv21velq" path="res://assets/materials/ceiling.tres" id="2_jcl15"]
 [ext_resource type="Material" uid="uid://ca2db0a60mj50" path="res://assets/materials/metal.tres" id="3_sqwx8"]
 [ext_resource type="PackedScene" uid="uid://b7vd8cvq5kxdt" path="res://scenes/station/interior/light_switch.tscn" id="6_3ek07"]
+[ext_resource type="PackedScene" uid="uid://bu4rpvaec4jla" path="res://scenes/station/interior/cactus_plant.tscn" id="8_cycxu"]
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_eoqii"]
 resource_name = "energy_lab_Plane_115"
@@ -145,6 +146,9 @@ light_switch = NodePath("StaticBody3D/LightSwitch")
 ceiling_mesh = NodePath("StaticBody3D/RoofEnergyLab")
 lamp_lights = [NodePath("OmniLight3D"), NodePath("OmniLight3D2"), NodePath("OmniLight3D3"), NodePath("OmniLight3D4")]
 
+[node name="cactus" parent="." unique_id=589026095 instance=ExtResource("8_cycxu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.711634, 0, 9.620688)
+
 [node name="StaticBody3D" type="StaticBody3D" parent="." unique_id=1093410393]
 collision_layer = 2
 collision_mask = 0
@@ -156,6 +160,7 @@ surface_material_override/0 = ExtResource("1_m4qa1")
 
 [node name="RoofEnergyLab" type="MeshInstance3D" parent="StaticBody3D" unique_id=1091524581]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.8054073, -7.5464764e-06, 0.006915656)
+visible = false
 instance_shader_parameters/offset_xz = Vector2(0.5, 2)
 instance_shader_parameters/rotation_deg = 0.0
 mesh = SubResource("ArrayMesh_xl21f")
@@ -179,10 +184,10 @@ shape = SubResource("ConcavePolygonShape3D_eqb1h")
 transform = Transform3D(0.9238795, 0, -0.38268346, 0, 1, 0, 0.38268346, 0, 0.9238795, 22.993383, 0, 12.188295)
 
 [node name="window_double2" parent="StaticBody3D" unique_id=798075664 instance=ExtResource("1_fgm2e")]
-transform = Transform3D(0.9238795, 0, -0.38268346, 0, 1, 0, 0.38268346, 0, 0.9238795, 11.710003, 0, 7.546467)
+transform = Transform3D(0.9238795, 0, -0.38268346, 0, 1, 0, 0.38268346, 0, 0.9238795, 11.727054, 0, 7.546467)
 
 [node name="LightSwitch" parent="StaticBody3D" unique_id=1802619805 instance=ExtResource("6_3ek07")]
-transform = Transform3D(0.9238795, 0, -0.38268346, 0, 1, 0, 0.38268346, 0, 0.9238795, 15.689374, 0, 9.510802)
+transform = Transform3D(0.9238795, 0, -0.38268346, 0, 1, 0, 0.38268346, 0, 0.9238795, 15.671954, 0, 9.521337)
 
 [node name="DoorDouble" parent="." unique_id=1045878697 instance=ExtResource("1_1hvab")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.785187, 0, 19.046888)

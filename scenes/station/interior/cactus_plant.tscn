@@ -134,6 +134,7 @@ prompt_action = "Pick up"
 focus_offset = Vector3(0, 0.22, 0)
 hold_offset = Vector3(0, -0.17, 0)
 hold_rotation_degrees = Vector3(8, 0, 0)
+highlight_mesh_paths = Array[NodePath]([NodePath("../Object_34"), NodePath("../Object_26")])
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Interactable" unique_id=984512337]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.25, 0)

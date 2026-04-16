@@ -43,6 +43,7 @@ enum VisualState {
 
 @export_group("Advanced")
 @export var visual_root_path: NodePath
+@export var highlight_mesh_paths: Array[NodePath] = []
 @export var pickup_root_path: NodePath
 @export var indicator_anchor_path: NodePath
 @export var save_key_override := ""
@@ -50,9 +51,9 @@ enum VisualState {
 @export var indicator_local_offset := Vector3.ZERO
 @export var indicator_camera_bias := 0.16
 @export var hover_color := Color(1.0, 1.0, 1.0, 0.0)
-@export var in_range_color := Color(1.0, 1.0, 1.0, 0.9)
+@export var in_range_color := Color(1.0, 1.0, 1.0, 1.0)
 @export var blocked_color := Color(1.0, 1.0, 1.0, 0.0)
-@export var click_color := Color(1.0, 1.0, 1.0, 0.96)
+@export var click_color := Color(1.0, 1.0, 1.0, 1.0)
 @export var click_feedback_duration := 0.14
 @export_group("")
 
@@ -89,7 +90,7 @@ func _ready() -> void:
 	if _visual_root == null:
 		_visual_root = _pickup_root
 
-	_collect_meshes(_visual_root)
+	_collect_highlight_meshes()
 	_cache_original_surface_overrides()
 	_build_outline_next_pass_materials()
 	_indicator_anchor_local = _compute_indicator_anchor_local()
@@ -233,21 +234,49 @@ func _apply_visuals() -> void:
 	_apply_outline_state(outline_state)
 
 
-func _collect_meshes(node: Node) -> void:
+func _collect_highlight_meshes() -> void:
+	_source_mesh_nodes.clear()
+	var seen_mesh_ids: Dictionary = {}
+	if not highlight_mesh_paths.is_empty():
+		for mesh_path in highlight_mesh_paths:
+			if mesh_path == NodePath(""):
+				continue
+			var target = get_node_or_null(mesh_path)
+			if target == null:
+				continue
+			if target is MeshInstance3D:
+				_append_unique_source_mesh(target as MeshInstance3D, seen_mesh_ids)
+			else:
+				_collect_meshes(target, seen_mesh_ids)
+		if _source_mesh_nodes.is_empty():
+			_collect_meshes(_visual_root, seen_mesh_ids)
+		return
+	_collect_meshes(_visual_root, seen_mesh_ids)
+
+
+func _collect_meshes(node: Node, seen_mesh_ids: Dictionary) -> void:
 	if node == null:
 		return
 
 	if node is MeshInstance3D:
-		_source_mesh_nodes.append(node as MeshInstance3D)
+		_append_unique_source_mesh(node as MeshInstance3D, seen_mesh_ids)
 
 	for child: Node in node.get_children():
-		_collect_meshes(child)
+		_collect_meshes(child, seen_mesh_ids)
+
+
+func _append_unique_source_mesh(mesh_node: MeshInstance3D, seen_mesh_ids: Dictionary) -> void:
+	var mesh_id := mesh_node.get_instance_id()
+	if seen_mesh_ids.has(mesh_id):
+		return
+	seen_mesh_ids[mesh_id] = true
+	_source_mesh_nodes.append(mesh_node)
 
 
 func _build_outline_next_pass_materials() -> void:
 	_outline_next_pass_materials.clear()
-	_outline_next_pass_materials["in_range"] = _make_outline_next_pass_material(in_range_color, 4.0)
-	_outline_next_pass_materials["click"] = _make_outline_next_pass_material(click_color, 6.0)
+	_outline_next_pass_materials["in_range"] = _make_outline_next_pass_material(in_range_color, 4.8)
+	_outline_next_pass_materials["click"] = _make_outline_next_pass_material(click_color, 6.4)
 
 
 func _make_outline_next_pass_material(color: Color, width: float) -> ShaderMaterial:
