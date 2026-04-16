@@ -106,7 +106,6 @@ lamp_lights = [NodePath("OmniLight3D"), NodePath("OmniLight3D2"), NodePath("Omni
 
 [node name="LightSwitch" parent="." unique_id=1802619805 instance=ExtResource("6_328kc")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.066742, 0, 19.405468)
-start_on = false
 
 [node name="StaticBody3D" type="StaticBody3D" parent="." unique_id=1651889896]
 collision_layer = 2
@@ -144,7 +143,7 @@ shape = SubResource("ConcavePolygonShape3D_62ma4")
 
 [node name="OmniLight3D" type="OmniLight3D" parent="." unique_id=1172026728]
 transform = Transform3D(0.99859184, 0.05305054, 0, -0.05305054, 0.99859184, 0, 0, 0, 1, 7.6399975, 5.5212016, 27.28033)
-light_energy = 3.0
+light_energy = 5.0
 light_indirect_energy = 5.0
 shadow_enabled = true
 shadow_blur = 2.0
@@ -152,7 +151,7 @@ omni_range = 10.0
 
 [node name="OmniLight3D2" type="OmniLight3D" parent="." unique_id=1776280879]
 transform = Transform3D(0.99859184, 0.05305054, 0, -0.05305054, 0.99859184, 0, 0, 0, 1, 12.377436, 6.3882546, 22.54289)
-light_energy = 3.0
+light_energy = 5.0
 light_indirect_energy = 5.0
 shadow_enabled = true
 shadow_blur = 2.0
@@ -160,7 +159,7 @@ omni_range = 10.0
 
 [node name="OmniLight3D3" type="OmniLight3D" parent="." unique_id=49165924]
 transform = Transform3D(0.99859184, 0.05305054, 0, -0.05305054, 0.99859184, 0, 0, 0, 1, 17.086845, 5.5462546, 22.54289)
-light_energy = 3.0
+light_energy = 5.0
 light_indirect_energy = 5.0
 shadow_enabled = true
 shadow_blur = 2.0

@@ -191,7 +191,7 @@ shape = SubResource("ConcavePolygonShape3D_8ctpj")
 
 [node name="OmniLight3D" type="OmniLight3D" parent="." unique_id=725256015]
 transform = Transform3D(0.99859184, 0.05305054, 0, -0.05305054, 0.99859184, 0, 0, 0, 1, -25.54182, 5.4141974, -13.818275)
-light_energy = 3.0
+light_energy = 5.0
 light_indirect_energy = 5.0
 shadow_enabled = true
 shadow_blur = 2.0
@@ -199,7 +199,7 @@ omni_range = 10.0
 
 [node name="OmniLight3D2" type="OmniLight3D" parent="." unique_id=251714193]
 transform = Transform3D(0.99859184, 0.05305054, 0, -0.05305054, 0.99859184, 0, 0, 0, 1, -16.17295, 6.470799, -13.818275)
-light_energy = 3.0
+light_energy = 5.0
 light_indirect_energy = 5.0
 shadow_enabled = true
 shadow_blur = 2.0
@@ -207,7 +207,7 @@ omni_range = 10.0
 
 [node name="OmniLight3D3" type="OmniLight3D" parent="." unique_id=1736410128]
 transform = Transform3D(0.99859184, 0.05305054, 0, -0.05305054, 0.99859184, 0, 0, 0, 1, -13.820593, 6.2815204, -20.794231)
-light_energy = 3.0
+light_energy = 5.0
 light_indirect_energy = 5.0
 shadow_enabled = true
 shadow_blur = 2.0
@@ -215,7 +215,7 @@ omni_range = 10.0
 
 [node name="OmniLight3D4" type="OmniLight3D" parent="." unique_id=2105848052]
 transform = Transform3D(0.99859184, 0.05305054, 0, -0.05305054, 0.99859184, 0, 0, 0, 1, -9.115879, 8.200851, -11.303688)
-light_energy = 3.0
+light_energy = 5.0
 light_indirect_energy = 5.0
 shadow_enabled = true
 shadow_blur = 2.0

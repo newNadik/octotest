@@ -200,7 +200,7 @@ transform = Transform3D(-0.9238795, 0, -0.38268343, 0, 1, 0, 0.38268343, 0, -0.9
 
 [node name="OmniLight3D" type="OmniLight3D" parent="." unique_id=511041822]
 transform = Transform3D(-0.9225786, -0.049012296, -0.38268346, -0.053050525, 0.99859184, 1.8600211e-09, 0.38214457, 0.02030156, -0.92387956, 10.8684025, 6.475928, -22.316319)
-light_energy = 3.0
+light_energy = 5.0
 light_indirect_energy = 5.0
 shadow_enabled = true
 shadow_blur = 2.0
@@ -208,7 +208,7 @@ omni_range = 10.0
 
 [node name="OmniLight3D2" type="OmniLight3D" parent="." unique_id=2025092766]
 transform = Transform3D(-0.9225786, -0.049012296, -0.38268346, -0.053050525, 0.99859184, 1.8600211e-09, 0.38214457, 0.02030156, -0.92387956, 22.728811, 4.9521275, -15.215677)
-light_energy = 3.0
+light_energy = 5.0
 light_indirect_energy = 5.0
 shadow_enabled = true
 shadow_blur = 2.0
@@ -216,7 +216,7 @@ omni_range = 10.0
 
 [node name="OmniLight3D3" type="OmniLight3D" parent="." unique_id=2038264134]
 transform = Transform3D(-0.9225786, -0.049012296, -0.38268346, -0.053050525, 0.99859184, 1.8600211e-09, 0.38214457, 0.02030156, -0.92387956, 8.60556, 7.8321047, -10.611966)
-light_energy = 3.0
+light_energy = 5.0
 light_indirect_energy = 5.0
 shadow_enabled = true
 shadow_blur = 2.0
@@ -224,7 +224,7 @@ omni_range = 10.0
 
 [node name="OmniLight3D4" type="OmniLight3D" parent="." unique_id=225194264]
 transform = Transform3D(-0.9225786, -0.049012296, -0.38268346, -0.053050525, 0.99859184, 1.8600211e-09, 0.38214457, 0.02030156, -0.92387956, 13.326313, 6.7992353, -15.176663)
-light_energy = 3.0
+light_energy = 5.0
 light_indirect_energy = 5.0
 shadow_enabled = true
 shadow_blur = 2.0

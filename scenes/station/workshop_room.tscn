@@ -154,7 +154,7 @@ shape = SubResource("ConcavePolygonShape3D_0cctw")
 
 [node name="OmniLight3D" type="OmniLight3D" parent="StaticBody3D/CollisionShape3D" unique_id=1336486012]
 transform = Transform3D(0.99859184, 0.05305054, 0, -0.05305054, 0.99859184, 0, 0, 0, 1, -3.06431, 5.9748473, 12.774767)
-light_energy = 3.0
+light_energy = 5.0
 light_indirect_energy = 5.0
 shadow_enabled = true
 shadow_blur = 2.0
@@ -162,7 +162,7 @@ omni_range = 10.0
 
 [node name="OmniLight3D2" type="OmniLight3D" parent="StaticBody3D/CollisionShape3D" unique_id=1471052974]
 transform = Transform3D(0.99859184, 0.05305054, 0, -0.05305054, 0.99859184, 0, 0, 0, 1, -3.06431, 5.836665, 6.058725)
-light_energy = 3.0
+light_energy = 5.0
 light_indirect_energy = 5.0
 shadow_enabled = true
 shadow_blur = 2.0
@@ -170,7 +170,7 @@ omni_range = 10.0
 
 [node name="OmniLight3D3" type="OmniLight3D" parent="StaticBody3D/CollisionShape3D" unique_id=1729764600]
 transform = Transform3D(0.99859184, 0.05305054, 0, -0.05305054, 0.99859184, 0, 0, 0, 1, -6.373562, 6.434453, 9.346748)
-light_energy = 3.0
+light_energy = 5.0
 light_indirect_energy = 5.0
 shadow_enabled = true
 shadow_blur = 2.0
@@ -178,7 +178,7 @@ omni_range = 10.0
 
 [node name="OmniLight3D4" type="OmniLight3D" parent="StaticBody3D/CollisionShape3D" unique_id=1761445036]
 transform = Transform3D(0.99859184, 0.05305054, 0, -0.05305054, 0.99859184, 0, 0, 0, 1, -13.06728, 8.061728, 9.479167)
-light_energy = 3.0
+light_energy = 5.0
 light_indirect_energy = 5.0
 shadow_enabled = true
 shadow_blur = 2.0
