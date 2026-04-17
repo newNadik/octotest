@@ -7,6 +7,10 @@ const MOBILE_OS_NAMES := ["iOS", "Android"]
 @export_range(8, 48, 1) var primary_point_count := 18
 @export_range(8, 64, 1) var secondary_point_count := 28
 @export var texture_seed := 1337
+@export_range(0.0, 64.0, 0.1) var light_energy := 20.0:
+	set(value):
+		light_energy = maxf(0.0, value)
+		_apply_base_light_energy()
 @export var rotation_speed_a_degrees := 9.0
 @export var rotation_speed_b_degrees := -13.0
 @export var energy_pulse_speed := 0.75
@@ -21,6 +25,7 @@ var _projector_texture: Texture2D
 
 func _ready() -> void:
 	_cache_lights()
+	_apply_base_light_energy()
 	_projector_texture = projector_texture if projector_texture != null else _generate_projector_texture()
 	for light in _lights:
 		light.light_projector = _projector_texture if _supports_light_projector() else null
@@ -71,6 +76,21 @@ func _cache_lights() -> void:
 			_lights.append(light)
 			_base_rotations[light] = light.rotation_degrees
 			_base_energy[light] = light.light_energy
+
+
+func _apply_base_light_energy() -> void:
+	var target_lights: Array[SpotLight3D] = _lights
+	if target_lights.is_empty():
+		target_lights = []
+		for child in get_children():
+			if child is SpotLight3D:
+				target_lights.append(child as SpotLight3D)
+
+	for light in target_lights:
+		if light == null:
+			continue
+		_base_energy[light] = light_energy
+		light.light_energy = light_energy
 
 
 func _generate_projector_texture() -> Texture2D:
