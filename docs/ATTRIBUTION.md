@@ -49,7 +49,3 @@ Source: [Flaticon](https://www.flaticon.com/)
 
 ## Sounds
 - Sound Effect by <a href="https://pixabay.com/users/freesounds-4u-51979242/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=401152">FreeSounds-4U</a> from <a href="https://pixabay.com/sound-effects//?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=401152">Pixabay</a>
-
-## Last Updated
-
-- 2026-03-21

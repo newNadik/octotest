@@ -2,6 +2,7 @@ extends Node
 class_name InteractionController
 
 
+const PICK_SOUND_DEFAULT: AudioStream = preload("res://assets/sound/pick.wav")
 const WALL_COLLISION_MASK := 1 << 0
 const GROUND_COLLISION_MASK := 1 << 1
 const DROP_SURFACE_COLLISION_MASK := WALL_COLLISION_MASK | GROUND_COLLISION_MASK
@@ -47,6 +48,12 @@ const ARM_SOCKET_ANGLE_BY_NAME := {
 @export var drop_probe_depth = 2.4
 @export var debug_interaction_logs = false
 @export var focus_reject_feedback_duration = 0.32
+@export var pick_drop_sound: AudioStream = PICK_SOUND_DEFAULT
+@export var pick_drop_sound_volume_db := -9.0
+@export var pick_drop_sound_volume_jitter_db := 2.5
+@export var pick_drop_sound_pitch_min := 0.82
+@export var pick_drop_sound_pitch_max := 1.22
+@export var pick_drop_sound_max_distance := 22.0
 
 var _player: CharacterBody3D
 var _camera: Camera3D
@@ -80,6 +87,8 @@ var _focus_card_reader: CardReaderScript
 var _focus_reject_feedback = FocusRejectFeedbackScript.new()
 var _hint_builder = InteractionHintBuilderScript.new()
 var _octo_rig: OctoRigScript
+var _pick_drop_player: AudioStreamPlayer3D
+var _rng := RandomNumberGenerator.new()
 
 
 func initialize(player: CharacterBody3D, camera: Camera3D, hint_label: Label, world_root: Node3D, room_light: OmniLight3D = null) -> void:
@@ -89,9 +98,11 @@ func initialize(player: CharacterBody3D, camera: Camera3D, hint_label: Label, wo
 	_world_root = world_root
 	_room_light = room_light
 	_base_move_speed = _player.move_speed
+	_rng.randomize()
 	if _room_light != null:
 		_default_light_energy = _room_light.light_energy
 	_focus_reject_feedback.duration = focus_reject_feedback_duration
+	_ensure_pick_drop_audio_player()
 	_ensure_hand_sockets()
 	_resolve_octo_rig()
 	_configure_hold_arm_slot_mapping()
@@ -765,9 +776,11 @@ func _pick_up_interactable(target) -> void:
 	if _held_interactables.size() >= max_held_items or _is_item_currently_held(target):
 		return
 
+	var pickup_position: Vector3 = target.get_focus_position() if target != null and target.has_method("get_focus_position") else _player.global_position
 	if not _attach_item_to_hands(target, true):
 		return
 
+	_play_pick_drop_sound(pickup_position)
 	target.interact(_player)
 	_player.clear_move_target()
 	_cancel_card_selection_mode()
@@ -818,6 +831,7 @@ func _drop_held_item_by_index(index: int) -> void:
 	if _hovered_interactable == item:
 		_set_hovered_interactable(null, false, false)
 
+	_play_pick_drop_sound(drop_position)
 	_cancel_card_selection_mode()
 	_update_hint_text()
 
@@ -1428,3 +1442,41 @@ func _on_button_clicked(_interactable, _actor: Node, button_body: StaticBody3D) 
 			Color(0.84, 0.24, 0.2, 1.0) if _light_toggle_on else Color(0.36, 0.36, 0.38, 1.0),
 			0.5
 		)
+
+
+func _ensure_pick_drop_audio_player() -> void:
+	if _pick_drop_player != null:
+		return
+	if _world_root == null:
+		return
+	_pick_drop_player = AudioStreamPlayer3D.new()
+	_pick_drop_player.name = "PickDropAudio"
+	_pick_drop_player.stream = pick_drop_sound
+	_pick_drop_player.volume_db = pick_drop_sound_volume_db
+	_pick_drop_player.max_distance = pick_drop_sound_max_distance
+	_pick_drop_player.bus = _resolve_sfx_bus_name()
+	_world_root.add_child(_pick_drop_player)
+
+
+func _play_pick_drop_sound(world_position: Vector3) -> void:
+	if pick_drop_sound == null:
+		return
+	_ensure_pick_drop_audio_player()
+	if _pick_drop_player == null:
+		return
+	_pick_drop_player.global_position = world_position
+	_pick_drop_player.stream = pick_drop_sound
+	var volume_jitter := _rng.randf_range(-absf(pick_drop_sound_volume_jitter_db), absf(pick_drop_sound_volume_jitter_db))
+	_pick_drop_player.volume_db = pick_drop_sound_volume_db + volume_jitter
+	_pick_drop_player.max_distance = pick_drop_sound_max_distance
+	_pick_drop_player.pitch_scale = _rng.randf_range(
+		minf(pick_drop_sound_pitch_min, pick_drop_sound_pitch_max),
+		maxf(pick_drop_sound_pitch_min, pick_drop_sound_pitch_max)
+	)
+	if _pick_drop_player.playing:
+		_pick_drop_player.stop()
+	_pick_drop_player.play()
+
+
+func _resolve_sfx_bus_name() -> String:
+	return "SFX" if AudioServer.get_bus_index("SFX") >= 0 else "Master"

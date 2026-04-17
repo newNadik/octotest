@@ -181,6 +181,7 @@ visible = false
 stream = ExtResource("18_underwater")
 volume_db = -18.0
 autoplay = true
+bus = &"Ambience"
 
 [node name="lights" type="Node3D" parent="." unique_id=1594734138]
 
