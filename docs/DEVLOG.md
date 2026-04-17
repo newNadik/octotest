@@ -2,6 +2,23 @@
 
 ## 2026-04-17
 
+### Step 52 - Async game loading screen + main-menu background preload
+
+- Added a dedicated loading transition scene:
+  - `res://scenes/ui/loading_screen.tscn`
+  - `res://scripts/ui/loading_screen.gd`
+- Implemented threaded game-scene loading for startup transition:
+  - starts/continues `ResourceLoader.load_threaded_request("res://scenes/main.tscn")`,
+  - updates a simple progress bar,
+  - swaps to packed scene when threaded load completes,
+  - includes direct-load fallback path on loader failure.
+- Updated main menu flow to route `New Game` and `Continue` through loading scene instead of direct scene switch.
+- Added proactive background preload from main menu `_ready()`:
+  - starts threaded preload of `main.tscn` before player clicks,
+  - loading screen now reuses in-progress/already-loaded state for faster perceived startup.
+- Visual pass:
+  - loading screen styled to match main-menu language (palette/layout cadence) while staying minimal.
+
 ### Step 51 - Shower room completion and mirrored pickup stability
 
 - Completed shower-room prop pass and scene integration:

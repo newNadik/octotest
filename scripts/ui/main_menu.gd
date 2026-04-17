@@ -1,6 +1,7 @@
 extends Control
 
 
+const LOADING_SCENE_PATH := "res://scenes/ui/loading_screen.tscn"
 const GAME_SCENE_PATH := "res://scenes/main.tscn"
 const SETTINGS_MENU_SCENE := preload("res://scenes/ui/settings_menu.tscn")
 const ABOUT_POPUP_SCENE := preload("res://scenes/ui/about_popup.tscn")
@@ -47,6 +48,7 @@ var _popup_layer: CanvasLayer
 
 
 func _ready() -> void:
+	_start_game_scene_preload()
 	continue_button.pressed.connect(_on_continue_pressed)
 	play_button.pressed.connect(_on_play_pressed)
 	settings_button.pressed.connect(_on_settings_pressed)
@@ -69,9 +71,9 @@ func _ready() -> void:
 func _on_play_pressed() -> void:
 	_clear_pending_load_request()
 	_clear_saved_game()
-	var error := get_tree().change_scene_to_file(GAME_SCENE_PATH)
+	var error := get_tree().change_scene_to_file(LOADING_SCENE_PATH)
 	if error != OK:
-		push_error("Failed to load game scene: %s" % GAME_SCENE_PATH)
+		push_error("Failed to load loading scene: %s" % LOADING_SCENE_PATH)
 
 
 func _on_quit_pressed() -> void:
@@ -88,9 +90,9 @@ func _try_load_or_continue() -> void:
 		_refresh_save_buttons()
 		return
 	_request_load_on_next_game_start()
-	var error := get_tree().change_scene_to_file(GAME_SCENE_PATH)
+	var error := get_tree().change_scene_to_file(LOADING_SCENE_PATH)
 	if error != OK:
-		push_error("Failed to load game scene: %s" % GAME_SCENE_PATH)
+		push_error("Failed to load loading scene: %s" % LOADING_SCENE_PATH)
 
 
 func _refresh_save_buttons() -> void:
@@ -133,6 +135,15 @@ func _clear_saved_game() -> void:
 	if game_save == null:
 		return
 	game_save.call("clear_save")
+
+
+func _start_game_scene_preload() -> void:
+	var status := ResourceLoader.load_threaded_get_status(GAME_SCENE_PATH)
+	if status == ResourceLoader.THREAD_LOAD_IN_PROGRESS or status == ResourceLoader.THREAD_LOAD_LOADED:
+		return
+	var error := ResourceLoader.load_threaded_request(GAME_SCENE_PATH, "", true)
+	if error != OK and error != ERR_BUSY:
+		push_warning("Background preload failed to start: %s" % GAME_SCENE_PATH)
 
 
 func _on_settings_pressed() -> void:
