@@ -1,5 +1,23 @@
 # Dev Log
 
+## 2026-04-17
+
+### Step 51 - Shower room completion and mirrored pickup stability
+
+- Completed shower-room prop pass and scene integration:
+  - added reusable `shower`, `duck`, and `flip_flop` interior scenes,
+  - placed shower setup and mirrored flip-flop variant in quarters.
+- Finalized interaction behavior for shower props:
+  - `flip_flop` now uses `requires_line_of_sight = false` in-scene,
+  - kept global `Interactable` LOS default at `true` to avoid broad behavior regressions.
+- Cleaned held-item transform handling in `interaction_controller.gd`:
+  - removed old scale bookkeeping/reapply path,
+  - now preserves local scale while applying hold/follow transforms,
+  - added mirrored-basis-safe handling so mirrored props no longer rotate incorrectly on pickup.
+- Updated station checklist:
+  - marked shower section and shower character touches as complete,
+  - marked slippers/flip-flops under bunk as complete.
+
 ## 2026-04-16
 
 ### Step 50 - Interactable highlight modes, authored reveal meshes, and double-door feedback sync

@@ -14,6 +14,7 @@
 [ext_resource type="PackedScene" uid="uid://6vcqkboq1fps" path="res://scenes/effects/floor_marker_light.tscn" id="11_floorlight"]
 [ext_resource type="PackedScene" uid="uid://c5tv72lyq8d8h" path="res://scenes/effects/caustic_rig.tscn" id="11_fy6p5"]
 [ext_resource type="PackedScene" uid="uid://b7vnunwlus20w" path="res://scenes/station/interior/toilet.tscn" id="14_hefio"]
+[ext_resource type="PackedScene" uid="uid://cro6qqaafsit1" path="res://scenes/station/interior/shower.tscn" id="16_2ysy5"]
 [ext_resource type="PackedScene" uid="uid://can7o07havaxf" path="res://scenes/station/interior/wet_floor_sign.tscn" id="16_o6nh8"]
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_cmvkd"]
@@ -1153,3 +1154,6 @@ transform = Transform3D(-5.2453668e-08, 0, -1.2, 0, 1.2, 0, 1.2, 0, -5.2453668e-
 
 [node name="wt_floor_sign" parent="." unique_id=1207511351 instance=ExtResource("16_o6nh8")]
 transform = Transform3D(0.8835369, 0, -0.46836165, 0, 1, 0, 0.46836165, 0, 0.8835369, 5.5680075, 0.013957152, 15.300981)
+
+[node name="shower" parent="." unique_id=1680803147 instance=ExtResource("16_2ysy5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -17.468838, 0.09971724, -8.133447)

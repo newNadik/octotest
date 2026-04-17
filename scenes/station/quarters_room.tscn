@@ -10,6 +10,7 @@
 [ext_resource type="PackedScene" uid="uid://b7vd8cvq5kxdt" path="res://scenes/station/interior/light_switch.tscn" id="7_hj37j"]
 [ext_resource type="PackedScene" uid="uid://c5tv72lyq8d8h" path="res://scenes/effects/caustic_rig.tscn" id="8_0o1h7"]
 [ext_resource type="PackedScene" uid="uid://brqdwvvq7xuyc" path="res://scenes/station/interior/orchid_plant.tscn" id="9_mcwsc"]
+[ext_resource type="PackedScene" uid="uid://ib88jjclimqc" path="res://scenes/station/interior/flip_flop.tscn" id="11_btc4l"]
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_mtf4t"]
 resource_name = "quarters_Plane_108"
@@ -239,3 +240,6 @@ transform = Transform3D(0.38268343, 0, -0.9238796, 0, 1, 0, 0.9238796, 0, 0.3826
 
 [node name="Node3D" parent="." unique_id=622791712 instance=ExtResource("9_mcwsc")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.413564, 0, -15.301605)
+
+[node name="flip_flop" parent="." unique_id=207116838 instance=ExtResource("11_btc4l")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, -1, -15.422, 0, -12.282)

@@ -41,7 +41,9 @@ Source: [Flaticon](https://www.flaticon.com/)
 - "Office storage filing cabinet" (https://skfb.ly/pCSnO) by Chenchanchong is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
 - "Sims Style Basic Public Toilet Set" (https://skfb.ly/6WNzs) by Yaiyeondurising is licensed under Creative Commons Attribution-ShareAlike (http://creativecommons.org/licenses/by-sa/4.0/).
 - 3D Caution Wet Floor Signby dimension Dazzle
-- 
+- "Compact bathroom" (https://skfb.ly/oRoQU) by MrdT is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+- "Rubber Duck" (https://skfb.ly/pBH8u) by nicolewnchoi is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+- "Flipflops (Mockup) Plain Texture" (https://skfb.ly/oK9Vn) by kane_sk06 is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
 ## Textures
 
 - https://cc0-textures.com

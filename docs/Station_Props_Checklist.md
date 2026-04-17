@@ -326,7 +326,7 @@
 - [ ] Water bottle (bedside)
 - [ ] Alarm clock
 - [ ] Headphones
-- [ ] Slippers / flip flops (under bunk)
+- [x] Slippers / flip flops (under bunk)
 - [ ] Journal / notebook + pen
 - [ ] Wall clock
 - [ ] Keypad / card reader on door
@@ -384,19 +384,15 @@
 - [ ] A single sad banana that's been there too long
 
 ### Showers
-- [ ] Shower cubicles
-- [ ] Sinks + mirrors
-- [ ] Towel hooks
-- [ ] Soap / shampoo dispensers
-- [ ] Trash bin
-- [ ] Evacuation plan (wall-mounted)
-- [ ] Keypad / card reader on door
-- [ ] Bar soap (on ledge)
-- [ ] Bath mat
+- [x] Shower cubicles
+- [x] Sinks + mirrors
+- [x] Towel hooks
+- [x] Soap / shampoo dispensers
+- [x] Trash bin
 
 #### Character touches
-- [ ] Rubber duck (on shower ledge)
-- [ ] Forgotten flip flop (only one)
+- [x] Rubber duck (on shower ledge)
+- [x] Forgotten flip flop (only one)
 
 ### Medical Bay
 - [ ] Examination bed / cot

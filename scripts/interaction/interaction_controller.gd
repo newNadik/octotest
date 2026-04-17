@@ -68,7 +68,6 @@ var _hovered_blocked = false
 var _held_interactables: Array = []
 var _hand_sockets: Array[Node3D] = []
 var _held_socket_by_item_id: Dictionary = {}
-var _held_global_scale_by_item_id: Dictionary = {}
 var _held_clearance_by_item_id: Dictionary = {}
 var _socket_index_by_arm_name: Dictionary = {}
 var _arm_name_by_socket_index: Dictionary = {}
@@ -972,15 +971,13 @@ func _update_held_item_transform(delta: float) -> void:
 
 	var alpha = minf(1.0, held_item_follow_speed * delta)
 	for held_item in _held_interactables:
-		var item_id = held_item.get_instance_id()
-		var socket_index = int(_held_socket_by_item_id.get(item_id, -1))
+		var socket_index = int(_held_socket_by_item_id.get(held_item.get_instance_id(), -1))
 		if socket_index < 0 or socket_index >= _hand_sockets.size():
 			continue
 		var pickup_root = held_item.get_pickup_root()
 		var socket = _hand_sockets[socket_index]
 		var target_transform = socket.global_transform * held_item.get_hold_transform()
-		pickup_root.global_transform = pickup_root.global_transform.interpolate_with(target_transform, alpha)
-		_reapply_held_global_scale(item_id, pickup_root)
+		_apply_interpolated_transform_preserving_scale(pickup_root, target_transform, alpha)
 
 
 func _update_focus_display_transforms(delta: float) -> void:
@@ -992,7 +989,6 @@ func _update_focus_display_transforms(delta: float) -> void:
 
 	for i in range(count):
 		var held_item = _held_interactables[i]
-		var item_id = held_item.get_instance_id()
 		var pickup_root = held_item.get_pickup_root()
 		var col = i % columns
 		var row = i / columns
@@ -1015,8 +1011,7 @@ func _update_focus_display_transforms(delta: float) -> void:
 
 		var target_basis = Basis.looking_at(-camera_forward, Vector3.UP)
 		var target_transform = Transform3D(target_basis, target_pos)
-		pickup_root.global_transform = pickup_root.global_transform.interpolate_with(target_transform, alpha)
-		_reapply_held_global_scale(item_id, pickup_root)
+		_apply_interpolated_transform_preserving_scale(pickup_root, target_transform, alpha)
 
 
 func _trigger_focus_reject_feedback(item) -> void:
@@ -1132,7 +1127,6 @@ func _remove_held_item(item) :
 	if socket_index >= 0:
 		_set_hold_state_for_socket(socket_index, false)
 	_held_interactables.remove_at(index)
-	_held_global_scale_by_item_id.erase(item_id)
 	_held_clearance_by_item_id.erase(item_id)
 	_update_carry_mobility()
 	return item
@@ -1157,13 +1151,11 @@ func _attach_item_to_hands(item, clear_motion_target: bool) -> bool:
 
 	var pickup_root = item.get_pickup_root()
 	var socket = _hand_sockets[socket_index]
-	_held_global_scale_by_item_id[item_id] = pickup_root.global_basis.get_scale().abs()
 	_held_clearance_by_item_id[item_id] = _estimate_item_clearance(item, pickup_root)
 	pickup_root.reparent(socket, true)
 	item.set_interaction_enabled(true)
 	item.set_held(true)
-	pickup_root.transform = item.get_hold_transform()
-	_reapply_held_global_scale(item_id, pickup_root)
+	_apply_hold_transform_preserving_scale(pickup_root, item.get_hold_transform())
 
 	if clear_motion_target:
 		_player.clear_move_target()
@@ -1281,17 +1273,34 @@ func _align_socket_basis(socket: Node3D, outward: Vector3) -> void:
 	socket.global_basis = Basis(x_axis, y_axis, z_axis)
 
 
-func _reapply_held_global_scale(item_id: int, pickup_root: Node3D) -> void:
+func _apply_hold_transform_preserving_scale(pickup_root: Node3D, hold_transform: Transform3D) -> void:
 	if pickup_root == null:
 		return
-	var held_scale_variant: Variant = _held_global_scale_by_item_id.get(item_id, null)
-	if held_scale_variant == null:
+	var preserved_local_scale = pickup_root.scale
+	var is_mirrored := _is_mirrored_basis(pickup_root.global_basis)
+	if is_mirrored:
+		# Keep mirrored items' orientation exactly as-authored; only place into hold offset.
+		pickup_root.position = hold_transform.origin
+	else:
+		pickup_root.transform = Transform3D(hold_transform.basis.orthonormalized(), hold_transform.origin)
+	pickup_root.scale = preserved_local_scale
+
+
+func _apply_interpolated_transform_preserving_scale(pickup_root: Node3D, target_transform: Transform3D, alpha: float) -> void:
+	if pickup_root == null:
 		return
-	var held_global_scale = held_scale_variant as Vector3
-	var current_global = pickup_root.global_transform
-	var rotation_basis = current_global.basis.orthonormalized()
-	current_global.basis = rotation_basis.scaled(held_global_scale)
-	pickup_root.global_transform = current_global
+	var preserved_local_scale = pickup_root.scale
+	var is_mirrored := _is_mirrored_basis(pickup_root.global_basis)
+	pickup_root.global_position = pickup_root.global_position.lerp(target_transform.origin, alpha)
+	if not is_mirrored:
+		var current_rotation = pickup_root.global_basis.get_rotation_quaternion()
+		var target_rotation = target_transform.basis.orthonormalized().get_rotation_quaternion()
+		pickup_root.global_basis = Basis(current_rotation.slerp(target_rotation, alpha))
+	pickup_root.scale = preserved_local_scale
+
+
+func _is_mirrored_basis(basis: Basis) -> bool:
+	return basis.determinant() < 0.0
 
 
 func _estimate_item_clearance(item, root: Node3D) -> float:
