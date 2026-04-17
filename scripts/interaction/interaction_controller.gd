@@ -13,6 +13,8 @@ const FocusRejectFeedbackScript = preload("res://scripts/interaction/focus_rejec
 const InteractableScript = preload("res://scripts/interaction/interactable.gd")
 const InteractionHintBuilderScript = preload("res://scripts/interaction/interaction_hint_builder.gd")
 const OctoRigScript = preload("res://scripts/rig/OctoRig.gd")
+const FRONT_LEFT_ARM_NAME := "arm_0"
+const FRONT_RIGHT_ARM_NAME := "arm_1"
 const FOCUS_SELECTION_CLICK_RADIUS := 220.0
 const FOCUS_HELD_CLICK_RADIUS := 170.0
 const FOCUS_READER_INSERTED_CLICK_RADIUS := 190.0
@@ -216,9 +218,11 @@ func try_handle_interaction_click(screen_position: Vector2) -> bool:
 		var reader = _get_card_reader_for_interactable(target)
 		if reader != null:
 			_debug_log("Reader interaction click on %s" % _describe_interactable(target))
+			_play_object_interaction_arm_gesture(target)
 			_handle_card_reader_click(reader)
 			return true
 		if target.interaction_type == InteractableScript.InteractionType.CLICK:
+			_play_object_interaction_arm_gesture(target)
 			target.interact(_player)
 			return true
 		if target.interaction_type == InteractableScript.InteractionType.PICKUP:
@@ -491,9 +495,11 @@ func _process_queued_interaction() -> void:
 	if _queued_interaction_target.interaction_type == InteractableScript.InteractionType.CLICK:
 		var reader = _get_card_reader_for_interactable(_queued_interaction_target)
 		if reader != null:
+			_play_object_interaction_arm_gesture(_queued_interaction_target)
 			_handle_card_reader_click(reader)
 			_queued_interaction_target = null
 			return
+		_play_object_interaction_arm_gesture(_queued_interaction_target)
 		_queued_interaction_target.interact(_player)
 		_queued_interaction_target = null
 
@@ -1329,6 +1335,42 @@ func _trigger_blocked_move_feedback() -> void:
 	_player.clear_move_target()
 	if _player != null and _player.has_method("trigger_blocked_move_feedback"):
 		_player.call("trigger_blocked_move_feedback")
+
+
+func _play_object_interaction_arm_gesture(target) -> void:
+	if _player == null or not _player.has_method("play_interaction_arm_gesture"):
+		return
+	var focus_position := _player.global_position
+	if target != null and is_instance_valid(target) and target.has_method("get_focus_position"):
+		focus_position = target.get_focus_position()
+	var arm_name := _choose_free_front_interaction_arm(focus_position)
+	if arm_name.is_empty():
+		return
+	_player.call("play_interaction_arm_gesture", arm_name, focus_position)
+
+
+func _choose_free_front_interaction_arm(target_position: Vector3) -> String:
+	var left_free := not _is_arm_currently_holding(FRONT_LEFT_ARM_NAME)
+	var right_free := not _is_arm_currently_holding(FRONT_RIGHT_ARM_NAME)
+	if not left_free and not right_free:
+		return ""
+	if left_free and not right_free:
+		return FRONT_LEFT_ARM_NAME
+	if right_free and not left_free:
+		return FRONT_RIGHT_ARM_NAME
+	var local_to_target: Vector3 = _player.to_local(target_position)
+	return FRONT_LEFT_ARM_NAME if local_to_target.x < 0.0 else FRONT_RIGHT_ARM_NAME
+
+
+func _is_arm_currently_holding(arm_name: String) -> bool:
+	if arm_name.is_empty():
+		return false
+	for socket_index_variant in _arm_name_by_socket_index.keys():
+		var socket_index := int(socket_index_variant)
+		if str(_arm_name_by_socket_index[socket_index]) != arm_name:
+			continue
+		return _is_socket_occupied(socket_index)
+	return false
 
 
 func _setup_scene_interactables() -> void:

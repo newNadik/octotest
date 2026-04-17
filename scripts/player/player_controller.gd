@@ -8,6 +8,9 @@ const MovementMath = preload("res://scripts/core/movement_math.gd")
 const CLIMB_PHASE_FIRST_REACH := 0
 const CLIMB_PHASE_SECOND_REACH := 1
 const CLIMB_PHASE_TRANSITION := 2
+const INTERACTION_ARM_PHASE_REACH := 0
+const INTERACTION_ARM_PHASE_HOLD := 1
+const INTERACTION_ARM_PHASE_RETURN := 2
 const NAV_AGENT_NODE_NAME := "NavigationAgent3D"
 
 var move_speed := 6.0
@@ -36,6 +39,13 @@ var climb_reach_phase_duration := 0.14
 var climb_turn_phase_duration := 0.08
 var climb_turn_speed := 12.0
 var climb_head_tilt_degrees := 7.0
+var interaction_arm_reach_duration := 0.22
+var interaction_arm_hold_duration := 0.06
+var interaction_arm_return_duration := 0.28
+var interaction_post_move_slow_duration := 2.2
+var interaction_post_move_speed_scale_min := 0.05
+var interaction_face_duration := 0.32
+var interaction_face_turn_speed := 14.0
 
 var _has_target := false
 var _target_position := Vector3.ZERO
@@ -64,6 +74,14 @@ var _pre_mantle_turn_target_yaw := 0.0
 var _post_mantle_move_target := Vector3.ZERO
 var _has_post_mantle_move_target := false
 var _navigation_agent: NavigationAgent3D
+var _interaction_arm_active := false
+var _interaction_arm_name := ""
+var _interaction_arm_phase := INTERACTION_ARM_PHASE_REACH
+var _interaction_arm_phase_time := 0.0
+var _interaction_face_active := false
+var _interaction_face_time := 0.0
+var _interaction_face_target := Vector3.ZERO
+var _interaction_post_move_slow_time := 0.0
 const POST_MANTLE_TURN_DAMP_TIME := 0.22
 
 
@@ -106,12 +124,16 @@ func trigger_blocked_move_feedback() -> void:
 
 
 func _physics_process(delta: float) -> void:
+	_process_interaction_face_target(delta)
+
 	if _process_climb_phase(delta):
+		_process_interaction_arm_gesture(delta)
 		_update_visual_feedback(delta)
 		return
 
 	if _post_mantle_turn_timer > 0.0:
 		_post_mantle_turn_timer = maxf(0.0, _post_mantle_turn_timer - delta)
+	_tick_interaction_post_move_window(delta)
 
 	var floor_normal := Vector3.UP
 	var grounded := is_on_floor()
@@ -125,6 +147,7 @@ func _physics_process(delta: float) -> void:
 	var move_target := global_position
 	if _has_target:
 		move_target = _get_drive_target()
+	var interaction_speed_scale := _get_interaction_post_move_speed_scale()
 
 	var used_surface_drive := false
 	if use_surface_locomotion and _octo_rig != null and _octo_rig.has_method("step_surface_locomotion"):
@@ -133,6 +156,8 @@ func _physics_process(delta: float) -> void:
 			var to_target := move_target - global_position
 			desired_dir = Vector3(to_target.x, 0.0, to_target.z)
 		var drive_velocity: Vector3 = _octo_rig.step_surface_locomotion(delta, global_position, desired_dir, velocity)
+		drive_velocity.x *= interaction_speed_scale
+		drive_velocity.z *= interaction_speed_scale
 		velocity.x = move_toward(velocity.x, drive_velocity.x, acceleration * delta)
 		velocity.z = move_toward(velocity.z, drive_velocity.z, acceleration * delta)
 		used_surface_drive = true
@@ -142,7 +167,7 @@ func _physics_process(delta: float) -> void:
 			velocity,
 			global_position,
 			move_target,
-			move_speed,
+			move_speed * interaction_speed_scale,
 			acceleration,
 			stop_distance,
 			delta
@@ -159,6 +184,10 @@ func _physics_process(delta: float) -> void:
 	if _has_target and grounded:
 		_try_begin_climb(move_target)
 
+	if interaction_speed_scale < 0.999:
+		velocity.x *= interaction_speed_scale
+		velocity.z *= interaction_speed_scale
+
 	move_and_slide()
 	if use_surface_locomotion and grounded and _octo_rig != null and _octo_rig.has_method("get_surface_support_normal"):
 		var support_normal: Vector3 = _octo_rig.get_surface_support_normal()
@@ -173,6 +202,7 @@ func _physics_process(delta: float) -> void:
 					1.0 - exp(-surface_align_strength * delta)
 				).orthonormalized()
 	_rotate_toward_motion(delta)
+	_process_interaction_arm_gesture(delta)
 	_update_visual_feedback(delta)
 
 
@@ -319,6 +349,7 @@ func _try_begin_climb(drive_target: Vector3) -> void:
 
 
 func _begin_pre_mantle_sequence(target_position: Vector3, planar_direction: Vector3, mantle_time: float) -> void:
+	_cancel_interaction_arm_gesture()
 	_mantle_to = target_position
 	_mantle_duration_active = mantle_time
 	_pre_mantle_planar_direction = planar_direction.normalized()
@@ -378,6 +409,101 @@ func _cancel_pre_mantle_sequence() -> void:
 	_clear_climb_arm_overrides()
 
 
+func play_interaction_arm_gesture(arm_name: String, target_position: Vector3 = Vector3.INF) -> bool:
+	if _pre_mantle_active or _mantling:
+		return false
+	if not _is_valid_climb_arm(arm_name):
+		return false
+	if target_position.is_finite():
+		_interaction_face_active = true
+		_interaction_face_time = interaction_face_duration
+		_interaction_face_target = target_position
+	_interaction_post_move_slow_time = maxf(_interaction_post_move_slow_time, interaction_post_move_slow_duration)
+	_interaction_arm_active = true
+	_interaction_arm_name = arm_name
+	_interaction_arm_phase = INTERACTION_ARM_PHASE_REACH
+	_interaction_arm_phase_time = 0.0
+	return true
+
+
+func _process_interaction_arm_gesture(delta: float) -> void:
+	if not _interaction_arm_active:
+		return
+	if _pre_mantle_active or _mantling:
+		_cancel_interaction_arm_gesture()
+		return
+	if not _is_valid_climb_arm(_interaction_arm_name):
+		_cancel_interaction_arm_gesture()
+		return
+
+	match _interaction_arm_phase:
+		INTERACTION_ARM_PHASE_REACH:
+			_interaction_arm_phase_time += delta
+			var t_reach := clampf(_interaction_arm_phase_time / maxf(0.01, interaction_arm_reach_duration), 0.0, 1.0)
+			_apply_interaction_arm_reach_pose(_interaction_arm_name, _ease_interaction_arm_t(t_reach))
+			if t_reach >= 1.0:
+				_interaction_arm_phase = INTERACTION_ARM_PHASE_HOLD
+				_interaction_arm_phase_time = 0.0
+		INTERACTION_ARM_PHASE_HOLD:
+			_interaction_arm_phase_time += delta
+			_apply_interaction_arm_reach_pose(_interaction_arm_name, 1.0)
+			if _interaction_arm_phase_time >= maxf(0.01, interaction_arm_hold_duration):
+				_interaction_arm_phase = INTERACTION_ARM_PHASE_RETURN
+				_interaction_arm_phase_time = 0.0
+		INTERACTION_ARM_PHASE_RETURN:
+			_interaction_arm_phase_time += delta
+			var t_return := clampf(_interaction_arm_phase_time / maxf(0.01, interaction_arm_return_duration), 0.0, 1.0)
+			_apply_interaction_arm_reach_pose(_interaction_arm_name, 1.0 - _ease_interaction_arm_t(t_return))
+			if t_return >= 1.0:
+				_cancel_interaction_arm_gesture()
+
+
+func _cancel_interaction_arm_gesture() -> void:
+	if _interaction_arm_active and _is_valid_climb_arm(_interaction_arm_name):
+		_octo_rig.call("clear_arm_animation_mode", _interaction_arm_name)
+	_interaction_arm_active = false
+	_interaction_arm_name = ""
+	_interaction_arm_phase = INTERACTION_ARM_PHASE_REACH
+	_interaction_arm_phase_time = 0.0
+
+
+func _process_interaction_face_target(delta: float) -> void:
+	if not _interaction_face_active:
+		return
+	if _interaction_face_time <= 0.0:
+		_interaction_face_active = false
+		return
+	_interaction_face_time = maxf(0.0, _interaction_face_time - delta)
+	if _pre_mantle_active or _mantling:
+		return
+	var to_target := _interaction_face_target - global_position
+	var planar := Vector2(to_target.x, to_target.z)
+	if planar.length_squared() <= 0.0001:
+		return
+	_rotate_toward_planar(planar.normalized(), delta, interaction_face_turn_speed)
+
+
+func _ease_interaction_arm_t(t: float) -> float:
+	var x := clampf(t, 0.0, 1.0)
+	# Cubic smoothstep for softer acceleration/deceleration at phase ends.
+	return x * x * (3.0 - 2.0 * x)
+
+
+func _tick_interaction_post_move_window(delta: float) -> void:
+	if _interaction_post_move_slow_time <= 0.0:
+		return
+	_interaction_post_move_slow_time = maxf(0.0, _interaction_post_move_slow_time - delta)
+
+
+func _get_interaction_post_move_speed_scale() -> float:
+	if _interaction_post_move_slow_time <= 0.0 or interaction_post_move_slow_duration <= 0.0:
+		return 1.0
+	var progress := 1.0 - clampf(_interaction_post_move_slow_time / interaction_post_move_slow_duration, 0.0, 1.0)
+	# Stay slow longer, then recover near the end of the window.
+	var eased_recovery := progress * progress
+	return lerpf(interaction_post_move_speed_scale_min, 1.0, eased_recovery)
+
+
 func _apply_climb_arm_reach_pose(arm_name: String, intensity: float) -> void:
 	if not _is_valid_climb_arm(arm_name):
 		return
@@ -392,6 +518,23 @@ func _apply_climb_arm_reach_pose(arm_name: String, intensity: float) -> void:
 		lerpf(1.1, -0.4 * inward_sign, t),
 		lerpf(0.6, -0.5, t),
 		lerpf(0.45, 0.14 * inward_sign, t)
+	)
+
+
+func _apply_interaction_arm_reach_pose(arm_name: String, intensity: float) -> void:
+	if not _is_valid_climb_arm(arm_name):
+		return
+	var t := clampf(intensity, 0.0, 1.0)
+	var inward_sign := _get_climb_arm_inward_sign(arm_name)
+	_set_climb_arm_mode_static(arm_name)
+	_set_climb_arm_pose(
+		arm_name,
+		lerpf(0.72, 1.08, t),
+		lerpf(0.0, -0.52 * inward_sign, t),
+		lerpf(1.3, 0.12, t),
+		lerpf(1.1, -0.52 * inward_sign, t),
+		lerpf(0.6, -0.62, t),
+		lerpf(0.45, 0.12 * inward_sign, t)
 	)
 
 
