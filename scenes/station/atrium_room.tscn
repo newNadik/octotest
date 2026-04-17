@@ -797,6 +797,9 @@ collision_layer = 31
 [node name="DoorDouble" parent="StaticBody3D/Walls" unique_id=1045878697 instance=ExtResource("2_ecqnk")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.8, 0, 22.6)
 locked = true
+door_title = "Exit"
+door_title_secondary = "Exit"
+title_side = 1
 
 [node name="window_double" parent="StaticBody3D/Walls" unique_id=779599183 instance=ExtResource("1_vvece")]
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 29.229, 0, 7.65)
@@ -880,6 +883,8 @@ shape = SubResource("BoxShape3D_5jbdu")
 
 [node name="DoorSingle" parent="StaticBody3D/Walls" unique_id=224428218 instance=ExtResource("3_wctxe")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.499224, 0, 19.06)
+privacy_glass_enabled = true
+door_title = "WC"
 
 [node name="Roof" type="Node3D" parent="StaticBody3D" unique_id=1383701249]
 
@@ -1040,15 +1045,23 @@ omni_range = 10.0
 
 [node name="DoorDouble" parent="." unique_id=1685186809 instance=ExtResource("2_ecqnk")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.78, 0, -10.1)
+door_title = "Staff"
+door_title_secondary = "Only"
 
 [node name="DoorSingle" parent="." unique_id=1940471585 instance=ExtResource("3_wctxe")]
 transform = Transform3D(0.70710677, 0, 0.70710677, 0, 1, 0, -0.70710677, 0, 0.70710677, -7.95, 0, -7.15)
+privacy_glass_enabled = true
+door_title = "Medic"
 
 [node name="DoorSingle2" parent="." unique_id=460529865 instance=ExtResource("3_wctxe")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25.751604, 0, -4.38)
+door_title = "Kitchen"
 
 [node name="DoorDouble2" parent="." unique_id=1171473448 instance=ExtResource("2_ecqnk")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13.986389, 0, 18.35)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13.971773, 0, 18.35)
+door_title = "Shop"
+door_title_secondary = "Gift"
+title_side = 1
 
 [node name="PathLights" type="Node3D" parent="." unique_id=1497399200]
 
@@ -1071,7 +1084,7 @@ transform = Transform3D(0.99859184, 0.05305054, 0, -0.05305054, 0.99859184, 0, 0
 transform = Transform3D(0.70613766, 0.037007112, 0.70710677, -0.05233596, 0.9986295, 0, -0.70613766, -0.037007112, 0.70710677, 7.555337, 0, -5.454432)
 
 [node name="FloorMarkerLightG" parent="PathLights" unique_id=1992540407 instance=ExtResource("11_floorlight")]
-transform = Transform3D(0.99859184, 0.05305054, 0, -0.05305054, 0.99859184, 0, 0, 0, 1, 27.693462, 0, -13.469454)
+transform = Transform3D(0.99859184, 0.05305054, 0, -0.05305054, 0.99859184, 0, 0, 0, 1, 27.492481, 0, -13.719322)
 
 [node name="FloorMarkerLightH" parent="PathLights" unique_id=1868351720 instance=ExtResource("11_floorlight")]
 transform = Transform3D(0.99859184, 0.05305054, 0, -0.05305054, 0.99859184, 0, 0, 0, 1, 27.491325, 0, 13.716922)

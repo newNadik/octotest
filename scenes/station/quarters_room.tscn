@@ -155,9 +155,14 @@ collision_mask = 0
 
 [node name="DoorSingle" parent="StaticBody3D" unique_id=224428218 instance=ExtResource("1_xhnal")]
 transform = Transform3D(0.98163044, 0, -0.19079189, 0, 1, 0, 0.19079189, 0, 0.98163044, -18.235306, 0, -10.46)
+privacy_glass_enabled = true
+door_title = "Shower"
+title_side = 1
 
 [node name="DoorSingle2" parent="StaticBody3D" unique_id=809785075 instance=ExtResource("1_xhnal")]
 transform = Transform3D(0.3826834, 0, -0.92387944, 0, 1, 0, 0.92387944, 0, 0.3826834, -7.07, 0, -12.71)
+door_title = "Crew"
+title_side = 1
 
 [node name="WindowSingle" parent="StaticBody3D" unique_id=1026944921 instance=ExtResource("2_21vip")]
 transform = Transform3D(0.70710677, -0.6941152, -0.13492236, 0, -0.19080903, 0.98162717, -0.70710677, -0.6941152, -0.13492236, -17.582901, 7.593294, -16.525135)

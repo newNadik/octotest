@@ -1,6 +1,11 @@
 extends Node3D
 
 @export var locked := false
+@export_group("Door Metadata")
+@export var privacy_glass_enabled := false
+@export var door_title := ""
+@export var door_title_secondary := ""
+@export_enum("Front", "Back") var title_side := 0
 @export var slide_a_path: NodePath = NodePath("door_slide")
 @export var slide_b_path: NodePath = NodePath("door_slide2")
 var slide_a_open_distance := 1.41
@@ -13,6 +18,7 @@ var _group_highlight_active := false
 
 func _ready() -> void:
 	_collect_slide_nodes()
+	_apply_metadata_to_slides()
 	_apply_open_distance_overrides()
 	_connect_slide_signals()
 	_apply_locked_state()
@@ -78,6 +84,41 @@ func _apply_locked_state() -> void:
 	for slide in _slide_nodes:
 		if slide != null and is_instance_valid(slide):
 			slide.call("set_locked", locked)
+
+
+func _apply_metadata_to_slides() -> void:
+	var title_by_index := [door_title, door_title_secondary]
+	for i in range(_slide_nodes.size()):
+		var slide = _slide_nodes[i]
+		if slide == null or not is_instance_valid(slide):
+			continue
+		if _object_has_property(slide, "privacy_glass_enabled"):
+			slide.set("privacy_glass_enabled", privacy_glass_enabled)
+		if _object_has_property(slide, "title_side"):
+			slide.set("title_side", _resolve_title_side_for_slide(slide))
+		if _object_has_property(slide, "door_title"):
+			var assigned_title: String = str(title_by_index[i]) if i < title_by_index.size() else ""
+			slide.set("door_title", assigned_title)
+		if slide.has_method("apply_metadata_visuals"):
+			slide.call("apply_metadata_visuals")
+
+
+func _object_has_property(object: Object, property_name: String) -> bool:
+	for property_info in object.get_property_list():
+		if str(property_info.name) == property_name:
+			return true
+	return false
+
+
+func _resolve_title_side_for_slide(slide: Node) -> int:
+	var resolved_side := title_side
+	if slide is Node3D:
+		var slide_node := slide as Node3D
+		# door_slide2 is rotated/flipped relative to door_slide in the double-door scene.
+		# Flip side selection so both leaf titles read correctly from the same corridor side.
+		if slide_node.transform.basis.x.dot(Vector3.RIGHT) < 0.0:
+			resolved_side = 1 - resolved_side
+	return resolved_side
 
 
 func _apply_open_distance_overrides() -> void:

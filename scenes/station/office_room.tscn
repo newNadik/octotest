@@ -163,6 +163,8 @@ transform = Transform3D(1, 0, 0, 0, -0.19080903, 0.98162717, 0, -0.98162717, -0.
 
 [node name="DoorDouble" parent="." unique_id=1045878697 instance=ExtResource("1_43emv")]
 transform = Transform3D(0.9238795, 0, -0.38268346, 0, 1, 0, 0.38268346, 0, 0.9238795, 2.5215478, 0, -16.9)
+door_title = "Data"
+door_title_secondary = "Office"
 
 [node name="LightSwitch" parent="." unique_id=1802619805 instance=ExtResource("7_m7hwl")]
 transform = Transform3D(-0.9238795, 0, 0.38268343, 0, 1, 0, -0.38268343, 0, -0.9238795, 4.2093787, 0, -16.543884)

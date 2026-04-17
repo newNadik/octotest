@@ -173,6 +173,15 @@ msgstr "Вийти"
 msgid "Resume"
 msgstr "Продовжити"
 
+msgid "Continue"
+msgstr "Продовжити"
+
+msgid "Save Game"
+msgstr "Зберегти гру"
+
+msgid "Save game"
+msgstr "Зберегти гру"
+
 msgid "Science"
 msgstr "Дослідження"
 
@@ -229,3 +238,66 @@ msgstr "Неправильний ID або пароль"
 
 msgid "%s is out of range"
 msgstr "%s поза межами досяжності"
+
+msgid "Data"
+msgstr "Відділ"
+
+msgid "Office"
+msgstr "даних"
+
+msgid "Systems"
+msgstr "Тех"
+
+msgid "Room"
+msgstr "відсік"
+
+msgid "Energy"
+msgstr "Енерго"
+
+msgid "Lab"
+msgstr "лаб-я"
+
+msgid "Chem"
+msgstr "Хім"
+
+msgid "WORK"
+msgstr "Цех"
+
+msgid "SHOP"
+msgstr " "
+
+msgid "Lock"
+msgstr " "
+
+msgid "Dive"
+msgstr "Шлюз"
+
+msgid "Exit"
+msgstr "Вихід"
+
+msgid "Medic"
+msgstr "Медик"
+
+msgid "Kitchen"
+msgstr "Кухня"
+
+msgid "Gift"
+msgstr "Лавка"
+
+msgid "Staff"
+msgstr "Служб."
+
+msgid "Only"
+msgstr "вхід"
+
+msgid "Shower"
+msgstr "Душ"
+
+msgid "Crew"
+msgstr "Кубрик"
+
+msgid "WC"
+msgstr "WC"
+
+msgid "Shop"
+msgstr " "

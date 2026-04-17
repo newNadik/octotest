@@ -5,12 +5,21 @@ const SLIDE_SOUND_DEFAULT: AudioStream = preload("res://assets/sound/sliding-noi
 signal open_requested(source: Node)
 signal door_opened(source: Node)
 
+enum TitleSide {
+	FRONT,
+	BACK,
+}
+
 @export var open_distance := 1.35
 @export var open_duration := 0.55
 @export var close_duration := 0.55
 @export var auto_close_delay := 2.8
 @export var auto_close_retry_interval := 0.65
 @export var locked := false
+@export_group("Metadata")
+@export var privacy_glass_enabled := false
+@export var door_title := ""
+@export var title_side: TitleSide = TitleSide.FRONT
 @export_group("Audio")
 @export var slide_sound: AudioStream = SLIDE_SOUND_DEFAULT
 @export var slide_sound_volume_db := -6.0
@@ -23,6 +32,10 @@ signal door_opened(source: Node)
 @onready var _button_mesh: MeshInstance3D = $StaticBody3D/button
 @onready var _interactable: Interactable = $Interactable
 @onready var _close_sensor: Area3D = $CloseSensor
+@onready var _glass_mesh: MeshInstance3D = get_node_or_null("StaticBody3D/glass") as MeshInstance3D
+@onready var _privacy_glass_mesh: MeshInstance3D = get_node_or_null("StaticBody3D/PrivacyGlassPlane") as MeshInstance3D
+@onready var _title_front_label: Label3D = get_node_or_null("StaticBody3D/TitleFront") as Label3D
+@onready var _title_back_label: Label3D = get_node_or_null("StaticBody3D/TitleBack") as Label3D
 
 var _closed_position := Vector3.ZERO
 var _is_open := false
@@ -49,6 +62,7 @@ func _ready() -> void:
 	_build_button_materials()
 	_update_button_state()
 	_ensure_audio_player()
+	_apply_metadata_visuals()
 	if _interactable != null and not _interactable.clicked.is_connected(_on_door_clicked):
 		_interactable.clicked.connect(_on_door_clicked)
 
@@ -278,6 +292,33 @@ func _build_button_materials() -> void:
 	_button_red_highlight_material = _button_red_material.duplicate()
 	_button_red_highlight_material.albedo_color = _button_red_material.albedo_color.lightened(0.32)
 	_button_red_highlight_material.emission = _button_red_material.emission.lightened(0.45)
+
+
+func _apply_metadata_visuals() -> void:
+	_apply_privacy_glass_visual()
+	_apply_title_visual()
+
+
+func apply_metadata_visuals() -> void:
+	_apply_metadata_visuals()
+
+
+func _apply_privacy_glass_visual() -> void:
+	if _privacy_glass_mesh != null:
+		_privacy_glass_mesh.visible = privacy_glass_enabled
+	if _glass_mesh != null:
+		_glass_mesh.visible = not privacy_glass_enabled
+
+
+func _apply_title_visual() -> void:
+	var localized_title := tr(door_title).strip_edges()
+	var has_title := not localized_title.is_empty()
+	if _title_front_label != null:
+		_title_front_label.text = localized_title
+		_title_front_label.visible = has_title and title_side == TitleSide.FRONT
+	if _title_back_label != null:
+		_title_back_label.text = localized_title
+		_title_back_label.visible = has_title and title_side == TitleSide.BACK
 
 
 func get_save_state() -> Dictionary:

@@ -135,6 +135,8 @@ collision_mask = 0
 
 [node name="DoorDouble" parent="StaticBody3D" unique_id=1045878697 instance=ExtResource("1_4de62")]
 transform = Transform3D(0.9238795, 0, 0.38268346, 0, 1, 0, -0.38268346, 0, 0.9238795, -4.4453554, 0, -17)
+door_title = "Systems"
+door_title_secondary = "Room"
 
 [node name="FloorSystem" type="MeshInstance3D" parent="StaticBody3D" unique_id=1099385515]
 transform = Transform3D(0.9238795, 0, 0.38268346, 0, 1, 0, -0.38268346, 0, 0.9238795, -9.380801, 0, -17.811625)

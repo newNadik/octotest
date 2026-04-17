@@ -160,6 +160,8 @@ transform = Transform3D(0.9238795, 0, 0.38268346, 0, 1, 0, -0.38268346, 0, 0.923
 
 [node name="DoorDouble" parent="StaticBody3D" unique_id=1045878697 instance=ExtResource("2_0o3lh")]
 transform = Transform3D(0.9238795, 0, 0.38268346, 0, 1, 0, -0.38268346, 0, 0.9238795, 17.431269, 0, -9.916206)
+door_title = "Chem"
+door_title_secondary = "Lab"
 
 [node name="WindowSingle" parent="StaticBody3D" unique_id=1026944921 instance=ExtResource("3_wckr1")]
 transform = Transform3D(0.7071067, -0.69411516, -0.13492228, 0, 0.19080892, -0.98162705, 0.7071067, 0.69411516, 0.13492228, 22.807203, 6.359706, -18.680317)

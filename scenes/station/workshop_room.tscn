@@ -214,6 +214,8 @@ transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 25.7
 
 [node name="DoorDouble" parent="." unique_id=1045878697 instance=ExtResource("2_uvbm7")]
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 25.777, 0, -0.095)
+door_title = "WORK"
+door_title_secondary = "SHOP"
 
 [node name="LightSwitch" parent="." unique_id=1802619805 instance=ExtResource("7_o720b")]
 transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 25.471992, 0, -1.7700095)

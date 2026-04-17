@@ -288,6 +288,11 @@ shadow_mesh = SubResource("ArrayMesh_2vf7o")
 [sub_resource type="BoxShape3D" id="BoxShape3D_8klbd"]
 size = Vector3(1.51, 4.8, 0.15)
 
+[sub_resource type="BoxMesh" id="BoxMesh_u058e"]
+size = Vector3(0.95, 2.7, 0.08)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_rhdm1"]
+
 [sub_resource type="BoxShape3D" id="BoxShape3D_door_interaction"]
 size = Vector3(1.55, 4.8, 0.2)
 
@@ -298,6 +303,26 @@ size = Vector3(1.62, 4.8, 0.42)
 script = ExtResource("1_door_slide_script")
 
 [node name="StaticBody3D" type="StaticBody3D" parent="." unique_id=1198069455]
+
+[node name="TitleFront" type="Label3D" parent="StaticBody3D" unique_id=1369437485]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.2, 0.045)
+visible = false
+pixel_size = 0.001
+modulate = Color(0.18039216, 0.33333334, 0.43137255, 1)
+outline_modulate = Color(1, 1, 1, 1)
+text = "Front"
+font_size = 180
+outline_size = 45
+
+[node name="TitleBack" type="Label3D" parent="StaticBody3D" unique_id=1235573515]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, 3.2, -0.045)
+visible = false
+pixel_size = 0.001
+modulate = Color(0.18039216, 0.33333334, 0.43137255, 1)
+outline_modulate = Color(1, 1, 1, 1)
+text = "Back"
+font_size = 180
+outline_size = 45
 
 [node name="DoorMain" type="MeshInstance3D" parent="StaticBody3D" unique_id=1736563299]
 mesh = SubResource("ArrayMesh_647sn")
@@ -329,6 +354,12 @@ mesh = SubResource("ArrayMesh_xdj8g")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D" unique_id=2023497220]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.4, 0)
 shape = SubResource("BoxShape3D_8klbd")
+
+[node name="PrivacyGlassPlane" type="MeshInstance3D" parent="StaticBody3D" unique_id=622692872]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
+visible = false
+mesh = SubResource("BoxMesh_u058e")
+surface_material_override/0 = SubResource("StandardMaterial3D_rhdm1")
 
 [node name="Interactable" type="Area3D" parent="." unique_id=1789112203]
 collision_layer = 8

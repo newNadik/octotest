@@ -191,9 +191,15 @@ transform = Transform3D(0.9238795, 0, -0.38268346, 0, 1, 0, 0.38268346, 0, 0.923
 
 [node name="DoorDouble" parent="." unique_id=1045878697 instance=ExtResource("1_1hvab")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.785187, 0, 19.046888)
+door_title = "Lock"
+door_title_secondary = "Dive"
+title_side = 1
 
 [node name="DoorDouble2" parent="." unique_id=683268443 instance=ExtResource("1_1hvab")]
 transform = Transform3D(0.9238795, 0, -0.38268346, 0, 1, 0, 0.38268346, 0, 0.9238795, 17.420347, 0, 9.889815)
+door_title = "Lab"
+door_title_secondary = "Energy"
+title_side = 1
 
 [node name="OmniLight3D" type="OmniLight3D" parent="." unique_id=576397186]
 transform = Transform3D(0.9987454, 0.04823518, -0.013456084, -0.048239548, 0.9988358, 4.204354e-11, 0.013440418, 0.0006491153, 0.9999095, 22.287033, 5.646458, 14.12034)
