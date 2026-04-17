@@ -9,6 +9,7 @@
 [ext_resource type="Material" uid="uid://bb4hx1vyakkmf" path="res://assets/materials/plaster.tres" id="5_otath"]
 [ext_resource type="Material" uid="uid://ca2db0a60mj50" path="res://assets/materials/metal.tres" id="6_cfhbd"]
 [ext_resource type="PackedScene" uid="uid://b7vd8cvq5kxdt" path="res://scenes/station/interior/light_switch.tscn" id="8_ldg3l"]
+[ext_resource type="PackedScene" uid="uid://c5tv72lyq8d8h" path="res://scenes/effects/caustic_rig.tscn" id="10_tada6"]
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_irqvq"]
 resource_name = "chem_lab_Plane_095"
@@ -231,3 +232,9 @@ light_indirect_energy = 5.0
 shadow_enabled = true
 shadow_blur = 2.0
 omni_range = 10.0
+
+[node name="CausticRig" parent="." unique_id=7604608 instance=ExtResource("10_tada6")]
+transform = Transform3D(0.6397694, 0.2484194, 0.72731215, -0.34045082, 0.9400143, -0.021597028, -0.6890489, -0.23379692, 0.68596697, 17.375011, 5.8672385, -21.714153)
+light_energy = 4.0
+rotation_speed_a_degrees = 3.0
+rotation_speed_b_degrees = -4.0

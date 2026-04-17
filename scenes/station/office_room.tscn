@@ -10,6 +10,7 @@
 [ext_resource type="PackedScene" uid="uid://b7vd8cvq5kxdt" path="res://scenes/station/interior/light_switch.tscn" id="7_m7hwl"]
 [ext_resource type="PackedScene" uid="uid://wo8dpvu58cav" path="res://scenes/station/interior/aloe_plant.tscn" id="9_th3od"]
 [ext_resource type="PackedScene" uid="uid://bu4rpvaec4jla" path="res://scenes/station/interior/cactus_plant.tscn" id="10_lhg08"]
+[ext_resource type="PackedScene" uid="uid://c5tv72lyq8d8h" path="res://scenes/effects/caustic_rig.tscn" id="11_lhg08"]
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_b4dhb"]
 _surfaces = [{
@@ -198,3 +199,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.513465, 2.3841858e-07, -19.
 
 [node name="cactus" parent="." unique_id=589026095 instance=ExtResource("10_lhg08")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.6567717, 0, -20.663298)
+
+[node name="CausticRig" parent="." unique_id=7604608 instance=ExtResource("11_lhg08")]
+transform = Transform3D(0.9659258, -0.06698731, 0.25000003, 7.4505815e-09, 0.9659258, 0.25881904, -0.25881907, -0.25, 0.93301266, 4.2595243, 8.086414, -26.654451)
+light_energy = 4.0
+rotation_speed_a_degrees = 3.0
+rotation_speed_b_degrees = -4.0

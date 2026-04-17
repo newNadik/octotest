@@ -12,6 +12,7 @@
 [ext_resource type="PackedScene" uid="uid://bu4rpvaec4jla" path="res://scenes/station/interior/cactus_plant.tscn" id="10_srhdw"]
 [ext_resource type="PackedScene" uid="uid://c1nq1i0twyqej" path="res://scenes/station/interior/garden.tscn" id="10_vucpf"]
 [ext_resource type="PackedScene" uid="uid://6vcqkboq1fps" path="res://scenes/effects/floor_marker_light.tscn" id="11_floorlight"]
+[ext_resource type="PackedScene" uid="uid://c5tv72lyq8d8h" path="res://scenes/effects/caustic_rig.tscn" id="11_fy6p5"]
 [ext_resource type="PackedScene" uid="uid://b7vnunwlus20w" path="res://scenes/station/interior/toilet.tscn" id="14_hefio"]
 [ext_resource type="PackedScene" uid="uid://can7o07havaxf" path="res://scenes/station/interior/wet_floor_sign.tscn" id="16_o6nh8"]
 
@@ -1127,6 +1128,10 @@ light_specular = 0.0
 light_bake_mode = 0
 omni_range = 20.0
 omni_attenuation = 0.1
+
+[node name="CausticRig" parent="PathLights" unique_id=7604608 instance=ExtResource("11_fy6p5")]
+transform = Transform3D(0.46584922, 0.7857269, -0.40696132, -0.44409522, 0.6054029, 0.6605047, 0.765352, -0.12696601, 0.63096416, 35.80785, 6.0118256, -0.059587)
+light_energy = 1.0
 
 [node name="garden" parent="." unique_id=679455543 instance=ExtResource("10_vucpf")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, -0.11054075, 0)

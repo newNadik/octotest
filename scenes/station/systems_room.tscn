@@ -9,6 +9,7 @@
 [ext_resource type="Material" uid="uid://ca2db0a60mj50" path="res://assets/materials/metal.tres" id="4_0ar6p"]
 [ext_resource type="AudioStream" uid="uid://cpvgrh463bnmg" path="res://assets/sound/machine_room.wav" id="5_machine_amb"]
 [ext_resource type="PackedScene" uid="uid://b7vd8cvq5kxdt" path="res://scenes/station/interior/light_switch.tscn" id="9_ag2h7"]
+[ext_resource type="PackedScene" uid="uid://c5tv72lyq8d8h" path="res://scenes/effects/caustic_rig.tscn" id="10_7gsjf"]
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_lf4d5"]
 resource_name = "system_Plane_099"
@@ -200,3 +201,9 @@ light_indirect_energy = 5.0
 shadow_enabled = true
 shadow_blur = 2.0
 omni_range = 10.0
+
+[node name="CausticRig" parent="." unique_id=7604608 instance=ExtResource("10_7gsjf")]
+transform = Transform3D(1, 0, 0, 0, 0.98333114, 0.18182364, 0, -0.18182364, 0.98333114, -4.6089106, 6.553854, -26.65145)
+light_energy = 4.0
+rotation_speed_a_degrees = 3.0
+rotation_speed_b_degrees = -4.0

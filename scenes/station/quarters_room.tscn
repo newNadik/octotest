@@ -8,6 +8,7 @@
 [ext_resource type="Material" uid="uid://bb4hx1vyakkmf" path="res://assets/materials/plaster.tres" id="4_kvu68"]
 [ext_resource type="Material" uid="uid://ca2db0a60mj50" path="res://assets/materials/metal.tres" id="5_wovnj"]
 [ext_resource type="PackedScene" uid="uid://b7vd8cvq5kxdt" path="res://scenes/station/interior/light_switch.tscn" id="7_hj37j"]
+[ext_resource type="PackedScene" uid="uid://c5tv72lyq8d8h" path="res://scenes/effects/caustic_rig.tscn" id="8_0o1h7"]
 [ext_resource type="PackedScene" uid="uid://brqdwvvq7xuyc" path="res://scenes/station/interior/orchid_plant.tscn" id="9_mcwsc"]
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_mtf4t"]
@@ -194,6 +195,12 @@ surface_material_override/0 = ExtResource("4_kvu68")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D" unique_id=1034998512]
 transform = Transform3D(0.9238795, 0, 0.38268346, 0, 1, 0, -0.38268346, 0, 0.9238795, -6.970282, -7.5464764e-06, -12.401364)
 shape = SubResource("ConcavePolygonShape3D_8ctpj")
+
+[node name="CausticRig" parent="StaticBody3D" unique_id=7604608 instance=ExtResource("8_0o1h7")]
+transform = Transform3D(0.30046892, -0.39893028, 0.8663562, 0.096529715, 0.9163837, 0.38848805, -0.94889426, -0.033099484, 0.31385347, -21.844046, 6.9949527, -17.760504)
+light_energy = 4.0
+rotation_speed_a_degrees = 3.0
+rotation_speed_b_degrees = -4.0
 
 [node name="OmniLight3D" type="OmniLight3D" parent="." unique_id=725256015]
 transform = Transform3D(0.99859184, 0.05305054, 0, -0.05305054, 0.99859184, 0, 0, 0, 1, -25.54182, 5.4141974, -13.818275)
