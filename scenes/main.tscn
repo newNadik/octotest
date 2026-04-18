@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://ddcirs8kpfb2k"]
 
 [ext_resource type="Script" uid="uid://km7y0f0xluw6" path="res://scripts/core/main.gd" id="1_4f72t"]
-[ext_resource type="PackedScene" uid="uid://tsltkwaxfsas" path="res://scenes/station/surroundings.tscn" id="2_muem4"]
+[ext_resource type="PackedScene" uid="uid://tsltkwaxfsas" path="res://scenes/station/items/surroundings.tscn" id="2_muem4"]
 [ext_resource type="PackedScene" uid="uid://63bbsnp8k0ew" path="res://scenes/player.tscn" id="2_vrsh6"]
 [ext_resource type="PackedScene" uid="uid://ojtj5eewvf4n" path="res://scenes/ui/in_game_menu.tscn" id="7_o6xl0"]
 [ext_resource type="PackedScene" uid="uid://d188rcj55r6g0" path="res://scenes/station/atrium_room.tscn" id="8_jkv2x"]
@@ -13,7 +13,7 @@
 [ext_resource type="PackedScene" uid="uid://b5wbnkdw8pctg" path="res://scenes/station/wetroom_room.tscn" id="14_yc10j"]
 [ext_resource type="PackedScene" uid="uid://bsq8i8032qepo" path="res://scenes/station/workshop_room.tscn" id="15_jscy8"]
 [ext_resource type="Script" uid="uid://cdsji1uitym1j" path="res://scripts/lighting/god_rays.gd" id="16_godrays"]
-[ext_resource type="PackedScene" uid="uid://6qexu3mk541a" path="res://scenes/station/fish_school.tscn" id="17_fishschool"]
+[ext_resource type="PackedScene" uid="uid://6qexu3mk541a" path="res://scenes/station/items/fish_school.tscn" id="17_fishschool"]
 [ext_resource type="AudioStream" uid="uid://d3qno7atcke7y" path="res://assets/sound/underwater-loop-amb.wav" id="18_underwater"]
 [ext_resource type="Shader" uid="uid://b5rx1t38of3h7" path="res://assets/shaders/gameplay_cohesion.gdshader" id="19_gameplayfx"]
 [ext_resource type="PackedScene" uid="uid://c5tv72lyq8d8h" path="res://scenes/effects/caustic_rig.tscn" id="20_caustic"]

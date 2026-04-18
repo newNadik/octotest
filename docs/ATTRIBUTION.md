@@ -44,6 +44,21 @@ Source: [Flaticon](https://www.flaticon.com/)
 - "Compact bathroom" (https://skfb.ly/oRoQU) by MrdT is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
 - "Rubber Duck" (https://skfb.ly/pBH8u) by nicolewnchoi is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
 - "Flipflops (Mockup) Plain Texture" (https://skfb.ly/oK9Vn) by kane_sk06 is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+- "Fairy Lights" (https://skfb.ly/oLyIR) by cartti is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+- "GAME READY FIRE EXTINGUISHER" (https://skfb.ly/pAXYN) by Oxygen3D is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+- "Locker and rack" (https://skfb.ly/pEN6D) by Oxygen3D is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+- "GAME READY POS-TERMINAL ASSET" (https://skfb.ly/pADDB) by Oxygen3D is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+- "GAME READY DARTS ASSET" (https://skfb.ly/pAxIE) by Oxygen3D is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+- "M1090-01 office chair" (https://skfb.ly/oNYyO) by rongphuongbacfurniture is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+- "Modern Bench 1" (https://skfb.ly/6VIxM) by Elasta Kristya is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+- "Furniture Pack For Summer Caffe FREE" (https://skfb.ly/o7Kw6) by Kozlov Maksim is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+- "VR ready hospital props" (https://skfb.ly/oEGEr) by Grish_Avetisyan is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+- "Hospital Room" (https://skfb.ly/oBGIT) by Uğur Yakışık is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+- "Medical Equipment" (https://skfb.ly/pBZnx) by Chenchanchong is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+- "Basic clock rigged" (https://skfb.ly/pzUts) by Chenchanchong is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+- "Round Table" (https://skfb.ly/oGKC6) by evansmine8 is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+- 
+
 ## Textures
 
 - https://cc0-textures.com

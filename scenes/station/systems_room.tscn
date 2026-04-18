@@ -10,6 +10,7 @@
 [ext_resource type="AudioStream" uid="uid://cpvgrh463bnmg" path="res://assets/sound/machine_room.wav" id="5_machine_amb"]
 [ext_resource type="PackedScene" uid="uid://b7vd8cvq5kxdt" path="res://scenes/station/interior/light_switch.tscn" id="9_ag2h7"]
 [ext_resource type="PackedScene" uid="uid://c5tv72lyq8d8h" path="res://scenes/effects/caustic_rig.tscn" id="10_7gsjf"]
+[ext_resource type="PackedScene" uid="uid://b18qdk7b4q77l" path="res://scenes/station/interior/desk.tscn" id="11_q87oj"]
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_lf4d5"]
 resource_name = "system_Plane_099"
@@ -126,9 +127,9 @@ data = PackedVector3Array(-0.6928, 0, -0.29999998, 1.35, 0, 0.29999998, 1.35, 0,
 
 [node name="system" type="Node3D" unique_id=1217152142 node_paths=PackedStringArray("light_switch", "ceiling_mesh", "lamp_lights")]
 script = ExtResource("1_ywlqd")
-light_switch = NodePath("LightSwitch")
+light_switch = NodePath("lights/LightSwitch")
 ceiling_mesh = NodePath("StaticBody3D/RoofSystem")
-lamp_lights = [NodePath("OmniLight3D"), NodePath("OmniLight3D2"), NodePath("OmniLight3D3")]
+lamp_lights = [NodePath("lights/OmniLight3D"), NodePath("lights/OmniLight3D2"), NodePath("lights/OmniLight3D3")]
 
 [node name="StaticBody3D" type="StaticBody3D" parent="." unique_id=956882956]
 collision_layer = 2
@@ -175,10 +176,13 @@ autoplay = true
 max_distance = 32.0
 bus = &"Ambience"
 
-[node name="LightSwitch" parent="." unique_id=1802619805 instance=ExtResource("9_ag2h7")]
-transform = Transform3D(-0.9238795, 0, -0.38268343, 0, 1, 0, 0.38268343, 0, -0.9238795, -3.0119002, 0, -17.945446)
+[node name="lights" type="Node3D" parent="." unique_id=1618650556]
 
-[node name="OmniLight3D" type="OmniLight3D" parent="." unique_id=1573901390]
+[node name="LightSwitch" parent="lights" unique_id=1802619805 instance=ExtResource("9_ag2h7")]
+transform = Transform3D(-0.9238795, 0, -0.38268343, 0, 1, 0, 0.38268343, 0, -0.9238795, -3.0119002, 0, -17.945446)
+start_on = true
+
+[node name="OmniLight3D" type="OmniLight3D" parent="lights" unique_id=1573901390]
 transform = Transform3D(0.99859184, 0.05305054, 0, -0.05305054, 0.99859184, 0, 0, 0, 1, -13.901335, 5.9748473, -23.92374)
 light_energy = 5.0
 light_indirect_energy = 5.0
@@ -186,7 +190,7 @@ shadow_enabled = true
 shadow_blur = 2.0
 omni_range = 10.0
 
-[node name="OmniLight3D2" type="OmniLight3D" parent="." unique_id=1205327639]
+[node name="OmniLight3D2" type="OmniLight3D" parent="lights" unique_id=1205327639]
 transform = Transform3D(0.99859184, 0.05305054, 0, -0.05305054, 0.99859184, 0, 0, 0, 1, -3.892705, 6.6641774, -20.534151)
 light_energy = 5.0
 light_indirect_energy = 5.0
@@ -194,7 +198,7 @@ shadow_enabled = true
 shadow_blur = 2.0
 omni_range = 10.0
 
-[node name="OmniLight3D3" type="OmniLight3D" parent="." unique_id=1364284982]
+[node name="OmniLight3D3" type="OmniLight3D" parent="lights" unique_id=1364284982]
 transform = Transform3D(0.99859184, 0.05305054, 0, -0.05305054, 0.99859184, 0, 0, 0, 1, -7.2022257, 5.321799, -27.233261)
 light_energy = 5.0
 light_indirect_energy = 5.0
@@ -202,8 +206,13 @@ shadow_enabled = true
 shadow_blur = 2.0
 omni_range = 10.0
 
-[node name="CausticRig" parent="." unique_id=7604608 instance=ExtResource("10_7gsjf")]
+[node name="CausticRig" parent="lights" unique_id=7604608 instance=ExtResource("10_7gsjf")]
 transform = Transform3D(1, 0, 0, 0, 0.98333114, 0.18182364, 0, -0.18182364, 0.98333114, -4.6089106, 6.553854, -26.65145)
 light_energy = 4.0
 rotation_speed_a_degrees = 3.0
 rotation_speed_b_degrees = -4.0
+
+[node name="furniture" type="Node3D" parent="." unique_id=116304272]
+
+[node name="desk" parent="furniture" unique_id=360776120 instance=ExtResource("11_q87oj")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.990107, 0, -22.145985)

@@ -9,8 +9,15 @@
 [ext_resource type="Material" uid="uid://ca2db0a60mj50" path="res://assets/materials/metal.tres" id="3_umm8t"]
 [ext_resource type="PackedScene" uid="uid://b7vd8cvq5kxdt" path="res://scenes/station/interior/light_switch.tscn" id="7_m7hwl"]
 [ext_resource type="PackedScene" uid="uid://wo8dpvu58cav" path="res://scenes/station/interior/aloe_plant.tscn" id="9_th3od"]
+[ext_resource type="PackedScene" uid="uid://c6u2h3iksfaya" path="res://scenes/station/interior/cabinet_01.tscn" id="10_fdq6y"]
 [ext_resource type="PackedScene" uid="uid://bu4rpvaec4jla" path="res://scenes/station/interior/cactus_plant.tscn" id="10_lhg08"]
+[ext_resource type="PackedScene" uid="uid://baby1674nt80i" path="res://scenes/station/interior/cabinet_02.tscn" id="11_86me0"]
 [ext_resource type="PackedScene" uid="uid://c5tv72lyq8d8h" path="res://scenes/effects/caustic_rig.tscn" id="11_lhg08"]
+[ext_resource type="PackedScene" uid="uid://qs8sh7iux1qk" path="res://scenes/station/interior/chair.tscn" id="12_lbeae"]
+[ext_resource type="PackedScene" uid="uid://b18qdk7b4q77l" path="res://scenes/station/interior/desk.tscn" id="13_24s07"]
+[ext_resource type="PackedScene" uid="uid://bv0s7hhcicpan" path="res://scenes/station/items/documents_001.tscn" id="16_n63b1"]
+[ext_resource type="PackedScene" uid="uid://q80ss7d03u6" path="res://scenes/station/items/documents_002.tscn" id="17_kdhla"]
+[ext_resource type="PackedScene" uid="uid://cofo0vasii446" path="res://scenes/station/items/mug.tscn" id="18_qu1ev"]
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_b4dhb"]
 _surfaces = [{
@@ -125,9 +132,9 @@ data = PackedVector3Array(-6.6, 0, 0.29999998, 6, 0, -0.29999998, 6, 0, 0.299999
 
 [node name="office" type="Node3D" unique_id=1551660067 node_paths=PackedStringArray("light_switch", "ceiling_mesh", "lamp_lights")]
 script = ExtResource("1_1k547")
-light_switch = NodePath("LightSwitch")
+light_switch = NodePath("lights/LightSwitch")
 ceiling_mesh = NodePath("StaticBody3D/Roof_Office")
-lamp_lights = [NodePath("OmniLight3D"), NodePath("OmniLight3D2"), NodePath("OmniLight3D3")]
+lamp_lights = [NodePath("lights/OmniLight3D"), NodePath("lights/OmniLight3D2"), NodePath("lights/OmniLight3D3")]
 
 [node name="StaticBody3D" type="StaticBody3D" parent="." unique_id=1704847918]
 collision_layer = 2
@@ -162,15 +169,17 @@ shape = SubResource("ConcavePolygonShape3D_8erxb")
 [node name="WindowSingle" parent="StaticBody3D" unique_id=1026944921 instance=ExtResource("1_o46ax")]
 transform = Transform3D(1, 0, 0, 0, -0.19080903, 0.98162717, 0, -0.98162717, -0.19080903, 2.504, 7.62, -23.401)
 
-[node name="DoorDouble" parent="." unique_id=1045878697 instance=ExtResource("1_43emv")]
+[node name="DoorDouble" parent="StaticBody3D" unique_id=1045878697 instance=ExtResource("1_43emv")]
 transform = Transform3D(0.9238795, 0, -0.38268346, 0, 1, 0, 0.38268346, 0, 0.9238795, 2.5215478, 0, -16.9)
 door_title = "Data"
 door_title_secondary = "Office"
 
-[node name="LightSwitch" parent="." unique_id=1802619805 instance=ExtResource("7_m7hwl")]
+[node name="lights" type="Node3D" parent="." unique_id=138401406]
+
+[node name="LightSwitch" parent="lights" unique_id=1802619805 instance=ExtResource("7_m7hwl")]
 transform = Transform3D(-0.9238795, 0, 0.38268343, 0, 1, 0, -0.38268343, 0, -0.9238795, 4.2093787, 0, -16.543884)
 
-[node name="OmniLight3D" type="OmniLight3D" parent="." unique_id=1215522251]
+[node name="OmniLight3D" type="OmniLight3D" parent="lights" unique_id=1215522251]
 transform = Transform3D(0.99859184, 0.05305054, 0, -0.05305054, 0.99859184, 0, 0, 0, 1, 8.226827, 5.1396184, -27.271605)
 light_energy = 5.0
 light_indirect_energy = 5.0
@@ -178,7 +187,7 @@ shadow_enabled = true
 shadow_blur = 2.0
 omni_range = 10.0
 
-[node name="OmniLight3D2" type="OmniLight3D" parent="." unique_id=328058947]
+[node name="OmniLight3D2" type="OmniLight3D" parent="lights" unique_id=328058947]
 transform = Transform3D(0.99859184, 0.05305054, 0, -0.05305054, 0.99859184, 0, 0, 0, 1, 4.8642817, 5.9748473, -23.874395)
 light_energy = 5.0
 light_indirect_energy = 5.0
@@ -186,7 +195,7 @@ shadow_enabled = true
 shadow_blur = 2.0
 omni_range = 10.0
 
-[node name="OmniLight3D3" type="OmniLight3D" parent="." unique_id=2041539478]
+[node name="OmniLight3D3" type="OmniLight3D" parent="lights" unique_id=2041539478]
 transform = Transform3D(0.99859184, 0.05305054, 0, -0.05305054, 0.99859184, 0, 0, 0, 1, 4.8642817, 7.864269, -17.183971)
 light_energy = 5.0
 light_indirect_energy = 5.0
@@ -194,14 +203,45 @@ shadow_enabled = true
 shadow_blur = 2.0
 omni_range = 10.0
 
-[node name="Node3D" parent="." unique_id=1667817107 instance=ExtResource("9_th3od")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.513465, 2.3841858e-07, -19.814096)
-
-[node name="cactus" parent="." unique_id=589026095 instance=ExtResource("10_lhg08")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.6567717, 0, -20.663298)
-
-[node name="CausticRig" parent="." unique_id=7604608 instance=ExtResource("11_lhg08")]
+[node name="CausticRig" parent="lights" unique_id=7604608 instance=ExtResource("11_lhg08")]
 transform = Transform3D(0.9659258, -0.06698731, 0.25000003, 7.4505815e-09, 0.9659258, 0.25881904, -0.25881907, -0.25, 0.93301266, 4.2595243, 8.086414, -26.654451)
 light_energy = 4.0
 rotation_speed_a_degrees = 3.0
 rotation_speed_b_degrees = -4.0
+
+[node name="furniture" type="Node3D" parent="." unique_id=723163923]
+
+[node name="Cabinet_01" parent="furniture" unique_id=1376455345 instance=ExtResource("10_fdq6y")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.0367985, 0, -29.177511)
+
+[node name="Cabinet_02" parent="furniture" unique_id=678435141 instance=ExtResource("11_86me0")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.5427246, 0, -29.259672)
+
+[node name="chair" parent="furniture" unique_id=1222624819 instance=ExtResource("12_lbeae")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 3.3743858, 0, -22.711327)
+
+[node name="desk" parent="furniture" unique_id=360776120 instance=ExtResource("13_24s07")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 2.918908, 0, -22.61223)
+
+[node name="chair2" parent="furniture" unique_id=1946128507 instance=ExtResource("12_lbeae")]
+transform = Transform3D(0.20572592, 0, -0.9786096, 0, 1, 0, 0.9786096, 0, 0.20572592, 4.063432, 0, -26.122463)
+
+[node name="desk2" parent="furniture" unique_id=1478287239 instance=ExtResource("13_24s07")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 2.9175506, 0, -25.833248)
+
+[node name="items" type="Node3D" parent="." unique_id=336571729]
+
+[node name="plant" parent="items" unique_id=1667817107 instance=ExtResource("9_th3od")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.513465, 1.036444, -29.249525)
+
+[node name="cactus" parent="items" unique_id=589026095 instance=ExtResource("10_lhg08")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.4536116, 1.5625226, -21.546877)
+
+[node name="documents001" parent="items" unique_id=85931941 instance=ExtResource("16_n63b1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.0535154, 0, -27.435308)
+
+[node name="documents002" parent="items" unique_id=367064636 instance=ExtResource("17_kdhla")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.612132, 0, -27.933422)
+
+[node name="mug" parent="items" unique_id=36977870 instance=ExtResource("18_qu1ev")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.2125726, 1.558221, -21.694439)

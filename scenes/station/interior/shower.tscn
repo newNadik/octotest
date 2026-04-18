@@ -867,7 +867,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.8090774, 3, 0.16091943)
 shape = SubResource("BoxShape3D_u51js")
 
 [node name="duck" parent="." unique_id=1120476849 instance=ExtResource("3_u51js")]
-transform = Transform3D(0.93361795, 0, 0.35827014, 0, 1, 0, -0.35827014, 0, 0.93361795, -1.8016205, 1.6716187, -0.79422736)
+transform = Transform3D(0.93361795, 0, 0.35827014, 0, 1, 0, -0.35827014, 0, 0.93361795, -1.8016205, 1.6414337, -0.79422736)
 
 [node name="flip_flop" parent="." unique_id=556537212 instance=ExtResource("4_gh2ub")]
 transform = Transform3D(0.614946, 0, -0.7885692, 0, 1, 0, 0.7885692, 0, 0.614946, -1.815, 0, 0.235)

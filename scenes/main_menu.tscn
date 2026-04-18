@@ -436,6 +436,7 @@ grow_vertical = 2
 mouse_filter = 2
 
 [node name="StickerContainer" type="MarginContainer" parent="." unique_id=1992276939]
+visible = false
 layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
