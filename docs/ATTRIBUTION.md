@@ -57,6 +57,9 @@ Source: [Flaticon](https://www.flaticon.com/)
 - "Medical Equipment" (https://skfb.ly/pBZnx) by Chenchanchong is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
 - "Basic clock rigged" (https://skfb.ly/pzUts) by Chenchanchong is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
 - "Round Table" (https://skfb.ly/oGKC6) by evansmine8 is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+- https://www.cgtrader.com/designers/sumostudio?utm_source=credit&utm_source=credit_item_page
+- https://www.cgtrader.com/designers/hlostoops?utm_source=credit&utm_source=credit_item_page
+- https://www.cgtrader.com/designers/postal29041?utm_source=credit&utm_source=credit_item_page
 - 
 
 ## Textures

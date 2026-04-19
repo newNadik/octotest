@@ -21,7 +21,7 @@
 - [ ] Potted plant (corner, observation side)
 - [ ] Wall clock
 - [ ] Trash bins
-- [ ] Fire extinguisher + cabinet
+- [x] Fire extinguisher + cabinet
 - [ ] Evacuation plan (wall-mounted)
 - [ ] CCTV cameras (corner mounts, 2–3)
 
@@ -40,7 +40,6 @@
 - [ ] Poster prints framed on wall
 - [ ] Plant pot (counter or corner)
 - [ ] Trash bin
-- [ ] Fire extinguisher
 - [ ] Evacuation plan (wall-mounted)
 - [ ] Keychains + fridge magnets (counter display)
 - [ ] Sticker sheets rack
@@ -72,7 +71,7 @@
 - [ ] Whiteboard with formulas
 - [ ] Waste disposal containers
 - [ ] Trash bin (general)
-- [ ] Fire extinguisher
+- [x] Fire extinguisher
 - [ ] Evacuation plan (wall-mounted)
 - [ ] Beakers + flasks (various sizes)
 - [ ] Pipettes (rack)
@@ -110,7 +109,7 @@
 - [ ] Vice mounted on bench edge
 - [ ] Rollaway tool cart
 - [ ] Trash bin
-- [ ] Fire extinguisher
+- [x] Fire extinguisher
 - [ ] Evacuation plan (wall-mounted)
 - [ ] Loose nuts + bolts (tray on bench)
 - [ ] Wire spools
@@ -134,7 +133,7 @@
 - [ ] Someone's named their 3D printer with a little label
 
 #### Storage area
-- [ ] Metal shelving units
+- [x] Metal shelving units
 - [ ] Labelled crates / parts bins
 - [ ] Cardboard boxes (stacked)
 - [ ] Equipment cases (Pelican-style)
@@ -153,7 +152,7 @@
 - [ ] Workbench with instruments
 - [ ] Warning tape on floor
 - [ ] High-voltage signage
-- [ ] Fire extinguisher (CO₂)
+- [x] Fire extinguisher (CO₂)
 - [ ] Wall-mounted circuit diagrams
 - [ ] Trash bin
 - [ ] Evacuation plan (wall-mounted)
@@ -170,7 +169,7 @@
 - [ ] CCTV camera
 
 #### Storage area
-- [ ] Metal shelving units
+- [x] Metal shelving units
 - [ ] Labelled crates / bins
 - [ ] Cardboard boxes (stacked)
 - [ ] Equipment cases (heavy-duty)
@@ -194,7 +193,7 @@
 - [ ] Emergency oxygen kit
 - [ ] Log board (dive records)
 - [ ] Trash bin
-- [ ] Fire extinguisher
+- [x] Fire extinguisher
 - [ ] Evacuation plan (wall-mounted)
 - [ ] Dive logbook + pen (on table)
 - [ ] Underwater torch / flashlight
@@ -226,7 +225,7 @@
 - [ ] Whiteboard / corkboard
 - [ ] Coffee mug / thermos (desk prop)
 - [ ] Trash bin
-- [ ] Fire extinguisher
+- [x] Fire extinguisher
 - [ ] Evacuation plan (wall-mounted)
 - [ ] Sticky notes (on monitors + desk)
 - [ ] Pen + pencil cup
@@ -256,11 +255,10 @@
 - [ ] Pipe runs (horizontal + vertical)
 - [ ] Warning / status lights (red/green)
 - [ ] Maintenance toolbox
-- [ ] Fire suppression nozzles (ceiling)
 - [ ] Emergency manual override panel
 - [ ] Stepladder (fold-out)
 - [ ] Trash bin
-- [ ] Fire extinguisher
+- [x] Fire extinguisher
 - [ ] Evacuation plan (wall-mounted)
 - [ ] Maintenance manuals / binders
 - [ ] Clipboard with checklist (on hook)
@@ -286,7 +284,6 @@
 - [ ] Shelf with personal items / books
 - [x] Plant pot (small, personal touch)
 - [ ] Trash bin
-- [ ] Fire extinguisher
 - [ ] Evacuation plan (wall-mounted)
 - [ ] Paperback books (2–3)
 - [ ] board game
@@ -311,7 +308,7 @@
 - [ ] Pinned meal rota / notes
 - [ ] Plant pot (herb pot on counter)
 - [ ] Trash bin
-- [ ] Fire extinguisher
+- [x] Fire extinguisher
 - [ ] Evacuation plan (wall-mounted)
 - [ ] Mugs (on hooks or shelf)
 - [ ] Plates + bowls (stacked in cabinet)
@@ -351,7 +348,7 @@
 - [ ] Privacy curtain on rail
 - [ ] Biohazard waste bin + sharps bin
 - [ ] Trash bin (general)
-- [ ] Fire extinguisher
+- [x] Fire extinguisher
 - [ ] Evacuation plan (wall-mounted)
 - [ ] Clipboard with patient forms + pen
 - [ ] Stethoscope (on desk or hook)

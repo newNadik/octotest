@@ -2,8 +2,8 @@
 
 [ext_resource type="Texture2D" uid="uid://sxnar832q00i" path="res://assets/models/interior/shower/shower_block_Image_0.jpg" id="1_d2ffb"]
 [ext_resource type="Material" uid="uid://bb4hx1vyakkmf" path="res://assets/materials/plaster.tres" id="2_f0f2p"]
-[ext_resource type="PackedScene" uid="uid://c00b2wj6krsqu" path="res://scenes/station/interior/duck.tscn" id="3_u51js"]
-[ext_resource type="PackedScene" uid="uid://ib88jjclimqc" path="res://scenes/station/interior/flip_flop.tscn" id="4_gh2ub"]
+[ext_resource type="PackedScene" uid="uid://c00b2wj6krsqu" path="res://scenes/station/items/duck.tscn" id="3_u51js"]
+[ext_resource type="PackedScene" uid="uid://ib88jjclimqc" path="res://scenes/station/items/flip_flop.tscn" id="4_gh2ub"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_8j6mu"]
 resource_name = "0131_Silver"

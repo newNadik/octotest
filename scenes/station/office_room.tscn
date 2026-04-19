@@ -7,10 +7,10 @@
 [ext_resource type="Material" uid="uid://biog7mv21velq" path="res://assets/materials/ceiling.tres" id="2_2ykdr"]
 [ext_resource type="Material" uid="uid://bb4hx1vyakkmf" path="res://assets/materials/plaster.tres" id="2_b06y5"]
 [ext_resource type="Material" uid="uid://ca2db0a60mj50" path="res://assets/materials/metal.tres" id="3_umm8t"]
-[ext_resource type="PackedScene" uid="uid://b7vd8cvq5kxdt" path="res://scenes/station/interior/light_switch.tscn" id="7_m7hwl"]
-[ext_resource type="PackedScene" uid="uid://wo8dpvu58cav" path="res://scenes/station/interior/aloe_plant.tscn" id="9_th3od"]
+[ext_resource type="PackedScene" uid="uid://b7vd8cvq5kxdt" path="res://scenes/station/items/light_switch.tscn" id="7_m7hwl"]
+[ext_resource type="PackedScene" uid="uid://wo8dpvu58cav" path="res://scenes/station/items/aloe_plant.tscn" id="9_th3od"]
 [ext_resource type="PackedScene" uid="uid://c6u2h3iksfaya" path="res://scenes/station/interior/cabinet_01.tscn" id="10_fdq6y"]
-[ext_resource type="PackedScene" uid="uid://bu4rpvaec4jla" path="res://scenes/station/interior/cactus_plant.tscn" id="10_lhg08"]
+[ext_resource type="PackedScene" uid="uid://bu4rpvaec4jla" path="res://scenes/station/items/cactus_plant.tscn" id="10_lhg08"]
 [ext_resource type="PackedScene" uid="uid://baby1674nt80i" path="res://scenes/station/interior/cabinet_02.tscn" id="11_86me0"]
 [ext_resource type="PackedScene" uid="uid://c5tv72lyq8d8h" path="res://scenes/effects/caustic_rig.tscn" id="11_lhg08"]
 [ext_resource type="PackedScene" uid="uid://qs8sh7iux1qk" path="res://scenes/station/interior/chair.tscn" id="12_lbeae"]
@@ -19,6 +19,7 @@
 [ext_resource type="PackedScene" uid="uid://bv0s7hhcicpan" path="res://scenes/station/items/documents_001.tscn" id="16_n63b1"]
 [ext_resource type="PackedScene" uid="uid://q80ss7d03u6" path="res://scenes/station/items/documents_002.tscn" id="17_kdhla"]
 [ext_resource type="PackedScene" uid="uid://cofo0vasii446" path="res://scenes/station/items/mug.tscn" id="18_qu1ev"]
+[ext_resource type="PackedScene" uid="uid://3qcq4vmexl3s" path="res://scenes/station/items/fire_extinguisher.tscn" id="20_lbeae"]
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_b4dhb"]
 _surfaces = [{
@@ -276,3 +277,6 @@ transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 4.14
 
 [node name="mug" parent="items" unique_id=36977870 instance=ExtResource("18_qu1ev")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.7065282, 1.558221, -20.978203)
+
+[node name="fire_extinguisher" parent="." unique_id=1012721613 instance=ExtResource("20_lbeae")]
+transform = Transform3D(-0.9238796, 0, 0.38268355, 0, 1, 0, -0.38268355, 0, -0.9238796, 0.26016712, 0, -18.447191)

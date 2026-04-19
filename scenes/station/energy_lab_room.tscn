@@ -7,10 +7,11 @@
 [ext_resource type="Material" uid="uid://bb4hx1vyakkmf" path="res://assets/materials/plaster.tres" id="2_hlkya"]
 [ext_resource type="Material" uid="uid://biog7mv21velq" path="res://assets/materials/ceiling.tres" id="2_jcl15"]
 [ext_resource type="Material" uid="uid://ca2db0a60mj50" path="res://assets/materials/metal.tres" id="3_sqwx8"]
-[ext_resource type="PackedScene" uid="uid://b7vd8cvq5kxdt" path="res://scenes/station/interior/light_switch.tscn" id="6_3ek07"]
-[ext_resource type="PackedScene" uid="uid://bu4rpvaec4jla" path="res://scenes/station/interior/cactus_plant.tscn" id="8_cycxu"]
+[ext_resource type="PackedScene" uid="uid://b7vd8cvq5kxdt" path="res://scenes/station/items/light_switch.tscn" id="6_3ek07"]
+[ext_resource type="PackedScene" uid="uid://bu4rpvaec4jla" path="res://scenes/station/items/cactus_plant.tscn" id="8_cycxu"]
 [ext_resource type="PackedScene" uid="uid://8vcajaaad64" path="res://scenes/station/interior/rack.tscn" id="9_ffqb1"]
 [ext_resource type="PackedScene" uid="uid://b18qdk7b4q77l" path="res://scenes/station/interior/desk.tscn" id="9_h87cj"]
+[ext_resource type="PackedScene" uid="uid://3qcq4vmexl3s" path="res://scenes/station/items/fire_extinguisher.tscn" id="9_ph1bl"]
 [ext_resource type="PackedScene" uid="uid://qs8sh7iux1qk" path="res://scenes/station/interior/chair.tscn" id="10_7lkr6"]
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_eoqii"]
@@ -199,6 +200,9 @@ transform = Transform3D(0.9238795, 0, -0.38268346, 0, 1, 0, 0.38268346, 0, 0.923
 door_title = "Lab"
 door_title_secondary = "Energy"
 title_side = 1
+
+[node name="fire_extinguisher" parent="StaticBody3D" unique_id=1012721613 instance=ExtResource("9_ph1bl")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 7.9773903, 0, 11.893904)
 
 [node name="lights" type="Node3D" parent="." unique_id=1568145273]
 
