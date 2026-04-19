@@ -18,6 +18,7 @@
 [ext_resource type="PackedScene" uid="uid://qs8sh7iux1qk" path="res://scenes/station/interior/chair.tscn" id="14_je4rm"]
 [ext_resource type="PackedScene" uid="uid://8vcajaaad64" path="res://scenes/station/interior/rack.tscn" id="15_cdlwy"]
 [ext_resource type="PackedScene" uid="uid://cofo0vasii446" path="res://scenes/station/items/mug.tscn" id="16_l0eqh"]
+[ext_resource type="PackedScene" uid="uid://cbu1wt6omt36j" path="res://assets/models/items/darts_asset.glb" id="19_kdk8m"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_4vwfq"]
 resource_name = "Roof"
@@ -168,6 +169,7 @@ transform = Transform3D(0.70710677, -0.6941152, -0.13492236, 0, -0.19080903, 0.9
 
 [node name="RoofQuarters" type="MeshInstance3D" parent="StaticBody3D" unique_id=2062910619]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.8054073, -7.5464764e-06, 0.006915656)
+visible = false
 instance_shader_parameters/offset_xz = Vector2(2, 3.5)
 mesh = SubResource("ArrayMesh_a4y7k")
 surface_material_override/0 = ExtResource("4_44o56")
@@ -306,3 +308,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -16.790138, 1.4573891, -17.42
 
 [node name="flip_flop" parent="items" unique_id=207116838 instance=ExtResource("11_btc4l")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, -1, -15.513511, 0, -19.299)
+
+[node name="darts" parent="items" unique_id=447770883 instance=ExtResource("19_kdk8m")]
+transform = Transform3D(0.5720896, 0, -1.3866196, 0, 1.4999999, 0, 1.3866196, 0, 0.5720896, -9.005959, 2.4622211, -16.444967)
