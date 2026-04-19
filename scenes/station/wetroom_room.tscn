@@ -7,6 +7,7 @@
 [ext_resource type="Material" uid="uid://biog7mv21velq" path="res://assets/materials/ceiling.tres" id="4_hoakw"]
 [ext_resource type="Material" uid="uid://bb4hx1vyakkmf" path="res://assets/materials/plaster.tres" id="4_tnekd"]
 [ext_resource type="PackedScene" uid="uid://b7vd8cvq5kxdt" path="res://scenes/station/interior/light_switch.tscn" id="6_328kc"]
+[ext_resource type="PackedScene" uid="uid://8vcajaaad64" path="res://scenes/station/interior/rack.tscn" id="8_b0427"]
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_l5yu4"]
 resource_name = "wetroom_Plane_121"
@@ -100,12 +101,9 @@ data = PackedVector3Array(-0.29999998, 0, -2.439, 0.29999998, 0, -6.5855, -0.299
 
 [node name="wetroom" type="Node3D" unique_id=2133782979 node_paths=PackedStringArray("light_switch", "ceiling_mesh", "lamp_lights")]
 script = ExtResource("1_uuxde")
-light_switch = NodePath("LightSwitch")
+light_switch = NodePath("lights/LightSwitch")
 ceiling_mesh = NodePath("StaticBody3D/RoofWetroom")
-lamp_lights = [NodePath("OmniLight3D"), NodePath("OmniLight3D2"), NodePath("OmniLight3D3")]
-
-[node name="LightSwitch" parent="." unique_id=1802619805 instance=ExtResource("6_328kc")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.066742, 0, 19.405468)
+lamp_lights = [NodePath("lights/OmniLight3D"), NodePath("lights/OmniLight3D2"), NodePath("lights/OmniLight3D3")]
 
 [node name="StaticBody3D" type="StaticBody3D" parent="." unique_id=1651889896]
 collision_layer = 2
@@ -118,7 +116,8 @@ transform = Transform3D(-0.3826834, 0, 0.92387956, 0, 1, 0, -0.92387956, 0, -0.3
 transform = Transform3D(0.70710677, 0, 0.70710677, 0, 1, 0, -0.70710677, 0, 0.70710677, 16.9, 0, 24.78)
 
 [node name="DoorSingle" parent="StaticBody3D" unique_id=214083956 instance=ExtResource("1_f5vnd")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.81, 0, 30)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.85273, 0, 30)
+locked = true
 
 [node name="FloorWetroom" type="MeshInstance3D" parent="StaticBody3D" unique_id=1647101433]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.274258, -7.5464764e-06, 24.89488)
@@ -141,7 +140,12 @@ surface_material_override/0 = ExtResource("4_tnekd")
 transform = Transform3D(0.9238795, 0, 0.38268346, 0, 1, 0, -0.38268346, 0, 0.9238795, 9.943851, -7.5464764e-06, 25.59095)
 shape = SubResource("ConcavePolygonShape3D_62ma4")
 
-[node name="OmniLight3D" type="OmniLight3D" parent="." unique_id=1172026728]
+[node name="lights" type="Node3D" parent="." unique_id=1699587579]
+
+[node name="LightSwitch" parent="lights" unique_id=1802619805 instance=ExtResource("6_328kc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.066742, 0, 19.405468)
+
+[node name="OmniLight3D" type="OmniLight3D" parent="lights" unique_id=1172026728]
 transform = Transform3D(0.99859184, 0.05305054, 0, -0.05305054, 0.99859184, 0, 0, 0, 1, 7.6399975, 5.5212016, 27.28033)
 light_energy = 5.0
 light_indirect_energy = 5.0
@@ -149,7 +153,7 @@ shadow_enabled = true
 shadow_blur = 2.0
 omni_range = 10.0
 
-[node name="OmniLight3D2" type="OmniLight3D" parent="." unique_id=1776280879]
+[node name="OmniLight3D2" type="OmniLight3D" parent="lights" unique_id=1776280879]
 transform = Transform3D(0.99859184, 0.05305054, 0, -0.05305054, 0.99859184, 0, 0, 0, 1, 12.377436, 6.3882546, 22.54289)
 light_energy = 5.0
 light_indirect_energy = 5.0
@@ -157,10 +161,18 @@ shadow_enabled = true
 shadow_blur = 2.0
 omni_range = 10.0
 
-[node name="OmniLight3D3" type="OmniLight3D" parent="." unique_id=49165924]
+[node name="OmniLight3D3" type="OmniLight3D" parent="lights" unique_id=49165924]
 transform = Transform3D(0.99859184, 0.05305054, 0, -0.05305054, 0.99859184, 0, 0, 0, 1, 17.086845, 5.5462546, 22.54289)
 light_energy = 5.0
 light_indirect_energy = 5.0
 shadow_enabled = true
 shadow_blur = 2.0
 omni_range = 10.0
+
+[node name="furniture" type="Node3D" parent="." unique_id=241589741]
+
+[node name="rack" parent="." unique_id=1216544187 instance=ExtResource("8_b0427")]
+transform = Transform3D(0.9135454, 0, 0.40673664, 0, 1, 0, -0.40673664, 0, 0.9135454, 11.555163, 0, 26.966839)
+
+[node name="rack2" parent="." unique_id=514956993 instance=ExtResource("8_b0427")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 18.782068, 0, 19.973156)

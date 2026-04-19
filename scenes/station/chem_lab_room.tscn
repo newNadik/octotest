@@ -11,6 +11,7 @@
 [ext_resource type="PackedScene" uid="uid://b7vd8cvq5kxdt" path="res://scenes/station/interior/light_switch.tscn" id="8_ldg3l"]
 [ext_resource type="PackedScene" uid="uid://c5tv72lyq8d8h" path="res://scenes/effects/caustic_rig.tscn" id="10_tada6"]
 [ext_resource type="PackedScene" uid="uid://qs8sh7iux1qk" path="res://scenes/station/interior/chair.tscn" id="11_0sovc"]
+[ext_resource type="PackedScene" uid="uid://8vcajaaad64" path="res://scenes/station/interior/rack.tscn" id="11_lgqjb"]
 [ext_resource type="PackedScene" uid="uid://b18qdk7b4q77l" path="res://scenes/station/interior/desk.tscn" id="12_lgqjb"]
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_irqvq"]
@@ -152,7 +153,7 @@ ceiling_mesh = NodePath("StaticBody3D/RoofChemLab")
 lamp_lights = [NodePath("lights/OmniLight3D"), NodePath("lights/OmniLight3D2"), NodePath("lights/OmniLight3D3"), NodePath("lights/OmniLight3D4")]
 
 [node name="StaticBody3D" type="StaticBody3D" parent="." unique_id=1247116951]
-collision_layer = 2
+collision_layer = 30
 collision_mask = 0
 
 [node name="window_double" parent="StaticBody3D" unique_id=779599183 instance=ExtResource("1_2yydf")]
@@ -245,6 +246,24 @@ rotation_speed_b_degrees = -4.0
 
 [node name="furniture" type="Node3D" parent="." unique_id=1322140375]
 
+[node name="rack" parent="furniture" unique_id=1216544187 instance=ExtResource("11_lgqjb")]
+transform = Transform3D(-0.9238795, 0, 0.3826835, 0, 1, 0, -0.3826835, 0, -0.9238795, 10.299299, 0, -22.849281)
+
+[node name="rack3" parent="furniture" unique_id=1369000468 instance=ExtResource("11_lgqjb")]
+transform = Transform3D(-0.9238795, 0, 0.3826835, 0, 1, 0, -0.3826835, 0, -0.9238795, 11.78347, 0, -26.400692)
+
+[node name="rack4" parent="furniture" unique_id=1823981186 instance=ExtResource("11_lgqjb")]
+transform = Transform3D(0.71044344, 0, 0.7037544, 0, 1, 0, -0.7037544, 0, 0.71044344, 16.281994, 0, -24.07658)
+
+[node name="rack5" parent="furniture" unique_id=1256960445 instance=ExtResource("11_lgqjb")]
+transform = Transform3D(0.71044344, 0, 0.7037544, 0, 1, 0, -0.7037544, 0, 0.71044344, 20.06084, 0, -20.253538)
+
+[node name="rack2" parent="furniture" unique_id=2014615487 instance=ExtResource("11_lgqjb")]
+transform = Transform3D(-0.9238795, 0, 0.3826835, 0, 1, 0, -0.3826835, 0, -0.9238795, 5.4268346, 0, -11.500361)
+
+[node name="rack6" parent="furniture" unique_id=1752374557 instance=ExtResource("11_lgqjb")]
+transform = Transform3D(-0.9238795, 0, 0.3826835, 0, 1, 0, -0.3826835, 0, -0.9238795, 5.4268346, 3.9634748, -11.500361)
+
 [node name="chair" parent="furniture" unique_id=1222624819 instance=ExtResource("11_0sovc")]
 transform = Transform3D(0.7302696, 0, 0.6831591, 0, 1, 0, -0.6831591, 0, 0.7302696, 9.01082, 0, -9.195303)
 
@@ -258,10 +277,10 @@ transform = Transform3D(0.98608905, 0, 0.16621803, 0, 1, 0, -0.16621803, 0, 0.98
 transform = Transform3D(0.98608905, 0, 0.16621803, 0, 1, 0, -0.16621803, 0, 0.98608905, 23.59309, 0, -15.448694)
 
 [node name="chair5" parent="furniture" unique_id=2041161212 instance=ExtResource("11_0sovc")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.604759, 0, -17.957653)
+transform = Transform3D(-0.0008726455, 0, -0.99999964, 0, 1, 0, 0.99999964, 0, -0.0008726455, 15.204219, 0, -16.320198)
 
 [node name="chair6" parent="furniture" unique_id=1407582139 instance=ExtResource("11_0sovc")]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 13.324347, 0, -14.681246)
+transform = Transform3D(0.000872558, 0, 0.99999964, 0, 1, 0, -0.99999964, 0, 0.000872558, 11.928057, 0, -16.603468)
 
 [node name="desk" parent="furniture" unique_id=360776120 instance=ExtResource("12_lgqjb")]
 transform = Transform3D(0.3833444, 0, -0.9236055, 0, 1, 0, 0.9236055, 0, 0.3833444, 9.602254, 0, -8.159995)
@@ -276,16 +295,16 @@ transform = Transform3D(0.3833444, 0, -0.9236055, 0, 1, 0, 0.9236055, 0, 0.38334
 transform = Transform3D(0.3833444, 0, -0.9236055, 0, 1, 0, 0.9236055, 0, 0.3833444, 23.91729, 0, -13.988235)
 
 [node name="desk5" parent="furniture" unique_id=1976707938 instance=ExtResource("12_lgqjb")]
-transform = Transform3D(-0.9238795, 0, 0.3826835, 0, 1, 0, -0.3826835, 0, -0.9238795, 6.723361, 0, -13.988235)
+transform = Transform3D(-0.9238795, 0, 0.3826835, 0, 1, 0, -0.3826835, 0, -0.9238795, 7.0060606, 0, -14.518296)
 
 [node name="desk6" parent="furniture" unique_id=333250980 instance=ExtResource("12_lgqjb")]
-transform = Transform3D(-0.9238795, 0, 0.3826835, 0, 1, 0, -0.3826835, 0, -0.9238795, 7.8540373, 0, -16.596302)
+transform = Transform3D(-0.9238795, 0, 0.3826835, 0, 1, 0, -0.3826835, 0, -0.9238795, 8.136737, 0, -17.126362)
 
 [node name="desk7" parent="furniture" unique_id=1808242015 instance=ExtResource("12_lgqjb")]
-transform = Transform3D(-0.9238795, 0, 0.3826835, 0, 1, 0, -0.3826835, 0, -0.9238795, 8.942381, 0, -19.200195)
+transform = Transform3D(-0.9238795, 0, 0.3826835, 0, 1, 0, -0.3826835, 0, -0.9238795, 9.2250805, 0, -19.730255)
 
 [node name="desk8" parent="furniture" unique_id=886025996 instance=ExtResource("12_lgqjb")]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 13.708398, 0, -15.471342)
+transform = Transform3D(0.99999964, 0, -0.0008726027, 0, 1, 0, 0.0008726027, 0, 0.99999964, 12.717817, 0, -16.218729)
 
 [node name="desk9" parent="furniture" unique_id=804585423 instance=ExtResource("12_lgqjb")]
-transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 13.708398, 0, -17.249338)
+transform = Transform3D(-0.99999964, 0, 0.00087268837, 0, 1, 0, -0.00087268837, 0, -0.99999964, 14.495813, 0, -16.217176)

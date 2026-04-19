@@ -10,8 +10,8 @@
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_efqak"]
 resource_name = "Bunk_Bed_1"
 cull_mode = 2
+albedo_color = Color(0.75, 0.75, 0.75, 1)
 albedo_texture = ExtResource("1_nx2av")
-metallic = 1.0
 metallic_texture = ExtResource("2_j8lq4")
 metallic_texture_channel = 2
 roughness_texture = ExtResource("2_j8lq4")

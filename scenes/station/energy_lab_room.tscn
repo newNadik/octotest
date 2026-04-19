@@ -9,6 +9,7 @@
 [ext_resource type="Material" uid="uid://ca2db0a60mj50" path="res://assets/materials/metal.tres" id="3_sqwx8"]
 [ext_resource type="PackedScene" uid="uid://b7vd8cvq5kxdt" path="res://scenes/station/interior/light_switch.tscn" id="6_3ek07"]
 [ext_resource type="PackedScene" uid="uid://bu4rpvaec4jla" path="res://scenes/station/interior/cactus_plant.tscn" id="8_cycxu"]
+[ext_resource type="PackedScene" uid="uid://8vcajaaad64" path="res://scenes/station/interior/rack.tscn" id="9_ffqb1"]
 [ext_resource type="PackedScene" uid="uid://b18qdk7b4q77l" path="res://scenes/station/interior/desk.tscn" id="9_h87cj"]
 [ext_resource type="PackedScene" uid="uid://qs8sh7iux1qk" path="res://scenes/station/interior/chair.tscn" id="10_7lkr6"]
 
@@ -235,6 +236,12 @@ omni_range = 10.0
 
 [node name="furniture" type="Node3D" parent="." unique_id=1582552460]
 
+[node name="rack" parent="furniture" unique_id=1216544187 instance=ExtResource("9_ffqb1")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 19.417341, 0, 18.1913)
+
+[node name="rack2" parent="furniture" unique_id=1910323021 instance=ExtResource("9_ffqb1")]
+transform = Transform3D(0.70710677, 0, -0.70710677, 0, 1, 0, 0.70710677, 0, 0.70710677, 23.372719, 0, 17.043167)
+
 [node name="desk" parent="furniture" unique_id=360776120 instance=ExtResource("9_h87cj")]
 transform = Transform3D(0.38730642, 0, 0.92195106, 0, 1, 0, -0.92195106, 0, 0.38730642, 9.803185, 0, 8.173948)
 
@@ -257,7 +264,7 @@ transform = Transform3D(0.38730642, 0, 0.92195106, 0, 1, 0, -0.92195106, 0, 0.38
 transform = Transform3D(0.38730642, 0, 0.92195106, 0, 1, 0, -0.92195106, 0, 0.38730642, 21.191238, 0, 12.868537)
 
 [node name="chair" parent="furniture" unique_id=1222624819 instance=ExtResource("10_7lkr6")]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 23.72945, 0, 15.037375)
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 23.170559, 0, 14.849669)
 
 [node name="chair2" parent="furniture" unique_id=420165469 instance=ExtResource("10_7lkr6")]
 transform = Transform3D(-0.9411996, 0, 0.33785093, 0, 1, 0, -0.33785093, 0, -0.9411996, 21.05269, 0, 13.770513)
@@ -271,4 +278,4 @@ transform = Transform3D(-0.96974015, 0, 0.24413969, 0, 1, 0, -0.24413969, 0, -0.
 [node name="items" type="Node3D" parent="." unique_id=1395117491]
 
 [node name="cactus" parent="items" unique_id=589026095 instance=ExtResource("8_cycxu")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.713462, 1.5508132, 8.196426)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.235491, 1.5508132, 16.130327)

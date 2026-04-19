@@ -10,7 +10,9 @@
 [ext_resource type="AudioStream" uid="uid://cpvgrh463bnmg" path="res://assets/sound/machine_room.wav" id="5_machine_amb"]
 [ext_resource type="PackedScene" uid="uid://b7vd8cvq5kxdt" path="res://scenes/station/interior/light_switch.tscn" id="9_ag2h7"]
 [ext_resource type="PackedScene" uid="uid://c5tv72lyq8d8h" path="res://scenes/effects/caustic_rig.tscn" id="10_7gsjf"]
+[ext_resource type="PackedScene" uid="uid://c6u2h3iksfaya" path="res://scenes/station/interior/cabinet_01.tscn" id="11_7mh4c"]
 [ext_resource type="PackedScene" uid="uid://b18qdk7b4q77l" path="res://scenes/station/interior/desk.tscn" id="11_q87oj"]
+[ext_resource type="PackedScene" uid="uid://8vcajaaad64" path="res://scenes/station/interior/rack.tscn" id="12_hq7nb"]
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_lf4d5"]
 resource_name = "system_Plane_099"
@@ -213,6 +215,18 @@ rotation_speed_a_degrees = 3.0
 rotation_speed_b_degrees = -4.0
 
 [node name="furniture" type="Node3D" parent="." unique_id=116304272]
+
+[node name="Cabinet_01" parent="furniture" unique_id=1376455345 instance=ExtResource("11_7mh4c")]
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, -1.6851468, 0, -20.365065)
+
+[node name="Cabinet_02" parent="furniture" unique_id=260837651 instance=ExtResource("11_7mh4c")]
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, -1.6851468, 0, -19.650875)
+
+[node name="rack" parent="furniture" unique_id=1216544187 instance=ExtResource("12_hq7nb")]
+transform = Transform3D(0.9238795, 0, 0.38268346, 0, 1, 0, -0.38268346, 0, 0.9238795, -8.214887, 0, -17.848898)
+
+[node name="rack2" parent="furniture" unique_id=1554226994 instance=ExtResource("12_hq7nb")]
+transform = Transform3D(0.9238795, 0, 0.38268346, 0, 1, 0, -0.38268346, 0, 0.9238795, -9.649445, 0, -21.305655)
 
 [node name="desk" parent="furniture" unique_id=360776120 instance=ExtResource("11_q87oj")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.990107, 0, -22.145985)

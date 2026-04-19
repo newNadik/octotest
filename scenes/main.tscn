@@ -14,6 +14,7 @@
 [ext_resource type="PackedScene" uid="uid://bsq8i8032qepo" path="res://scenes/station/workshop_room.tscn" id="15_jscy8"]
 [ext_resource type="Script" uid="uid://cdsji1uitym1j" path="res://scripts/lighting/god_rays.gd" id="16_godrays"]
 [ext_resource type="PackedScene" uid="uid://6qexu3mk541a" path="res://scenes/station/items/fish_school.tscn" id="17_fishschool"]
+[ext_resource type="PackedScene" uid="uid://drkdj8tkrup8" path="res://assets/models/underwater/underwater_terrain_-_agisoftnaturechallenge.glb" id="18_dp3eg"]
 [ext_resource type="AudioStream" uid="uid://d3qno7atcke7y" path="res://assets/sound/underwater-loop-amb.wav" id="18_underwater"]
 [ext_resource type="Shader" uid="uid://b5rx1t38of3h7" path="res://assets/shaders/gameplay_cohesion.gdshader" id="19_gameplayfx"]
 [ext_resource type="PackedScene" uid="uid://c5tv72lyq8d8h" path="res://scenes/effects/caustic_rig.tscn" id="20_caustic"]
@@ -266,6 +267,12 @@ directional_shadow_max_distance = 95.0
 
 [node name="surroundings" parent="surrounding" unique_id=1002961838 instance=ExtResource("2_muem4")]
 transform = Transform3D(0.9983359, 0, -0.05766857, 0, 1, 0, 0.05766857, 0, 0.9983359, -28.281834, -3.5834541, 3.4941978)
+
+[node name="Sketchfab_Scene" parent="surrounding" unique_id=1221402596 instance=ExtResource("18_dp3eg")]
+transform = Transform3D(0.97155327, -0.23682119, 0, 0.23682119, 0.97155327, 0, 0, 0, 1, 33.7202, 0.71104646, -9.662016)
+
+[node name="Sketchfab_Scene2" parent="surrounding" unique_id=113517416 instance=ExtResource("18_dp3eg")]
+transform = Transform3D(0.5148214, -0.39364758, -0.7615776, 0.31401354, 0.91319627, -0.259746, 0.7977184, -0.10542284, 0.59374374, 17.803167, 0.676563, 29.596968)
 
 [node name="surroundings2" parent="surrounding" unique_id=2092085712 instance=ExtResource("2_muem4")]
 transform = Transform3D(-0.7428878, 0, 0.6694159, 0, 1, 0, -0.6694159, 0, -0.7428878, 21.034111, -3.5834541, 13.66193)
