@@ -1,5 +1,27 @@
 # Dev Log
 
+## 2026-04-20
+
+### Step 53 - In-world rigged clock + game-time system
+
+- Added a new rigged wall clock scene and runtime controller:
+  - `res://scenes/station/items/clock.tscn`
+  - `res://scripts/station/items/clock.gd`
+  - integrated into atrium room placement.
+- Fixed runtime scene override that disabled clock logic on the atrium instance (`script = null` removed).
+- Added in-game time singleton:
+  - `res://scripts/core/game_time.gd`
+  - autoloaded as `/root/GameTime` in `project.godot`.
+- Wired gameplay startup/save/load to game-time state in `res://scripts/core/main.gd`:
+  - `New Game` initializes clock time to `17:00`,
+  - `Continue`/load restores saved `game_time`,
+  - save payload now includes `game_time.seconds_of_day`.
+- Updated wall-clock behavior:
+  - reads time from `/root/GameTime` (system-time fallback only if singleton missing),
+  - second-hand smoothing toggle now works for in-game time too.
+- Pause behavior:
+  - in-game time uses `PROCESS_MODE_PAUSABLE`, so time stops while paused and continues on resume.
+
 ## 2026-04-17
 
 ### Step 52 - Async game loading screen + main-menu background preload

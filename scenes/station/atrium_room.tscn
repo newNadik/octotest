@@ -26,6 +26,8 @@
 [ext_resource type="PackedScene" uid="uid://dac1j07k7sd70" path="res://scenes/station/interior/bench.tscn" id="23_7do4q"]
 [ext_resource type="PackedScene" uid="uid://cf658n5t3d7ls" path="res://assets/models/items/pos-terminal_asset.glb" id="24_jt052"]
 [ext_resource type="PackedScene" uid="uid://lnt7a3iskajx" path="res://scenes/station/interior/amphitheater.tscn" id="26_fan24"]
+[ext_resource type="PackedScene" uid="uid://cofo0vasii446" path="res://scenes/station/items/mug.tscn" id="26_wmtnf"]
+[ext_resource type="PackedScene" uid="uid://bp2qgp1sbmraf" path="res://scenes/station/items/clock.tscn" id="27_i5gpl"]
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_cmvkd"]
 resource_name = "atrium_Plane_123"
@@ -1249,11 +1251,17 @@ transform = Transform3D(0.70710677, 0, 0.70710677, 0, 1, 0, -0.70710677, 0, 0.70
 [node name="bench5" parent="rooms/attrium" unique_id=1661848770 instance=ExtResource("23_7do4q")]
 transform = Transform3D(0.70710677, 0, -0.70710677, 0, 1, 0, 0.70710677, 0, 0.70710677, -12.407931, 0, 3.1794515)
 
+[node name="clock" parent="rooms/attrium" unique_id=605620393 instance=ExtResource("27_i5gpl")]
+transform = Transform3D(0.99999976, 0, 0, 0, 1, 0, 0, 0, 0.99999976, -11.867958, 4, 7.7687654)
+
+[node name="mug" parent="rooms/attrium" unique_id=36977870 instance=ExtResource("26_wmtnf")]
+transform = Transform3D(0.9999999, 0, 0, 0, 1, 0, 0, 0, 0.9999999, -18.66425, 0.9640896, 5.0965886)
+
+[node name="amphitheater" parent="rooms/attrium" unique_id=1652820508 instance=ExtResource("26_fan24")]
+transform = Transform3D(0.99999994, 0, 0, 0, 1, 0, 0, 0, 0.99999994, -14.058354, 0, 5.089758)
+
 [node name="bench6" parent="rooms/attrium" unique_id=2006705821 instance=ExtResource("23_7do4q")]
 transform = Transform3D(-4.3711385e-08, 0, 0.99999994, 0, 1, 0, -0.99999994, 0, -4.3711385e-08, -11.120958, 0, 6.2147655)
-
-[node name="amphitheater" parent="rooms/attrium/bench6" unique_id=1652820508 instance=ExtResource("26_fan24")]
-transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 1.1250081, 0, -2.937396)
 
 [node name="kitchen" type="Node3D" parent="rooms" unique_id=184594421]
 

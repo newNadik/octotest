@@ -94,6 +94,9 @@ func _ready() -> void:
 	if _consume_pending_load_request():
 		_loaded_save_data = _load_saved_game()
 		starting_position = _extract_player_position(_loaded_save_data, starting_position)
+		_initialize_game_time(_loaded_save_data)
+	else:
+		_initialize_game_time({})
 	player.global_position = starting_position
 	var follow_position := player.global_position + Vector3(0.0, CAMERA_FOLLOW_HEIGHT, 0.0)
 	follow_position.y = maxf(follow_position.y, CAMERA_MIN_WORLD_Y)
@@ -654,7 +657,8 @@ func _save_game(is_autosave: bool) -> bool:
 		"player": {
 			"position": [player.global_position.x, player.global_position.y, player.global_position.z]
 		},
-		"world": _capture_world_state()
+		"world": _capture_world_state(),
+		"game_time": _capture_game_time_state()
 	}
 	var save_ok := _save_payload(payload)
 	if save_ok:
@@ -733,11 +737,41 @@ func _resolve_provider_by_custom_save_key(path_key: String) -> Node:
 	return null
 
 
+func _initialize_game_time(save_data: Dictionary) -> void:
+	var game_time := _get_game_time()
+	if game_time == null:
+		return
+	if save_data.is_empty():
+		game_time.call("start_new_game", 17, 0, 0.0)
+		return
+	var game_time_data = save_data.get("game_time", {})
+	if game_time_data is Dictionary and game_time.call("load_save_state", game_time_data):
+		return
+	game_time.call("start_new_game", 17, 0, 0.0)
+
+
+func _capture_game_time_state() -> Dictionary:
+	var game_time := _get_game_time()
+	if game_time == null:
+		return {}
+	var state = game_time.call("get_save_state")
+	if state is Dictionary:
+		return state as Dictionary
+	return {}
+
+
 func _get_game_save() -> Node:
 	var tree := get_tree()
 	if tree == null or tree.root == null:
 		return null
 	return tree.root.get_node_or_null("GameSave")
+
+
+func _get_game_time() -> Node:
+	var tree := get_tree()
+	if tree == null or tree.root == null:
+		return null
+	return tree.root.get_node_or_null("GameTime")
 
 
 func _consume_pending_load_request() -> bool:

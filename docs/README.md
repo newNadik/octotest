@@ -31,6 +31,7 @@ Godot `4.6.1` 3D isometric prototype with:
 27. Procedural animated fish-school system with per-volume schooling controls, timed school waves, species randomization (1-2 types per school), and directional flow modes (`Two-Way`, `Four-Way XZ`, `Fixed Direction`).
 28. Desktop rendering defaults now target cleaner 3D output in debug and regular play: `Forward Plus`, `1600x900` default window, `MSAA 4x`, screen-space AA, and full-resolution 3D scaling.
 29. Gameplay visual cohesion pass now layers a restrained facility grade over the 3D view: softer saturation/contrast, lifted blacks, teal-leaning shadow tint, and a faint moving light wash for ocean influence without a full blue underwater filter.
+30. In-game time system (`/root/GameTime`) drives world clocks: new game starts at `17:00`, time advances only while gameplay is unpaused, and save/load preserves current in-game time.
 
 ## Canonical Branch
 
@@ -125,6 +126,7 @@ Main tuning points:
 - Autosave triggers when opening station doors (room traversal flow).
 - Manual save is available from pause menu.
 - Saved state includes player position and save providers in world state.
+- Saved state includes in-game clock time (`game_time.seconds_of_day`).
 - Interactables persist enabled state and pickup-object world transform.
 - If an item was held at save time, on load it is restored as dropped near Octo on the floor (not floating in-hand), with slot spreading to avoid overlap stacking.
 - In-game save feedback is shown as a bottom-right toast (`Game Saved`, `Autosaved`, `Save Failed`).

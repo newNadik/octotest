@@ -15,6 +15,7 @@ This document describes the current runtime architecture of the prototype and mu
 9. `WorldEnvironment` provides sky/background visuals visible through wall openings.
 10. `FishSchool` instances (for example `FishSchoolSkylight`) run procedural animated fish waves inside authored swim volumes around/over the station.
 11. `CausticRig` instances under `lights` project animated caustics onto nearby geometry using spotlight projector textures.
+12. `GameTime` (`/root/GameTime`, autoload) owns simulation time-of-day progression used by in-world clocks.
 
 ## Scene Graph Responsibilities
 
@@ -93,6 +94,10 @@ This document describes the current runtime architecture of the prototype and mu
 - Routes click-to-move and delegates interact/drop input to `InteractionController`.
 - Owns focus-mode transitions (auto-enter after approach, movement lock, click-based exit rules).
 - Drives underwater directional-light animation/pulse behavior.
+- Initializes and persists `GameTime` state:
+  - new game starts at `17:00`,
+  - continue/load restores saved `game_time`,
+  - save writes current `game_time` payload.
 - Reads shared pulse from `Node3D/GodRays` and applies synchronized `DirectionalLight3D` energy pulsing using:
   - `main_light_min_factor`
   - `main_light_max_factor`
@@ -126,6 +131,14 @@ This document describes the current runtime architecture of the prototype and mu
 5. `res://scripts/core/movement_math.gd`
 - Pure helper math (no scene dependencies).
 - Designed for headless logic testing.
+6. `res://scripts/core/game_time.gd`
+- Autoload time-of-day service (`/root/GameTime`).
+- Advances in-game seconds while tree is unpaused (`PROCESS_MODE_PAUSABLE`).
+- Exposes:
+  - `start_new_game(...)`,
+  - `load_save_state(...)`,
+  - `get_save_state()`,
+  - `get_clock_time()` for world clocks.
 6. `res://scripts/interaction/interactable.gd`
 - Reusable `Area3D` interaction component.
 - Encapsulates interaction type (`CLICK`, `PICKUP`), range, prompts, held-state toggles, and visual overlays.
@@ -222,8 +235,8 @@ This document describes the current runtime architecture of the prototype and mu
 Scripts are grouped by runtime domain to keep ownership boundaries clear:
 
 1. `res://scripts/core/`
-- Scene orchestration and shared gameplay math.
-- Current files: `main.gd`, `movement_math.gd`, `game_settings.gd`.
+- Scene orchestration, global runtime services, and shared gameplay math.
+- Current files: `main.gd`, `movement_math.gd`, `game_settings.gd`, `game_save.gd`, `game_time.gd`.
 2. `res://scripts/ui/`
 - UI scene controllers.
 - Current files: `main_menu.gd`, `settings_menu.gd`.
