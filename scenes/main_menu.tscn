@@ -5,6 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://bydkhwglewp85" path="res://scenes/ui/research_button.tscn" id="2_button"]
 [ext_resource type="PackedScene" path="res://scenes/ui/photo_slide.tscn" id="3_slide"]
 [ext_resource type="Texture2D" uid="uid://bveo1mgp8bkut" path="res://icon.png" id="4_wu84c"]
+[ext_resource type="Texture2D" uid="uid://col1g465oecb3" path="res://assets/ui/Icon_BCRC.png" id="5_rtw2f"]
 
 [sub_resource type="SystemFont" id="SystemFont_title_heavy"]
 font_names = PackedStringArray("Segoe UI Black", "SF Pro Display Black", "Helvetica Neue Black", "Noto Sans Black", "DejaVu Sans Bold", "sans-serif")
@@ -41,7 +42,7 @@ render_mode unshaded;
 
 uniform sampler2D screen_tex : hint_screen_texture, filter_linear_mipmap;
 uniform float vignette_strength : hint_range(0.0, 0.35) = 0.12;
-uniform float scanline_strength : hint_range(0.0, 0.2) = 0.01;
+uniform float scanline_strength : hint_range(0.0, 0.2) = 0.0;
 uniform float glare_strength : hint_range(0.0, 0.4) = 0.2;
 uniform vec2 reflection_offset = vec2(0.0, 0.0);
 
@@ -70,7 +71,7 @@ void fragment() {
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_display_fx"]
 shader = SubResource("Shader_8ln24")
 shader_parameter/vignette_strength = 0.12
-shader_parameter/scanline_strength = 0.01
+shader_parameter/scanline_strength = 0.0
 shader_parameter/glare_strength = 0.2
 shader_parameter/reflection_offset = Vector2(0, 0)
 
@@ -194,9 +195,23 @@ layout_mode = 2
 layout_mode = 2
 color = Color(0.77254903, 0.9098039, 0.99607843, 1)
 
-[node name="TopContainer" type="MarginContainer" parent="MainVBoxContainer/TopPanelContainer" unique_id=1937161778]
+[node name="MarginContainer" type="MarginContainer" parent="MainVBoxContainer/TopPanelContainer" unique_id=1876655358]
 layout_mode = 2
 theme_override_constants/margin_left = 42
+theme_override_constants/margin_top = 24
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 24
+
+[node name="TextureRect" type="TextureRect" parent="MainVBoxContainer/TopPanelContainer/MarginContainer" unique_id=1716275053]
+texture_filter = 4
+layout_mode = 2
+texture = ExtResource("5_rtw2f")
+expand_mode = 2
+stretch_mode = 4
+
+[node name="TopContainer" type="MarginContainer" parent="MainVBoxContainer/TopPanelContainer" unique_id=1937161778]
+layout_mode = 2
+theme_override_constants/margin_left = 135
 theme_override_constants/margin_top = 42
 theme_override_constants/margin_right = 42
 theme_override_constants/margin_bottom = 24
