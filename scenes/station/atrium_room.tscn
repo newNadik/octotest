@@ -1162,6 +1162,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -17.468838, 0.09971724, -8.13
 
 [node name="medbay" type="Node3D" parent="rooms" unique_id=272159100]
 
+[node name="clock" parent="rooms/medbay" unique_id=605620393 instance=ExtResource("27_i5gpl")]
+transform = Transform3D(-0.70710677, 0, 0.70710677, 0, 1, 0, -0.70710677, 0, -0.70710677, -8.163929, 5.5, -7.3273926)
+
 [node name="chair" parent="rooms/medbay" unique_id=1571566799 instance=ExtResource("8_mpvso")]
 transform = Transform3D(-0.96351373, 0, -0.2676589, 0, 1, 0, 0.2676589, 0, -0.96351373, -11.259848, 9.512901e-05, -5.6018605)
 
@@ -1251,8 +1254,8 @@ transform = Transform3D(0.70710677, 0, 0.70710677, 0, 1, 0, -0.70710677, 0, 0.70
 [node name="bench5" parent="rooms/attrium" unique_id=1661848770 instance=ExtResource("23_7do4q")]
 transform = Transform3D(0.70710677, 0, -0.70710677, 0, 1, 0, 0.70710677, 0, 0.70710677, -12.407931, 0, 3.1794515)
 
-[node name="clock" parent="rooms/attrium" unique_id=605620393 instance=ExtResource("27_i5gpl")]
-transform = Transform3D(0.99999976, 0, 0, 0, 1, 0, 0, 0, 0.99999976, -11.867958, 4, 7.7687654)
+[node name="clock" parent="rooms/attrium" unique_id=852658388 instance=ExtResource("27_i5gpl")]
+transform = Transform3D(0.99999976, 0, 0, 0, 1, 0, 0, 0, 0.99999976, -11.868, 5, 7.769)
 
 [node name="mug" parent="rooms/attrium" unique_id=36977870 instance=ExtResource("26_wmtnf")]
 transform = Transform3D(0.9999999, 0, 0, 0, 1, 0, 0, 0, 0.9999999, -18.66425, 0.9640896, 5.0965886)
@@ -1266,7 +1269,10 @@ transform = Transform3D(-4.3711385e-08, 0, 0.99999994, 0, 1, 0, -0.99999994, 0, 
 [node name="kitchen" type="Node3D" parent="rooms" unique_id=184594421]
 
 [node name="fire_extinguisher" parent="rooms/kitchen" unique_id=2101435779 instance=ExtResource("8_j5434")]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -27.5942, 0, -4.831451)
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -27.5942, 0, -4.92505)
+
+[node name="clock" parent="rooms/kitchen" unique_id=1448510736 instance=ExtResource("27_i5gpl")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -25.779, 5.5, -4.6650796)
 
 [node name="giftshop" type="Node3D" parent="rooms" unique_id=1483668541]
 

@@ -6,7 +6,7 @@
 
 ### Atrium & Observation Deck
 - [x] Round garden / plants area
-- [ ] Benches (atrium + along window)
+- [x] Benches (atrium + along window)
 - [x] Round table with chairs (2–3 sets)
 - [ ] Wall-mounted info panels
 - [ ] Vending machine
@@ -19,11 +19,12 @@
 - [ ] Mission / research briefing board
 - [ ] Directional signage / map stand
 - [ ] Potted plant (corner, observation side)
-- [ ] Wall clock
+- [x] Wall clock
 - [ ] Trash bins
 - [x] Fire extinguisher + cabinet
 - [ ] Evacuation plan (wall-mounted)
 - [ ] CCTV cameras (corner mounts, 2–3)
+- [ ] NPC - eating ramen and watching tik-tok
 
 #### Character touches
 - [ ] Someone's left a sketchbook open on the bench (ocean drawings)
@@ -64,7 +65,7 @@
 - [ ] Fume hood / extraction cabinet
 - [ ] Shelving with labelled reagent bottles
 - [ ] Microscopes (2–3)
-- [ ] Centrifuge
+- [ ] Centrifuge (spinning)
 - [ ] Hot plate / stirrer
 - [ ] Safety goggles + gloves rack
 - [ ] Eyewash station
@@ -83,7 +84,7 @@
 - [ ] Safety data sheets binder
 - [ ] Permanent marker (for labelling)
 - [ ] Timer (on bench)
-- [ ] Wall clock
+- [x] Wall clock
 - [ ] First aid kit (wall-mounted)
 - [ ] Keypad / card reader on door
 - [ ] CCTV camera
@@ -100,6 +101,7 @@
 
 ### Workshop
 - [ ] 3D printers (2–3) on workbenches
+- [ ] Beatle part in 3D printer
 - [ ] Spool rack for filament
 - [ ] Pegboard wall with tools
 - [ ] Drill press / bench drill
@@ -121,14 +123,13 @@
 - [ ] Label maker
 - [ ] Safety glasses (spare pair on bench)
 - [ ] Coffee mug (bench prop)
-- [ ] Wall clock
+- [x] Wall clock
 - [ ] First aid kit (wall-mounted)
 - [ ] Keypad / card reader on door
 - [ ] CCTV camera
 
 #### Character touches
 - [ ] Stickers all over one toolbox (band logos, nerdy stuff)
-- [ ] Half-finished personal project on a bench corner (tiny robot, custom part)
 - [ ] Lucky charm / keychain hanging from pegboard
 - [ ] Someone's named their 3D printer with a little label
 
@@ -163,10 +164,11 @@
 - [ ] Measuring tape
 - [ ] Cable ties (bag)
 - [ ] Printed maintenance schedule (pinned)
-- [ ] Wall clock
+- [x] Wall clock
 - [ ] First aid kit (wall-mounted)
 - [ ] Keypad / card reader on door
 - [ ] CCTV camera
+- [ ] Beatle robot 
 
 #### Storage area
 - [x] Metal shelving units
@@ -204,7 +206,7 @@
 - [ ] Waterproof marker
 - [ ] Dive tables / decompression chart (wall poster)
 - [ ] Conditions board (water temp, visibility, current depth)
-- [ ] Wall clock
+- [x] Wall clock
 - [ ] First aid kit (wall-mounted)
 - [ ] Keypad / card reader on door
 - [ ] CCTV camera
@@ -234,7 +236,7 @@
 - [ ] Water bottle
 - [ ] Snack wrapper / energy bar (desk prop)
 - [ ] Printer / scanner (on shelf or side table)
-- [ ] Wall clock
+- [x] Wall clock
 - [ ] Keypad / card reader on door
 - [ ] CCTV camera
 
@@ -269,9 +271,9 @@
 - [ ] Ear protection (on hook)
 - [ ] Torch / flashlight
 - [ ] Coffee mug (engineer's desk prop)
-- [ ] Wall clock
 - [ ] Keypad / card reader on door
 - [ ] CCTV camera
+- [ ] NPC - mechanic 
 
 #### Character touches
 - [ ] Stress ball or small squish toy near the control panel
@@ -290,7 +292,8 @@
 - [ ] Water bottle (bedside)
 - [x] Slippers / flip flops (under bunk)
 - [ ] Journal / notebook + pen
-- [ ] Wall clock
+- [x] Wall clock
+- [ ] NPC sleeping
 
 #### Character touches
 - [ ] Bunk 1 — toy shark on pillow
@@ -321,6 +324,7 @@
 - [ ] Sugar bowl / coffee pods
 - [ ] Tea towels (hanging)
 - [ ] Sponge + washing-up liquid (by sink)
+- [x] Wall clock
 
 #### Character touches
 - [ ] Passive-aggressive note about dishes on the wall
@@ -354,4 +358,4 @@
 - [ ] Stethoscope (on desk or hook)
 - [ ] Box of latex gloves
 - [ ] Blood pressure cuff
-- [ ] Wall clock
+- [x] Wall clock

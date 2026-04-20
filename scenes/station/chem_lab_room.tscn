@@ -14,6 +14,7 @@
 [ext_resource type="PackedScene" uid="uid://8vcajaaad64" path="res://scenes/station/interior/rack.tscn" id="11_lgqjb"]
 [ext_resource type="PackedScene" uid="uid://b18qdk7b4q77l" path="res://scenes/station/interior/desk.tscn" id="12_lgqjb"]
 [ext_resource type="PackedScene" uid="uid://3qcq4vmexl3s" path="res://scenes/station/items/fire_extinguisher.tscn" id="14_ohg37"]
+[ext_resource type="PackedScene" uid="uid://bp2qgp1sbmraf" path="res://scenes/station/items/clock.tscn" id="15_lxvvl"]
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_irqvq"]
 resource_name = "chem_lab_Plane_095"
@@ -310,5 +311,10 @@ transform = Transform3D(0.99999964, 0, -0.0008726027, 0, 1, 0, 0.0008726027, 0, 
 [node name="desk9" parent="furniture" unique_id=804585423 instance=ExtResource("12_lgqjb")]
 transform = Transform3D(-0.99999964, 0, 0.00087268837, 0, 1, 0, -0.00087268837, 0, -0.99999964, 14.495813, 0, -16.217176)
 
-[node name="fire_extinguisher" parent="." unique_id=1012721613 instance=ExtResource("14_ohg37")]
+[node name="items" type="Node3D" parent="." unique_id=43741844]
+
+[node name="fire_extinguisher" parent="items" unique_id=1012721613 instance=ExtResource("14_ohg37")]
 transform = Transform3D(0.70710677, 0, -0.70710677, 0, 1, 0, 0.70710677, 0, 0.70710677, 14.652212, 0, -26.253263)
+
+[node name="clock" parent="items" unique_id=605620393 instance=ExtResource("15_lxvvl")]
+transform = Transform3D(-0.3819416, 0, 0.9241866, 0, 1, 0, -0.9241866, 0, -0.3819416, 17.374403, 5.5, -10.200755)

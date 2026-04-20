@@ -13,6 +13,7 @@
 [ext_resource type="PackedScene" uid="uid://b18qdk7b4q77l" path="res://scenes/station/interior/desk.tscn" id="9_h87cj"]
 [ext_resource type="PackedScene" uid="uid://3qcq4vmexl3s" path="res://scenes/station/items/fire_extinguisher.tscn" id="9_ph1bl"]
 [ext_resource type="PackedScene" uid="uid://qs8sh7iux1qk" path="res://scenes/station/interior/chair.tscn" id="10_7lkr6"]
+[ext_resource type="PackedScene" uid="uid://bp2qgp1sbmraf" path="res://scenes/station/items/clock.tscn" id="13_m4mmn"]
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_eoqii"]
 resource_name = "energy_lab_Plane_115"
@@ -201,9 +202,6 @@ door_title = "Lab"
 door_title_secondary = "Energy"
 title_side = 1
 
-[node name="fire_extinguisher" parent="StaticBody3D" unique_id=1012721613 instance=ExtResource("9_ph1bl")]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 7.9773903, 0, 11.893904)
-
 [node name="lights" type="Node3D" parent="." unique_id=1568145273]
 
 [node name="OmniLight3D" type="OmniLight3D" parent="lights" unique_id=576397186]
@@ -280,6 +278,15 @@ transform = Transform3D(-0.92061406, 0, 0.39047405, 0, 1, 0, -0.39047405, 0, -0.
 transform = Transform3D(-0.96974015, 0, 0.24413969, 0, 1, 0, -0.24413969, 0, -0.96974015, 11.871761, 0, 9.992151)
 
 [node name="items" type="Node3D" parent="." unique_id=1395117491]
+
+[node name="fire_extinguisher" parent="items" unique_id=1012721613 instance=ExtResource("9_ph1bl")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 7.9773903, 0, 11.893904)
+
+[node name="clock" parent="items" unique_id=605620393 instance=ExtResource("13_m4mmn")]
+transform = Transform3D(-0.37609494, 0, -0.92658114, 0, 1, 0, 0.92658114, 0, -0.37609494, 17.298529, 5.5, 10.169195)
+
+[node name="clock2" parent="items" unique_id=1825475380 instance=ExtResource("13_m4mmn")]
+transform = Transform3D(-4.3711385e-08, 0, -0.99999994, 0, 1, 0, 0.99999994, 0, -4.3711385e-08, 14.779568, 5.5, 19.400358)
 
 [node name="cactus" parent="items" unique_id=589026095 instance=ExtResource("8_cycxu")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.235491, 1.5508132, 16.130327)
