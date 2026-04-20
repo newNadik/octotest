@@ -92,6 +92,9 @@ func _ready() -> void:
 		return
 	if volume_preview != null:
 		volume_preview.visible = false
+	if DisplayServer.get_name() == "headless":
+		set_process(false)
+		return
 
 	_rng.randomize()
 	if use_swim_volume:

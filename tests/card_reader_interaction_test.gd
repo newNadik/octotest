@@ -1,8 +1,29 @@
 extends SceneTree
 
 
-const MAIN_SCENE = preload("res://scenes/main.tscn")
-const SETTLE_FRAMES := 4
+const CARD_READER_SCENE: PackedScene = preload("res://scenes/interactables/card_reader.tscn")
+const CardReaderScript = preload("res://scripts/interaction/card_reader.gd")
+
+
+class MockCard:
+	extends Node3D
+
+	var item_id: String
+	var _is_card_flag: bool
+	var interaction_enabled := true
+
+	func _init(new_item_id: String, is_card_flag: bool = true) -> void:
+		item_id = new_item_id
+		_is_card_flag = is_card_flag
+
+	func is_card() -> bool:
+		return _is_card_flag
+
+	func set_interaction_enabled(enabled: bool) -> void:
+		interaction_enabled = enabled
+
+	func get_pickup_root() -> Node3D:
+		return self
 
 var _failures := 0
 
@@ -12,55 +33,47 @@ func _init() -> void:
 
 
 func _run() -> void:
-	var world := MAIN_SCENE.instantiate()
-	root.add_child(world)
+	var reader_node: Node = CARD_READER_SCENE.instantiate()
+	root.add_child(reader_node)
 
-	for i in range(SETTLE_FRAMES):
-		await physics_frame
+	await process_frame
 
-	var controller := world.get_node_or_null("InteractionController")
-	var reader := world.get_node_or_null("Interactables/CardReader")
-	var focus_target := world.get_node_or_null("Interactables/CardReader/FocusTarget")
-	var camera := world.get_node_or_null("CameraPivot/CameraYaw/CameraPitch/SpringArm3D/Camera3D") as Camera3D
-	var card_a := world.get_node_or_null("Interactables/Card/Interactable")
-	var card_b := world.get_node_or_null("Interactables/Card2/Interactable")
-
-	_expect_true(controller != null, "interaction controller should exist")
-	_expect_true(reader != null, "card reader should exist")
-	_expect_true(focus_target != null, "focus target should exist")
-	_expect_true(camera != null, "camera should exist")
-	_expect_true(card_a != null and card_b != null, "card interactables should exist")
-	if _failures > 0:
-		_finish(world)
+	var reader: CardReaderScript = reader_node as CardReaderScript
+	_expect_true(reader != null, "card reader scene should instantiate CardReader")
+	if reader == null:
+		_finish(reader_node)
 		return
 
-	_expect_true(bool(controller.call("_attach_item_to_hands", card_a, false)), "card A should attach to hands")
-	controller.call("_handle_card_reader_click", reader)
-	_expect_true(reader.has_inserted_card(), "reader should contain inserted card after click handling")
-	_expect_true(controller.get_held_item_names().size() == 0, "held list should be empty after inserting only held card")
+	var required_card_id: String = String(reader.required_card_id)
+	var correct_card := MockCard.new(required_card_id, true)
+	var wrong_card := MockCard.new("card_wrong", true)
+	var non_card := MockCard.new("not_a_card", false)
+	root.add_child(correct_card)
+	root.add_child(wrong_card)
+	root.add_child(non_card)
 
-	_expect_true(bool(controller.call("_attach_item_to_hands", card_b, false)), "card B should attach to hands")
-	_expect_true(not reader.can_accept_card(card_b), "reader should reject additional card while occupied")
+	_expect_true(reader.can_accept_card(correct_card), "reader should accept a card when empty")
+	_expect_true(not reader.can_accept_card(non_card), "reader should reject non-card object")
 
-	controller.set_focus_locked(true)
-	controller.set_focus_display(true, camera)
-	controller.set_focus_target(focus_target)
-	controller.process_interactions(1.0 / 60.0)
+	_expect_true(reader.insert_card(wrong_card), "reader should insert wrong card")
+	_expect_true(reader.has_inserted_card(), "reader should report inserted card")
+	_expect_true(not reader.is_correct_card_inserted(), "wrong card should not set correct state")
+	_expect_true(not reader.can_accept_card(correct_card), "reader should reject second card while occupied")
 
-	var card_b_screen := camera.unproject_position(card_b.get_pickup_root().global_position)
-	controller.try_handle_interaction_click(card_b_screen)
-	_expect_true(reader.has_inserted_card(), "clicking held card should not replace inserted card")
-	_expect_true(controller.get_held_item_names().size() == 1, "held card should remain held when reader is occupied")
+	var ejected_wrong = reader.eject_card()
+	_expect_true(ejected_wrong == wrong_card, "eject should return inserted wrong card")
+	_expect_true(not reader.has_inserted_card(), "reader should be empty after eject")
+	_expect_true(wrong_card.interaction_enabled, "ejected card should remain interactable")
 
-	controller.call("_handle_card_reader_click", reader)
-	_expect_true(not reader.has_inserted_card(), "reader should eject inserted card on click")
-	_expect_true(controller.get_held_item_names().size() == 2, "both cards should be held after eject")
+	_expect_true(reader.insert_card(correct_card), "reader should insert required card id")
+	_expect_true(reader.is_correct_card_inserted(), "required card should set correct state")
+	var ejected_correct = reader.eject_card()
+	_expect_true(ejected_correct == correct_card, "eject should return inserted correct card")
+	_expect_true(not reader.has_inserted_card(), "reader should be empty after ejecting correct card")
 
-	controller.set_focus_locked(false)
-	controller.set_focus_display(false, null)
-	controller.set_focus_target(null)
+	_expect_true(reader.can_accept_card(correct_card), "reader should accept card again after eject")
 
-	_finish(world)
+	_finish(reader_node)
 
 
 func _expect_true(condition: bool, message: String) -> void:

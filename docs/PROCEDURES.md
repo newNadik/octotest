@@ -7,7 +7,7 @@ This file defines how to initialize and run AI-assisted dev sessions for this pr
 - Project root: this repository root
 - Godot binary: auto-detected by `scripts/check.sh` (`godot4`, `godot`, `Godot`, macOS app path, legacy `/ssd2/...`), or override with `GODOT_BIN`
 - Main scene: `res://scenes/main_menu.tscn`
-- Logic tests: `res://tests/movement_math_test.gd`, `res://tests/slope_movement_test.gd`
+- Logic tests: `res://tests/movement_math_test.gd`, `res://tests/slope_movement_test.gd`, `res://tests/octorig_startup_test.gd`, `res://tests/card_reader_interaction_test.gd`
 - Dev log: `docs/DEVLOG.md`
 - Architecture doc: `docs/ARCHITECTURE.md`
 - Manual testing doc: `docs/TESTING.md`
@@ -27,6 +27,8 @@ Run these steps at the start of every session.
 4. Check git status and branch.
 5. Run baseline sanity checks before changing code (`./scripts/check.sh`).
 6. Create a dedicated feature/fix branch before implementation.
+
+Agent requirement: AI/code agents must use `./scripts/check.sh` as the baseline and final validation path for every implementation task.
 
 Suggested commands:
 
@@ -61,10 +63,11 @@ git checkout -b feat/camera-target-indicator
 Every behavior change must include tests where possible.
 
 1. If logic can be isolated, place it in a pure script and add/update a headless test under `tests/`.
-2. At minimum, run:
+2. `./scripts/check.sh` is the mandatory validation entrypoint for humans and agents.
+3. At minimum, run:
 - Headless boot smoke check (`--quit-after 5`)
 - Logic test script(s) including slope integration
-3. If a change is hard to unit test, document manual verification steps in `docs/DEVLOG.md`.
+4. If a change is hard to unit test, document manual verification steps in `docs/DEVLOG.md`.
 
 ## Dev Log Rules
 
@@ -123,7 +126,7 @@ godot --path /path/to/octotest
 2. Keep gameplay math in pure scripts when possible for headless testability.
 3. Avoid touching `.godot/` generated cache.
 4. Keep `.uid` files committed with scripts/scenes to reduce resource ID churn.
-5. Use `scripts/check.sh` as the default pre-commit validation entrypoint.
+5. Always run `scripts/check.sh` after code changes and before hand-off/review/merge.
 
 ## Text & Localisation Rules
 

@@ -20,6 +20,7 @@ or, if a Godot binary is on your `PATH`:
 HOME=/tmp XDG_DATA_HOME=/tmp XDG_CONFIG_HOME=/tmp godot --headless --path /path/to/octotest --quit-after 5
 HOME=/tmp XDG_DATA_HOME=/tmp XDG_CONFIG_HOME=/tmp godot --headless --path /path/to/octotest --script res://tests/movement_math_test.gd
 HOME=/tmp XDG_DATA_HOME=/tmp XDG_CONFIG_HOME=/tmp godot --headless --path /path/to/octotest --script res://tests/slope_movement_test.gd
+HOME=/tmp XDG_DATA_HOME=/tmp XDG_CONFIG_HOME=/tmp godot --headless --path /path/to/octotest --script res://tests/octorig_startup_test.gd
 HOME=/tmp XDG_DATA_HOME=/tmp XDG_CONFIG_HOME=/tmp godot --headless --path /path/to/octotest --script res://tests/card_reader_interaction_test.gd
 ```
 
@@ -41,7 +42,7 @@ HOME=/tmp XDG_DATA_HOME=/tmp XDG_CONFIG_HOME=/tmp godot --headless --path /path/
 12. When navmesh is authored, confirm click movement follows navigable routes around walls/corners instead of cutting through blockers.
 13. Press `Esc` to open/close in-game pause menu; verify `Resume` closes pause menu and `Main Menu` returns to startup menu.
 14. In startup main menu, press `Esc` and confirm the app does not exit.
-15. Click startup `Load Game` and confirm placeholder warning is logged (not implemented yet).
+15. If `Continue` is visible, click it and confirm the saved game loads into gameplay scene.
 16. Click startup `Settings` and confirm settings overlay opens and closes via back button and `Esc`.
 17. Open pause menu `Settings` and confirm settings overlay opens and closes via back button and `Esc`.
 18. Confirm language switch in settings (`<`/`>`) changes UI language immediately and persists after restart.

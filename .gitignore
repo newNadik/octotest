@@ -15,3 +15,15 @@ data_*/
 .DS_Store
 Thumbs.db
 *.swp
+
+# Nested accidental project copy content under furniture (keep root textures).
+assets/models/interior/furniture/.git/
+assets/models/interior/furniture/.godot/
+assets/models/interior/furniture/.claude/
+assets/models/interior/furniture/addons/
+assets/models/interior/furniture/assets/
+assets/models/interior/furniture/docs/
+assets/models/interior/furniture/i18n/
+assets/models/interior/furniture/scenes/
+assets/models/interior/furniture/scripts/
+assets/models/interior/furniture/tests/

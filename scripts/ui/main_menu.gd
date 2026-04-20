@@ -71,9 +71,7 @@ func _ready() -> void:
 func _on_play_pressed() -> void:
 	_clear_pending_load_request()
 	_clear_saved_game()
-	var error := get_tree().change_scene_to_file(LOADING_SCENE_PATH)
-	if error != OK:
-		push_error("Failed to load loading scene: %s" % LOADING_SCENE_PATH)
+	_start_game_transition()
 
 
 func _on_quit_pressed() -> void:
@@ -90,6 +88,18 @@ func _try_load_or_continue() -> void:
 		_refresh_save_buttons()
 		return
 	_request_load_on_next_game_start()
+	_start_game_transition()
+
+
+func _start_game_transition() -> void:
+	var status := ResourceLoader.load_threaded_get_status(GAME_SCENE_PATH)
+	if status == ResourceLoader.THREAD_LOAD_LOADED:
+		var packed_scene := ResourceLoader.load_threaded_get(GAME_SCENE_PATH) as PackedScene
+		if packed_scene != null:
+			var packed_error := get_tree().change_scene_to_packed(packed_scene)
+			if packed_error == OK:
+				return
+			push_error("Failed to change to preloaded game scene: %s" % GAME_SCENE_PATH)
 	var error := get_tree().change_scene_to_file(LOADING_SCENE_PATH)
 	if error != OK:
 		push_error("Failed to load loading scene: %s" % LOADING_SCENE_PATH)
@@ -138,6 +148,8 @@ func _clear_saved_game() -> void:
 
 
 func _start_game_scene_preload() -> void:
+	if DisplayServer.get_name() == "headless":
+		return
 	var status := ResourceLoader.load_threaded_get_status(GAME_SCENE_PATH)
 	if status == ResourceLoader.THREAD_LOAD_IN_PROGRESS or status == ResourceLoader.THREAD_LOAD_LOADED:
 		return

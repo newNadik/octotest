@@ -63,6 +63,9 @@ echo "[check] movement math unit tests"
 echo "[check] slope integration test"
 "${GODOT_BIN}" --headless --path "${PROJECT_ROOT}" --log-file "${GODOT_LOG_FILE}" --script res://tests/slope_movement_test.gd
 
+echo "[check] octorig startup integration test"
+"${GODOT_BIN}" --headless --path "${PROJECT_ROOT}" --log-file "${GODOT_LOG_FILE}" --script res://tests/octorig_startup_test.gd
+
 echo "[check] card reader interaction test"
 "${GODOT_BIN}" --headless --path "${PROJECT_ROOT}" --log-file "${GODOT_LOG_FILE}" --script res://tests/card_reader_interaction_test.gd
 
