@@ -1285,10 +1285,10 @@ transform = Transform3D(0.99999994, 0, 0, 0, 1, 0, 0, 0, 0.99999994, -14.058354,
 transform = Transform3D(-4.3711385e-08, 0, 0.99999994, 0, 1, 0, -0.99999994, 0, -4.3711385e-08, -11.120958, 0, 6.2147655)
 
 [node name="vanding" parent="rooms/attrium" unique_id=1134603623 instance=ExtResource("28_arv6u")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -16.52377, 0, -3.1030564)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -16.52377, 0, -3.2289684)
 
 [node name="vanding2" parent="rooms/attrium" unique_id=1142576058 instance=ExtResource("28_arv6u")]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -5.964761, 0, 22.483189)
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -6.1879683, 0, 22.954103)
 
 [node name="CCTV_cam" parent="rooms/attrium" unique_id=888049353 instance=ExtResource("34_ibub3")]
 transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 3.1132083, 6.5, 19.055204)
