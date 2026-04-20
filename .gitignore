@@ -27,3 +27,11 @@ assets/models/interior/furniture/i18n/
 assets/models/interior/furniture/scenes/
 assets/models/interior/furniture/scripts/
 assets/models/interior/furniture/tests/
+assets/models/interior/furniture/.editorconfig
+assets/models/interior/furniture/.gitattributes
+assets/models/interior/furniture/.gitignore
+assets/models/interior/furniture/default_bus_layout.tres
+assets/models/interior/furniture/export_presets.cfg
+assets/models/interior/furniture/icon.png
+assets/models/interior/furniture/icon.png.import
+assets/models/interior/furniture/project.godot

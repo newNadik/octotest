@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://ce31gq7bqv6ur" path="res://scripts/ui/main_menu.gd" id="1_core"]
 [ext_resource type="Texture2D" uid="uid://bleasmjxjq0hr" path="res://assets/ui/search.png" id="2_8ln24"]
 [ext_resource type="PackedScene" uid="uid://bydkhwglewp85" path="res://scenes/ui/research_button.tscn" id="2_button"]
-[ext_resource type="PackedScene" path="res://scenes/ui/photo_slide.tscn" id="3_slide"]
+[ext_resource type="PackedScene" uid="uid://cdtoxdrr3lbo4" path="res://scenes/ui/photo_slide.tscn" id="3_slide"]
 [ext_resource type="Texture2D" uid="uid://bveo1mgp8bkut" path="res://icon.png" id="4_wu84c"]
 [ext_resource type="Texture2D" uid="uid://col1g465oecb3" path="res://assets/ui/Icon_BCRC.png" id="5_rtw2f"]
 
@@ -288,7 +288,6 @@ theme_override_constants/margin_bottom = 42
 
 [node name="HBoxContainer" type="HBoxContainer" parent="MainVBoxContainer/MainContainer" unique_id=63538876]
 layout_mode = 2
-size_flags_vertical = 0
 theme_override_constants/separation = 42
 
 [node name="Spacer" type="Control" parent="MainVBoxContainer/MainContainer/HBoxContainer" unique_id=34655410]
@@ -334,14 +333,14 @@ layout_mode = 2
 size_flags_vertical = 3
 
 [node name="SpacerMid" type="Control" parent="MainVBoxContainer/MainContainer/HBoxContainer" unique_id=601664209]
+visible = false
 layout_mode = 2
 size_flags_horizontal = 3
 
 [node name="CarouselPanel" type="PanelContainer" parent="MainVBoxContainer/MainContainer/HBoxContainer" unique_id=1604388800]
 custom_minimum_size = Vector2(0, 420)
 layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 4
+size_flags_horizontal = 3
 theme_override_styles/panel = SubResource("StyleBoxEmpty_wu84c")
 
 [node name="SlidesHost" type="Control" parent="MainVBoxContainer/MainContainer/HBoxContainer/CarouselPanel" unique_id=693251718]
@@ -384,6 +383,7 @@ text = "● ○ ○ ○"
 horizontal_alignment = 1
 
 [node name="SpacerRight" type="Control" parent="MainVBoxContainer/MainContainer/HBoxContainer" unique_id=687562235]
+visible = false
 layout_mode = 2
 size_flags_horizontal = 3
 
