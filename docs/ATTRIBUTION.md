@@ -61,6 +61,8 @@ Source: [Flaticon](https://www.flaticon.com/)
 - https://www.cgtrader.com/designers/hlostoops?utm_source=credit&utm_source=credit_item_page
 - https://www.cgtrader.com/designers/postal29041?utm_source=credit&utm_source=credit_item_page
 - "Vending machine" (https://skfb.ly/ozDWw) by Aysa is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+- https://www.cgtrader.com/designers/javidan?utm_source=credit&utm_source=credit_item_page
+- "CCTV Camera minimal" (https://skfb.ly/6ZCUy) by Jesse Ragos is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
 
 ## Textures
 

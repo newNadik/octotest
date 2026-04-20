@@ -97,18 +97,18 @@ blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_3ay6i")
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_bysld"]
-size = Vector3(0.4, 1.2, 0.4)
+size = Vector3(0.8, 2, 0.8)
 
 [node name="Node3D" type="StaticBody3D" unique_id=212926635]
 
 [node name="concrete_pot_lambert3_0" type="MeshInstance3D" parent="." unique_id=1076888816]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.0065541267)
+transform = Transform3D(1.8, 0, 0, 0, 1.8, 0, 0, 0, 1.8, 0, 0, 0.0065541267)
 mesh = SubResource("ArrayMesh_0ywrj")
 
 [node name="Object_30" type="MeshInstance3D" parent="." unique_id=741719667]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.021041393, 0.4597245, 0)
+transform = Transform3D(1.8, 0, 0, 0, 1.8, 0, 0, 0, 1.8, -0.021041393, 0.4597245, 0)
 mesh = SubResource("ArrayMesh_qgpkm")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=942910129]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 shape = SubResource("BoxShape3D_bysld")

@@ -10,7 +10,6 @@
 - [x] Round table with chairs (2–3 sets)
 - [ ] Wall-mounted info panels
 - [x] Vending machine
-- [ ] Water cooler + paper cup dispenser
 - [ ] Leaflets / brochures rack
 - [ ] Informational leaflets rack (observation side)
 - [ ] Newspaper / magazine on bench
@@ -18,12 +17,12 @@
 - [ ] Noticeboard with crew roster / duty rota
 - [ ] Mission / research briefing board
 - [ ] Directional signage / map stand
-- [ ] Potted plant (corner, observation side)
+- [x] Potted plant (corner, observation side)
 - [x] Wall clock
-- [ ] Trash bins
+- [x] Trash bins
 - [x] Fire extinguisher + cabinet
 - [ ] Evacuation plan (wall-mounted)
-- [ ] CCTV cameras (corner mounts, 2–3)
+- [x] CCTV cameras (corner mounts, 2–3)
 - [ ] NPC - eating ramen and watching tik-tok
 
 #### Character touches
@@ -48,7 +47,6 @@
 - [ ] Shopping bags (paper, behind counter)
 - [ ] Tissue box (at till)
 - [ ] CCTV camera (corner mount)
-- [ ] Wall-mounted PA speaker
 
 ### WC
 - [x] Toilet stalls (2–3) with doors
@@ -85,7 +83,7 @@
 - [ ] Permanent marker (for labelling)
 - [ ] Timer (on bench)
 - [x] Wall clock
-- [ ] First aid kit (wall-mounted)
+- [x] First aid kit (wall-mounted)
 - [ ] Keypad / card reader on door
 - [ ] CCTV camera
 

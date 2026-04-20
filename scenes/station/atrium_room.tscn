@@ -26,9 +26,14 @@
 [ext_resource type="PackedScene" uid="uid://dac1j07k7sd70" path="res://scenes/station/interior/bench.tscn" id="23_7do4q"]
 [ext_resource type="PackedScene" uid="uid://cf658n5t3d7ls" path="res://assets/models/items/pos-terminal_asset.glb" id="24_jt052"]
 [ext_resource type="PackedScene" uid="uid://lnt7a3iskajx" path="res://scenes/station/interior/amphitheater.tscn" id="26_fan24"]
+[ext_resource type="PackedScene" uid="uid://wxpj00rcd3mq" path="res://scenes/station/interior/trash_bin.tscn" id="26_np73v"]
 [ext_resource type="PackedScene" uid="uid://cofo0vasii446" path="res://scenes/station/items/mug.tscn" id="26_wmtnf"]
 [ext_resource type="PackedScene" uid="uid://bp2qgp1sbmraf" path="res://scenes/station/items/clock.tscn" id="27_i5gpl"]
 [ext_resource type="PackedScene" uid="uid://bwn7s1ih3aaij" path="res://scenes/station/interior/vending.tscn" id="28_arv6u"]
+[ext_resource type="PackedScene" uid="uid://d0abd2ne6qpp8" path="res://scenes/station/items/money_plant.tscn" id="31_i2ypu"]
+[ext_resource type="PackedScene" uid="uid://bvm2yhaf5t477" path="res://scenes/station/items/pothos_plant.tscn" id="33_pi2vv"]
+[ext_resource type="PackedScene" uid="uid://b55kryvd17ry2" path="res://scenes/station/items/rhyzone_plant.tscn" id="34_h502i"]
+[ext_resource type="PackedScene" uid="uid://d0tq5lhvb74vc" path="res://scenes/station/interior/cctv_cam.tscn" id="34_ibub3"]
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_cmvkd"]
 resource_name = "atrium_Plane_123"
@@ -1204,6 +1209,12 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.4905014, 0.013957629, 11.6
 
 [node name="attrium" type="Node3D" parent="rooms" unique_id=222971945]
 
+[node name="trash_bin3" parent="rooms/attrium" unique_id=188497815 instance=ExtResource("26_np73v")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.259486, 0, 7.9658837)
+
+[node name="trash_bin4" parent="rooms/attrium" unique_id=1277110760 instance=ExtResource("26_np73v")]
+transform = Transform3D(0.68921494, 0, 0.7245569, 0, 1, 0, -0.7245569, 0, 0.68921494, 6.356765, 0, -5.719739)
+
 [node name="bench" parent="rooms/attrium" unique_id=1550511523 instance=ExtResource("23_7do4q")]
 transform = Transform3D(0.70710677, 0, 0.70710677, 0, 1, 0, -0.70710677, 0, 0.70710677, 4.9358644, 0, 6.996668)
 
@@ -1261,6 +1272,9 @@ transform = Transform3D(0.70710677, 0, -0.70710677, 0, 1, 0, 0.70710677, 0, 0.70
 [node name="clock" parent="rooms/attrium" unique_id=852658388 instance=ExtResource("27_i5gpl")]
 transform = Transform3D(0.99999976, 0, 0, 0, 1, 0, 0, 0, 0.99999976, -11.868, 5, 7.769)
 
+[node name="trash_bin" parent="rooms/attrium" unique_id=1256391836 instance=ExtResource("26_np73v")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.829338, 0, -3.4754243)
+
 [node name="mug" parent="rooms/attrium" unique_id=36977870 instance=ExtResource("26_wmtnf")]
 transform = Transform3D(0.9999999, 0, 0, 0, 1, 0, 0, 0, 0.9999999, -18.66425, 0.9640896, 5.0965886)
 
@@ -1275,6 +1289,33 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -16.52377, 0, -3.1030564)
 
 [node name="vanding2" parent="rooms/attrium" unique_id=1142576058 instance=ExtResource("28_arv6u")]
 transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -5.964761, 0, 22.483189)
+
+[node name="CCTV_cam" parent="rooms/attrium" unique_id=888049353 instance=ExtResource("34_ibub3")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 3.1132083, 6.5, 19.055204)
+
+[node name="CCTV_cam2" parent="rooms/attrium" unique_id=407734395 instance=ExtResource("34_ibub3")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, 1, 0, 4.371139e-08, -6.9835906, 6, 22.221968)
+
+[node name="Node3D2" parent="rooms/attrium" unique_id=212926635 instance=ExtResource("31_i2ypu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.3415089, 7.5711023e-06, 8.718697)
+
+[node name="Node3D6" parent="rooms/attrium" unique_id=1007198569 instance=ExtResource("31_i2ypu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -29.68653, 7.5711023e-06, -3.477569)
+
+[node name="pothos" parent="rooms/attrium" unique_id=598657276 instance=ExtResource("33_pi2vv")]
+transform = Transform3D(0.72976863, 0, -0.6836942, 0, 1, 0, 0.6836942, 0, 0.72976863, -17.728733, 1.4058876, 3.6045716)
+
+[node name="Node3D4" parent="rooms/attrium" unique_id=19005477 instance=ExtResource("34_h502i")]
+transform = Transform3D(0.83447295, 0, 0.5510489, 0, 1, 0, -0.5510489, 0, 0.83447295, -12.894912, 7.5711023e-06, 10.753297)
+
+[node name="Node3D5" parent="rooms/attrium" unique_id=682307147 instance=ExtResource("34_h502i")]
+transform = Transform3D(0.6075976, 0, 0.7942449, 0, 1, 0, -0.7942449, 0, 0.6075976, -4.6235795, 7.5711023e-06, -9.08986)
+
+[node name="trash_bin2" parent="rooms/attrium" unique_id=953683941 instance=ExtResource("26_np73v")]
+transform = Transform3D(-0.7135562, 0, 0.70059806, 0, 1, 0, -0.70059806, 0, -0.7135562, -7.330523, 0, 21.295156)
+
+[node name="CCTV_cam3" parent="rooms/attrium" unique_id=1784038098 instance=ExtResource("34_ibub3")]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, 1, -10.758007, 8.035594, -3.903729)
 
 [node name="kitchen" type="Node3D" parent="rooms" unique_id=184594421]
 

@@ -92,7 +92,7 @@ size = Vector3(0.5, 2, 0.5)
 [node name="RootNode" type="Node3D" parent="." unique_id=1627263649]
 
 [node name="group1" type="Node3D" parent="RootNode" unique_id=1591271838]
-transform = Transform3D(0.01, 0, 0, 0, 0.01, 0, 0, 0, 0.01, 0, 0, 0)
+transform = Transform3D(0.015, 0, 0, 0, 0.015, 0, 0, 0, 0.015, 0, 0, 0)
 
 [node name="concrete_pot" type="Node3D" parent="RootNode/group1" unique_id=1495414478]
 
