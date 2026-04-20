@@ -28,6 +28,7 @@
 [ext_resource type="PackedScene" uid="uid://lnt7a3iskajx" path="res://scenes/station/interior/amphitheater.tscn" id="26_fan24"]
 [ext_resource type="PackedScene" uid="uid://cofo0vasii446" path="res://scenes/station/items/mug.tscn" id="26_wmtnf"]
 [ext_resource type="PackedScene" uid="uid://bp2qgp1sbmraf" path="res://scenes/station/items/clock.tscn" id="27_i5gpl"]
+[ext_resource type="PackedScene" uid="uid://bwn7s1ih3aaij" path="res://scenes/station/interior/vending.tscn" id="28_arv6u"]
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_cmvkd"]
 resource_name = "atrium_Plane_123"
@@ -1254,6 +1255,9 @@ transform = Transform3D(0.70710677, 0, 0.70710677, 0, 1, 0, -0.70710677, 0, 0.70
 [node name="bench5" parent="rooms/attrium" unique_id=1661848770 instance=ExtResource("23_7do4q")]
 transform = Transform3D(0.70710677, 0, -0.70710677, 0, 1, 0, 0.70710677, 0, 0.70710677, -12.407931, 0, 3.1794515)
 
+[node name="bench8" parent="rooms/attrium" unique_id=1318744111 instance=ExtResource("23_7do4q")]
+transform = Transform3D(0.70710677, 0, -0.70710677, 0, 1, 0, 0.70710677, 0, 0.70710677, -8.474873, 0, 19.435024)
+
 [node name="clock" parent="rooms/attrium" unique_id=852658388 instance=ExtResource("27_i5gpl")]
 transform = Transform3D(0.99999976, 0, 0, 0, 1, 0, 0, 0, 0.99999976, -11.868, 5, 7.769)
 
@@ -1265,6 +1269,12 @@ transform = Transform3D(0.99999994, 0, 0, 0, 1, 0, 0, 0, 0.99999994, -14.058354,
 
 [node name="bench6" parent="rooms/attrium" unique_id=2006705821 instance=ExtResource("23_7do4q")]
 transform = Transform3D(-4.3711385e-08, 0, 0.99999994, 0, 1, 0, -0.99999994, 0, -4.3711385e-08, -11.120958, 0, 6.2147655)
+
+[node name="vanding" parent="rooms/attrium" unique_id=1134603623 instance=ExtResource("28_arv6u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -16.52377, 0, -3.1030564)
+
+[node name="vanding2" parent="rooms/attrium" unique_id=1142576058 instance=ExtResource("28_arv6u")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -5.964761, 0, 22.483189)
 
 [node name="kitchen" type="Node3D" parent="rooms" unique_id=184594421]
 

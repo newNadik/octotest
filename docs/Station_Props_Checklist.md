@@ -9,7 +9,7 @@
 - [x] Benches (atrium + along window)
 - [x] Round table with chairs (2–3 sets)
 - [ ] Wall-mounted info panels
-- [ ] Vending machine
+- [x] Vending machine
 - [ ] Water cooler + paper cup dispenser
 - [ ] Leaflets / brochures rack
 - [ ] Informational leaflets rack (observation side)
