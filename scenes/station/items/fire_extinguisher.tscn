@@ -588,10 +588,6 @@ transform = Transform3D(-3.059797e-07, -7, 0, 7, -3.059797e-07, 0, 0, 0, 7, -0.0
 mesh = SubResource("ArrayMesh_agwfk")
 surface_material_override/0 = SubResource("StandardMaterial3D_6klkk")
 
-[node name="Sprite3D" type="Sprite3D" parent="." unique_id=226367609]
-transform = Transform3D(0.045, 0, 0, 0, 0.045, 0, 0, 0, 0.045, 0, 1.508271, -0.15074448)
-texture = ExtResource("2_h5p6b")
-
 [node name="light_sign" parent="." unique_id=2033543759 instance=ExtResource("3_h5p6b")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.25, -0.3)
 sign_texture = ExtResource("4_g0fbs")
@@ -599,3 +595,8 @@ sign_texture = ExtResource("4_g0fbs")
 [node name="light_sign2" parent="." unique_id=308339498 instance=ExtResource("3_h5p6b")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.5, -0.3)
 sign_texture = ExtResource("4_vpu02")
+
+[node name="Decal" type="Decal" parent="." unique_id=1404573715]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 1.4974995, -0.13094814)
+size = Vector3(0.23, 0.11, 0.11)
+texture_albedo = ExtResource("2_h5p6b")

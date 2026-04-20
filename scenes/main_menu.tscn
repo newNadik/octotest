@@ -42,7 +42,7 @@ render_mode unshaded;
 
 uniform sampler2D screen_tex : hint_screen_texture, filter_linear_mipmap;
 uniform float vignette_strength : hint_range(0.0, 0.35) = 0.12;
-uniform float scanline_strength : hint_range(0.0, 0.2) = 0.0;
+uniform float scanline_strength : hint_range(0.0, 0.2) = 0.01;
 uniform float glare_strength : hint_range(0.0, 0.4) = 0.2;
 uniform vec2 reflection_offset = vec2(0.0, 0.0);
 
@@ -68,10 +68,10 @@ void fragment() {
 }
 "
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_display_fx"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_rtw2f"]
 shader = SubResource("Shader_8ln24")
 shader_parameter/vignette_strength = 0.12
-shader_parameter/scanline_strength = 0.0
+shader_parameter/scanline_strength = 0.01
 shader_parameter/glare_strength = 0.2
 shader_parameter/reflection_offset = Vector2(0, 0)
 
@@ -440,8 +440,8 @@ label_settings = SubResource("LabelSettings_8ln24")
 wait_time = 4.5
 autostart = true
 
-[node name="DisplayFX" type="ColorRect" parent="." unique_id=268931144]
-material = SubResource("ShaderMaterial_display_fx")
+[node name="DisplayFX" type="ColorRect" parent="." unique_id=309820831]
+material = SubResource("ShaderMaterial_rtw2f")
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0

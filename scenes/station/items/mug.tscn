@@ -1,6 +1,8 @@
 [gd_scene format=4 uid="uid://cofo0vasii446"]
 
 [ext_resource type="Script" uid="uid://bt8vvmy3m63u7" path="res://scripts/interaction/interactable.gd" id="1_dgi2r"]
+[ext_resource type="Texture2D" uid="uid://fexkp1kbef3c" path="res://assets/ui/Icon_BCRC1024.png" id="2_3yqkp"]
+[ext_resource type="Script" uid="uid://dhxq2wwog7fei" path="res://scripts/station/items/mug.gd" id="3_u6hb8"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_iee4l"]
 resource_name = "MI_plasticwhite03"
@@ -67,9 +69,10 @@ height = 0.22
 radius = 0.1
 
 [node name="mug" type="StaticBody3D" unique_id=36977870]
+script = ExtResource("3_u6hb8")
 
 [node name="cup1228A6_StaticMeshComponent0" type="Node3D" parent="." unique_id=1845302656]
-transform = Transform3D(2, 0, 0, 0, -8.742278e-08, 2, 0, -2, -8.742278e-08, 0, 0, 0)
+transform = Transform3D(1.5320889, 1.2855752, 5.6194274e-08, 0, -8.742278e-08, 2, 1.2855752, -1.5320889, -6.696973e-08, 0, 0, 0.0075182766)
 
 [node name="cup1228A6_StaticMeshComponent0_MI_plasticwhite03_0" type="MeshInstance3D" parent="cup1228A6_StaticMeshComponent0" unique_id=1325126733]
 mesh = SubResource("ArrayMesh_4an4b")
@@ -96,3 +99,17 @@ metadata/_custom_type_script = "uid://bt8vvmy3m63u7"
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Interactable" unique_id=743407270]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.11, 0)
 shape = SubResource("CylinderShape3D_3yqkp")
+
+[node name="Decal" type="Decal" parent="." unique_id=323491526]
+transform = Transform3D(-4.371139e-08, 1, -4.371139e-08, 0, -4.371139e-08, -1, -1, -4.371139e-08, 1.9106855e-15, 0.13856907, 0.13, 0)
+size = Vector3(0.1, 0.1, 0.1)
+texture_albedo = ExtResource("2_3yqkp")
+upper_fade = 0.0007213706
+lower_fade = 0.0011319568
+
+[node name="Decal2" type="Decal" parent="." unique_id=473184620]
+transform = Transform3D(-4.371139e-08, -1, 4.371139e-08, 0, -4.371139e-08, -1, 1, -4.371139e-08, 1.9106855e-15, -0.129085, 0.13, 0)
+size = Vector3(0.1, 0.1, 0.1)
+texture_albedo = ExtResource("2_3yqkp")
+upper_fade = 0.0007213706
+lower_fade = 0.0011319568

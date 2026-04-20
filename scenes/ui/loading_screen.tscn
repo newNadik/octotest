@@ -2,22 +2,28 @@
 
 [ext_resource type="Script" uid="uid://df6ghec2tf64y" path="res://scripts/ui/loading_screen.gd" id="1_ya3ju"]
 [ext_resource type="Texture2D" uid="uid://bveo1mgp8bkut" path="res://icon.png" id="2_logo"]
+[ext_resource type="Texture2D" uid="uid://col1g465oecb3" path="res://assets/ui/Icon_BCRC.png" id="2_s2kth"]
+[ext_resource type="Texture2D" uid="uid://bleasmjxjq0hr" path="res://assets/ui/search.png" id="3_s41fs"]
 
 [sub_resource type="SystemFont" id="SystemFont_title_heavy"]
 font_names = PackedStringArray("Segoe UI Black", "SF Pro Display Black", "Helvetica Neue Black", "Noto Sans Black", "DejaVu Sans Bold", "sans-serif")
 font_weight = 999
 subpixel_positioning = 0
 
-[sub_resource type="LabelSettings" id="LabelSettings_q4fso"]
+[sub_resource type="LabelSettings" id="LabelSettings_y06jl"]
 font = SubResource("SystemFont_title_heavy")
 font_size = 32
 font_color = Color(0.050980393, 0.14117648, 0.23921569, 1)
 outline_size = 2
 outline_color = Color(0.050980393, 0.14117648, 0.23921569, 1)
 
-[sub_resource type="LabelSettings" id="LabelSettings_5fj0j"]
+[sub_resource type="LabelSettings" id="LabelSettings_g5iak"]
 font_size = 18
 font_color = Color(0.11372549, 0.19607843, 0.28627452, 0.74509805)
+
+[sub_resource type="LabelSettings" id="LabelSettings_2hmxs"]
+font_size = 20
+font_color = Color(0.050980393, 0.14117648, 0.23921569, 1)
 
 [sub_resource type="LabelSettings" id="LabelSettings_s2kth"]
 font_size = 14
@@ -37,7 +43,7 @@ corner_radius_top_right = 6
 corner_radius_bottom_right = 6
 corner_radius_bottom_left = 6
 
-[sub_resource type="Shader" id="Shader_8ln24"]
+[sub_resource type="Shader" id="Shader_q4fso"]
 code = "shader_type canvas_item;
 render_mode unshaded;
 
@@ -70,7 +76,7 @@ void fragment() {
 "
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_s41fs"]
-shader = SubResource("Shader_8ln24")
+shader = SubResource("Shader_q4fso")
 shader_parameter/vignette_strength = 0.12
 shader_parameter/scanline_strength = 0.01
 shader_parameter/glare_strength = 0.2
@@ -197,39 +203,88 @@ layout_mode = 2
 layout_mode = 2
 color = Color(0.77254903, 0.9098039, 0.99607843, 1)
 
-[node name="TopContainer" type="MarginContainer" parent="MainVBoxContainer/TopPanelContainer" unique_id=361324511]
+[node name="MarginContainer" type="MarginContainer" parent="MainVBoxContainer/TopPanelContainer" unique_id=1023437052]
 layout_mode = 2
 theme_override_constants/margin_left = 42
+theme_override_constants/margin_top = 24
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 24
+
+[node name="TextureRect" type="TextureRect" parent="MainVBoxContainer/TopPanelContainer/MarginContainer" unique_id=720362240]
+texture_filter = 4
+layout_mode = 2
+texture = ExtResource("2_s2kth")
+expand_mode = 2
+stretch_mode = 4
+
+[node name="TopContainer2" type="MarginContainer" parent="MainVBoxContainer/TopPanelContainer" unique_id=1165601702]
+layout_mode = 2
+theme_override_constants/margin_left = 135
 theme_override_constants/margin_top = 42
 theme_override_constants/margin_right = 42
 theme_override_constants/margin_bottom = 24
 
-[node name="HeaderRow" type="HBoxContainer" parent="MainVBoxContainer/TopPanelContainer/TopContainer" unique_id=132764423]
+[node name="HeaderRow" type="HBoxContainer" parent="MainVBoxContainer/TopPanelContainer/TopContainer2" unique_id=2012420036]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 8
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MainVBoxContainer/TopPanelContainer/TopContainer/HeaderRow" unique_id=325004007]
+[node name="VBoxContainer" type="VBoxContainer" parent="MainVBoxContainer/TopPanelContainer/TopContainer2/HeaderRow" unique_id=577082419]
 layout_mode = 2
 theme_override_constants/separation = -2
 
-[node name="TitleText" type="Label" parent="MainVBoxContainer/TopPanelContainer/TopContainer/HeaderRow/VBoxContainer" unique_id=938411600]
+[node name="TitleText" type="Label" parent="MainVBoxContainer/TopPanelContainer/TopContainer2/HeaderRow/VBoxContainer" unique_id=2038317368]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.0313726, 0.0941176, 0.176471, 1)
 theme_override_font_sizes/font_size = 32
 text = "Blue Current Research Centre"
-label_settings = SubResource("LabelSettings_q4fso")
+label_settings = SubResource("LabelSettings_y06jl")
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Label" type="Label" parent="MainVBoxContainer/TopPanelContainer/TopContainer/HeaderRow/VBoxContainer" unique_id=1026543963]
+[node name="Label" type="Label" parent="MainVBoxContainer/TopPanelContainer/TopContainer2/HeaderRow/VBoxContainer" unique_id=1125357907]
 layout_mode = 2
 text = "Understanding the ocean. Powering the future."
-label_settings = SubResource("LabelSettings_5fj0j")
+label_settings = SubResource("LabelSettings_g5iak")
 
-[node name="Control" type="Control" parent="MainVBoxContainer/TopPanelContainer/TopContainer/HeaderRow" unique_id=232879161]
+[node name="Control" type="Control" parent="MainVBoxContainer/TopPanelContainer/TopContainer2/HeaderRow" unique_id=1381525579]
 layout_mode = 2
 size_flags_horizontal = 3
+
+[node name="NavButtons" type="HBoxContainer" parent="MainVBoxContainer/TopPanelContainer/TopContainer2/HeaderRow" unique_id=1906139287]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 8
+theme_override_constants/separation = 20
+
+[node name="Label4" type="Label" parent="MainVBoxContainer/TopPanelContainer/TopContainer2/HeaderRow/NavButtons" unique_id=250252019]
+layout_mode = 2
+text = "About"
+label_settings = SubResource("LabelSettings_2hmxs")
+
+[node name="Label2" type="Label" parent="MainVBoxContainer/TopPanelContainer/TopContainer2/HeaderRow/NavButtons" unique_id=1524125868]
+layout_mode = 2
+text = "Science"
+label_settings = SubResource("LabelSettings_2hmxs")
+
+[node name="Label" type="Label" parent="MainVBoxContainer/TopPanelContainer/TopContainer2/HeaderRow/NavButtons" unique_id=1577731578]
+layout_mode = 2
+text = "____________"
+label_settings = SubResource("LabelSettings_2hmxs")
+
+[node name="Label6" type="Label" parent="MainVBoxContainer/TopPanelContainer/TopContainer2/HeaderRow/NavButtons" unique_id=2124713866]
+layout_mode = 2
+text = "__________"
+label_settings = SubResource("LabelSettings_2hmxs")
+
+[node name="Label5" type="Label" parent="MainVBoxContainer/TopPanelContainer/TopContainer2/HeaderRow/NavButtons" unique_id=165942537]
+layout_mode = 2
+text = "Contact Us"
+label_settings = SubResource("LabelSettings_2hmxs")
+
+[node name="Search" type="TextureRect" parent="MainVBoxContainer/TopPanelContainer/TopContainer2/HeaderRow/NavButtons" unique_id=1889333325]
+layout_mode = 2
+texture = ExtResource("3_s41fs")
 
 [node name="MainContainer" type="MarginContainer" parent="MainVBoxContainer" unique_id=107874688]
 layout_mode = 2
