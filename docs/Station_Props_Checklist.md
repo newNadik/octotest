@@ -300,15 +300,15 @@
 - [ ] Bunk 3 — engineering textbooks stacked on desk
 
 ### Kitchen
-- [ ] Galley counter + cabinets
-- [ ] Sink with taps
+- [x] Galley counter + cabinets
+- [x] Sink with taps
 - [ ] Microwave
 - [ ] Coffee machine
-- [ ] fridge
+- [x] fridge
 - [ ] Dish rack
 - [ ] Pinned meal rota / notes
-- [ ] Plant pot (herb pot on counter)
-- [ ] Trash bin
+- [x] Plant pot (herb pot on counter)
+- [x] Trash bin
 - [x] Fire extinguisher
 - [ ] Evacuation plan (wall-mounted)
 - [ ] Mugs (on hooks or shelf)
