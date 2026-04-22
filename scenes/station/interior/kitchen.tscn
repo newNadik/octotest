@@ -10,6 +10,9 @@
 [ext_resource type="PackedScene" uid="uid://wo8dpvu58cav" path="res://scenes/station/items/aloe_plant.tscn" id="8_x8g26"]
 [ext_resource type="PackedScene" uid="uid://br6ntmevwpsdb" path="res://scenes/station/items/fairy_lights.tscn" id="9_ic7gy"]
 [ext_resource type="PackedScene" uid="uid://bvm2yhaf5t477" path="res://scenes/station/items/pothos_plant.tscn" id="10_wunaa"]
+[ext_resource type="PackedScene" uid="uid://djbxa50jd4frh" path="res://assets/models/interior/kitchen/noodles pack.glb" id="11_x8g26"]
+[ext_resource type="PackedScene" uid="uid://cofo0vasii446" path="res://scenes/station/items/mug.tscn" id="12_wunaa"]
+[ext_resource type="Texture2D" uid="uid://bfgnuwfpokato" path="res://assets/models/interior/kitchen/mondays.png" id="13_2ag42"]
 
 [node name="kitchen" type="Node3D" unique_id=655617701]
 
@@ -77,7 +80,7 @@ transform = Transform3D(-0.22574264, 0, -1.28025, 0, 1.3, 0, 1.28025, 0, -0.2257
 transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -28.851173, 0, -4.7988214)
 
 [node name="Node3D" parent="." unique_id=1667817107 instance=ExtResource("8_x8g26")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -30.10227, 1.8200002, -4.848313)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -30.10227, 1.7613952, -4.848313)
 
 [node name="fairy_lights" parent="." unique_id=486168498 instance=ExtResource("9_ic7gy")]
 transform = Transform3D(0.98480767, 0, -0.17364816, 0, 1, 0, 0.17364816, 0, 0.98480767, -24.890347, 3.4533925, -10.514729)
@@ -87,3 +90,20 @@ transform = Transform3D(0.98480767, 0, -0.17364816, 0, 1, 0, 0.17364816, 0, 0.98
 
 [node name="pothos" parent="." unique_id=598657276 instance=ExtResource("10_wunaa")]
 transform = Transform3D(0.15174392, 0, -0.98841983, 0, 1, 0, 0.98841983, 0, 0.15174392, -21.735996, 1.8200083, -10.227603)
+
+[node name="noodles pack" parent="." unique_id=1047820714 instance=ExtResource("11_x8g26")]
+transform = Transform3D(0.8549031, 0, 1.4694016, 0, 1.7, 0, -1.4694016, 0, 0.8549031, -30.007156, 1.7583888, -10.313735)
+
+[node name="mug" parent="." unique_id=36977870 instance=ExtResource("12_wunaa")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -30.095402, 1.7693241, -8.4863405)
+
+[node name="mug2" parent="." unique_id=2129939341 instance=ExtResource("12_wunaa")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -30.23608, 1.7693241, -8.809116)
+front_decal_texture = ExtResource("13_2ag42")
+back_decal_texture = ExtResource("13_2ag42")
+
+[node name="mug3" parent="." unique_id=504639743 instance=ExtResource("12_wunaa")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -29.88784, 1.7693241, -8.965881)
+
+[node name="mug4" parent="." unique_id=1828983511 instance=ExtResource("12_wunaa")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -30.184357, 1.7693241, -9.238745)

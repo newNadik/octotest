@@ -12,7 +12,6 @@
 [ext_resource type="PackedScene" uid="uid://3qcq4vmexl3s" path="res://scenes/station/items/fire_extinguisher.tscn" id="8_j5434"]
 [ext_resource type="PackedScene" uid="uid://qs8sh7iux1qk" path="res://scenes/station/interior/chair.tscn" id="8_mpvso"]
 [ext_resource type="Material" uid="uid://ca2db0a60mj50" path="res://assets/materials/metal.tres" id="8_xp3kh"]
-[ext_resource type="PackedScene" uid="uid://bu4rpvaec4jla" path="res://scenes/station/items/cactus_plant.tscn" id="10_srhdw"]
 [ext_resource type="PackedScene" uid="uid://c1nq1i0twyqej" path="res://scenes/station/interior/garden.tscn" id="10_vucpf"]
 [ext_resource type="PackedScene" uid="uid://6vcqkboq1fps" path="res://scenes/effects/floor_marker_light.tscn" id="11_floorlight"]
 [ext_resource type="PackedScene" uid="uid://c5tv72lyq8d8h" path="res://scenes/effects/caustic_rig.tscn" id="11_fy6p5"]
@@ -38,6 +37,7 @@
 [ext_resource type="PackedScene" uid="uid://bvm2yhaf5t477" path="res://scenes/station/items/pothos_plant.tscn" id="33_pi2vv"]
 [ext_resource type="PackedScene" uid="uid://b55kryvd17ry2" path="res://scenes/station/items/rhyzone_plant.tscn" id="34_h502i"]
 [ext_resource type="PackedScene" uid="uid://d0tq5lhvb74vc" path="res://scenes/station/interior/cctv_cam.tscn" id="34_ibub3"]
+[ext_resource type="PackedScene" uid="uid://bhw6qsm3wjcd7" path="res://scenes/station/items/noodle_cup.tscn" id="39_bq35r"]
 [ext_resource type="PackedScene" uid="uid://cvmc4k2rg5tih" path="res://scenes/station/interior/kitchen.tscn" id="39_i3dbr"]
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_cmvkd"]
@@ -1164,8 +1164,6 @@ door_title = "Shop"
 door_title_secondary = "Gift"
 title_side = 1
 
-[node name="tests" type="Node3D" parent="." unique_id=1786725467]
-
 [node name="rooms" type="Node3D" parent="." unique_id=1967129213]
 
 [node name="shower" parent="rooms" unique_id=1680803147 instance=ExtResource("16_2ysy5")]
@@ -1214,18 +1212,6 @@ transform = Transform3D(-5.2453668e-08, 0, -1.2, 0, 1.2, 0, 1.2, 0, -5.2453668e-
 
 [node name="wt_floor_sign" parent="rooms/WC" unique_id=1207511351 instance=ExtResource("16_o6nh8")]
 transform = Transform3D(0.8835369, 0, -0.46836165, 0, 1, 0, 0.46836165, 0, 0.8835369, 5.5680075, 0.013957152, 15.300981)
-
-[node name="cactus" parent="rooms/WC" unique_id=589026095 instance=ExtResource("10_srhdw")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.08566, 0, 14.993629)
-
-[node name="cactus2" parent="rooms/WC" unique_id=673860927 instance=ExtResource("10_srhdw")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.357236, 0, 14.993629)
-
-[node name="StaticBody3D6" parent="rooms/WC" unique_id=534925038 instance=ExtResource("16_o6nh8")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5179149, 0.013957629, 11.6915045)
-
-[node name="StaticBody3D7" parent="rooms/WC" unique_id=396757281 instance=ExtResource("16_o6nh8")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.4905014, 0.013957629, 11.6915045)
 
 [node name="attrium" type="Node3D" parent="rooms" unique_id=222971945]
 
@@ -1298,6 +1284,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.829338, 0, -3.4754243)
 [node name="mug" parent="rooms/attrium" unique_id=36977870 instance=ExtResource("26_wmtnf")]
 transform = Transform3D(0.9999999, 0, 0, 0, 1, 0, 0, 0, 0.9999999, -18.66425, 0.9640896, 5.0965886)
 
+[node name="mug2" parent="rooms/attrium" unique_id=1821760355 instance=ExtResource("26_wmtnf")]
+transform = Transform3D(0.9999999, 0, 0, 0, 1, 0, 0, 0, 0.9999999, -22.201412, 1.558384, -2.4571445)
+
 [node name="amphitheater" parent="rooms/attrium" unique_id=1652820508 instance=ExtResource("26_fan24")]
 transform = Transform3D(0.99999994, 0, 0, 0, 1, 0, 0, 0, 0.99999994, -14.058354, 0, 5.089758)
 
@@ -1343,3 +1332,6 @@ transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, 1, -10.758007, 8.035594, -3.903
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.677511, 0, 20.193176)
 
 [node name="kitchen" parent="rooms" unique_id=655617701 instance=ExtResource("39_i3dbr")]
+
+[node name="noodle_cup" parent="rooms" unique_id=365145535 instance=ExtResource("39_bq35r")]
+transform = Transform3D(1.7, 0, 0, 0, 1.7, 0, 0, 0, 1.7, -27.598127, 1.56, -0.10236883)
