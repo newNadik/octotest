@@ -35,7 +35,7 @@ func spin() -> void:
 	if _spin_tween != null and _spin_tween.is_running():
 		_spin_tween.kill()
 
-	var target_rotation_y := rotation.y + deg_to_rad(spin_degrees_per_click)
+	var target_rotation_y := rotation.y - deg_to_rad(spin_degrees_per_click)
 	_spin_tween = create_tween()
 	_spin_tween.set_trans(Tween.TRANS_QUART)
 	_spin_tween.set_ease(Tween.EASE_OUT)
