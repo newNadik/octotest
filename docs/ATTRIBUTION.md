@@ -73,6 +73,12 @@ Source: [Flaticon](https://www.flaticon.com/)
 
 - https://cc0-textures.com
 - https://ambientcg.com
+- Photo by <a href="https://unsplash.com/@quinguyen?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">qui nguyen</a> on <a href="https://unsplash.com/photos/live-corals-0G01UI1MQhg?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>
+- Photo by <a href="https://unsplash.com/@hiro0718?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Hiroko Yoshii</a> on <a href="https://unsplash.com/photos/school-of-fish-in-body-of-water-9y7y26C-l4Y?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>
+- Photo by <a href="https://unsplash.com/@marc0521?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">LI FEI</a> on <a href="https://unsplash.com/photos/school-of-fish-underwater-l4QTY7XOIcg?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>
+- Photo by <a href="https://unsplash.com/@neom?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">NEOM</a> on <a href="https://unsplash.com/photos/a-person-swimming-in-the-ocean-near-a-coral-reef-I5j46lqAo-o?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>
+- Photo by <a href="https://unsplash.com/@frankiefoto?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">frank mckenna</a> on <a href="https://unsplash.com/photos/five-birds-flying-on-the-sea-OD9EOzfSOh0?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>
 
 ## Sounds
 - Sound Effect by <a href="https://pixabay.com/users/freesounds-4u-51979242/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=401152">FreeSounds-4U</a> from <a href="https://pixabay.com/sound-effects//?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=401152">Pixabay</a>
+- `res://assets/sound/metal_squeak.wav` - source pending confirmation (add final attribution/license before release).

@@ -1,5 +1,24 @@
 # Dev Log
 
+## 2026-04-22
+
+### Step 54 - Gift-shop spinning rack interaction and audio pass
+
+- Added a new interactable spinning rack item:
+  - `res://scenes/station/items/spinning_rack.tscn`
+  - `res://scripts/station/items/spinning_rack.gd`
+- Wired rack interaction through the shared `Interactable` flow (`clicked` signal) so player click triggers spin.
+- Tuned rack behavior to a slower comedic spin profile:
+  - `spin_degrees_per_click = 540`
+  - `spin_duration = 5.2`
+- Added rack SFX integration:
+  - new sound asset `res://assets/sound/metal_squeak.wav`,
+  - one-shot playback per click with no restart if the previous sound is still playing.
+- Added per-click pitch variation to avoid repetitive playback:
+  - `spin_sound_pitch_min` / `spin_sound_pitch_max` exports.
+- Removed prior fade-out logic after SFX workflow decision to use a single trimmed squeak.
+- Updated station props checklist to mark gift-shop spinning rack/books item as complete.
+
 ## 2026-04-20
 
 ### Step 53 - In-world rigged clock + game-time system

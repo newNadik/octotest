@@ -33,7 +33,7 @@
 - [ ] Glass counter with till
 - [ ] Octopus plushies (rack / basket)
 - [ ] Shark / sea creature plushies
-- [ ] Books & field guides (spinning rack)
+- [x] Books & field guides (spinning rack)
 - [ ] Postcards & prints stand
 - [ ] Tote bags on hooks
 - [ ] Branded mugs / water bottles
@@ -320,7 +320,6 @@
 - [ ] Fruit bowl (bananas, apples)
 - [ ] Noodles cups
 - [ ] Sugar bowl / coffee pods
-- [ ] Tea towels (hanging)
 - [ ] Sponge + washing-up liquid (by sink)
 - [x] Wall clock
 
