@@ -29,22 +29,19 @@
 - [ ] Someone's left a sketchbook open on the bench (ocean drawings)
 
 ### Gift Shop
-- [ ] Display shelving units
-- [ ] Glass counter with till
+- [x] Display shelving units
+- [x] Glass counter with till
 - [ ] Octopus plushies (rack / basket)
 - [ ] Shark / sea creature plushies
 - [x] Books & field guides (spinning rack)
-- [ ] Postcards & prints stand
+- [x] Postcards & prints stand
 - [ ] Tote bags on hooks
 - [ ] Branded mugs / water bottles
 - [ ] Poster prints framed on wall
 - [ ] Plant pot (counter or corner)
-- [ ] Trash bin
 - [ ] Evacuation plan (wall-mounted)
 - [ ] Keychains + fridge magnets (counter display)
 - [ ] Sticker sheets rack
-- [ ] Snow globe (ocean themed)
-- [ ] Shopping bags (paper, behind counter)
 - [ ] Tissue box (at till)
 - [ ] CCTV camera (corner mount)
 
@@ -103,7 +100,7 @@
 - [ ] Spool rack for filament
 - [ ] Pegboard wall with tools
 - [ ] Drill press / bench drill
-- [ ] Soldering station
+- [x] Soldering station
 - [ ] Component bins / parts drawers
 - [ ] Oscilloscope + multimeter
 - [ ] Vice mounted on bench edge
@@ -113,7 +110,6 @@
 - [ ] Evacuation plan (wall-mounted)
 - [ ] Loose nuts + bolts (tray on bench)
 - [ ] Wire spools
-- [ ] Soldering wire spool
 - [ ] Sandpaper sheets
 - [ ] Printed schematics / blueprints (pinned)
 - [ ] Cable ties (bag)
@@ -219,8 +215,7 @@
 - [x] Office chairs
 - [ ] Wall display screens (4 tiled)
 - [ ] Shelving with binders / documents
-- [ ] Filing cabinet
-- [ ] Plant pot (desk or floor)
+- [x] Plant pot (desk or floor)
 - [ ] fish tank
 - [ ] Whiteboard / corkboard
 - [ ] Coffee mug / thermos (desk prop)
@@ -248,33 +243,22 @@
 - [ ] Shared — someone's printed a meme and pinned it to the corkboard
 
 ### Systems Room
-- [ ] Server racks (2–3 tall units)
-- [ ] Life support control panel
-- [ ] Compressed air tanks (O₂ / CO₂)
-- [ ] Wall-mounted gauges & dials
-- [ ] Pipe runs (horizontal + vertical)
-- [ ] Warning / status lights (red/green)
-- [ ] Maintenance toolbox
-- [ ] Emergency manual override panel
-- [ ] Stepladder (fold-out)
-- [ ] Trash bin
+- [x] Server racks (2–3 tall units)
+- [x] Life support control panel
+- [x] Compressed air tanks (O₂ / CO₂)
+- [x] Warning / status lights (red/green)
+- [x] Maintenance toolbox
+- [x] Stepladder (fold-out)
 - [x] Fire extinguisher
 - [ ] Evacuation plan (wall-mounted)
 - [ ] Maintenance manuals / binders
 - [ ] Clipboard with checklist (on hook)
-- [ ] Coiled spare cables
-- [ ] Cable ties (bag)
-- [ ] Label maker + labels
-- [ ] Safety gloves (on shelf)
-- [ ] Ear protection (on hook)
 - [ ] Torch / flashlight
-- [ ] Coffee mug (engineer's desk prop)
 - [ ] Keypad / card reader on door
 - [ ] CCTV camera
 - [ ] NPC - mechanic 
 
 #### Character touches
-- [ ] Stress ball or small squish toy near the control panel
 - [ ] Handwritten "DO NOT TURN OFF" note taped to one server
 
 ### Quarters
@@ -291,6 +275,8 @@
 - [x] Slippers / flip flops (under bunk)
 - [ ] Journal / notebook + pen
 - [x] Wall clock
+- [x] darts
+- [x] pull up bar
 - [ ] NPC sleeping
 
 #### Character touches
@@ -302,23 +288,23 @@
 ### Kitchen
 - [x] Galley counter + cabinets
 - [x] Sink with taps
-- [ ] Microwave
-- [ ] Coffee machine
+- [x] Microwave
+- [x] Coffee machine
 - [x] fridge
-- [ ] Dish rack
+- [x] Dish rack
 - [ ] Pinned meal rota / notes
 - [x] Plant pot (herb pot on counter)
 - [x] Trash bin
 - [x] Fire extinguisher
 - [ ] Evacuation plan (wall-mounted)
-- [ ] Mugs (on hooks or shelf)
-- [ ] Plates + bowls (stacked in cabinet)
+- [x] Mugs (on hooks or shelf)
+- [x] Plates + bowls (stacked in cabinet)
 - [ ] Cutlery in utensil holder
-- [ ] Kettle
+- [x] Kettle
 - [ ] Bags of snacks / crisps
 - [ ] Cereal box
 - [ ] Fruit bowl (bananas, apples)
-- [ ] Noodles cups
+- [x] Noodles cups
 - [ ] Sugar bowl / coffee pods
 - [ ] Sponge + washing-up liquid (by sink)
 - [x] Wall clock
@@ -326,7 +312,7 @@
 #### Character touches
 - [ ] Passive-aggressive note about dishes on the wall
 - [ ] Someone's mug that's clearly their "special" mug
-- [ ] A single sad banana that's been there too long
+- [x] A single sad banana that's been there too long
 
 ### Showers
 - [x] Shower cubicles
@@ -345,8 +331,8 @@
 - [ ] Defibrillator on wall bracket
 - [ ] Drip stand (IV pole)
 - [x] Desk + chair (medic station)
-- [ ] Vitals monitor on wall
-- [ ] Privacy curtain on rail
+- [x] Vitals monitor on wall
+- [x] Privacy curtain on rail
 - [ ] Biohazard waste bin + sharps bin
 - [ ] Trash bin (general)
 - [x] Fire extinguisher

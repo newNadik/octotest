@@ -18,6 +18,7 @@
 [ext_resource type="PackedScene" uid="uid://qs8sh7iux1qk" path="res://scenes/station/interior/chair.tscn" id="14_je4rm"]
 [ext_resource type="PackedScene" uid="uid://8vcajaaad64" path="res://scenes/station/interior/rack.tscn" id="15_cdlwy"]
 [ext_resource type="PackedScene" uid="uid://cofo0vasii446" path="res://scenes/station/items/mug.tscn" id="16_l0eqh"]
+[ext_resource type="PackedScene" uid="uid://cncn15ux5kawl" path="res://assets/models/interior/furniture/benchk_pull-up_bar_d9.glb" id="18_wrylc"]
 [ext_resource type="PackedScene" uid="uid://cbu1wt6omt36j" path="res://assets/models/items/darts_asset.glb" id="19_kdk8m"]
 [ext_resource type="PackedScene" uid="uid://bp2qgp1sbmraf" path="res://scenes/station/items/clock.tscn" id="20_05str"]
 
@@ -303,6 +304,12 @@ transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -10.
 [node name="mug" parent="items" unique_id=36977870 instance=ExtResource("16_l0eqh")]
 transform = Transform3D(1, 0, 0, 0, 0.99999994, 0, 0, 0, 0.99999994, -20.429155, 1.570058, -12.684125)
 
+[node name="clock" parent="items/mug" unique_id=605620393 instance=ExtResource("20_05str")]
+transform = Transform3D(0.15662405, 0, 0.98765826, 0, 1, 0, -0.98765826, 0, 0.15662405, -1.0776062, 2.722086, 1.3470249)
+
+[node name="Sketchfab_Scene" parent="items/mug" unique_id=939841449 instance=ExtResource("18_wrylc")]
+transform = Transform3D(0.76536685, 0, -1.847759, 0, 2, 0, 1.847759, 0, 0.76536685, 9.683936, 2.372707, -4.3558493)
+
 [node name="plant" parent="items" unique_id=622791712 instance=ExtResource("9_mcwsc")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -16.790138, 1.4573891, -17.420954)
 
@@ -311,6 +318,3 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, -1, -15.513511, 0, -19.299)
 
 [node name="darts" parent="items" unique_id=447770883 instance=ExtResource("19_kdk8m")]
 transform = Transform3D(0.5720896, 0, -1.3866196, 0, 1.4999999, 0, 1.3866196, 0, 0.5720896, -9.005959, 2.4622211, -16.444967)
-
-[node name="clock" parent="." unique_id=605620393 instance=ExtResource("20_05str")]
-transform = Transform3D(0.15662405, 0, 0.98765826, 0, 1, 0, -0.98765826, 0, 0.15662405, -21.506762, 4.292144, -11.3371)

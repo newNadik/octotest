@@ -68,7 +68,18 @@ Source: [Flaticon](https://www.flaticon.com/)
 - "Hospital Kit_3" (https://skfb.ly/pAGWI) by KotovV.04 is licensed under Creative Commons Attribution-NonCommercial (http://creativecommons.org/licenses/by-nc/4.0/).
 - "Fridge" (https://skfb.ly/pASSR) by Logan S. is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
 - "Tau Noodle Cup" (https://skfb.ly/psWT6) by Squishy is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
-
+- "Server Rack and Console v3" (https://skfb.ly/GoCE) by Ridellco is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+- "Toolbox" (https://skfb.ly/osWB7) by holgcool is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+- "stepladder" (https://skfb.ly/6vwCY) by TheDrone is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+- "Fluck + Probs" (https://skfb.ly/oORwJ) by daniel.katz is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+- "高压配电室及变压器配电部分" (https://skfb.ly/prERA) by MrdT is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+- "BENCHK: PULL-UP BAR D9" (https://skfb.ly/6EV86) by BenchK is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+- "Microwave" (https://skfb.ly/pvv6P) by pixapexel is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+- "Coffee Machine" (https://skfb.ly/54hgfed0ba) by 3DHaupt is licensed under Creative Commons Attribution-NonCommercial (http://creativecommons.org/licenses/by-nc/4.0/).
+- "dish rack" (https://skfb.ly/6V6YJ) by prasetyoheru10 is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+- "ELECTRICK KETTLE" (https://skfb.ly/6U6vo) by cirugi4 is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+- "Banana" (https://skfb.ly/6QStP) by DerHobbyTroller is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+- 
 ## Textures
 
 - https://cc0-textures.com

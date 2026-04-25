@@ -10,10 +10,14 @@
 [ext_resource type="AudioStream" uid="uid://cpvgrh463bnmg" path="res://assets/sound/machine_room.wav" id="5_machine_amb"]
 [ext_resource type="PackedScene" uid="uid://b7vd8cvq5kxdt" path="res://scenes/station/items/light_switch.tscn" id="9_ag2h7"]
 [ext_resource type="PackedScene" uid="uid://c5tv72lyq8d8h" path="res://scenes/effects/caustic_rig.tscn" id="10_7gsjf"]
-[ext_resource type="PackedScene" uid="uid://c6u2h3iksfaya" path="res://scenes/station/interior/cabinet_01.tscn" id="11_7mh4c"]
+[ext_resource type="PackedScene" uid="uid://bofl1r32tafur" path="res://scenes/station/items/server.tscn" id="11_glc3d"]
+[ext_resource type="PackedScene" uid="uid://ccp478peo5m85" path="res://scenes/station/items/aircompressor.tscn" id="11_hk35n"]
 [ext_resource type="PackedScene" uid="uid://b18qdk7b4q77l" path="res://scenes/station/interior/desk.tscn" id="11_q87oj"]
+[ext_resource type="PackedScene" uid="uid://crfvv1h28b5as" path="res://assets/models/interior/systems_room/stepladder.glb" id="11_uj4lm"]
 [ext_resource type="PackedScene" uid="uid://8vcajaaad64" path="res://scenes/station/interior/rack.tscn" id="12_hq7nb"]
 [ext_resource type="PackedScene" uid="uid://3qcq4vmexl3s" path="res://scenes/station/items/fire_extinguisher.tscn" id="14_hq7nb"]
+[ext_resource type="PackedScene" uid="uid://3di56riavh4m" path="res://scenes/station/items/toolbox.tscn" id="15_ak3k6"]
+[ext_resource type="PackedScene" uid="uid://dyy2h0h5k8326" path="res://scenes/station/interior/powerbox.tscn" id="17_uj4lm"]
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_lf4d5"]
 resource_name = "system_Plane_099"
@@ -133,6 +137,9 @@ script = ExtResource("1_ywlqd")
 light_switch = NodePath("lights/LightSwitch")
 ceiling_mesh = NodePath("StaticBody3D/RoofSystem")
 lamp_lights = [NodePath("lights/OmniLight3D"), NodePath("lights/OmniLight3D2"), NodePath("lights/OmniLight3D3")]
+led_blink_interval_5 = 1.1
+led_blink_interval_6 = 0.9
+led_blink_interval_7 = 0.8
 
 [node name="StaticBody3D" type="StaticBody3D" parent="." unique_id=956882956]
 collision_layer = 2
@@ -187,6 +194,7 @@ start_on = true
 
 [node name="OmniLight3D" type="OmniLight3D" parent="lights" unique_id=1573901390]
 transform = Transform3D(0.99859184, 0.05305054, 0, -0.05305054, 0.99859184, 0, 0, 0, 1, -13.901335, 5.9748473, -23.92374)
+visible = false
 light_energy = 5.0
 light_indirect_energy = 5.0
 shadow_enabled = true
@@ -195,6 +203,7 @@ omni_range = 10.0
 
 [node name="OmniLight3D2" type="OmniLight3D" parent="lights" unique_id=1205327639]
 transform = Transform3D(0.99859184, 0.05305054, 0, -0.05305054, 0.99859184, 0, 0, 0, 1, -3.892705, 6.6641774, -20.534151)
+visible = false
 light_energy = 5.0
 light_indirect_energy = 5.0
 shadow_enabled = true
@@ -203,6 +212,7 @@ omni_range = 10.0
 
 [node name="OmniLight3D3" type="OmniLight3D" parent="lights" unique_id=1364284982]
 transform = Transform3D(0.99859184, 0.05305054, 0, -0.05305054, 0.99859184, 0, 0, 0, 1, -7.2022257, 5.321799, -27.233261)
+visible = false
 light_energy = 5.0
 light_indirect_energy = 5.0
 shadow_enabled = true
@@ -211,17 +221,85 @@ omni_range = 10.0
 
 [node name="CausticRig" parent="lights" unique_id=7604608 instance=ExtResource("10_7gsjf")]
 transform = Transform3D(1, 0, 0, 0, 0.98333114, 0.18182364, 0, -0.18182364, 0.98333114, -4.6089106, 6.553854, -26.65145)
+visible = false
 light_energy = 4.0
 rotation_speed_a_degrees = 3.0
 rotation_speed_b_degrees = -4.0
 
+[node name="led_random" type="Node3D" parent="lights" unique_id=1109827755]
+
+[node name="LEDglow" type="OmniLight3D" parent="lights/led_random" unique_id=1518445516]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -2.5581145, 1.120564, -25.267878)
+light_color = Color(0.32941177, 0.92156863, 0.08235294, 1)
+light_energy = 0.7
+light_specular = 0.0
+omni_range = 0.9
+
+[node name="LEDglow2" type="OmniLight3D" parent="lights/led_random" unique_id=538304865]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -2.6284919, 0.74976957, -26.560715)
+light_color = Color(0.32941177, 0.92156863, 0.08235294, 1)
+light_energy = 0.7
+light_specular = 0.0
+omni_range = 0.9
+
+[node name="LEDglow3" type="OmniLight3D" parent="lights/led_random" unique_id=1811446385]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -2.5581145, 2.63305, -26.618942)
+light_color = Color(0.32941177, 0.92156863, 0.08235294, 1)
+light_energy = 0.7
+light_specular = 0.0
+omni_range = 0.9
+
+[node name="LEDglow4" type="OmniLight3D" parent="lights/led_random" unique_id=282214847]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -2.5474448, 2.2439892, -25.848072)
+light_color = Color(0.98039216, 0.72156864, 0.09019608, 1)
+light_energy = 0.7
+light_specular = 0.0
+omni_range = 0.9
+
+[node name="LEDglow5" type="OmniLight3D" parent="lights/led_random" unique_id=1949525858]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -9.874062, 3.0296853, -28.097523)
+light_color = Color(0.98039216, 0.76862746, 0.09019608, 1)
+light_energy = 0.3
+light_specular = 0.0
+omni_range = 0.9
+
+[node name="LEDglow7" type="OmniLight3D" parent="lights/led_random" unique_id=684813367]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -8.686613, 1.4233856, -28.097523)
+light_color = Color(0.41960785, 0.8745098, 0.41568628, 1)
+light_energy = 0.3
+light_specular = 0.0
+omni_range = 0.9
+
+[node name="LEDglow8" type="OmniLight3D" parent="lights/led_random" unique_id=835674305]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -8.752161, 3.2447186, -28.285097)
+light_color = Color(0.4295339, 0.82446283, 0.9006511, 1)
+light_energy = 0.3
+light_specular = 0.0
+omni_range = 0.9
+
+[node name="LEDglow6" type="OmniLight3D" parent="lights/led_random" unique_id=969058128]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -10.327178, 3.0296853, -28.062307)
+light_color = Color(0.98039216, 0.76862746, 0.09019608, 1)
+light_energy = 0.3
+light_specular = 0.0
+omni_range = 0.9
+
 [node name="furniture" type="Node3D" parent="." unique_id=116304272]
 
-[node name="Cabinet_01" parent="furniture" unique_id=1376455345 instance=ExtResource("11_7mh4c")]
-transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, -1.6851468, 0, -20.365065)
+[node name="Sketchfab_Scene" parent="furniture" unique_id=1529204698 instance=ExtResource("11_uj4lm")]
+transform = Transform3D(2.0853786, 0, -0.24737416, 0, 2.0999994, 0, 0.24737416, 0, 2.0853786, -9.658644, 0.44115722, -25.886951)
 
-[node name="Cabinet_02" parent="furniture" unique_id=260837651 instance=ExtResource("11_7mh4c")]
-transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, -1.6851468, 0, -19.650875)
+[node name="aircompressor" parent="furniture" unique_id=1970164455 instance=ExtResource("11_hk35n")]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, -13.101645, 0, -24.0975)
+
+[node name="aircompressor2" parent="furniture" unique_id=518355256 instance=ExtResource("11_hk35n")]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, -12.06405, 0, -25.29016)
+
+[node name="server" parent="furniture" unique_id=87480987 instance=ExtResource("11_glc3d")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -1.8043618, 0, -25.56268)
+
+[node name="server2" parent="furniture" unique_id=1508326927 instance=ExtResource("11_glc3d")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -1.8043618, 0, -26.918196)
 
 [node name="rack" parent="furniture" unique_id=1216544187 instance=ExtResource("12_hq7nb")]
 transform = Transform3D(0.9238795, 0, 0.38268346, 0, 1, 0, -0.38268346, 0, 0.9238795, -8.214887, 0, -17.848898)
@@ -229,8 +307,17 @@ transform = Transform3D(0.9238795, 0, 0.38268346, 0, 1, 0, -0.38268346, 0, 0.923
 [node name="rack2" parent="furniture" unique_id=1554226994 instance=ExtResource("12_hq7nb")]
 transform = Transform3D(0.9238795, 0, 0.38268346, 0, 1, 0, -0.38268346, 0, 0.9238795, -9.649445, 0, -21.305655)
 
+[node name="toolbox" parent="furniture" unique_id=143511273 instance=ExtResource("15_ak3k6")]
+transform = Transform3D(-0.37528616, 0, 0.926909, 0, 1, 0, -0.926909, 0, -0.37528616, -9.966957, 0.47816205, -22.45077)
+
 [node name="desk" parent="furniture" unique_id=360776120 instance=ExtResource("11_q87oj")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.990107, 0, -22.145985)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.990107, 0, -23.214285)
+
+[node name="powerbox" parent="furniture" unique_id=122672602 instance=ExtResource("17_uj4lm")]
+transform = Transform3D(-0.70710677, 0, 0.70710677, 0, 1, 0, 0.70710677, 0, 0.70710677, -15.020506, 0, -27.705622)
+
+[node name="powerbox2" parent="furniture" unique_id=991568484 instance=ExtResource("17_uj4lm")]
+transform = Transform3D(0.99999994, 0, 0, 0, 1, 0, 0, 0, 0.99999994, -7.2122483, 0, -29.715)
 
 [node name="fire_extinguisher" parent="furniture" unique_id=1012721613 instance=ExtResource("14_hq7nb")]
-transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -1.3612168, 0, -24.20791)
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -1.3612168, 0, -19.742176)

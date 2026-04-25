@@ -1216,7 +1216,7 @@ transform = Transform3D(0.8835369, 0, -0.46836165, 0, 1, 0, 0.46836165, 0, 0.883
 [node name="attrium" type="Node3D" parent="rooms" unique_id=222971945]
 
 [node name="trash_bin3" parent="rooms/attrium" unique_id=188497815 instance=ExtResource("26_np73v")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.259486, 0, 7.9658837)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.259486, 0, 8.667719)
 
 [node name="trash_bin4" parent="rooms/attrium" unique_id=1277110760 instance=ExtResource("26_np73v")]
 transform = Transform3D(0.68921494, 0, 0.7245569, 0, 1, 0, -0.7245569, 0, 0.68921494, 6.356765, 0, -5.719739)
@@ -1270,7 +1270,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.359366, 0, -3.2554135)
 transform = Transform3D(0.70710677, 0, 0.70710677, 0, 1, 0, -0.70710677, 0, 0.70710677, -8.870218, 0, -4.7948785)
 
 [node name="bench5" parent="rooms/attrium" unique_id=1661848770 instance=ExtResource("23_7do4q")]
-transform = Transform3D(0.70710677, 0, -0.70710677, 0, 1, 0, 0.70710677, 0, 0.70710677, -12.407931, 0, 3.1794515)
+transform = Transform3D(0.70710677, 0, -0.70710677, 0, 1, 0, 0.70710677, 0, 0.70710677, -12.856326, 0, 2.6920662)
 
 [node name="bench8" parent="rooms/attrium" unique_id=1318744111 instance=ExtResource("23_7do4q")]
 transform = Transform3D(0.70710677, 0, -0.70710677, 0, 1, 0, 0.70710677, 0, 0.70710677, -8.474873, 0, 19.435024)
@@ -1291,7 +1291,7 @@ transform = Transform3D(0.9999999, 0, 0, 0, 1, 0, 0, 0, 0.9999999, -22.201412, 1
 transform = Transform3D(0.99999994, 0, 0, 0, 1, 0, 0, 0, 0.99999994, -14.058354, 0, 5.089758)
 
 [node name="bench6" parent="rooms/attrium" unique_id=2006705821 instance=ExtResource("23_7do4q")]
-transform = Transform3D(-4.3711385e-08, 0, 0.99999994, 0, 1, 0, -0.99999994, 0, -4.3711385e-08, -11.120958, 0, 6.2147655)
+transform = Transform3D(-4.3711385e-08, 0, 0.99999994, 0, 1, 0, -0.99999994, 0, -4.3711385e-08, -11.120958, 0, 6.9166)
 
 [node name="vanding" parent="rooms/attrium" unique_id=1134603623 instance=ExtResource("28_arv6u")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -16.52377, 0, -3.2289684)
