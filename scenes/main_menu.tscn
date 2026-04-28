@@ -4,20 +4,10 @@
 [ext_resource type="Texture2D" uid="uid://bleasmjxjq0hr" path="res://assets/ui/search.png" id="2_8ln24"]
 [ext_resource type="PackedScene" uid="uid://bydkhwglewp85" path="res://scenes/ui/research_button.tscn" id="2_button"]
 [ext_resource type="PackedScene" uid="uid://cdtoxdrr3lbo4" path="res://scenes/ui/photo_slide.tscn" id="3_slide"]
+[ext_resource type="FontFile" uid="uid://banqhd2e6ew1n" path="res://assets/ui/title_font.tres" id="3_tbmy8"]
+[ext_resource type="LabelSettings" uid="uid://db317mbtlc3uk" path="res://assets/ui/title_label_settings.tres" id="4_jk1qb"]
 [ext_resource type="Texture2D" uid="uid://bveo1mgp8bkut" path="res://icon.png" id="4_wu84c"]
 [ext_resource type="Texture2D" uid="uid://col1g465oecb3" path="res://assets/ui/Icon_BCRC.png" id="5_rtw2f"]
-
-[sub_resource type="SystemFont" id="SystemFont_title_heavy"]
-font_names = PackedStringArray("Segoe UI Black", "SF Pro Display Black", "Helvetica Neue Black", "Noto Sans Black", "DejaVu Sans Bold", "sans-serif")
-font_weight = 999
-subpixel_positioning = 0
-
-[sub_resource type="LabelSettings" id="LabelSettings_bqqt6"]
-font = SubResource("SystemFont_title_heavy")
-font_size = 32
-font_color = Color(0.050980393, 0.14117648, 0.23921569, 1)
-outline_size = 2
-outline_color = Color(0.050980393, 0.14117648, 0.23921569, 1)
 
 [sub_resource type="LabelSettings" id="LabelSettings_rtw2f"]
 font_size = 18
@@ -228,9 +218,10 @@ theme_override_constants/separation = -2
 [node name="TitleText" type="Label" parent="MainVBoxContainer/TopPanelContainer/TopContainer/HeaderRow/VBoxContainer" unique_id=551016171]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.0313726, 0.0941176, 0.176471, 1)
+theme_override_fonts/font = ExtResource("3_tbmy8")
 theme_override_font_sizes/font_size = 32
 text = "Blue Current Research Centre"
-label_settings = SubResource("LabelSettings_bqqt6")
+label_settings = ExtResource("4_jk1qb")
 horizontal_alignment = 1
 vertical_alignment = 1
 

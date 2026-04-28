@@ -94,6 +94,10 @@ Source: [Flaticon](https://www.flaticon.com/)
 - Photo by <a href="https://unsplash.com/@marc0521?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">LI FEI</a> on <a href="https://unsplash.com/photos/school-of-fish-underwater-l4QTY7XOIcg?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>
 - Photo by <a href="https://unsplash.com/@neom?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">NEOM</a> on <a href="https://unsplash.com/photos/a-person-swimming-in-the-ocean-near-a-coral-reef-I5j46lqAo-o?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>
 - Photo by <a href="https://unsplash.com/@frankiefoto?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">frank mckenna</a> on <a href="https://unsplash.com/photos/five-birds-flying-on-the-sea-OD9EOzfSOh0?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>
+- <a href="https://www.freepik.com/free-vector/world-habitat-day-banners-marine-animals_947404.htm">Image by freepik</a>
+- <a href="https://www.freepik.com/free-vector/turtles-fishes_27271884.htm">Image by gstudioimagen1 on Freepik</a>
+- <a href="https://www.freepik.com/free-vector/world-oceans-day-banner_8422590.htm">Image by freepik</a>
+- 
 
 ## Sounds
 - Sound Effect by <a href="https://pixabay.com/users/freesounds-4u-51979242/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=401152">FreeSounds-4U</a> from <a href="https://pixabay.com/sound-effects//?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=401152">Pixabay</a>

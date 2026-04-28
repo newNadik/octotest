@@ -1,0 +1,13 @@
+[gd_resource type="LabelSettings" format=3 uid="uid://db317mbtlc3uk"]
+
+[sub_resource type="SystemFont" id="SystemFont_title_heavy"]
+font_names = PackedStringArray("Segoe UI Black", "SF Pro Display Black", "Helvetica Neue Black", "Noto Sans Black", "DejaVu Sans Bold", "sans-serif")
+font_weight = 999
+subpixel_positioning = 0
+
+[resource]
+font = SubResource("SystemFont_title_heavy")
+font_size = 32
+font_color = Color(0.050980393, 0.14117648, 0.23921569, 1)
+outline_size = 2
+outline_color = Color(0.050980393, 0.14117648, 0.23921569, 1)

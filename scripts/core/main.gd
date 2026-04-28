@@ -918,7 +918,7 @@ func _show_save_feedback(message: String, is_error: bool) -> void:
 	save_status_icon.visible = true
 	_save_status_tween = create_tween()
 	_save_status_tween.set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_SINE)
-	_save_status_tween.parallel().tween_property(save_status_icon, "modulate:a", 1.0, 0.24)
+	_save_status_tween.parallel().tween_property(save_status_icon, "modulate:a", 0.8, 0.24)
 	_save_status_tween.parallel().tween_property(save_status_icon, "scale", Vector2.ONE, 0.26)
 	_save_status_tween.tween_interval(1.35)
 	_save_status_tween.parallel().tween_property(save_status_icon, "modulate:a", 0.0, 0.55)

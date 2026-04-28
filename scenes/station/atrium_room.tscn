@@ -40,6 +40,13 @@
 [ext_resource type="PackedScene" uid="uid://bc1e233sg7d7l" path="res://scenes/station/interior/giftshop.tscn" id="37_i3dbr"]
 [ext_resource type="PackedScene" uid="uid://bhw6qsm3wjcd7" path="res://scenes/station/items/noodle_cup.tscn" id="39_bq35r"]
 [ext_resource type="PackedScene" uid="uid://cvmc4k2rg5tih" path="res://scenes/station/interior/kitchen.tscn" id="39_i3dbr"]
+[ext_resource type="Texture2D" uid="uid://dlfqj07cv7jkn" path="res://assets/textures/wall_images/decal_4.png" id="41_188u5"]
+[ext_resource type="Texture2D" uid="uid://bnv1u2s2f57ow" path="res://assets/textures/wall_images/decal_1.png" id="42_62j8m"]
+[ext_resource type="Texture2D" uid="uid://cf06kelht71s1" path="res://assets/textures/wall_images/decal_2.png" id="43_pdemt"]
+[ext_resource type="Texture2D" uid="uid://sotgv2aj6y1s" path="res://assets/textures/wall_images/decal_3.png" id="44_sxb2l"]
+[ext_resource type="Texture2D" uid="uid://csyym67cm2gv2" path="res://assets/textures/wall_images/decal_5.png" id="45_62j8m"]
+[ext_resource type="Texture2D" uid="uid://fexkp1kbef3c" path="res://assets/ui/Icon_BCRC1024.png" id="46_sxb2l"]
+[ext_resource type="FontFile" uid="uid://banqhd2e6ew1n" path="res://assets/ui/title_font.tres" id="47_fnwcc"]
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_cmvkd"]
 resource_name = "atrium_Plane_123"
@@ -1341,3 +1348,51 @@ transform = Transform3D(-1, 0, -1.509958e-07, 0, 1, 0, -1.509958e-07, 0, 1, -16.
 [node name="giftshop" parent="rooms/giftshop" unique_id=2017872549 instance=ExtResource("37_i3dbr")]
 
 [node name="kitchen" parent="rooms" unique_id=655617701 instance=ExtResource("39_i3dbr")]
+
+[node name="Sprite3D4" type="Sprite3D" parent="rooms" unique_id=609318146]
+transform = Transform3D(0.4, 0, 0, 0, 0.4, 0, 0, 0, 0.4, -18.755062, 5.293614, -4.0274987)
+texture = ExtResource("41_188u5")
+
+[node name="Sprite3D" type="Sprite3D" parent="rooms" unique_id=1363539521]
+transform = Transform3D(0.21213204, 0, -0.21213204, 0, 0.3, 0, 0.21213204, 0, 0.21213204, -9.244332, 3.8547516, 19.950344)
+texture = ExtResource("42_62j8m")
+
+[node name="Sprite3D2" type="Sprite3D" parent="rooms" unique_id=249981649]
+transform = Transform3D(-0.21213204, 0, 0.21213204, 0, 0.3, 0, -0.21213204, 0, -0.21213204, -13.880108, 5.034073, 2.7572122)
+texture = ExtResource("43_pdemt")
+
+[node name="Sprite3D3" type="Sprite3D" parent="rooms" unique_id=383367345]
+transform = Transform3D(-2.1855694e-08, 0, -0.5, 0, 0.5, 0, 0.5, 0, -2.1855694e-08, 3.2430267, 5.1495705, 14.676611)
+texture = ExtResource("44_sxb2l")
+
+[node name="Sprite3D5" type="Sprite3D" parent="rooms" unique_id=2006259276]
+transform = Transform3D(-1.3113417e-08, 0, 0.3, 0, 0.3, 0, -0.3, 0, -1.3113417e-08, -11.870889, 7.451473, 7.374949)
+texture = ExtResource("45_62j8m")
+
+[node name="Node3D" type="Node3D" parent="." unique_id=788589359]
+
+[node name="Sprite3D" type="Sprite3D" parent="Node3D" unique_id=148389557]
+transform = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, -0.81679153, 8.222376, -9.776364)
+texture = ExtResource("46_sxb2l")
+
+[node name="Label3D" type="Label3D" parent="Node3D" unique_id=553461021]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.7437167, 6.4434285, -9.738382)
+modulate = Color(0.050980393, 0.14117648, 0.23921569, 1)
+outline_modulate = Color(0.050980393, 0.14117648, 0.23921569, 1)
+text = "Blue Current
+Research Centre"
+font = ExtResource("47_fnwcc")
+font_size = 100
+outline_size = 8
+line_spacing = -25.0
+
+[node name="Label3D2" type="Label3D" parent="Node3D" unique_id=2109574501]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.7437167, 5.486403, -9.738382)
+modulate = Color(0.11372549, 0.19607843, 0.28627452, 0.89411765)
+outline_modulate = Color(0.050980393, 0.14117648, 0.23921569, 0)
+text = "Understanding the ocean
+Powering the future"
+font = ExtResource("47_fnwcc")
+font_size = 60
+outline_size = 8
+line_spacing = -20.0
