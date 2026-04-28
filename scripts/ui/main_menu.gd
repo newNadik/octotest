@@ -48,6 +48,7 @@ var _popup_layer: CanvasLayer
 
 
 func _ready() -> void:
+	MusicManager.play_menu()
 	_start_game_scene_preload()
 	continue_button.pressed.connect(_on_continue_pressed)
 	play_button.pressed.connect(_on_play_pressed)

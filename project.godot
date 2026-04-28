@@ -27,6 +27,7 @@ buses/default_bus_layout="uid://cqfj04s4dmv7k"
 GameSettings="*res://scripts/core/game_settings.gd"
 GameSave="*res://scripts/core/game_save.gd"
 GameTime="*res://scripts/core/game_time.gd"
+MusicManager="*res://scripts/audio/music_manager.gd"
 
 [display]
 

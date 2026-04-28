@@ -32,6 +32,7 @@ Godot `4.6.1` 3D isometric prototype with:
 28. Desktop rendering defaults now target cleaner 3D output in debug and regular play: `Forward Plus`, `1600x900` default window, `MSAA 4x`, screen-space AA, and full-resolution 3D scaling.
 29. Gameplay visual cohesion pass now layers a restrained facility grade over the 3D view: softer saturation/contrast, lifted blacks, teal-leaning shadow tint, and a faint moving light wash for ocean influence without a full blue underwater filter.
 30. In-game time system (`/root/GameTime`) drives world clocks: new game starts at `17:00`, time advances only while gameplay is unpaused, and save/load preserves current in-game time.
+31. Central music system (`/root/MusicManager`) handles menu/new-game/game-loop/final-scene tracks, with crossfades and multi-track gameplay loop playlist support.
 
 ## Canonical Branch
 
@@ -139,6 +140,18 @@ Main tuning points:
 6. Text policy:
 - Player-visible source text should use UK English.
 - New/changed text should include Ukrainian translation coverage in `i18n/uk_UA.po`.
+
+## Music Flow
+
+1. Autoload: `MusicManager` (`res://scripts/audio/music_manager.gd`).
+2. Scene hooks:
+- Main menu calls `MusicManager.play_menu()`.
+- Gameplay (`main.tscn`) calls:
+  - `MusicManager.play_game_start()` on `New Game`.
+  - `MusicManager.play_game_loop()` on `Continue/Load`.
+3. `game_start_music` is a one-shot intro; near track end it crossfades into game loop tracks.
+4. Game loop supports multiple files through `game_loop_music_tracks` (array), with optional shuffle (`game_loop_shuffle`).
+5. Final scene should call `MusicManager.play_last_scene()`.
 
 ## Validate
 

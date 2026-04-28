@@ -91,12 +91,15 @@ func _ready() -> void:
 	player.process_mode = Node.PROCESS_MODE_PAUSABLE
 	_apply_platform_visual_overrides()
 	var starting_position := Vector3(0.0, OCTO_START_Y, 16.0)
-	if _consume_pending_load_request():
+	var is_loading_saved_game := _consume_pending_load_request()
+	if is_loading_saved_game:
 		_loaded_save_data = _load_saved_game()
 		starting_position = _extract_player_position(_loaded_save_data, starting_position)
 		_initialize_game_time(_loaded_save_data)
+		MusicManager.play_game_loop()
 	else:
 		_initialize_game_time({})
+		MusicManager.play_game_start()
 	player.global_position = starting_position
 	var follow_position := player.global_position + Vector3(0.0, CAMERA_FOLLOW_HEIGHT, 0.0)
 	follow_position.y = maxf(follow_position.y, CAMERA_MIN_WORLD_Y)
