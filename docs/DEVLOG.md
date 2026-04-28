@@ -1,5 +1,21 @@
 # Dev Log
 
+## 2026-04-28
+
+### Step 55 - Distance-based station room streaming
+
+- Added room streaming to gameplay scene orchestration in `res://scripts/core/main.gd`.
+- Streaming now tracks room instances under `station` and updates them by player distance with hysteresis:
+  - load within `room_load_distance`,
+  - unload beyond `room_unload_distance`.
+- Added exported tuning controls:
+  - `room_streaming_enabled`,
+  - `room_load_distance`,
+  - `room_unload_distance`,
+  - `room_names_to_always_keep`.
+- Default always-loaded room list includes `atrium` to keep spawn/menu-adjacent space stable.
+- Streaming updates are throttled (`ROOM_STREAM_UPDATE_INTERVAL_SEC`) to reduce runtime churn.
+
 ## 2026-04-22
 
 ### Step 54 - Gift-shop spinning rack interaction and audio pass

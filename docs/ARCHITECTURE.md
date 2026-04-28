@@ -92,6 +92,7 @@ This document describes the current runtime architecture of the prototype and mu
 - Owns in-game pause menu visibility and scene-change actions.
 - Opens `res://scenes/ui/settings_menu.tscn` as an overlay from pause menu and closes it with back/`Esc`.
 - Routes click-to-move and delegates interact/drop input to `InteractionController`.
+- Owns room streaming for station rooms (distance-based load/unload with hysteresis and always-keep list).
 - Owns focus-mode transitions (auto-enter after approach, movement lock, click-based exit rules).
 - Drives underwater directional-light animation/pulse behavior.
 - Initializes and persists `GameTime` state:

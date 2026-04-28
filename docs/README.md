@@ -33,6 +33,7 @@ Godot `4.6.1` 3D isometric prototype with:
 29. Gameplay visual cohesion pass now layers a restrained facility grade over the 3D view: softer saturation/contrast, lifted blacks, teal-leaning shadow tint, and a faint moving light wash for ocean influence without a full blue underwater filter.
 30. In-game time system (`/root/GameTime`) drives world clocks: new game starts at `17:00`, time advances only while gameplay is unpaused, and save/load preserves current in-game time.
 31. Central music system (`/root/MusicManager`) handles menu/new-game/game-loop/final-scene tracks, with crossfades and multi-track gameplay loop playlist support.
+32. Room streaming in gameplay (`Main`) loads/unloads station room scenes by player distance to reduce runtime memory and CPU overhead.
 
 ## Canonical Branch
 
@@ -131,13 +132,21 @@ Main tuning points:
 - Interactables persist enabled state and pickup-object world transform.
 - If an item was held at save time, on load it is restored as dropped near Octo on the floor (not floating in-hand), with slot spreading to avoid overlap stacking.
 - In-game save feedback is shown as a bottom-right toast (`Game Saved`, `Autosaved`, `Save Failed`).
-4. Settings menu controls:
+4. Room streaming behavior:
+- Configured in `res://scripts/core/main.gd`.
+- Exported controls:
+  - `room_streaming_enabled`
+  - `room_load_distance`
+  - `room_unload_distance`
+  - `room_names_to_always_keep`
+- Uses hysteresis (`load` distance lower than `unload`) to reduce boundary thrashing.
+5. Settings menu controls:
 - `Music` and `Sound Effects` sliders persist audio values.
 - `Subtitles` toggles with `<`/`>`.
 - `Language` switches between `English (UK)` and `Ukrainian` with `<`/`>`.
 - Language preference is saved to `user://settings.cfg` and applied on startup.
-5. `Esc` on the startup main menu does not quit the app.
-6. Text policy:
+6. `Esc` on the startup main menu does not quit the app.
+7. Text policy:
 - Player-visible source text should use UK English.
 - New/changed text should include Ukrainian translation coverage in `i18n/uk_UA.po`.
 

@@ -19,6 +19,7 @@ const CAMERA_PROBE_RADIUS := 0.72
 const CAMERA_MIN_MARGIN := 0.7
 const CAMERA_NEAR_CLIP := 0.12
 const MOBILE_OS_NAMES := ["iOS", "Android"]
+const ROOM_STREAM_UPDATE_INTERVAL_SEC := 0.35
 
 @export var orbit_sensitivity := 0.2
 @export var drag_orbit_threshold_px := 10.0
@@ -40,6 +41,10 @@ const MOBILE_OS_NAMES := ["iOS", "Android"]
 @export var main_light_sway_enabled := false
 @export var main_light_min_factor := 0.5
 @export var main_light_max_factor := 0.8
+@export var room_streaming_enabled := true
+@export var room_load_distance := 80.0
+@export var room_unload_distance := 96.0
+@export var room_names_to_always_keep: PackedStringArray = PackedStringArray(["atrium"])
 
 @onready var player: CharacterBody3D = $Player
 @onready var camera_pivot: Node3D = $CameraPivot
@@ -83,6 +88,9 @@ var _hero_base_energy := 0.0
 var _loaded_save_data: Dictionary = {}
 var _last_save_unix_time := -1000.0
 var _save_status_tween: Tween
+var _stream_station_root: Node3D
+var _stream_rooms: Dictionary = {}
+var _stream_update_accum := 0.0
 
 
 func _ready() -> void:
@@ -117,6 +125,7 @@ func _ready() -> void:
 	in_game_main_menu_button.pressed.connect(_on_main_menu_pressed)
 	_connect_autosave_doors()
 	_apply_loaded_world_state()
+	_initialize_room_streaming()
 	_set_in_game_menu_visible(false)
 
 
@@ -239,6 +248,7 @@ func _collect_omni_lights(node: Node) -> Array[OmniLight3D]:
 
 func _physics_process(delta: float) -> void:
 	_animate_underwater_light(delta)
+	_update_room_streaming(delta)
 
 	if not _focus_mode:
 		var follow_position := player.global_position + Vector3(0.0, CAMERA_FOLLOW_HEIGHT, 0.0)
@@ -256,6 +266,84 @@ func _physics_process(delta: float) -> void:
 	_interaction_controller.process_interactions(delta)
 	_process_focus_mode()
 	_process_pending_focus_entry()
+
+
+func _initialize_room_streaming() -> void:
+	if not room_streaming_enabled:
+		return
+	if room_unload_distance <= room_load_distance:
+		room_unload_distance = room_load_distance + 12.0
+
+	_stream_station_root = get_node_or_null("station") as Node3D
+	if _stream_station_root == null:
+		return
+
+	_stream_rooms.clear()
+	var room_children := _stream_station_root.get_children()
+	for child in room_children:
+		var room_node := child as Node3D
+		if room_node == null:
+			continue
+		if room_node.scene_file_path.is_empty():
+			continue
+		_stream_rooms[room_node.name] = {
+			"scene_path": room_node.scene_file_path,
+			"transform": room_node.transform,
+			"node": room_node
+		}
+
+	# Optional safety mode for very low-end targets.
+	if room_load_distance <= 0.0:
+		return
+
+	# Force a first pass so only nearby rooms remain alive immediately.
+	_apply_room_streaming()
+
+
+func _update_room_streaming(delta: float) -> void:
+	if not room_streaming_enabled:
+		return
+	if _stream_rooms.is_empty():
+		return
+	_stream_update_accum += delta
+	if _stream_update_accum < ROOM_STREAM_UPDATE_INTERVAL_SEC:
+		return
+	_stream_update_accum = 0.0
+	_apply_room_streaming()
+
+
+func _apply_room_streaming() -> void:
+	if _stream_station_root == null:
+		return
+	var player_pos := player.global_position
+	for room_name in _stream_rooms.keys():
+		var room_data: Dictionary = _stream_rooms[room_name]
+		var room_origin: Vector3 = (room_data["transform"] as Transform3D).origin
+		var distance := player_pos.distance_to(room_origin)
+		var is_loaded := is_instance_valid(room_data["node"] as Node)
+		var should_keep := room_names_to_always_keep.has(String(room_name))
+
+		if (should_keep or distance <= room_load_distance) and not is_loaded:
+			var scene_path := String(room_data["scene_path"])
+			var packed_scene := load(scene_path) as PackedScene
+			if packed_scene == null:
+				continue
+			var instance := packed_scene.instantiate() as Node3D
+			if instance == null:
+				continue
+			instance.name = StringName(room_name)
+			instance.transform = room_data["transform"] as Transform3D
+			_stream_station_root.add_child(instance)
+			room_data["node"] = instance
+			_stream_rooms[room_name] = room_data
+			continue
+
+		if not should_keep and is_loaded and distance >= room_unload_distance:
+			var instance_node := room_data["node"] as Node
+			if instance_node != null:
+				instance_node.queue_free()
+			room_data["node"] = null
+			_stream_rooms[room_name] = room_data
 
 
 func _unhandled_input(event: InputEvent) -> void:
