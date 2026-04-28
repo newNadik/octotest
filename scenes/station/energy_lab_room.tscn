@@ -14,6 +14,7 @@
 [ext_resource type="PackedScene" uid="uid://3qcq4vmexl3s" path="res://scenes/station/items/fire_extinguisher.tscn" id="9_ph1bl"]
 [ext_resource type="PackedScene" uid="uid://qs8sh7iux1qk" path="res://scenes/station/interior/chair.tscn" id="10_7lkr6"]
 [ext_resource type="PackedScene" uid="uid://bp2qgp1sbmraf" path="res://scenes/station/items/clock.tscn" id="13_m4mmn"]
+[ext_resource type="PackedScene" uid="uid://b21bahphpnv3o" path="res://scenes/station/items/computer.tscn" id="14_oce6r"]
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_eoqii"]
 resource_name = "energy_lab_Plane_115"
@@ -287,6 +288,15 @@ transform = Transform3D(-0.37609494, 0, -0.92658114, 0, 1, 0, 0.92658114, 0, -0.
 
 [node name="clock2" parent="items" unique_id=1825475380 instance=ExtResource("13_m4mmn")]
 transform = Transform3D(-4.3711385e-08, 0, -0.99999994, 0, 1, 0, 0.99999994, 0, -4.3711385e-08, 14.779568, 5.5, 19.400358)
+
+[node name="computer" parent="items" unique_id=1576113446 instance=ExtResource("14_oce6r")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.26, 1.482, 7.350039)
+
+[node name="computer2" parent="items" unique_id=362791773 instance=ExtResource("14_oce6r")]
+transform = Transform3D(0.9224101, 0, -0.38621196, 0, 1, 0, 0.38621196, 0, 0.9224101, 12.392862, 1.482, 8.588694)
+
+[node name="computer3" parent="items" unique_id=972387699 instance=ExtResource("14_oce6r")]
+transform = Transform3D(0.76182103, 0, -0.6477876, 0, 1, 0, 0.6477876, 0, 0.76182103, 24.209, 1.482, 13.531)
 
 [node name="cactus" parent="items" unique_id=589026095 instance=ExtResource("8_cycxu")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.235491, 1.5508132, 16.130327)

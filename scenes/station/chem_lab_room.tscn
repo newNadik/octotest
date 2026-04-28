@@ -15,6 +15,8 @@
 [ext_resource type="PackedScene" uid="uid://b18qdk7b4q77l" path="res://scenes/station/interior/desk.tscn" id="12_lgqjb"]
 [ext_resource type="PackedScene" uid="uid://3qcq4vmexl3s" path="res://scenes/station/items/fire_extinguisher.tscn" id="14_ohg37"]
 [ext_resource type="PackedScene" uid="uid://bp2qgp1sbmraf" path="res://scenes/station/items/clock.tscn" id="15_lxvvl"]
+[ext_resource type="PackedScene" uid="uid://b21bahphpnv3o" path="res://scenes/station/items/computer.tscn" id="16_qkewc"]
+[ext_resource type="PackedScene" uid="uid://ccmtakyjiuxeg" path="res://scenes/station/items/printer.tscn" id="17_b2j56"]
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_irqvq"]
 resource_name = "chem_lab_Plane_095"
@@ -318,3 +320,18 @@ transform = Transform3D(0.70710677, 0, -0.70710677, 0, 1, 0, 0.70710677, 0, 0.70
 
 [node name="clock" parent="items" unique_id=605620393 instance=ExtResource("15_lxvvl")]
 transform = Transform3D(-0.3819416, 0, 0.9241866, 0, 1, 0, -0.9241866, 0, -0.3819416, 17.374403, 5.5, -10.200755)
+
+[node name="computer" parent="items" unique_id=1576113446 instance=ExtResource("16_qkewc")]
+transform = Transform3D(-0.7522769, 0, -0.6588471, 0, 1, 0, 0.6588471, 0, -0.7522769, 24.65511, 1.482, -13.762858)
+
+[node name="computer2" parent="items" unique_id=63838728 instance=ExtResource("16_qkewc")]
+transform = Transform3D(-0.9367821, 0, -0.34991312, 0, 1, 0, 0.34991312, 0, -0.9367821, 21.439428, 1.482, -12.214834)
+
+[node name="computer3" parent="items" unique_id=775765415 instance=ExtResource("16_qkewc")]
+transform = Transform3D(-0.98341036, 0, -0.18139462, 0, 1, 0, 0.18139462, 0, -0.98341036, 12.486265, 1.482, -8.618769)
+
+[node name="computer4" parent="items" unique_id=1451028921 instance=ExtResource("16_qkewc")]
+transform = Transform3D(-0.98341036, 0, -0.18139462, 0, 1, 0, 0.18139462, 0, -0.98341036, 9.47835, 1.482, -7.333011)
+
+[node name="printer" parent="items" unique_id=1111848469 instance=ExtResource("17_b2j56")]
+transform = Transform3D(0.37931088, 0, 0.9252693, 0, 1, 0, -0.9252693, 0, 0.37931088, 5.1690598, 1.5804136, -10.675426)

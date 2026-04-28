@@ -79,7 +79,12 @@ Source: [Flaticon](https://www.flaticon.com/)
 - "dish rack" (https://skfb.ly/6V6YJ) by prasetyoheru10 is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
 - "ELECTRICK KETTLE" (https://skfb.ly/6U6vo) by cirugi4 is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
 - "Banana" (https://skfb.ly/6QStP) by DerHobbyTroller is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+- "Sleek All-in-One Computer Set | for Any 3D Scene" (https://skfb.ly/pqOBT) by elixonline is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+- "Lowpoly printer HP Laser MFP 135w" (https://skfb.ly/oVYvS) by Lesliehope72 is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+- "Fish tank XYZ Damage" (https://skfb.ly/owFvs) by yulkenn is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+- "Complete aquarium with BackToNature bg" (https://skfb.ly/pGuAK) by Nullified is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
 - 
+
 ## Textures
 
 - https://cc0-textures.com
@@ -92,3 +97,4 @@ Source: [Flaticon](https://www.flaticon.com/)
 
 ## Sounds
 - Sound Effect by <a href="https://pixabay.com/users/freesounds-4u-51979242/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=401152">FreeSounds-4U</a> from <a href="https://pixabay.com/sound-effects//?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=401152">Pixabay</a>
+- Sound Effect by <a href="https://pixabay.com/users/freesound_community-46691455/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=33541">freesound_community</a> from <a href="https://pixabay.com//?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=33541">Pixabay</a>

@@ -27,6 +27,7 @@
 [ext_resource type="PackedScene" uid="uid://d3h1lk5hh0c60" path="res://scenes/station/interior/cabinet_low.tscn" id="20_h502i"]
 [ext_resource type="PackedScene" uid="uid://vwo7teuwrwl8" path="res://scenes/station/interior/cabinet_low_sink.tscn" id="21_i3dbr"]
 [ext_resource type="PackedScene" uid="uid://dac1j07k7sd70" path="res://scenes/station/interior/bench.tscn" id="23_7do4q"]
+[ext_resource type="PackedScene" uid="uid://b21bahphpnv3o" path="res://scenes/station/items/computer.tscn" id="23_bq35r"]
 [ext_resource type="PackedScene" uid="uid://lnt7a3iskajx" path="res://scenes/station/interior/amphitheater.tscn" id="26_fan24"]
 [ext_resource type="PackedScene" uid="uid://wxpj00rcd3mq" path="res://scenes/station/interior/trash_bin.tscn" id="26_np73v"]
 [ext_resource type="PackedScene" uid="uid://cofo0vasii446" path="res://scenes/station/items/mug.tscn" id="26_wmtnf"]
@@ -1201,6 +1202,9 @@ transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -10.
 [node name="med_monitor" parent="rooms/medbay" unique_id=72819634 instance=ExtResource("20_46ahj")]
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -14.844794, 0.0015605235, -9.098691)
 
+[node name="computer" parent="rooms/medbay" unique_id=1576113446 instance=ExtResource("23_bq35r")]
+transform = Transform3D(0.95735985, 0, -0.2888981, 0, 1, 0, 0.2888981, 0, 0.95735985, -10.55065, 1.482, -7.5644755)
+
 [node name="WC" type="Node3D" parent="rooms" unique_id=234633914]
 
 [node name="light_sign" parent="rooms/WC" unique_id=2033543759 instance=ExtResource("17_k4tdq")]
@@ -1323,14 +1327,17 @@ transform = Transform3D(0.6075976, 0, 0.7942449, 0, 1, 0, -0.7942449, 0, 0.60759
 [node name="trash_bin2" parent="rooms/attrium" unique_id=953683941 instance=ExtResource("26_np73v")]
 transform = Transform3D(-0.7135562, 0, 0.70059806, 0, 1, 0, -0.70059806, 0, -0.7135562, -7.330523, 0, 21.295156)
 
+[node name="noodle_cup" parent="rooms/attrium" unique_id=365145535 instance=ExtResource("39_bq35r")]
+transform = Transform3D(1.7, 0, 0, 0, 1.7, 0, 0, 0, 1.7, -27.598127, 1.56, -0.10236883)
+
 [node name="CCTV_cam3" parent="rooms/attrium" unique_id=1784038098 instance=ExtResource("34_ibub3")]
 transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, 1, -10.758007, 8.035594, -3.903729)
 
 [node name="giftshop" type="Node3D" parent="rooms" unique_id=1483668541]
 
+[node name="CCTV_cam" parent="rooms/giftshop" unique_id=704552698 instance=ExtResource("34_ibub3")]
+transform = Transform3D(-1, 0, -1.509958e-07, 0, 1, 0, -1.509958e-07, 0, 1, -16.392525, 5.6876726, 18.80531)
+
 [node name="giftshop" parent="rooms/giftshop" unique_id=2017872549 instance=ExtResource("37_i3dbr")]
 
 [node name="kitchen" parent="rooms" unique_id=655617701 instance=ExtResource("39_i3dbr")]
-
-[node name="noodle_cup" parent="rooms" unique_id=365145535 instance=ExtResource("39_bq35r")]
-transform = Transform3D(1.7, 0, 0, 0, 1.7, 0, 0, 0, 1.7, -27.598127, 1.56, -0.10236883)

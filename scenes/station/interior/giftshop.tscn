@@ -8,6 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://qs8sh7iux1qk" path="res://scenes/station/interior/chair.tscn" id="6_0geg4"]
 [ext_resource type="PackedScene" uid="uid://b18qdk7b4q77l" path="res://scenes/station/interior/desk.tscn" id="7_eujpg"]
 [ext_resource type="Material" uid="uid://bb4hx1vyakkmf" path="res://assets/materials/plaster.tres" id="8_eujpg"]
+[ext_resource type="PackedScene" uid="uid://b21bahphpnv3o" path="res://scenes/station/items/computer.tscn" id="9_t6hbe"]
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_7thus"]
 resource_name = "atrium_Plane_124"
@@ -86,7 +87,7 @@ mesh = SubResource("ArrayMesh_0geg4")
 surface_material_override/0 = ExtResource("2_r4n6g")
 
 [node name="pos_terminal" parent="." unique_id=1677324928 instance=ExtResource("3_n5pno")]
-transform = Transform3D(-1.2745253, 0, -1.5412936, 0, 2, 0, 1.5412936, 0, -1.2745253, -16.99234, 1.581178, 20.685183)
+transform = Transform3D(-1.2745253, 0, -1.5412936, 0, 2, 0, 1.5412936, 0, -1.2745253, -16.477196, 1.9972239, 22.099213)
 
 [node name="spinning_rack" parent="." unique_id=2104924222 instance=ExtResource("4_n5pno")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.655744, 0, 20.076435)
@@ -137,3 +138,6 @@ surface_material_override/0 = ExtResource("8_eujpg")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D" unique_id=1406192488]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -16.466066, 1, 21.193)
 shape = SubResource("BoxShape3D_eujpg")
+
+[node name="computer" parent="." unique_id=1576113446 instance=ExtResource("9_t6hbe")]
+transform = Transform3D(0.19111733, 0, -0.9815672, 0, 1, 0, 0.9815672, 0, 0.19111733, -16.598724, 1.481719, 20.581816)

@@ -17,6 +17,7 @@
 [ext_resource type="PackedScene" uid="uid://b18qdk7b4q77l" path="res://scenes/station/interior/desk.tscn" id="13_knys5"]
 [ext_resource type="PackedScene" uid="uid://qs8sh7iux1qk" path="res://scenes/station/interior/chair.tscn" id="14_je4rm"]
 [ext_resource type="PackedScene" uid="uid://8vcajaaad64" path="res://scenes/station/interior/rack.tscn" id="15_cdlwy"]
+[ext_resource type="PackedScene" uid="uid://b21bahphpnv3o" path="res://scenes/station/items/computer.tscn" id="16_1x66l"]
 [ext_resource type="PackedScene" uid="uid://cofo0vasii446" path="res://scenes/station/items/mug.tscn" id="16_l0eqh"]
 [ext_resource type="PackedScene" uid="uid://cncn15ux5kawl" path="res://assets/models/interior/furniture/benchk_pull-up_bar_d9.glb" id="18_wrylc"]
 [ext_resource type="PackedScene" uid="uid://cbu1wt6omt36j" path="res://assets/models/items/darts_asset.glb" id="19_kdk8m"]
@@ -278,7 +279,10 @@ transform = Transform3D(-0.1699343, 0, -0.98545545, 0, 1, 0, 0.98545545, 0, -0.1
 [node name="chair" parent="furniture" unique_id=1763820311 instance=ExtResource("14_je4rm")]
 transform = Transform3D(0.9999888, -0.0003668766, -0.004713075, 0.00039421994, 0.9999831, 0.0058054426, 0.0047108666, -0.0058072344, 0.99997205, -21.870176, 0, -13.707364)
 
-[node name="chair2" parent="furniture" unique_id=1222624819 instance=ExtResource("14_je4rm")]
+[node name="chair3" parent="furniture" unique_id=1222624819 instance=ExtResource("14_je4rm")]
+transform = Transform3D(0.69564843, -0.004444772, 0.7183687, 0.0003942199, 0.999983, 0.005805442, -0.7183822, -0.0037553392, 0.69563836, -23.12194, 0, -14.097003)
+
+[node name="chair2" parent="furniture" unique_id=716730710 instance=ExtResource("14_je4rm")]
 transform = Transform3D(-0.11966905, 0, -0.99281394, 0, 1, 0, 0.9928138, 0, -0.119669035, -22.958641, 0, -16.844624)
 
 [node name="desk3" parent="furniture" unique_id=68192183 instance=ExtResource("13_knys5")]
@@ -298,6 +302,9 @@ transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -14.
 
 [node name="rack4" parent="furniture" unique_id=143938825 instance=ExtResource("15_cdlwy")]
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -10.321057, 3.9634883, -10.985652)
+
+[node name="computer" parent="furniture" unique_id=1576113446 instance=ExtResource("16_1x66l")]
+transform = Transform3D(-0.9575713, 0, 0.2881962, 0, 1, 0, -0.2881962, 0, -0.9575713, -22.336, 1.482, -11.749011)
 
 [node name="items" type="Node3D" parent="." unique_id=1659725905]
 
