@@ -2,7 +2,6 @@ extends Control
 
 
 const LOADING_SCENE_PATH := "res://scenes/ui/loading_screen.tscn"
-const GAME_SCENE_PATH := "res://scenes/main.tscn"
 const SETTINGS_MENU_SCENE := preload("res://scenes/ui/settings_menu.tscn")
 const ABOUT_POPUP_SCENE := preload("res://scenes/ui/about_popup.tscn")
 const CONTACT_POPUP_SCENE := preload("res://scenes/ui/contact_popup.tscn")
@@ -45,24 +44,24 @@ var _display_reflection_offset := Vector2.ZERO
 var _settings_overlay: Control
 var _info_popup_overlay: Control
 var _popup_layer: CanvasLayer
+var _is_transitioning := false
 
 
 func _ready() -> void:
 	MusicManager.play_menu()
-	_start_game_scene_preload()
 	continue_button.pressed.connect(_on_continue_pressed)
 	play_button.pressed.connect(_on_play_pressed)
 	settings_button.pressed.connect(_on_settings_pressed)
 	quit_button.pressed.connect(_on_quit_pressed)
 	slide_timer.timeout.connect(_on_slide_timer_timeout)
 	_collect_slides()
-	_assign_slide_textures()
 	_show_slide(0)
 	_setup_nav_links()
 	_setup_language_select()
 	_setup_display_parallax()
 	_ensure_popup_layer()
 	_refresh_save_buttons()
+	_deferred_startup_work()
 	if continue_button.visible and continue_button.disabled == false:
 		continue_button.grab_focus()
 	else:
@@ -93,16 +92,21 @@ func _try_load_or_continue() -> void:
 
 
 func _start_game_transition() -> void:
-	var status := ResourceLoader.load_threaded_get_status(GAME_SCENE_PATH)
-	if status == ResourceLoader.THREAD_LOAD_LOADED:
-		var packed_scene := ResourceLoader.load_threaded_get(GAME_SCENE_PATH) as PackedScene
-		if packed_scene != null:
-			var packed_error := get_tree().change_scene_to_packed(packed_scene)
-			if packed_error == OK:
-				return
-			push_error("Failed to change to preloaded game scene: %s" % GAME_SCENE_PATH)
+	if _is_transitioning:
+		return
+	_is_transitioning = true
+	play_button.disabled = true
+	continue_button.disabled = true
+	settings_button.disabled = true
+	quit_button.disabled = true
+	slide_timer.stop()
 	var error := get_tree().change_scene_to_file(LOADING_SCENE_PATH)
 	if error != OK:
+		_is_transitioning = false
+		play_button.disabled = false
+		continue_button.disabled = false
+		settings_button.disabled = false
+		quit_button.disabled = false
 		push_error("Failed to load loading scene: %s" % LOADING_SCENE_PATH)
 
 
@@ -146,17 +150,6 @@ func _clear_saved_game() -> void:
 	if game_save == null:
 		return
 	game_save.call("clear_save")
-
-
-func _start_game_scene_preload() -> void:
-	if DisplayServer.get_name() == "headless":
-		return
-	var status := ResourceLoader.load_threaded_get_status(GAME_SCENE_PATH)
-	if status == ResourceLoader.THREAD_LOAD_IN_PROGRESS or status == ResourceLoader.THREAD_LOAD_LOADED:
-		return
-	var error := ResourceLoader.load_threaded_request(GAME_SCENE_PATH, "", true)
-	if error != OK and error != ERR_BUSY:
-		push_warning("Background preload failed to start: %s" % GAME_SCENE_PATH)
 
 
 func _on_settings_pressed() -> void:
@@ -203,8 +196,21 @@ func _collect_slides() -> void:
 			_slides.append(child as Control)
 
 
-func _assign_slide_textures() -> void:
+func _deferred_startup_work() -> void:
+	await get_tree().process_frame
+	if _is_transitioning:
+		return
+	await _assign_slide_textures_incremental()
+
+
+func _assign_slide_textures_incremental() -> void:
 	for i in min(_slides.size(), SLIDESHOW_TEXTURE_PATHS.size()):
+		if _is_transitioning:
+			return
+		if i > 0:
+			await get_tree().process_frame
+		if _is_transitioning:
+			return
 		var slide := _slides[i]
 		var image := slide.get_node_or_null("SlideImage") as TextureRect
 		if image == null:

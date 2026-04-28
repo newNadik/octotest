@@ -9,13 +9,13 @@
 [ext_resource type="PackedScene" uid="uid://c2fxhq255lfu6" path="res://scenes/station/energy_lab_room.tscn" id="10_muem4"]
 [ext_resource type="PackedScene" uid="uid://dq8f3vrk631bb" path="res://scenes/station/office_room.tscn" id="11_dp3eg"]
 [ext_resource type="PackedScene" uid="uid://c71b0em5lqt7r" path="res://scenes/station/quarters_room.tscn" id="12_0ld40"]
+[ext_resource type="AudioStream" uid="uid://djsajf7b1jgf" path="res://assets/sound/underwater-loop-amb.mp3" id="13_dp3eg"]
 [ext_resource type="PackedScene" uid="uid://ceub8e3x43ri7" path="res://scenes/station/systems_room.tscn" id="13_gqmmt"]
 [ext_resource type="PackedScene" uid="uid://b5wbnkdw8pctg" path="res://scenes/station/wetroom_room.tscn" id="14_yc10j"]
 [ext_resource type="PackedScene" uid="uid://bsq8i8032qepo" path="res://scenes/station/workshop_room.tscn" id="15_jscy8"]
 [ext_resource type="Script" uid="uid://cdsji1uitym1j" path="res://scripts/lighting/god_rays.gd" id="16_godrays"]
 [ext_resource type="PackedScene" uid="uid://6qexu3mk541a" path="res://scenes/station/items/fish_school.tscn" id="17_fishschool"]
 [ext_resource type="PackedScene" uid="uid://drkdj8tkrup8" path="res://assets/models/underwater/underwater_terrain_-_agisoftnaturechallenge.glb" id="18_dp3eg"]
-[ext_resource type="AudioStream" uid="uid://d3qno7atcke7y" path="res://assets/sound/underwater-loop-amb.wav" id="18_underwater"]
 [ext_resource type="Shader" uid="uid://b5rx1t38of3h7" path="res://assets/shaders/gameplay_cohesion.gdshader" id="19_gameplayfx"]
 [ext_resource type="PackedScene" uid="uid://c5tv72lyq8d8h" path="res://scenes/effects/caustic_rig.tscn" id="20_caustic"]
 
@@ -179,7 +179,7 @@ horizontal_alignment = 2
 visible = false
 
 [node name="UnderwaterAmbient" type="AudioStreamPlayer" parent="." unique_id=1890427101]
-stream = ExtResource("18_underwater")
+stream = ExtResource("13_dp3eg")
 volume_db = -18.0
 autoplay = true
 bus = &"Ambience"

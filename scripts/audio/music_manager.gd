@@ -145,9 +145,13 @@ func _on_game_loop_timer_timeout() -> void:
 func _on_player_finished(player: AudioStreamPlayer) -> void:
 	if player != _active_player:
 		return
-	if _current_slot != MusicSlot.GAME_LOOP:
-		return
-	play_game_loop(0.2)
+	match _current_slot:
+		MusicSlot.MENU:
+			play_menu(0.2)
+		MusicSlot.GAME_LOOP:
+			play_game_loop(0.2)
+		_:
+			return
 
 
 func _get_next_game_loop_track() -> AudioStream:

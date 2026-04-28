@@ -1,15 +1,31 @@
 extends Control
 
 const GAME_SCENE_PATH := "res://scenes/main.tscn"
+const PROGRESS_CREEP_PER_SEC := 18.0
+const PROGRESS_CREEP_MAX := 92.0
+const PROGRESS_SMOOTH_SPEED := 3.0
+const UI_MAX_DELTA := 0.05
 
 @onready var progress_bar: ProgressBar = $CenterContainer/VBoxContainer/ProgressBar
 
 var _transition_started := false
+var _target_progress := 0.0
+var _display_progress := 0.0
 
 
 func _ready() -> void:
+	if progress_bar != null:
+		progress_bar.min_value = 0.0
+		progress_bar.max_value = 100.0
+		progress_bar.value = 0.0
+	_target_progress = 0.0
+	_display_progress = 0.0
 	var status := ResourceLoader.load_threaded_get_status(GAME_SCENE_PATH)
 	if status == ResourceLoader.THREAD_LOAD_LOADED:
+		_target_progress = 100.0
+		_display_progress = 100.0
+		if progress_bar != null:
+			progress_bar.value = 100.0
 		_transition_to_loaded_scene()
 		return
 	var error := ResourceLoader.load_threaded_request(GAME_SCENE_PATH, "", true)
@@ -20,19 +36,36 @@ func _ready() -> void:
 	set_process(true)
 
 
-func _process(_delta: float) -> void:
+func _process(delta: float) -> void:
 	if _transition_started:
 		return
+	var ui_delta := minf(maxf(delta, 0.0), UI_MAX_DELTA)
 
 	var progress := []
 	var status := ResourceLoader.load_threaded_get_status(GAME_SCENE_PATH, progress)
-	if not progress.is_empty() and progress_bar != null:
-		progress_bar.value = clampf(float(progress[0]) * 100.0, 0.0, 100.0)
+	if not progress.is_empty():
+		var reported := clampf(float(progress[0]) * 100.0, 0.0, 100.0)
+		_target_progress = maxf(_target_progress, reported)
+
+	if status == ResourceLoader.THREAD_LOAD_IN_PROGRESS and _target_progress < PROGRESS_CREEP_MAX:
+		_target_progress = minf(PROGRESS_CREEP_MAX, _target_progress + PROGRESS_CREEP_PER_SEC * ui_delta)
+
+	_display_progress = move_toward(
+		_display_progress,
+		_target_progress,
+		PROGRESS_SMOOTH_SPEED * 100.0 * ui_delta
+	)
+	if progress_bar != null:
+		progress_bar.value = _display_progress
 
 	match status:
 		ResourceLoader.THREAD_LOAD_IN_PROGRESS:
 			return
 		ResourceLoader.THREAD_LOAD_LOADED:
+			_target_progress = 100.0
+			_display_progress = 100.0
+			if progress_bar != null:
+				progress_bar.value = 100.0
 			_transition_to_loaded_scene()
 		_:
 			_transition_started = true
