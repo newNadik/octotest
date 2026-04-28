@@ -53,9 +53,10 @@ const ROOM_STREAM_UPDATE_INTERVAL_SEC := 0.35
 @onready var spring_arm: SpringArm3D = $CameraPivot/CameraYaw/CameraPitch/SpringArm3D
 @onready var camera: Camera3D = $CameraPivot/CameraYaw/CameraPitch/SpringArm3D/Camera3D
 @onready var gameplay_fx: ColorRect = $UI/GameplayFX
+@onready var pause_menu_button: Button = $UI/PauseMenuButton
 @onready var hud_root: Control = $UI/HUD
 @onready var hint_label: Label = $UI/HUD/HintPanel/HintMargin/HintLabel
-@onready var save_status_label: Label = $UI/SaveStatusLabel
+@onready var save_status_icon: TextureRect = $UI/SaveStatusIcon
 @onready var in_game_menu: Control = $UI/InGameMenu
 @onready var in_game_resume_button: Button = $UI/InGameMenu/MenuCenter/MenuPanel/MenuMargin/MenuButtons/ResumeButton
 @onready var in_game_save_button: Button = $UI/InGameMenu/MenuCenter/MenuPanel/MenuMargin/MenuButtons/SaveButton
@@ -123,6 +124,7 @@ func _ready() -> void:
 	in_game_save_button.pressed.connect(_on_save_pressed)
 	in_game_settings_button.pressed.connect(_on_settings_pressed)
 	in_game_main_menu_button.pressed.connect(_on_main_menu_pressed)
+	pause_menu_button.pressed.connect(_on_pause_menu_button_pressed)
 	_connect_autosave_doors()
 	_apply_loaded_world_state()
 	_initialize_room_streaming()
@@ -656,6 +658,14 @@ func _on_resume_pressed() -> void:
 	_set_in_game_menu_visible(false)
 
 
+func _on_pause_menu_button_pressed() -> void:
+	if _settings_overlay != null and is_instance_valid(_settings_overlay):
+		return
+	if _focus_mode:
+		_exit_focus_mode()
+	_set_in_game_menu_visible(not in_game_menu.visible)
+
+
 func _on_save_pressed() -> void:
 	var save_ok := _save_game(false)
 	if save_ok:
@@ -897,21 +907,25 @@ func _clear_pending_load_request() -> void:
 
 
 func _show_save_feedback(message: String, is_error: bool) -> void:
-	if save_status_label == null:
+	if save_status_icon == null:
 		return
 	if _save_status_tween != null:
 		_save_status_tween.kill()
 	_save_status_tween = null
-	save_status_label.text = message
-	save_status_label.modulate = Color(1.0, 0.75, 0.75, 0.0) if is_error else Color(0.88, 0.98, 1.0, 0.0)
-	save_status_label.visible = true
+	save_status_icon.tooltip_text = message
+	save_status_icon.scale = Vector2(0.96, 0.96)
+	save_status_icon.modulate = Color(1.0, 0.86, 0.86, 0.0) if is_error else Color(0.94, 0.98, 1.0, 0.0)
+	save_status_icon.visible = true
 	_save_status_tween = create_tween()
 	_save_status_tween.set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_SINE)
-	_save_status_tween.tween_property(save_status_label, "modulate:a", 1.0, 0.14)
-	_save_status_tween.tween_interval(1.0)
-	_save_status_tween.tween_property(save_status_label, "modulate:a", 0.0, 0.35)
+	_save_status_tween.parallel().tween_property(save_status_icon, "modulate:a", 1.0, 0.24)
+	_save_status_tween.parallel().tween_property(save_status_icon, "scale", Vector2.ONE, 0.26)
+	_save_status_tween.tween_interval(1.35)
+	_save_status_tween.parallel().tween_property(save_status_icon, "modulate:a", 0.0, 0.55)
+	_save_status_tween.parallel().tween_property(save_status_icon, "scale", Vector2(0.98, 0.98), 0.55)
 	_save_status_tween.finished.connect(func() -> void:
-		save_status_label.visible = false
+		save_status_icon.visible = false
+		save_status_icon.scale = Vector2.ONE
 	)
 
 

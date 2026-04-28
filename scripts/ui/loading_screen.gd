@@ -1,9 +1,10 @@
 extends Control
 
 const GAME_SCENE_PATH := "res://scenes/main.tscn"
-const PROGRESS_CREEP_PER_SEC := 18.0
-const PROGRESS_CREEP_MAX := 92.0
-const PROGRESS_SMOOTH_SPEED := 3.0
+const PROGRESS_CREEP_MAX := 99.2
+const PROGRESS_CREEP_MIN_PER_SEC := 0.35
+const PROGRESS_CREEP_FACTOR := 0.22
+const PROGRESS_SMOOTH_SPEED := 28.0
 const UI_MAX_DELTA := 0.05
 
 @onready var progress_bar: ProgressBar = $CenterContainer/VBoxContainer/ProgressBar
@@ -45,15 +46,21 @@ func _process(delta: float) -> void:
 	var status := ResourceLoader.load_threaded_get_status(GAME_SCENE_PATH, progress)
 	if not progress.is_empty():
 		var reported := clampf(float(progress[0]) * 100.0, 0.0, 100.0)
-		_target_progress = maxf(_target_progress, reported)
+		if reported > _target_progress:
+			# Dampen sudden engine progress jumps so UI feels continuous.
+			var catch_up_step := maxf(6.0 * ui_delta, (reported - _target_progress) * 0.26)
+			_target_progress = minf(reported, _target_progress + catch_up_step)
 
 	if status == ResourceLoader.THREAD_LOAD_IN_PROGRESS and _target_progress < PROGRESS_CREEP_MAX:
-		_target_progress = minf(PROGRESS_CREEP_MAX, _target_progress + PROGRESS_CREEP_PER_SEC * ui_delta)
+		# Keep gentle forward motion near the end instead of freezing at one value.
+		var remaining := maxf(0.0, PROGRESS_CREEP_MAX - _target_progress)
+		var creep_step := (PROGRESS_CREEP_MIN_PER_SEC + remaining * PROGRESS_CREEP_FACTOR) * ui_delta
+		_target_progress = minf(PROGRESS_CREEP_MAX, _target_progress + creep_step)
 
 	_display_progress = move_toward(
 		_display_progress,
 		_target_progress,
-		PROGRESS_SMOOTH_SPEED * 100.0 * ui_delta
+		PROGRESS_SMOOTH_SPEED * ui_delta
 	)
 	if progress_bar != null:
 		progress_bar.value = _display_progress

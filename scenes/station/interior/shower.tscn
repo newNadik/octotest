@@ -752,6 +752,9 @@ size = Vector3(4, 6, 2)
 [sub_resource type="BoxShape3D" id="BoxShape3D_u51js"]
 size = Vector3(1, 6, 4.2)
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_gh2ub"]
+size = Vector3(1.4940186, 1.5, 1)
+
 [node name="shower" type="StaticBody3D" unique_id=1080276977]
 
 [node name="Sketchfab_model" type="Node3D" parent="." unique_id=983669823]
@@ -863,11 +866,15 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.81025803, 3, 3.1879213)
 shape = SubResource("BoxShape3D_f0f2p")
 
 [node name="CollisionShape3D2" type="CollisionShape3D" parent="." unique_id=1254750835]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.8090774, 3, 0.16091943)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.1530735, 3, 0.16091943)
 shape = SubResource("BoxShape3D_u51js")
 
 [node name="duck" parent="." unique_id=1120476849 instance=ExtResource("3_u51js")]
 transform = Transform3D(0.93361795, 0, 0.35827014, 0, 1, 0, -0.35827014, 0, 0.93361795, -1.8016205, 1.6414337, -0.79422736)
 
 [node name="flip_flop" parent="." unique_id=556537212 instance=ExtResource("4_gh2ub")]
-transform = Transform3D(0.614946, 0, -0.7885692, 0, 1, 0, 0.7885692, 0, 0.614946, -1.815, 0, 0.235)
+transform = Transform3D(0.614946, 0, -0.7885692, 0, 1, 0, 0.7885692, 0, 0.614946, -1.815, -0.04620877, 0.235)
+
+[node name="CollisionShape3D3" type="CollisionShape3D" parent="." unique_id=726645825]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.6466652, 0.25, 1.4321976)
+shape = SubResource("BoxShape3D_gh2ub")

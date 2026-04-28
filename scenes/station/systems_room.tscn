@@ -183,9 +183,10 @@ transform = Transform3D(1, 0, 0, 0, -0.19080903, 0.98162717, 0, -0.98162717, -0.
 [node name="MachineRoomAmbient" type="AudioStreamPlayer3D" parent="." unique_id=2005131281]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.25, 1.4, -24.875141)
 stream = ExtResource("8_k2uky")
-volume_db = 25.0
+volume_db = 80.0
+max_db = 6.0
 autoplay = true
-max_distance = 32.0
+max_distance = 20.0
 bus = &"Ambience"
 
 [node name="lights" type="Node3D" parent="." unique_id=1618650556]

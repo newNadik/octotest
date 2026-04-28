@@ -309,7 +309,7 @@ transform = Transform3D(-0.9575713, 0, 0.2881962, 0, 1, 0, -0.2881962, 0, -0.957
 [node name="items" type="Node3D" parent="." unique_id=1659725905]
 
 [node name="mug" parent="items" unique_id=36977870 instance=ExtResource("16_l0eqh")]
-transform = Transform3D(1, 0, 0, 0, 0.99999994, 0, 0, 0, 0.99999994, -20.429155, 1.570058, -12.684125)
+transform = Transform3D(1, 0, 0, 0, 0.99999994, 0, 0, 0, 0.99999994, -21.003107, 1.570058, -12.684125)
 
 [node name="clock" parent="items/mug" unique_id=605620393 instance=ExtResource("20_05str")]
 transform = Transform3D(0.15662405, 0, 0.98765826, 0, 1, 0, -0.98765826, 0, 0.15662405, -1.0776062, 2.722086, 1.3470249)

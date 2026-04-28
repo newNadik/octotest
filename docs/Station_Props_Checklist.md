@@ -43,7 +43,7 @@
 - [ ] Keychains + fridge magnets (counter display)
 - [ ] Sticker sheets rack
 - [ ] Tissue box (at till)
-- [ ] CCTV camera (corner mount)
+- [x] CCTV camera (corner mount)
 
 ### WC
 - [x] Toilet stalls (2–3) with doors
@@ -211,7 +211,7 @@
 ## 🔴 Staff Only
 
 ### Data Office
-- [ ] 2× desks with monitors & keyboards
+- [x] 2× desks with monitors & keyboards
 - [x] Office chairs
 - [ ] Wall display screens (4 tiled)
 - [ ] Shelving with binders / documents
@@ -228,7 +228,7 @@
 - [ ] Wall calendar
 - [ ] Water bottle
 - [ ] Snack wrapper / energy bar (desk prop)
-- [ ] Printer / scanner (on shelf or side table)
+- [x] Printer / scanner (on shelf or side table)
 - [x] Wall clock
 - [ ] Keypad / card reader on door
 - [ ] CCTV camera
