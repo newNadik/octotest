@@ -1,6 +1,6 @@
 # Project Architecture
 
-This document describes the current runtime architecture of the prototype and must be updated when structural changes are made.
+This document describes the current runtime architecture of Gone Exploring and must be updated when structural changes are made.
 
 ## High-Level Runtime
 

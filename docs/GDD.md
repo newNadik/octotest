@@ -12,7 +12,8 @@
 | **Platform** | iPad, PC, Mac |
 | **Developer** | 2-person indie team |
 | **Tone** | Cute, curious, grounded — Stray underwater |
-| **Stage** | Pre-prototype / active design |
+| **Title** | Gone Exploring |
+| **Stage** | Active development |
 
 ## **Contents**
 
@@ -28,7 +29,7 @@
 - [Mechanics](#mechanics)
 - [Controls](#controls)
 - [Aesthetic Direction](#aesthetic-direction)
-- [Prototype Roadmap](#prototype-roadmap)
+- [Development Roadmap](#development-roadmap)
 
 # **Vision**
 
@@ -669,7 +670,7 @@ Arm status is communicated through Octo's body language, not an interface panel:
 
 * Music: ambient only, no melody. The soundscape is texture, not score. Swells reserved for the very end.
 
-## **Prototype Roadmap**
+## **Development Roadmap**
 
 *First 3D game in Godot — prototype mechanics before building any rooms or story. The core feel must work in grey boxes first.*
 
