@@ -1,5 +1,15 @@
 # Player Path & Interactables
 
+## Interactable Types Key
+
+| Icon | Type | Meaning |
+|---|---|---|
+| 🔑 | Key item / Key item use | Critical path — must find or use |
+| 💬 | Read / Inspect | Lore, atmosphere, character |
+| 🔘 | Toggle | Button, switch, machine — no puzzle use |
+| 📦 | Carry | Pick up and hold, no puzzle use |
+| 🎬 | Trigger | Triggers a scene or sequence |
+
 ---
 
 ## Door Logic
@@ -7,8 +17,8 @@
 | Door | Type | How to open |
 |---|---|---|
 | Staff wing entrance | Card reader — both sides | Researcher card (required to exit as well as enter — flood-containment protocol) |
-| Data Office | Keypad | Staff code |
-| Systems Room | Keypad | Staff code |
+| Data Office | Keypad (staff hall side) | Staff code — player starts inside; only needed for re-entry |
+| Systems Room | Keypad (staff hall side) | Staff code |
 | Quarters / Kitchen / Showers | No lock | Inside staff wing |
 | Chemistry Lab | Card reader | Researcher card |
 | Workshop | Card reader | Researcher card |
@@ -31,19 +41,18 @@
 ## Critical Path
 
 ```
-Data Office → Quarters → Workshop → Energy Lab → Wet Room ✓
+Data Office → Quarters → [exit staff wing] → Atrium → Workshop → Energy Lab → Wet Room ✓
 ```
 
 ## Key Items
 
 | Item | Found | Used |
 |---|---|---|
-| Staff code (sticky note) | Data Office, desk | All keypad doors |
+| Staff code (sticky note) | Data Office, desk | Systems Room keypad only (Data Office is entered from inside at the start; staff wing entrance uses card reader) |
 | Researcher card | Quarters, hanging on sleeping crew member's bed | Staff wing exit + all lab card readers |
 | USB drive | Data Office, desk | Workshop terminal |
 | Wrench | Workshop, pegboard | Wet room hatch release |
 
----
 ---
 
 ## Rooms
@@ -59,7 +68,7 @@ Data Office → Quarters → Workshop → Energy Lab → Wet Room ✓
 | Sticky note on desk | 🔑 Key item | Staff code. Note reads: *"New code as of Monday — please memorise and destroy (Karen)"* |
 | USB drive | 🔑 Key item | On desk. Carry to Workshop |
 | PC monitor A | 💬 Read | Partial station map — shows wet room is the exit |
-| PC monitor B | 🔒 Locked terminal | Requires login code from Kitchen fridge note |
+| PC monitor B | 🔒 Locked terminal | Requires login code from Kitchen fridge note (Kitchen is in the staff wing — visit before leaving) |
 | Whiteboard / corkboard | 💬 Read | Research notes, names, lore |
 | Printed report — OCT-05 incident | 💬 Read | Filed report: OCT-05 found tangled in new test energy equipment during installation. Showed unusual curiosity around the hardware. Minor head trauma. Brought in to recover on-site. |
 | Wall calendar | 💬 Read/Inspect | A date circled in marker: *"OCT-05 release"* — Monday or Tuesday next week |
@@ -107,13 +116,12 @@ Data Office → Quarters → Workshop → Energy Lab → Wet Room ✓
 
 ### Quarters *(critical)*
 
-> Lights off. Researcher asleep in a bunk.
-> Turning on the light switch triggers the scene: *"I'm sleeping. I asked you a million times, Mark!"*
-> Researcher card is on the bedside table. OCT-05 takes it while they sleep.
+> Lights off. Sleeping man asleep in a bunk (see NPCs).
+> Researcher card is hanging on the bed. OCT-05 takes it while he sleeps.
 
 | Interactable | Type | Detail |
 |---|---|---|
-| Light switch | 🎬 Trigger | Triggers sleeping researcher scene |
+| Light switch | 🎬 Trigger | Wakes sleeping man — *"I'm sleeping. I asked you a million times, Mark!"* (see NPCs) |
 | Researcher card | 🔑 Key item | Hanging on the bed. Unlocks staff wing exit + all labs |
 | Journal / notebook | 💬 Read | Personal lore — includes entries about OCT-05: *"the little one keeps tapping at the glass, she's too clever for her own good"* |
 | Framed photo | 💬 Read/Inspect | Personal touch, lore |
@@ -128,8 +136,9 @@ Data Office → Quarters → Workshop → Energy Lab → Wet Room ✓
 
 ### Atrium & Observation Deck *(optional — public)*
 
-> Open hub. Good place to get oriented. Connects to all lab doors.
-> **NPC present:** man eating, watching a video on his phone. Has a staff card but is too absorbed to notice OCT-05 — intentional fake-out, this card path is not usable.
+> First public space after leaving the staff wing. Staff wing exit door opens directly here.
+> Open hub, connects to all lab doors.
+> **NPC present:** man eating, watching a video on his phone (see NPCs). Has a staff card but is too absorbed to notice OCT-05 — intentional fake-out, this card path is not usable.
 
 | Interactable | Type | Detail |
 |---|---|---|
@@ -260,14 +269,3 @@ Data Office → Quarters → Workshop → Energy Lab → Wet Room ✓
 | Underwater torch | 📦 Carry | Into the ending |
 | Moon pool | 🎬 Trigger | Final interaction → escape sequence |
 
----
-
-## Interactable Types Key
-
-| Icon | Type | Meaning |
-|---|---|---|
-| 🔑 | Key item / Key item use | Critical path — must find or use |
-| 💬 | Read / Inspect | Lore, atmosphere, character |
-| 🔘 | Toggle | Button, switch, machine — no puzzle use |
-| 📦 | Carry | Pick up and hold, no puzzle use |
-| 🎬 | Trigger | Triggers a scene or sequence |
