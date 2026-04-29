@@ -125,6 +125,7 @@ script = ExtResource("1_ps8pt")
 interaction_type = 1
 display_name = "Cactus"
 prompt_action = "Pick up"
+requires_line_of_sight = false
 focus_offset = Vector3(0, 0.22, 0)
 hold_offset = Vector3(0, -0.17, 0)
 hold_rotation_degrees = Vector3(8, 0, 0)
