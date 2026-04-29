@@ -83,6 +83,7 @@ Source: [Flaticon](https://www.flaticon.com/)
 - "Lowpoly printer HP Laser MFP 135w" (https://skfb.ly/oVYvS) by Lesliehope72 is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
 - "Fish tank XYZ Damage" (https://skfb.ly/owFvs) by yulkenn is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
 - "Complete aquarium with BackToNature bg" (https://skfb.ly/pGuAK) by Nullified is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+- "Digital TV" (https://skfb.ly/oAnJX) by padepokaseameo09 is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
 - 
 
 ## Textures

@@ -1,5 +1,20 @@
 # Dev Log
 
+## 2026-04-29
+
+### Step 56 - TV and computer screen image support + computer screensaver proximity
+
+- Added `res://scripts/station/items/screen_display.gd`: a `@tool` script attached to `wall_tv` and `computer` root nodes.
+  - Exports `screen_image: Texture2D`; when assigned, duplicates the `screen_mesh` surface material and applies it to both `albedo_texture` and `emission_texture` so the screen appears self-lit.
+  - Each scene instance can show a different image; setter runs in-editor so the result is visible during authoring without entering play mode.
+- Added `res://scripts/station/items/computer_proximity.gd`: an `Area3D` script on a new `ProximityArea` child of the `computer` scene.
+  - Detects the player entering the desk area (collision mask targets player layer `1 << 2` only).
+  - On entry: hides `Node3D/Monitor_2/black_screen` and starts a 45-second timer.
+  - On timeout: restores `black_screen` (screensaver-style behaviour).
+  - Re-entry resets the countdown.
+- Updated `scenes/station/items/wall_tv.tscn` and `scenes/station/items/computer.tscn` to attach `screen_display.gd` to each scene's root node.
+- Updated `scenes/station/items/computer.tscn` with a new `ProximityArea` (`Area3D`) + `CollisionShape3D` (`BoxShape3D`) for proximity detection.
+
 ## 2026-04-28
 
 ### Step 55 - Distance-based station room streaming

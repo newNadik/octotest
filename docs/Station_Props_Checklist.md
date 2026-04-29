@@ -213,12 +213,12 @@
 ### Data Office
 - [x] 2× desks with monitors & keyboards
 - [x] Office chairs
-- [ ] Wall display screens (4 tiled)
-- [ ] Shelving with binders / documents
+- [x] Wall display screens (4 tiled)
+- [x] Shelving with binders / documents
 - [x] Plant pot (desk or floor)
-- [ ] fish tank
+- [x] fish tank
 - [ ] Whiteboard / corkboard
-- [ ] Coffee mug / thermos (desk prop)
+- [x] Coffee mug / thermos (desk prop)
 - [ ] Trash bin
 - [x] Fire extinguisher
 - [ ] Evacuation plan (wall-mounted)
@@ -226,12 +226,9 @@
 - [ ] Pen + pencil cup
 - [ ] Printed reports (stacked)
 - [ ] Wall calendar
-- [ ] Water bottle
-- [ ] Snack wrapper / energy bar (desk prop)
 - [x] Printer / scanner (on shelf or side table)
 - [x] Wall clock
 - [ ] Keypad / card reader on door
-- [ ] CCTV camera
 
 #### Character touches
 - [ ] Desk A — absolute wall of sticky notes (on monitor, around screen, edge of desk)

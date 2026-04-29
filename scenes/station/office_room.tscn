@@ -23,6 +23,11 @@
 [ext_resource type="PackedScene" uid="uid://cofo0vasii446" path="res://scenes/station/items/mug.tscn" id="18_qu1ev"]
 [ext_resource type="PackedScene" uid="uid://3qcq4vmexl3s" path="res://scenes/station/items/fire_extinguisher.tscn" id="20_lbeae"]
 [ext_resource type="PackedScene" uid="uid://bp2qgp1sbmraf" path="res://scenes/station/items/clock.tscn" id="21_24s07"]
+[ext_resource type="PackedScene" uid="uid://dps88krn8tc4p" path="res://scenes/station/items/wall_tv.tscn" id="24_qu1ev"]
+[ext_resource type="Texture2D" uid="uid://b0r4g7j73ium7" path="res://assets/textures/screens/dashboart_4.png" id="25_mdgqt"]
+[ext_resource type="Texture2D" uid="uid://botaxjfpbfllo" path="res://assets/textures/screens/dashboart_3.png" id="26_hitc6"]
+[ext_resource type="Texture2D" uid="uid://d3wpu5sb6gfus" path="res://assets/textures/screens/dashboart_2.png" id="27_7a6tg"]
+[ext_resource type="Texture2D" uid="uid://dy5q3ul1fwxuq" path="res://assets/textures/screens/dashboart_1.png" id="28_uo8mj"]
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_b4dhb"]
 _surfaces = [{
@@ -286,3 +291,19 @@ transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 4.14
 
 [node name="mug" parent="items" unique_id=36977870 instance=ExtResource("18_qu1ev")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.0631657, 1.558221, -20.978203)
+
+[node name="wall_tv" parent="items" unique_id=562100905 instance=ExtResource("24_qu1ev")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -0.3986223, 3.0217419, -24.868483)
+screen_image = ExtResource("25_mdgqt")
+
+[node name="wall_tv2" parent="items" unique_id=1198260023 instance=ExtResource("24_qu1ev")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -0.3986223, 3.0217419, -22.111685)
+screen_image = ExtResource("26_hitc6")
+
+[node name="wall_tv3" parent="items" unique_id=1518642959 instance=ExtResource("24_qu1ev")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -0.3986223, 4.6812744, -24.868483)
+screen_image = ExtResource("27_7a6tg")
+
+[node name="wall_tv4" parent="items" unique_id=1535495751 instance=ExtResource("24_qu1ev")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -0.3986223, 4.6812744, -22.111685)
+screen_image = ExtResource("28_uo8mj")

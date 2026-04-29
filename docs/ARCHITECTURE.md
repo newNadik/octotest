@@ -230,6 +230,16 @@ This document describes the current runtime architecture of Gone Exploring and m
   - handles wave timing and despawn/restart cycle.
 21. `res://scripts/station/fish_school_utils.gd`
 - Utility helpers for fish-school direction selection, heading variation, random ranges, and species subset selection.
+22. `res://scripts/station/items/screen_display.gd`
+- `@tool` script attached to `wall_tv` and `computer` root nodes.
+- Exports `screen_image: Texture2D`; when set in the editor or at runtime, duplicates the `screen_mesh` surface material and applies the texture to both `albedo_texture` and `emission_texture`.
+- Setter fires immediately in-editor so the image is visible during scene authoring.
+23. `res://scripts/station/items/computer_proximity.gd`
+- `Area3D` script on the `ProximityArea` child of the `computer` scene.
+- Collision mask targets the player layer only (`1 << 2`).
+- On player body entry: hides the `black_screen` MeshInstance3D and starts a 45-second one-shot timer.
+- On timer timeout: restores `black_screen` visibility (screensaver-style behaviour).
+- Re-entry while the timer is running resets the countdown.
 
 ## Script Directory Layout
 
@@ -259,6 +269,9 @@ Scripts are grouped by runtime domain to keep ownership boundaries clear:
 8. `res://scripts/station/`
 - Station ambient/world simulation systems.
 - Current files: `fish_school.gd`, `fish_school_utils.gd`.
+9. `res://scripts/station/items/`
+- Per-prop behaviour scripts for station item scenes.
+- Current files: `screen_display.gd`, `computer_proximity.gd`.
 
 ## Movement Data Flow
 
