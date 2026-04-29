@@ -6,7 +6,7 @@
 
 | Door | Type | How to open |
 |---|---|---|
-| Staff wing entrance | Keypad | Staff code (sticky note, Data Office) |
+| Staff wing entrance | Card reader — both sides | Researcher card (required to exit as well as enter — flood-containment protocol) |
 | Data Office | Keypad | Staff code |
 | Systems Room | Keypad | Staff code |
 | Quarters / Kitchen / Showers | No lock | Inside staff wing |
@@ -15,6 +15,16 @@
 | Energy Lab | Card reader | Researcher card |
 | Wet Room | Card reader + hatch | Researcher card + wrench |
 | Medical Bay / Public areas | No lock | Always open |
+
+---
+
+## NPCs
+
+| Character | Location | Behaviour | Threat |
+|---|---|---|---|
+| Sleeping man | Quarters | Asleep in bunk. Card hanging on the bed. If player turns the lights on: *"I'm sleeping. I asked you a million times, Mark!"* | None |
+| Mechanic (woman) | Systems Room | Stationary, sitting with back to door, fixing something. If OCT-05 enters her field of view: picks up octo saying *"hey buddy, you are not supposed to be here. let me just — (picks up slimy octo) — emmm..."*, then carries octo back to the tank in Data Office with *"back you go"* | ⚠️ Resets to start |
+| Man eating | Atrium / dining area | Eating, watching video on phone. Has a staff card but is too absorbed to notice OCT-05. Not a threat, not a usable card path — intentional fake-out | None |
 
 ---
 
@@ -29,7 +39,7 @@ Data Office → Quarters → Workshop → Energy Lab → Wet Room ✓
 | Item | Found | Used |
 |---|---|---|
 | Staff code (sticky note) | Data Office, desk | All keypad doors |
-| Researcher card | Quarters, sleeping crew member | All lab card readers |
+| Researcher card | Quarters, hanging on sleeping crew member's bed | Staff wing exit + all lab card readers |
 | USB drive | Data Office, desk | Workshop terminal |
 | Wrench | Workshop, pegboard | Wet room hatch release |
 
@@ -63,6 +73,7 @@ Data Office → Quarters → Workshop → Energy Lab → Wet Room ✓
 ### Systems Room *(optional — staff wing)*
 
 > Likely explored while searching the wing. No key items but good foreshadowing.
+> ⚠️ **Mechanic NPC is here.** Stationary, back to door. Entering her field of view triggers capture — OCT-05 is returned to the Data Office tank.
 
 | Interactable | Type | Detail |
 |---|---|---|
@@ -103,7 +114,7 @@ Data Office → Quarters → Workshop → Energy Lab → Wet Room ✓
 | Interactable | Type | Detail |
 |---|---|---|
 | Light switch | 🎬 Trigger | Triggers sleeping researcher scene |
-| Researcher card | 🔑 Key item | On bedside table. Unlocks all labs |
+| Researcher card | 🔑 Key item | Hanging on the bed. Unlocks staff wing exit + all labs |
 | Journal / notebook | 💬 Read | Personal lore — includes entries about OCT-05: *"the little one keeps tapping at the glass, she's too clever for her own good"* |
 | Framed photo | 💬 Read/Inspect | Personal touch, lore |
 | Toy shark | 📦 Carry | On pillow. Prop — fun to carry |
@@ -118,6 +129,7 @@ Data Office → Quarters → Workshop → Energy Lab → Wet Room ✓
 ### Atrium & Observation Deck *(optional — public)*
 
 > Open hub. Good place to get oriented. Connects to all lab doors.
+> **NPC present:** man eating, watching a video on his phone. Has a staff card but is too absorbed to notice OCT-05 — intentional fake-out, this card path is not usable.
 
 | Interactable | Type | Detail |
 |---|---|---|
