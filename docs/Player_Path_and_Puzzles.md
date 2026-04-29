@@ -17,13 +17,13 @@
 | Door | Type | How to open |
 |---|---|---|
 | Staff wing entrance | Card reader — both sides | Researcher card (required to exit as well as enter — flood-containment protocol) |
-| Data Office | Keypad (staff hall side) | Staff code — player starts inside; only needed for re-entry |
-| Systems Room | Keypad (staff hall side) | Staff code |
+| Data Office | Card reader (staff hall side) | Researcher card — player starts inside; only needed for re-entry |
+| Systems Room | Card reader (staff hall side) | Researcher card |
 | Quarters / Kitchen / Showers | No lock | Inside staff wing |
 | Chemistry Lab | Card reader | Researcher card |
 | Workshop | Card reader | Researcher card |
 | Energy Lab | Card reader | Researcher card |
-| Wet Room | Card reader + hatch | Researcher card + wrench |
+| Wet Room | Card reader + code pad + hatch | Researcher card + dive lock code + wrench |
 | Medical Bay / Public areas | No lock | Always open |
 
 ---
@@ -48,8 +48,8 @@ Data Office → Quarters → [exit staff wing] → Atrium → Workshop → Energ
 
 | Item | Found | Used |
 |---|---|---|
-| Staff code (sticky note) | Data Office, desk | Systems Room keypad only (Data Office is entered from inside at the start; staff wing entrance uses card reader) |
 | Researcher card | Quarters, hanging on sleeping crew member's bed | Staff wing exit + all lab card readers |
+| Dive lock code | Data Office, emergency procedure document | Wet room hatch code pad |
 | USB drive | Data Office, desk | Workshop terminal |
 | Wrench | Workshop, pegboard | Wet room hatch release |
 
@@ -65,7 +65,7 @@ Data Office → Quarters → [exit staff wing] → Atrium → Workshop → Energ
 
 | Interactable | Type | Detail |
 |---|---|---|
-| Sticky note on desk | 🔑 Key item | Staff code. Note reads: *"New code as of Monday — please memorise and destroy (Karen)"* |
+| Emergency procedure document | 🔑 Key item | Laminated sheet on the wall. Dive lock authorization protocol — contains the hatch release code. Official, procedural tone. Player reads it early with no context; pays off at the wet room |
 | USB drive | 🔑 Key item | On desk. Carry to Workshop |
 | PC monitor A | 💬 Read | Partial station map — shows wet room is the exit |
 | PC monitor B | 🔒 Locked terminal | Requires login code from Kitchen fridge note (Kitchen is in the staff wing — visit before leaving) |
@@ -256,11 +256,12 @@ Data Office → Quarters → [exit staff wing] → Atrium → Workshop → Energ
 
 ### Wet Room *(exit)*
 
-> Power is restored. Card reader works. Hatch is still sealed — needs the wrench.
+> Power is restored. Card reader works. Hatch requires two-step authorization — code pad then wrench.
 
 | Interactable | Type | Detail |
 |---|---|---|
 | Card reader | 🔑 Key item use | Researcher card → door opens |
+| Hatch code pad | 🔑 Key item use | Enter dive lock code (from Data Office emergency procedure document) → authorization confirmed |
 | Hatch manual release | 🔑 Puzzle | Use wrench on release point → hatch opens |
 | Dive suit on rack | 💬 Inspect | OCT-05 tries to figure out if she could wear it. Brief comic animation |
 | Rinse shower | 🔘 Toggle | Water runs. Atmospheric |
