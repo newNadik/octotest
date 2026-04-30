@@ -216,7 +216,7 @@ func step(
 		target_support = Vector3.UP
 	else:
 		target_support = target_support.normalized()
-	_support_normal = current_support.slerp(
+	_support_normal = current_support.lerp(
 		target_support,
 		1.0 - exp(-support_normal_lerp * maxf(0.0, delta))
 	).normalized()
