@@ -49,3 +49,5 @@ mesh = SubResource("ArrayMesh_0pbsp")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1544795678]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
 shape = SubResource("BoxShape3D_bei7b")
+
+[node name="shelf" type="Node3D" parent="." unique_id=1649562840]

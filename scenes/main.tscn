@@ -173,7 +173,6 @@ autoplay = true
 bus = &"Ambience"
 
 [node name="lights" type="Node3D" parent="." unique_id=1594734138]
-visible = false
 
 [node name="SkylightHeroLight" type="SpotLight3D" parent="lights" unique_id=622259033]
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, -0.805, 36, 0.007)

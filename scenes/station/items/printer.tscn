@@ -238,7 +238,7 @@ blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_yw68e")
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_jfjiv"]
-size = Vector3(1.1352539, 0.7081299, 1)
+size = Vector3(1.1768799, 0.7871704, 1)
 
 [node name="printer" type="StaticBody3D" unique_id=1111848469]
 
@@ -278,5 +278,5 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.085202836)
 mesh = SubResource("ArrayMesh_wta0n")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=576369013]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.009521484, 0.37120914, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.011291504, 0.4107294, 0)
 shape = SubResource("BoxShape3D_jfjiv")

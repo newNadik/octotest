@@ -1,0 +1,15 @@
+[gd_scene format=3 uid="uid://cdmqak8o3pwic"]
+
+[ext_resource type="PackedScene" uid="uid://bv0s7hhcicpan" path="res://scenes/station/items/documents_001.tscn" id="1_pwvm7"]
+[ext_resource type="PackedScene" uid="uid://q80ss7d03u6" path="res://scenes/station/items/documents_002.tscn" id="2_bnaiy"]
+
+[node name="shelf_papers_4" type="Node3D" unique_id=226085921]
+
+[node name="documents001" parent="." unique_id=85931941 instance=ExtResource("1_pwvm7")]
+transform = Transform3D(-1.4955993, 0, -0.114817604, 0, 1.5, 0, 0.114817604, 0, -1.4955993, -0.02312696, 1.4715099, -1.292068)
+
+[node name="documents003" parent="." unique_id=1156851840 instance=ExtResource("1_pwvm7")]
+transform = Transform3D(-1.4955993, 0, -0.114817604, 0, 1.5, 0, 0.114817604, 0, -1.4955993, 0.03227508, 1.4715099, -0.44357008)
+
+[node name="documents002" parent="." unique_id=367064636 instance=ExtResource("2_bnaiy")]
+transform = Transform3D(1.4998527, 0, -0.02102175, 0, 1.5, 0, 0.02102175, 0, 1.4998527, 0.08915982, 1.4552003, 0.87981236)

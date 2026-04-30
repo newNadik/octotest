@@ -10,6 +10,7 @@
 [ext_resource type="PackedScene" uid="uid://b7vd8cvq5kxdt" path="res://scenes/station/items/light_switch.tscn" id="7_hj37j"]
 [ext_resource type="PackedScene" uid="uid://c5tv72lyq8d8h" path="res://scenes/effects/caustic_rig.tscn" id="8_0o1h7"]
 [ext_resource type="PackedScene" uid="uid://br6ntmevwpsdb" path="res://scenes/station/items/fairy_lights.tscn" id="8_5fr8h"]
+[ext_resource type="PackedScene" uid="uid://cujh0jfg6qbtp" path="res://scenes/station/items/whiteboard.tscn" id="8_urbls"]
 [ext_resource type="PackedScene" uid="uid://brqdwvvq7xuyc" path="res://scenes/station/items/orchid_plant.tscn" id="9_mcwsc"]
 [ext_resource type="PackedScene" uid="uid://bqfmosbr5347w" path="res://scenes/station/interior/bunk_bed.tscn" id="10_6rgpq"]
 [ext_resource type="PackedScene" uid="uid://c6u2h3iksfaya" path="res://scenes/station/interior/cabinet_01.tscn" id="10_eb7ah"]
@@ -172,6 +173,7 @@ transform = Transform3D(0.70710677, -0.6941152, -0.13492236, 0, -0.19080903, 0.9
 
 [node name="RoofQuarters" type="MeshInstance3D" parent="StaticBody3D" unique_id=2062910619]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.8054073, -7.5464764e-06, 0.006915656)
+visible = false
 instance_shader_parameters/offset_xz = Vector2(2, 3.5)
 mesh = SubResource("ArrayMesh_a4y7k")
 surface_material_override/0 = ExtResource("4_44o56")
@@ -194,6 +196,9 @@ shape = SubResource("ConcavePolygonShape3D_8ctpj")
 transform = Transform3D(1, 0, 1.5247432e-15, 0, -4.371139e-08, -1, 0, 1, -4.3711314e-08, -18.363, -0.01, -16.282)
 mesh = SubResource("QuadMesh_5fr8h")
 surface_material_override/0 = ExtResource("3_21vip")
+
+[node name="whiteboard" parent="StaticBody3D" unique_id=1268081871 instance=ExtResource("8_urbls")]
+transform = Transform3D(-0.98465884, 2.8045061e-08, 0.17449023, 0, 0.9999999, 0, -0.1744902, 1.2536493e-08, -0.9846588, -21.458761, 3, -11.322815)
 
 [node name="lights" type="Node3D" parent="." unique_id=1225828476]
 

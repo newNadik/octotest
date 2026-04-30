@@ -3,7 +3,15 @@
     "allow": [
       "Bash(git add:*)",
       "Bash(git commit:*)",
-      "Bash(git push *)"
+      "Bash(git push *)",
+      "Bash(git -C /Users/nadiiaiv/Documents/GodotProjects/Octotest diff --stat HEAD assets/ui/title_font.tres)",
+      "Bash(git -C /Users/nadiiaiv/Documents/GodotProjects/Octotest status)",
+      "Bash(git -C /Users/nadiiaiv/Documents/GodotProjects/Octotest diff --stat)",
+      "Bash(git -C /Users/nadiiaiv/Documents/GodotProjects/Octotest log --oneline -5)",
+      "Bash(git -C /Users/nadiiaiv/Documents/GodotProjects/Octotest add assets/ui/OpenSans-Semibold.ttf assets/ui/OpenSans-Semibold.ttf.import assets/textures/historical/ assets/ui/title_font.tres scenes/main.tscn scenes/main_menu.tscn scenes/station/atrium_room.tscn scenes/station/chem_lab_room.tscn scenes/station/office_room.tscn scripts/core/main.gd docs/ATTRIBUTION.md docs/Player_Path_and_Puzzles.md docs/Station_Props_Checklist.md)",
+      "Bash(git -C /Users/nadiiaiv/Documents/GodotProjects/Octotest diff --stat --cached)",
+      "Bash(git -C /Users/nadiiaiv/Documents/GodotProjects/Octotest commit -m ' *)",
+      "Bash(git -C /Users/nadiiaiv/Documents/GodotProjects/Octotest push)"
     ]
   }
 }
