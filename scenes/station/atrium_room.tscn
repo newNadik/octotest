@@ -46,7 +46,7 @@
 [ext_resource type="Texture2D" uid="uid://sotgv2aj6y1s" path="res://assets/textures/wall_images/decal_3.png" id="44_sxb2l"]
 [ext_resource type="Texture2D" uid="uid://csyym67cm2gv2" path="res://assets/textures/wall_images/decal_5.png" id="45_62j8m"]
 [ext_resource type="Texture2D" uid="uid://fexkp1kbef3c" path="res://assets/ui/Icon_BCRC1024.png" id="46_sxb2l"]
-[ext_resource type="FontFile" uid="uid://banqhd2e6ew1n" path="res://assets/ui/title_font.tres" id="47_fnwcc"]
+[ext_resource type="FontFile" path="res://assets/ui/OpenSans-Semibold.ttf" id="47_fnwcc"]
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_cmvkd"]
 resource_name = "atrium_Plane_123"

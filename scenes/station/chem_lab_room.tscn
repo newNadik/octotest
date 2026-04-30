@@ -13,6 +13,7 @@
 [ext_resource type="PackedScene" uid="uid://qs8sh7iux1qk" path="res://scenes/station/interior/chair.tscn" id="11_0sovc"]
 [ext_resource type="PackedScene" uid="uid://8vcajaaad64" path="res://scenes/station/interior/rack.tscn" id="11_lgqjb"]
 [ext_resource type="PackedScene" uid="uid://b18qdk7b4q77l" path="res://scenes/station/interior/desk.tscn" id="12_lgqjb"]
+[ext_resource type="PackedScene" uid="uid://c6u2h3iksfaya" path="res://scenes/station/interior/cabinet_01.tscn" id="14_85fsw"]
 [ext_resource type="PackedScene" uid="uid://3qcq4vmexl3s" path="res://scenes/station/items/fire_extinguisher.tscn" id="14_ohg37"]
 [ext_resource type="PackedScene" uid="uid://bp2qgp1sbmraf" path="res://scenes/station/items/clock.tscn" id="15_lxvvl"]
 [ext_resource type="PackedScene" uid="uid://b21bahphpnv3o" path="res://scenes/station/items/computer.tscn" id="16_qkewc"]
@@ -187,6 +188,7 @@ surface_material_override/0 = ExtResource("4_ssju7")
 
 [node name="RoofChemLab" type="MeshInstance3D" parent="StaticBody3D" unique_id=941413572]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.208, 0, -13.928)
+visible = false
 instance_shader_parameters/offset_xz = Vector2(0.8, 5)
 mesh = SubResource("ArrayMesh_ja8y8")
 surface_material_override/0 = ExtResource("5_mt5em")
@@ -275,10 +277,10 @@ transform = Transform3D(0.7302696, 0, 0.6831591, 0, 1, 0, -0.6831591, 0, 0.73026
 transform = Transform3D(0.90209633, 0, 0.43153477, 0, 1, 0, -0.43153477, 0, 0.90209633, 12.317873, 0, -10.371451)
 
 [node name="chair3" parent="furniture" unique_id=1206483457 instance=ExtResource("11_0sovc")]
-transform = Transform3D(0.98608905, 0, 0.16621803, 0, 1, 0, -0.16621803, 0, 0.98608905, 20.672401, 0, -13.597794)
+transform = Transform3D(0.98608905, 0, 0.16621803, 0, 1, 0, -0.16621803, 0, 0.98608905, 20.624062, 0, -13.497396)
 
 [node name="chair4" parent="furniture" unique_id=823085785 instance=ExtResource("11_0sovc")]
-transform = Transform3D(0.98608905, 0, 0.16621803, 0, 1, 0, -0.16621803, 0, 0.98608905, 23.59309, 0, -15.448694)
+transform = Transform3D(0.986089, 0, 0.166218, 0, 1, 0, -0.166218, 0, 0.986089, 23.54475, 0, -15.348297)
 
 [node name="chair5" parent="furniture" unique_id=2041161212 instance=ExtResource("11_0sovc")]
 transform = Transform3D(-0.0008726455, 0, -0.99999964, 0, 1, 0, 0.99999964, 0, -0.0008726455, 15.204219, 0, -16.320198)
@@ -293,10 +295,10 @@ transform = Transform3D(0.3833444, 0, -0.9236055, 0, 1, 0, 0.9236055, 0, 0.38334
 transform = Transform3D(0.3833444, 0, -0.9236055, 0, 1, 0, 0.9236055, 0, 0.3833444, 12.530481, 0, -9.366812)
 
 [node name="desk3" parent="furniture" unique_id=1348891759 instance=ExtResource("12_lgqjb")]
-transform = Transform3D(0.3833444, 0, -0.9236055, 0, 1, 0, 0.9236055, 0, 0.3833444, 20.989061, 0, -12.781419)
+transform = Transform3D(0.3833444, 0, -0.9236055, 0, 1, 0, 0.9236055, 0, 0.3833444, 20.940722, 0, -12.681022)
 
 [node name="desk4" parent="furniture" unique_id=288902678 instance=ExtResource("12_lgqjb")]
-transform = Transform3D(0.3833444, 0, -0.9236055, 0, 1, 0, 0.9236055, 0, 0.3833444, 23.91729, 0, -13.988235)
+transform = Transform3D(0.38334438, 0, -0.92360544, 0, 1, 0, 0.92360544, 0, 0.38334438, 23.86895, 0, -13.887838)
 
 [node name="desk5" parent="furniture" unique_id=1976707938 instance=ExtResource("12_lgqjb")]
 transform = Transform3D(-0.9238795, 0, 0.3826835, 0, 1, 0, -0.3826835, 0, -0.9238795, 7.0060606, 0, -14.518296)
@@ -313,6 +315,9 @@ transform = Transform3D(0.99999964, 0, -0.0008726027, 0, 1, 0, 0.0008726027, 0, 
 [node name="desk9" parent="furniture" unique_id=804585423 instance=ExtResource("12_lgqjb")]
 transform = Transform3D(-0.99999964, 0, 0.00087268837, 0, 1, 0, -0.00087268837, 0, -0.99999964, 14.495813, 0, -16.217176)
 
+[node name="Cabinet_01" parent="furniture" unique_id=1376455345 instance=ExtResource("14_85fsw")]
+transform = Transform3D(-0.7266585, 0, -0.68699884, 0, 1, 0, 0.68699884, 0, -0.7266585, 25.329388, 0, -15.2819)
+
 [node name="items" type="Node3D" parent="." unique_id=43741844]
 
 [node name="fire_extinguisher" parent="items" unique_id=1012721613 instance=ExtResource("14_ohg37")]
@@ -322,10 +327,10 @@ transform = Transform3D(0.70710677, 0, -0.70710677, 0, 1, 0, 0.70710677, 0, 0.70
 transform = Transform3D(-0.3819416, 0, 0.9241866, 0, 1, 0, -0.9241866, 0, -0.3819416, 17.374403, 5.5, -10.200755)
 
 [node name="computer" parent="items" unique_id=1576113446 instance=ExtResource("16_qkewc")]
-transform = Transform3D(-0.7522769, 0, -0.6588471, 0, 1, 0, 0.6588471, 0, -0.7522769, 24.65511, 1.482, -13.762858)
+transform = Transform3D(-0.7522769, 0, -0.6588471, 0, 1, 0, 0.6588471, 0, -0.7522769, 24.60677, 1.482, -13.662461)
 
 [node name="computer2" parent="items" unique_id=63838728 instance=ExtResource("16_qkewc")]
-transform = Transform3D(-0.9367821, 0, -0.34991312, 0, 1, 0, 0.34991312, 0, -0.9367821, 21.439428, 1.482, -12.214834)
+transform = Transform3D(-0.9367821, 0, -0.34991312, 0, 1, 0, 0.34991312, 0, -0.9367821, 21.391088, 1.482, -12.114437)
 
 [node name="computer3" parent="items" unique_id=775765415 instance=ExtResource("16_qkewc")]
 transform = Transform3D(-0.98341036, 0, -0.18139462, 0, 1, 0, 0.18139462, 0, -0.98341036, 12.486265, 1.482, -8.618769)

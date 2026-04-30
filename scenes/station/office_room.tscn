@@ -185,7 +185,7 @@ door_title = "Data"
 door_title_secondary = "Office"
 
 [node name="printer" parent="StaticBody3D" unique_id=1111848469 instance=ExtResource("8_kdhla")]
-transform = Transform3D(0.9684876, 0, 0.2490618, 0, 1, 0, -0.2490618, 0, 0.9684876, 1.5459969, 0, -28.920242)
+transform = Transform3D(0.9136803, 0, 0.4064337, 0, 1, 0, -0.4064337, 0, 0.9136803, 3.778773, 0, -27.731081)
 
 [node name="lights" type="Node3D" parent="." unique_id=138401406]
 

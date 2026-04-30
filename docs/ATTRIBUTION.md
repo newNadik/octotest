@@ -84,6 +84,27 @@ Source: [Flaticon](https://www.flaticon.com/)
 - "Fish tank XYZ Damage" (https://skfb.ly/owFvs) by yulkenn is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
 - "Complete aquarium with BackToNature bg" (https://skfb.ly/pGuAK) by Nullified is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
 - "Digital TV" (https://skfb.ly/oAnJX) by padepokaseameo09 is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+- "Poppy Playtime: 4 Books And Papers" (https://skfb.ly/pELSW) by FuzerGamesTV is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+- "Brown Tape" (https://skfb.ly/pFsEA) by carlcapu9 is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+- "Card Board Box" (https://skfb.ly/oGKwX) by carlcapu9 is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+- "Whiteboard" (https://skfb.ly/6XVGG) by Reflex_Entertainment is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+- "desk_calendar (1)" (https://skfb.ly/pxQSW) by ap-school is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+- "paper_tablet" (https://skfb.ly/pwnLo) by ap-school is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+- "headphones_skullcandy_crusher_wireless" (https://skfb.ly/pvvoH) by ap-school is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+- "wrench_craftsman_6in" (https://skfb.ly/pv6PL) by ap-school is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+- "Non Stop Energy" (https://skfb.ly/oHMUI) by Gaidzi is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+- "Non Stop S.T.A.L.K.E.R. 2" (https://skfb.ly/pAMrT) by Alex_Bond is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+- "Martian Popping Thing" (https://skfb.ly/6VXBO) by Duznot is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+- "Flashlight" (https://skfb.ly/6FTV8) by davibatnas is licensed under Creative Commons Attribution-ShareAlike (http://creativecommons.org/licenses/by-sa/4.0/).
+- "sketchbook" (https://skfb.ly/6RsSN) by Kisielev Mikhail is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+- "Variety of Books" (https://skfb.ly/osEsy) by Spookyghostboo is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+- "Lays Classic || HD Textures || FREE Download!" (https://skfb.ly/oEOPG) by NKaap is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+- "UK Automated External Defibrillator" (https://skfb.ly/pqPRz) by Warcub is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+- "Stethoscope" (https://skfb.ly/6C7YX) by Phillip Stephens is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+- "Lab Kit" (https://skfb.ly/oJxFV) by A9908244 is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+- "FREE Conical Flask | Laboratory | Low poly" (https://skfb.ly/oyGXN) by Naked Singularity Studio is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+- "Toy Rocket 4k Free 3d Model" (https://skfb.ly/oBoYR) by henrique-dev is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+- "Plastic Submarine" (https://skfb.ly/oXC9G) by roddstehling is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
 - 
 
 ## Textures

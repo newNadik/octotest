@@ -20,6 +20,27 @@ const CAMERA_MIN_MARGIN := 0.7
 const CAMERA_NEAR_CLIP := 0.12
 const MOBILE_OS_NAMES := ["iOS", "Android"]
 const ROOM_STREAM_UPDATE_INTERVAL_SEC := 0.35
+# Preloads make these room scenes dependencies of main.gd, so the loading
+# screen's threaded load pulls them all into the resource cache. When
+# _initialize_room_streaming() calls load() on them they return instantly.
+const _SCENE_ATRIUM     := preload("res://scenes/station/atrium_room.tscn")
+const _SCENE_CHEM_LAB   := preload("res://scenes/station/chem_lab_room.tscn")
+const _SCENE_ENERGY_LAB := preload("res://scenes/station/energy_lab_room.tscn")
+const _SCENE_OFFICE     := preload("res://scenes/station/office_room.tscn")
+const _SCENE_QUARTERS   := preload("res://scenes/station/quarters_room.tscn")
+const _SCENE_SYSTEMS    := preload("res://scenes/station/systems_room.tscn")
+const _SCENE_WETROOM    := preload("res://scenes/station/wetroom_room.tscn")
+const _SCENE_WORKSHOP   := preload("res://scenes/station/workshop_room.tscn")
+const ROOM_REGISTRY: Array[Dictionary] = [
+	{"name": "atrium",     "path": "res://scenes/station/atrium_room.tscn"},
+	{"name": "checm_lab",  "path": "res://scenes/station/chem_lab_room.tscn"},
+	{"name": "energy_lab", "path": "res://scenes/station/energy_lab_room.tscn"},
+	{"name": "office",     "path": "res://scenes/station/office_room.tscn"},
+	{"name": "quarters",   "path": "res://scenes/station/quarters_room.tscn"},
+	{"name": "systems",    "path": "res://scenes/station/systems_room.tscn"},
+	{"name": "wetroom",    "path": "res://scenes/station/wetroom_room.tscn"},
+	{"name": "workshop",   "path": "res://scenes/station/workshop_room.tscn"},
+]
 
 @export var orbit_sensitivity := 0.2
 @export var drag_orbit_threshold_px := 10.0
@@ -91,6 +112,7 @@ var _last_save_unix_time := -1000.0
 var _save_status_tween: Tween
 var _stream_station_root: Node3D
 var _stream_rooms: Dictionary = {}
+var _stream_pending_loads: Dictionary = {}
 var _stream_update_accum := 0.0
 
 
@@ -281,25 +303,47 @@ func _initialize_room_streaming() -> void:
 		return
 
 	_stream_rooms.clear()
-	var room_children := _stream_station_root.get_children()
-	for child in room_children:
-		var room_node := child as Node3D
-		if room_node == null:
-			continue
-		if room_node.scene_file_path.is_empty():
-			continue
-		_stream_rooms[room_node.name] = {
-			"scene_path": room_node.scene_file_path,
-			"transform": room_node.transform,
-			"node": room_node
+	for room_def in ROOM_REGISTRY:
+		_stream_rooms[room_def["name"]] = {
+			"scene_path": room_def["path"],
+			"transform": Transform3D.IDENTITY,
+			"node": null
 		}
 
-	# Optional safety mode for very low-end targets.
 	if room_load_distance <= 0.0:
 		return
 
-	# Force a first pass so only nearby rooms remain alive immediately.
-	_apply_room_streaming()
+	# Sync-load every room that should be present when gameplay starts.
+	# load() returns instantly from cache because the preload constants above
+	# caused the loading screen's threaded load to pull them all in already.
+	var player_pos := player.global_position
+	for room_name in _stream_rooms.keys():
+		var room_data: Dictionary = _stream_rooms[room_name]
+		var room_origin: Vector3 = (room_data["transform"] as Transform3D).origin
+		var distance := player_pos.distance_to(room_origin)
+		var should_keep := room_names_to_always_keep.has(String(room_name))
+		if should_keep or distance <= room_load_distance:
+			_load_room_now(room_name)
+
+
+func _load_room_now(room_name: String) -> void:
+	var room_data: Dictionary = _stream_rooms.get(room_name, {})
+	if room_data.is_empty():
+		return
+	if is_instance_valid(room_data.get("node") as Node):
+		return
+	var scene_path := String(room_data["scene_path"])
+	var packed_scene := load(scene_path) as PackedScene
+	if packed_scene == null:
+		return
+	var instance := packed_scene.instantiate() as Node3D
+	if instance == null:
+		return
+	instance.name = StringName(room_name)
+	instance.transform = room_data["transform"] as Transform3D
+	_stream_station_root.add_child(instance)
+	room_data["node"] = instance
+	_stream_rooms[room_name] = room_data
 
 
 func _update_room_streaming(delta: float) -> void:
@@ -307,11 +351,39 @@ func _update_room_streaming(delta: float) -> void:
 		return
 	if _stream_rooms.is_empty():
 		return
+	_check_pending_room_loads()
 	_stream_update_accum += delta
 	if _stream_update_accum < ROOM_STREAM_UPDATE_INTERVAL_SEC:
 		return
 	_stream_update_accum = 0.0
 	_apply_room_streaming()
+
+
+func _check_pending_room_loads() -> void:
+	if _stream_pending_loads.is_empty():
+		return
+	for room_name in _stream_pending_loads.keys():
+		var scene_path: String = _stream_pending_loads[room_name]
+		var status := ResourceLoader.load_threaded_get_status(scene_path)
+		if status != ResourceLoader.THREAD_LOAD_LOADED:
+			continue
+		var packed_scene := ResourceLoader.load_threaded_get(scene_path) as PackedScene
+		_stream_pending_loads.erase(room_name)
+		if packed_scene == null:
+			continue
+		var room_data: Dictionary = _stream_rooms.get(room_name, {})
+		if room_data.is_empty():
+			continue
+		if is_instance_valid(room_data.get("node") as Node):
+			continue
+		var instance := packed_scene.instantiate() as Node3D
+		if instance == null:
+			continue
+		instance.name = StringName(room_name)
+		instance.transform = room_data["transform"] as Transform3D
+		_stream_station_root.add_child(instance)
+		room_data["node"] = instance
+		_stream_rooms[room_name] = room_data
 
 
 func _apply_room_streaming() -> void:
@@ -327,25 +399,20 @@ func _apply_room_streaming() -> void:
 
 		if (should_keep or distance <= room_load_distance) and not is_loaded:
 			var scene_path := String(room_data["scene_path"])
-			var packed_scene := load(scene_path) as PackedScene
-			if packed_scene == null:
-				continue
-			var instance := packed_scene.instantiate() as Node3D
-			if instance == null:
-				continue
-			instance.name = StringName(room_name)
-			instance.transform = room_data["transform"] as Transform3D
-			_stream_station_root.add_child(instance)
-			room_data["node"] = instance
-			_stream_rooms[room_name] = room_data
+			if not _stream_pending_loads.has(room_name):
+				var err := ResourceLoader.load_threaded_request(scene_path)
+				if err == OK or err == ERR_BUSY:
+					_stream_pending_loads[room_name] = scene_path
 			continue
 
-		if not should_keep and is_loaded and distance >= room_unload_distance:
-			var instance_node := room_data["node"] as Node
-			if instance_node != null:
-				instance_node.queue_free()
-			room_data["node"] = null
-			_stream_rooms[room_name] = room_data
+		if not should_keep and distance >= room_unload_distance:
+			_stream_pending_loads.erase(room_name)
+			if is_loaded:
+				var instance_node := room_data["node"] as Node
+				if instance_node != null:
+					instance_node.queue_free()
+				room_data["node"] = null
+				_stream_rooms[room_name] = room_data
 
 
 func _unhandled_input(event: InputEvent) -> void:

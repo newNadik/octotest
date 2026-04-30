@@ -18,6 +18,8 @@
 - [ ] Mission / research briefing board
 - [ ] Directional signage / map stand
 - [x] Potted plant (corner, observation side)
+- [ ] Coffee mug (on bench / table)
+- [ ] Coin (on bench / under table)
 - [x] Wall clock
 - [x] Trash bins
 - [x] Fire extinguisher + cabinet
@@ -99,6 +101,7 @@
 - [ ] Beatle part in 3D printer
 - [ ] Spool rack for filament
 - [ ] Pegboard wall with tools
+- [ ] Screwdriver (on pegboard / bench)
 - [ ] Drill press / bench drill
 - [x] Soldering station
 - [ ] Component bins / parts drawers
@@ -121,6 +124,9 @@
 - [ ] First aid kit (wall-mounted)
 - [ ] Keypad / card reader on door
 - [ ] CCTV camera
+- [ ] printed Rocky
+- [ ] 3D printer name tag "Gertrude"
+- [ ] Projector (on shelf — shows station construction photos when light is off)
 
 #### Character touches
 - [ ] Stickers all over one toolbox (band logos, nerdy stuff)
@@ -202,6 +208,7 @@
 - [ ] Conditions board (water temp, visibility, current depth)
 - [x] Wall clock
 - [ ] First aid kit (wall-mounted)
+- [ ] Hatch code pad (separate from door card reader)
 - [ ] Keypad / card reader on door
 - [ ] CCTV camera
 - [ ] Wall-mounted PA speaker
@@ -222,10 +229,11 @@
 - [ ] Trash bin
 - [x] Fire extinguisher
 - [ ] Evacuation plan (wall-mounted)
+- [ ] Emergency procedure document (laminated, wall-mounted)
+- [ ] Desk lamp
 - [ ] Sticky notes (on monitors + desk)
-- [ ] Pen + pencil cup
 - [ ] Printed reports (stacked)
-- [ ] Wall calendar
+- [ ] desk calendar
 - [x] Printer / scanner (on shelf or side table)
 - [x] Wall clock
 - [ ] Keypad / card reader on door
@@ -247,6 +255,7 @@
 - [x] Maintenance toolbox
 - [x] Stepladder (fold-out)
 - [x] Fire extinguisher
+- [ ] measuring tape
 - [ ] Evacuation plan (wall-mounted)
 - [ ] Maintenance manuals / binders
 - [ ] Clipboard with checklist (on hook)
@@ -274,10 +283,13 @@
 - [x] Wall clock
 - [x] darts
 - [x] pull up bar
+- [ ] Researcher card (hanging on bunk)
 - [ ] NPC sleeping
+- [ ] stash of toilet paper on shelf 
 
 #### Character touches
 - [ ] Bunk 1 — toy shark on pillow
+- [ ] Octopus plushie on shelf
 - [x] Bunk 1 — string of fairy lights around the frame
 - [ ] Bunk 2 — movie poster on wall above bed (sci-fi / action)
 - [ ] Bunk 3 — engineering textbooks stacked on desk
@@ -308,6 +320,7 @@
 
 #### Character touches
 - [ ] Passive-aggressive note about dishes on the wall
+- [ ] Note asking people to keep mugs in the kitchen
 - [ ] Someone's mug that's clearly their "special" mug
 - [x] A single sad banana that's been there too long
 
