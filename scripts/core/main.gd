@@ -20,26 +20,18 @@ const CAMERA_MIN_MARGIN := 0.7
 const CAMERA_NEAR_CLIP := 0.12
 const MOBILE_OS_NAMES := ["iOS", "Android"]
 const ROOM_STREAM_UPDATE_INTERVAL_SEC := 0.35
-# Preloads make these room scenes dependencies of main.gd, so the loading
-# screen's threaded load pulls them all into the resource cache. When
-# _initialize_room_streaming() calls load() on them they return instantly.
-const _SCENE_ATRIUM     := preload("res://scenes/station/atrium_room.tscn")
-const _SCENE_CHEM_LAB   := preload("res://scenes/station/chem_lab_room.tscn")
-const _SCENE_ENERGY_LAB := preload("res://scenes/station/energy_lab_room.tscn")
-const _SCENE_OFFICE     := preload("res://scenes/station/office_room.tscn")
-const _SCENE_QUARTERS   := preload("res://scenes/station/quarters_room.tscn")
-const _SCENE_SYSTEMS    := preload("res://scenes/station/systems_room.tscn")
-const _SCENE_WETROOM    := preload("res://scenes/station/wetroom_room.tscn")
-const _SCENE_WORKSHOP   := preload("res://scenes/station/workshop_room.tscn")
+# Must match loading_screen.gd — rooms within this radius of player start are
+# preloaded by the loading screen and can be sync-instantiated from cache.
+const INITIAL_LOAD_RADIUS := 20.0
 const ROOM_REGISTRY: Array[Dictionary] = [
-	{"name": "atrium",     "path": "res://scenes/station/atrium_room.tscn"},
-	{"name": "checm_lab",  "path": "res://scenes/station/chem_lab_room.tscn"},
-	{"name": "energy_lab", "path": "res://scenes/station/energy_lab_room.tscn"},
-	{"name": "office",     "path": "res://scenes/station/office_room.tscn"},
-	{"name": "quarters",   "path": "res://scenes/station/quarters_room.tscn"},
-	{"name": "systems",    "path": "res://scenes/station/systems_room.tscn"},
-	{"name": "wetroom",    "path": "res://scenes/station/wetroom_room.tscn"},
-	{"name": "workshop",   "path": "res://scenes/station/workshop_room.tscn"},
+	{"name": "atrium",     "path": "res://scenes/station/atrium_room.tscn",     "center": Vector3(0.93,   0.0,  28.47), "neighbors": ["workshop", "chem_lab"]},
+	{"name": "chem_lab",   "path": "res://scenes/station/chem_lab_room.tscn",   "center": Vector3(11.72,  0.0,  -7.54),  "neighbors": ["atrium"]},
+	{"name": "energy_lab", "path": "res://scenes/station/energy_lab_room.tscn", "center": Vector3(10.32,  0.0,  14.32),  "neighbors": []},
+	{"name": "office",     "path": "res://scenes/station/office_room.tscn",     "center": Vector3(0.78,   0.0, -17.63),  "neighbors": []},
+	{"name": "quarters",   "path": "res://scenes/station/quarters_room.tscn",   "center": Vector3(0.0,    0.0,   0.0),   "neighbors": []},
+	{"name": "systems",    "path": "res://scenes/station/systems_room.tscn",    "center": Vector3(-4.45,  0.0, -17.0),   "neighbors": []},
+	{"name": "wetroom",    "path": "res://scenes/station/wetroom_room.tscn",    "center": Vector3(9.65,   0.0,  24.85),  "neighbors": []},
+	{"name": "workshop",   "path": "res://scenes/station/workshop_room.tscn",   "center": Vector3(25.78,  0.0,   5.67),  "neighbors": ["atrium"]},
 ]
 
 @export var orbit_sensitivity := 0.2
@@ -108,6 +100,7 @@ var _sun_base_rotation := Vector3.ZERO
 var _sun_base_energy := 0.0
 var _hero_base_energy := 0.0
 var _loaded_save_data: Dictionary = {}
+var _pending_world_state: Dictionary = {}
 var _last_save_unix_time := -1000.0
 var _save_status_tween: Tween
 var _stream_station_root: Node3D
@@ -127,6 +120,9 @@ func _ready() -> void:
 		_loaded_save_data = _load_saved_game()
 		starting_position = _extract_player_position(_loaded_save_data, starting_position)
 		_initialize_game_time(_loaded_save_data)
+		var world = _loaded_save_data.get("world", {})
+		if world is Dictionary:
+			_pending_world_state = (world as Dictionary).duplicate()
 		MusicManager.play_game_loop()
 	else:
 		_initialize_game_time({})
@@ -148,8 +144,8 @@ func _ready() -> void:
 	in_game_main_menu_button.pressed.connect(_on_main_menu_pressed)
 	pause_menu_button.pressed.connect(_on_pause_menu_button_pressed)
 	_connect_autosave_doors()
-	_apply_loaded_world_state()
 	_initialize_room_streaming()
+	_apply_loaded_world_state()
 	_set_in_game_menu_visible(false)
 
 
@@ -306,24 +302,45 @@ func _initialize_room_streaming() -> void:
 	for room_def in ROOM_REGISTRY:
 		_stream_rooms[room_def["name"]] = {
 			"scene_path": room_def["path"],
-			"transform": Transform3D.IDENTITY,
+			"center": room_def["center"] as Vector3,
+			"neighbors": room_def["neighbors"] as Array,
 			"node": null
 		}
 
 	if room_load_distance <= 0.0:
 		return
 
-	# Sync-load every room that should be present when gameplay starts.
-	# load() returns instantly from cache because the preload constants above
-	# caused the loading screen's threaded load to pull them all in already.
-	var player_pos := player.global_position
+	# Sync-instantiate rooms preloaded by the loading screen (instant cache hits).
+	# Kick off async loads for the remaining rooms so they arrive in the background.
+	var start_pos := player.global_position
+	print("[RoomStream] Init — player pos: ", start_pos, "  radius: ", INITIAL_LOAD_RADIUS)
+
+	# Determine which rooms are near (by distance or always-keep), then expand with neighbors.
+	var near_rooms: Array[String] = []
 	for room_name in _stream_rooms.keys():
 		var room_data: Dictionary = _stream_rooms[room_name]
-		var room_origin: Vector3 = (room_data["transform"] as Transform3D).origin
-		var distance := player_pos.distance_to(room_origin)
-		var should_keep := room_names_to_always_keep.has(String(room_name))
-		if should_keep or distance <= room_load_distance:
+		var dist := start_pos.distance_to(room_data["center"] as Vector3)
+		if room_names_to_always_keep.has(String(room_name)) or dist <= INITIAL_LOAD_RADIUS:
+			near_rooms.append(String(room_name))
+	for room_name in near_rooms.duplicate():
+		for neighbor in (_stream_rooms[room_name]["neighbors"] as Array):
+			if not near_rooms.has(String(neighbor)):
+				near_rooms.append(String(neighbor))
+
+	for room_name in _stream_rooms.keys():
+		var room_data: Dictionary = _stream_rooms[room_name]
+		var center: Vector3 = room_data["center"] as Vector3
+		var dist := start_pos.distance_to(center)
+		if near_rooms.has(String(room_name)):
+			print("[RoomStream] Near (dist=%.1f), sync-loading: " % dist, room_name)
 			_load_room_now(room_name)
+		else:
+			print("[RoomStream] Far  (dist=%.1f), async-loading: " % dist, room_name)
+			var scene_path := String(room_data["scene_path"])
+			if not _stream_pending_loads.has(room_name):
+				var err := ResourceLoader.load_threaded_request(scene_path)
+				if err == OK or err == ERR_BUSY:
+					_stream_pending_loads[room_name] = scene_path
 
 
 func _load_room_now(room_name: String) -> void:
@@ -340,10 +357,10 @@ func _load_room_now(room_name: String) -> void:
 	if instance == null:
 		return
 	instance.name = StringName(room_name)
-	instance.transform = room_data["transform"] as Transform3D
 	_stream_station_root.add_child(instance)
 	room_data["node"] = instance
 	_stream_rooms[room_name] = room_data
+	print("[RoomStream] Sync-instantiated (cache hit): ", room_name)
 
 
 func _update_room_streaming(delta: float) -> void:
@@ -380,10 +397,11 @@ func _check_pending_room_loads() -> void:
 		if instance == null:
 			continue
 		instance.name = StringName(room_name)
-		instance.transform = room_data["transform"] as Transform3D
 		_stream_station_root.add_child(instance)
 		room_data["node"] = instance
 		_stream_rooms[room_name] = room_data
+		print("[RoomStream] Async-instantiated: ", room_name)
+		_apply_pending_world_state()
 
 
 func _apply_room_streaming() -> void:
@@ -392,8 +410,7 @@ func _apply_room_streaming() -> void:
 	var player_pos := player.global_position
 	for room_name in _stream_rooms.keys():
 		var room_data: Dictionary = _stream_rooms[room_name]
-		var room_origin: Vector3 = (room_data["transform"] as Transform3D).origin
-		var distance := player_pos.distance_to(room_origin)
+		var distance := player_pos.distance_to(room_data["center"] as Vector3)
 		var is_loaded := is_instance_valid(room_data["node"] as Node)
 		var should_keep := room_names_to_always_keep.has(String(room_name))
 
@@ -787,20 +804,24 @@ func _on_autosave_door_opened(_source: Node) -> void:
 
 
 func _apply_loaded_world_state() -> void:
-	if _loaded_save_data.is_empty():
+	_apply_pending_world_state()
+	_loaded_save_data.clear()
+
+
+func _apply_pending_world_state() -> void:
+	if _pending_world_state.is_empty():
 		return
-	var world_state = _loaded_save_data.get("world", {})
-	if not (world_state is Dictionary):
-		return
-	var providers := world_state as Dictionary
-	for key in providers.keys():
+	var applied: Array[String] = []
+	for key in _pending_world_state.keys():
 		var node := _resolve_node_from_save_key(str(key))
 		if node == null or not node.has_method("apply_save_state"):
 			continue
-		var state = providers[key]
+		var state = _pending_world_state[key]
 		if state is Dictionary:
 			node.call("apply_save_state", state)
-	_loaded_save_data.clear()
+			applied.append(str(key))
+	for key in applied:
+		_pending_world_state.erase(key)
 
 
 func _extract_player_position(save_data: Dictionary, fallback: Vector3) -> Vector3:
