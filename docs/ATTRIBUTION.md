@@ -105,6 +105,7 @@ Source: [Flaticon](https://www.flaticon.com/)
 - "FREE Conical Flask | Laboratory | Low poly" (https://skfb.ly/oyGXN) by Naked Singularity Studio is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
 - "Toy Rocket 4k Free 3d Model" (https://skfb.ly/oBoYR) by henrique-dev is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
 - "Plastic Submarine" (https://skfb.ly/oXC9G) by roddstehling is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+- "watering can" (https://skfb.ly/oFo9T) by 3Dog is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
 - 
 
 ## Textures

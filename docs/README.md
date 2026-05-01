@@ -26,6 +26,17 @@ Climb and mantle onto low surfaces (chairs, desks) is automatic — no jump requ
 
 Focus mode activates automatically when interacting with precision objects. Click outside the interaction area to exit.
 
+## Incident Report Folder Interaction
+
+- The `incident_report` folder is a staged interactable:
+  1. Click opens folder and enters focus view.
+  2. Next click slides page 1 left.
+  3. Next click lifts page 2 slightly, then slides it left.
+  4. Next click restores pages, closes folder, and exits focus view.
+- Documents inside this folder are intentionally not individually clickable and do not show indicators.
+- Folder keeps the interactable indicator enabled.
+- `page_flip.wav` is used for document reading and folder page transitions.
+
 ## Exit Code
 
 On every **New Game** (not Continue/Load), the game generates a new 4-digit exit code in the range `1100..1900`.

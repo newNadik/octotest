@@ -28,10 +28,6 @@ size = Vector3(0.856, 1.169, 0.3)
 [node name="DocumentItem" type="StaticBody3D" unique_id=-1447463677]
 collision_mask = 0
 script = ExtResource("1_docitem")
-focus_roll_offset_degrees = null
-paper_roughness = null
-paper_specular = null
-paper_brightness = null
 
 [node name="DocumentMesh" type="MeshInstance3D" parent="." unique_id=-1104682540]
 mesh = SubResource("QuadMesh_yt08w")

@@ -1133,3 +1133,26 @@ No code changes. Design docs only.
 1. `HOME=/tmp XDG_DATA_HOME=/tmp XDG_CONFIG_HOME=/tmp /ssd2/godot/4.6.1/Godot_v4.6.1-stable_linux.x86_64 --headless --path /ssd2/projects/godot/octotest --quit-after 5`
 2. `HOME=/tmp XDG_DATA_HOME=/tmp XDG_CONFIG_HOME=/tmp /ssd2/godot/4.6.1/Godot_v4.6.1-stable_linux.x86_64 --headless --path /ssd2/projects/godot/octotest --script res://tests/movement_math_test.gd`
 3. `HOME=/tmp XDG_DATA_HOME=/tmp XDG_CONFIG_HOME=/tmp /ssd2/godot/4.6.1/Godot_v4.6.1-stable_linux.x86_64 --headless --path /ssd2/projects/godot/octotest --script res://tests/slope_movement_test.gd`
+### Step 13 - Document interaction polish, localization, and incident report flow
+- Refined `DocumentItem` interaction behavior:
+  - Removed highlight/indicator while reading.
+  - Smoothed focus return camera behavior.
+  - Added focus pan while zoomed on documents.
+  - Stabilized focus orientation to avoid upside-down/angled document views.
+- Added localized document textures with language-based switching:
+  - `document_texture` (EN) and `document_texture_ua` (UA).
+  - Editor preview updates when locale/texture settings change.
+- Updated document sizing:
+  - Replaced prior large size with `A1_LANDSCAPE` (3x A4 dimensions in project scale).
+  - Outline mesh scales with document size.
+- Added persistent exit-code feature:
+  - New Game generates a random 4-digit code in `1100..1900`.
+  - Stored in global settings and applied to `ExitCodeLabel` in scene labels.
+- Added `incident_report` staged folder interaction:
+  - Folder-only interaction (documents inside non-clickable, no indicators).
+  - Click sequence: open/focus -> page 1 left -> page 2 up+left -> reset+close+exit focus.
+  - Folder open/close playback sped up for better pacing.
+  - Folder interactable indicator enabled.
+- Added page flip SFX integration:
+  - `assets/sound/page_flip.wav` now plays when entering document reading view.
+  - Same SFX plays during incident report page move stages.

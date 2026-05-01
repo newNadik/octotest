@@ -7,6 +7,7 @@ enum DocumentSize {
 	A1_LANDSCAPE,
 }
 
+const PAGE_FLIP_SOUND := preload("res://assets/sound/page_flip.wav")
 const A4_SIZE := Vector2(0.756, 1.069)
 const A1_LANDSCAPE_SIZE := Vector2(4.536, 3.207)
 
@@ -30,6 +31,7 @@ var _focus_active_last_frame := false
 var _locale_last_frame := ""
 var _outline_base_scale := Vector3.ONE
 var _preview_signature := ""
+var _page_flip_player: AudioStreamPlayer3D
 
 
 func _ready() -> void:
@@ -42,6 +44,7 @@ func _ready() -> void:
 	_apply_texture()
 	_setup_focus_angles()
 	_locale_last_frame = TranslationServer.get_locale()
+	_setup_page_flip_player()
 	# Force first _process() reconciliation so interaction state is corrected
 	# after load even if it was persisted while focused.
 	_focus_active_last_frame = not _is_focus_active()
@@ -193,6 +196,7 @@ func _update_focus_interaction_state() -> void:
 	_interactable.set_interaction_enabled(not focus_active)
 	if focus_active:
 		_interactable.set_visual_state(Interactable.VisualState.IDLE)
+		_play_page_flip()
 
 
 func _update_editor_preview_if_needed() -> void:
@@ -225,3 +229,19 @@ func _is_focus_active() -> bool:
 	if not scene.has_method("is_focus_target_active"):
 		return false
 	return bool(scene.call("is_focus_target_active", _focus_target))
+
+
+func _setup_page_flip_player() -> void:
+	_page_flip_player = AudioStreamPlayer3D.new()
+	_page_flip_player.stream = PAGE_FLIP_SOUND
+	_page_flip_player.volume_db = -7.0
+	_page_flip_player.max_distance = 16.0
+	_page_flip_player.unit_size = 1.0
+	add_child(_page_flip_player)
+
+
+func _play_page_flip() -> void:
+	if _page_flip_player == null:
+		return
+	_page_flip_player.pitch_scale = randf_range(0.96, 1.04)
+	_page_flip_player.play()

@@ -565,7 +565,8 @@ func _is_document_focus_active() -> bool:
 		return false
 	if _focus_target == null or not is_instance_valid(_focus_target):
 		return false
-	return _focus_target.get_parent() is DocumentItem
+	var focus_host = _focus_target.get_parent()
+	return focus_host is DocumentItem or focus_host is IncidentReport
 
 
 func _handle_primary_click(screen_position: Vector2) -> bool:
@@ -583,12 +584,13 @@ func _handle_primary_click(screen_position: Vector2) -> bool:
 	if clicked_focus_target != null:
 		_focus_pending_target = clicked_focus_target
 		var focus_host = clicked_focus_target.get_parent()
-		if focus_host is DocumentItem:
-			if _interaction_controller.can_enter_focus_target(clicked_focus_target):
-				_enter_focus_mode(clicked_focus_target)
-			else:
-				_interaction_controller.request_approach_focus_target(clicked_focus_target)
-			return true
+		if focus_host is IncidentReport:
+			_interaction_controller.try_handle_interaction_click(screen_position)
+		if _interaction_controller.can_enter_focus_target(clicked_focus_target):
+			_enter_focus_mode(clicked_focus_target)
+		else:
+			_interaction_controller.request_approach_focus_target(clicked_focus_target)
+		return true
 	if _interaction_controller.try_handle_interaction_click(screen_position):
 		return true
 	if clicked_focus_target != null:
@@ -679,7 +681,13 @@ func _exit_focus_mode() -> void:
 	zoom_step = _saved_zoom_step
 	var follow_position := player.global_position + Vector3(0.0, CAMERA_FOLLOW_HEIGHT, 0.0)
 	follow_position.y = maxf(follow_position.y, CAMERA_MIN_WORLD_Y)
-	var is_document_focus := exiting_target != null and exiting_target.get_parent() is DocumentItem
+	var is_document_focus := (
+		exiting_target != null
+		and (
+			exiting_target.get_parent() is DocumentItem
+			or exiting_target.get_parent() is IncidentReport
+		)
+	)
 	if is_document_focus:
 		_start_focus_tween(
 			follow_position,
@@ -813,6 +821,10 @@ func is_focus_target_active(target) -> bool:
 	if target == null:
 		return false
 	return _focus_target == target
+
+
+func exit_focus_mode() -> void:
+	_exit_focus_mode()
 
 
 func _make_click_through(node: Node) -> void:

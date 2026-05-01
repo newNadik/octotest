@@ -44,6 +44,7 @@
 [ext_resource type="Texture2D" uid="uid://blwwebtoh0odf" path="res://assets/textures/documents/BCRC_Energy_Lab_September_Report_en.png" id="41_1v3wg"]
 [ext_resource type="Texture2D" uid="uid://disqw01812sev" path="res://assets/textures/documents/Dive Lock Operations Manual-ua.png" id="41_neupb"]
 [ext_resource type="Texture2D" uid="uid://cj5sb64axyarx" path="res://assets/textures/documents/BCRC_Energy_Lab_September_Report_ua.png" id="42_1mwdg"]
+[ext_resource type="PackedScene" uid="uid://mlm3uii4kmw7" path="res://scenes/interactables/incident_report.tscn" id="45_axy4g"]
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_b4dhb"]
 _surfaces = [{
@@ -345,7 +346,7 @@ transform = Transform3D(1.4581873, 0, -0.35169524, 0, 1.5, 0, 0.35169524, 0, 1.4
 transform = Transform3D(1.4097, 0, -0.51258737, 0, 1.5, 0, 0.51258737, 0, 1.4097, 7.9525414, 2.458999, -22.47495)
 
 [node name="Sketchfab_Scene" parent="furniture" unique_id=193934492 instance=ExtResource("26_vysnv")]
-transform = Transform3D(1.4498838, 0, 6.8481994, 0, 7, 0, -6.8481994, 0, 1.4498838, 1.3067704, 1.5502174, -25.74439)
+transform = Transform3D(1.4498838, 0, 6.8481994, 0, 7, 0, -6.8481994, 0, 1.4498838, 1.1115266, 1.5502174, -26.190887)
 
 [node name="items" type="Node3D" parent="." unique_id=336571729]
 
@@ -356,7 +357,7 @@ transform = Transform3D(0.38202226, 0, 0.9241531, 0, 1, 0, -0.9241531, 0, 0.3820
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 1.0918846, 1.482, -21.895)
 
 [node name="computer2" parent="items" unique_id=1396061796 instance=ExtResource("15_24s07")]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 1.1387501, 1.481719, -24.861412)
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 1.1387501, 1.481719, -25.31607)
 
 [node name="fire_extinguisher" parent="items" unique_id=1012721613 instance=ExtResource("20_lbeae")]
 transform = Transform3D(-0.9238796, 0, 0.38268355, 0, 1, 0, -0.38268355, 0, -0.9238796, 0.26016712, 0, -18.447191)
@@ -365,7 +366,7 @@ transform = Transform3D(-0.9238796, 0, 0.38268355, 0, 1, 0, -0.38268355, 0, -0.9
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.0167646, 2.469826, -18.92471)
 
 [node name="cactus" parent="items" unique_id=589026095 instance=ExtResource("10_lhg08")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.2386034, 1.5625226, -23.023087)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.2386034, 1.5625226, -22.959644)
 
 [node name="mug" parent="items" unique_id=36977870 instance=ExtResource("18_qu1ev")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5842094, 1.558221, -21.281277)
@@ -390,10 +391,6 @@ screen_image = ExtResource("28_uo8mj")
 transform = Transform3D(0.9812018, -0.19253998, 0.013088915, 0, 0.067823716, 0.9976974, -0.19298439, -0.9789425, 0.06654876, 3.790728, 0.7950039, -27.830137)
 document_texture = ExtResource("40_1amw7")
 document_texture_ua = ExtResource("41_neupb")
-focus_roll_offset_degrees = 0.0
-paper_roughness = 0.92
-paper_specular = 0.04
-paper_brightness = 0.9
 
 [node name="ExitCodeLabel" type="Label3D" parent="items/DocumentItem" unique_id=200098651]
 transform = Transform3D(0.99999994, 5.9604645e-08, -3.7252903e-09, 5.9604645e-08, 0.99999994, 0, -3.7252903e-09, -2.9802322e-08, 1.0000002, -0.3234682, -0.24791718, 0.0067691803)
@@ -429,10 +426,9 @@ outline_size = 20
 transform = Transform3D(0.22835085, -0.9735789, -4.2556483e-08, 0, -4.3711385e-08, 0.9999999, -0.9735788, -0.22835086, -9.981533e-09, 1.3568361, 1.56531, -20.92093)
 document_texture = ExtResource("41_1v3wg")
 document_texture_ua = ExtResource("42_1mwdg")
-focus_roll_offset_degrees = 0.0
-paper_roughness = 0.92
-paper_specular = 0.04
-paper_brightness = 0.9
 
 [node name="whiteboard" parent="items" unique_id=1268081871 instance=ExtResource("37_de8xb")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5587819, 3, -29.733006)
+
+[node name="incident_report" parent="items" unique_id=1549406628 instance=ExtResource("45_axy4g")]
+transform = Transform3D(0.088407345, 0, 0.9960844, 0, 1, 0, -0.9960844, 0, 0.088407345, 1.298976, 1.5797518, -24.34287)
