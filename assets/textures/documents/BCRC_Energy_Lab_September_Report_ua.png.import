@@ -2,9 +2,9 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cn2ay2gp5xlal"
-path.s3tc="res://.godot/imported/DefaultMaterial_Roughness.png-83b4e8f1142d0fa30a604eee913e0657.s3tc.ctex"
-path.etc2="res://.godot/imported/DefaultMaterial_Roughness.png-83b4e8f1142d0fa30a604eee913e0657.etc2.ctex"
+uid="uid://cj5sb64axyarx"
+path.s3tc="res://.godot/imported/BCRC_Energy_Lab_September_Report_ua.png-13507b0d9264fa65564dfd1d70674cdf.s3tc.ctex"
+path.etc2="res://.godot/imported/BCRC_Energy_Lab_September_Report_ua.png-13507b0d9264fa65564dfd1d70674cdf.etc2.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
@@ -12,8 +12,8 @@ metadata={
 
 [deps]
 
-source_file="res://assets/models/items/first_aid/DefaultMaterial_Roughness.png"
-dest_files=["res://.godot/imported/DefaultMaterial_Roughness.png-83b4e8f1142d0fa30a604eee913e0657.s3tc.ctex", "res://.godot/imported/DefaultMaterial_Roughness.png-83b4e8f1142d0fa30a604eee913e0657.etc2.ctex"]
+source_file="res://assets/textures/documents/BCRC_Energy_Lab_September_Report_ua.png"
+dest_files=["res://.godot/imported/BCRC_Energy_Lab_September_Report_ua.png-13507b0d9264fa65564dfd1d70674cdf.s3tc.ctex", "res://.godot/imported/BCRC_Energy_Lab_September_Report_ua.png-13507b0d9264fa65564dfd1d70674cdf.etc2.ctex"]
 
 [params]
 

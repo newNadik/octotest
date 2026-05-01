@@ -38,6 +38,11 @@
 [ext_resource type="Texture2D" uid="uid://d3wpu5sb6gfus" path="res://assets/textures/screens/dashboart_2.png" id="27_7a6tg"]
 [ext_resource type="Texture2D" uid="uid://dy5q3ul1fwxuq" path="res://assets/textures/screens/dashboart_1.png" id="28_uo8mj"]
 [ext_resource type="PackedScene" uid="uid://cujh0jfg6qbtp" path="res://scenes/station/items/whiteboard.tscn" id="37_de8xb"]
+[ext_resource type="PackedScene" uid="uid://bwx4cmp7n3qhv" path="res://scenes/interactables/document_item.tscn" id="39_khf22"]
+[ext_resource type="Texture2D" uid="uid://c03w1a6lwi8fw" path="res://assets/textures/documents/Dive Lock Operations Manual-en.png" id="40_1amw7"]
+[ext_resource type="Texture2D" uid="uid://blwwebtoh0odf" path="res://assets/textures/documents/BCRC_Energy_Lab_September_Report_en.png" id="41_1v3wg"]
+[ext_resource type="Texture2D" uid="uid://disqw01812sev" path="res://assets/textures/documents/Dive Lock Operations Manual-ua.png" id="41_neupb"]
+[ext_resource type="Texture2D" uid="uid://cj5sb64axyarx" path="res://assets/textures/documents/BCRC_Energy_Lab_September_Report_ua.png" id="42_1mwdg"]
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_b4dhb"]
 _surfaces = [{
@@ -362,7 +367,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.0167646, 2.469826, -18.9247
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.2386034, 1.5625226, -23.023087)
 
 [node name="mug" parent="items" unique_id=36977870 instance=ExtResource("18_qu1ev")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.0631657, 1.558221, -20.978203)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5842094, 1.558221, -21.281277)
 
 [node name="wall_tv" parent="items" unique_id=562100905 instance=ExtResource("24_qu1ev")]
 transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -0.3986223, 3.0217419, -24.868483)
@@ -380,5 +385,15 @@ screen_image = ExtResource("27_7a6tg")
 transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -0.3986223, 4.6812744, -22.111685)
 screen_image = ExtResource("28_uo8mj")
 
-[node name="whiteboard" parent="." unique_id=1268081871 instance=ExtResource("37_de8xb")]
+[node name="DocumentItem" parent="items" unique_id=-1447463677 instance=ExtResource("39_khf22")]
+transform = Transform3D(0.9812018, -0.19253998, 0.013088915, 0, 0.067823716, 0.9976974, -0.19298439, -0.9789425, 0.06654876, 3.790728, 0.7950039, -27.830137)
+document_texture = ExtResource("40_1amw7")
+document_texture_ua = ExtResource("41_neupb")
+
+[node name="DocumentItem2" parent="items" unique_id=628716117 instance=ExtResource("39_khf22")]
+transform = Transform3D(0.22835085, -0.9735789, -4.2556483e-08, 0, -4.3711385e-08, 0.9999999, -0.9735788, -0.22835086, -9.981533e-09, 1.3568361, 1.56531, -20.92093)
+document_texture = ExtResource("41_1v3wg")
+document_texture_ua = ExtResource("42_1mwdg")
+
+[node name="whiteboard" parent="items" unique_id=1268081871 instance=ExtResource("37_de8xb")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5587819, 3, -29.733006)

@@ -2,9 +2,9 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cn2ay2gp5xlal"
-path.s3tc="res://.godot/imported/DefaultMaterial_Roughness.png-83b4e8f1142d0fa30a604eee913e0657.s3tc.ctex"
-path.etc2="res://.godot/imported/DefaultMaterial_Roughness.png-83b4e8f1142d0fa30a604eee913e0657.etc2.ctex"
+uid="uid://c03w1a6lwi8fw"
+path.s3tc="res://.godot/imported/Dive Lock Operations Manual-en.png-80abbde7fb185bd834badb55583647de.s3tc.ctex"
+path.etc2="res://.godot/imported/Dive Lock Operations Manual-en.png-80abbde7fb185bd834badb55583647de.etc2.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
@@ -12,8 +12,8 @@ metadata={
 
 [deps]
 
-source_file="res://assets/models/items/first_aid/DefaultMaterial_Roughness.png"
-dest_files=["res://.godot/imported/DefaultMaterial_Roughness.png-83b4e8f1142d0fa30a604eee913e0657.s3tc.ctex", "res://.godot/imported/DefaultMaterial_Roughness.png-83b4e8f1142d0fa30a604eee913e0657.etc2.ctex"]
+source_file="res://assets/textures/documents/Dive Lock Operations Manual-en.png"
+dest_files=["res://.godot/imported/Dive Lock Operations Manual-en.png-80abbde7fb185bd834badb55583647de.s3tc.ctex", "res://.godot/imported/Dive Lock Operations Manual-en.png-80abbde7fb185bd834badb55583647de.etc2.ctex"]
 
 [params]
 

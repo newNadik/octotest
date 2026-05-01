@@ -9,6 +9,11 @@ class_name FocusTarget
 @export var use_angle_override := false
 @export var focus_yaw_degrees := 0.0
 @export var focus_pitch_degrees := -22.0
+@export var focus_roll_degrees := 0.0
+@export var focus_zoom_start := -1.0
+@export var focus_min_zoom := -1.0
+@export var focus_max_zoom := -1.0
+@export var focus_zoom_step := -1.0
 
 
 func get_focus_position() -> Vector3:
@@ -37,3 +42,9 @@ func get_focus_pitch_degrees(default_pitch: float) -> float:
 	if use_angle_override:
 		return focus_pitch_degrees
 	return default_pitch
+
+
+func get_focus_roll_degrees(default_roll: float) -> float:
+	if use_angle_override:
+		return focus_roll_degrees
+	return default_roll

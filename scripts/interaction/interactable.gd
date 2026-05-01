@@ -228,19 +228,7 @@ func trigger_click_feedback() -> void:
 
 
 func _apply_visuals() -> void:
-	var outline_state := ""
-	if _click_feedback_time_left > 0.0:
-		outline_state = "click"
-	else:
-		match _current_state:
-			VisualState.IN_RANGE:
-				outline_state = "in_range"
-			VisualState.HOVERED:
-				outline_state = "in_range"
-			VisualState.HELD:
-				outline_state = ""
-			_:
-				outline_state = ""
+	var outline_state := _get_outline_state_name()
 	var should_show_highlight := not outline_state.is_empty()
 	if highlight_mode == HighlightMode.REVEAL_MESHES:
 		_apply_outline_state("")
@@ -466,18 +454,7 @@ func _refresh_indicator_visuals() -> void:
 		_indicator_root.visible = false
 		return
 
-	var dot_alpha = 1.0
-	match _current_state:
-		VisualState.HOVERED:
-			dot_alpha = 1.0
-		VisualState.IN_RANGE:
-			dot_alpha = 1.0
-		VisualState.BLOCKED:
-			dot_alpha = 0.78
-		VisualState.HELD:
-			dot_alpha = 0.0
-		_:
-			dot_alpha = 1.0
+	var dot_alpha := _get_indicator_alpha_for_state()
 
 	if _indicator_dot != null:
 		_indicator_dot.modulate = Color(1.8, 1.8, 1.8, dot_alpha)
@@ -511,6 +488,26 @@ func _is_highlighted_state() -> bool:
 		or _current_state == VisualState.BLOCKED
 		or _click_feedback_time_left > 0.0
 	)
+
+
+func _get_outline_state_name() -> String:
+	if _click_feedback_time_left > 0.0:
+		return "click"
+	match _current_state:
+		VisualState.IN_RANGE, VisualState.HOVERED:
+			return "in_range"
+		_:
+			return ""
+
+
+func _get_indicator_alpha_for_state() -> float:
+	match _current_state:
+		VisualState.BLOCKED:
+			return 0.78
+		VisualState.HELD:
+			return 0.0
+		_:
+			return 1.0
 
 
 func _get_indicator_world_position() -> Vector3:

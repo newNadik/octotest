@@ -429,7 +429,7 @@ func can_enter_focus_target(focus_target: FocusTargetScript) -> bool:
 		return false
 	if not _is_interactable_in_range(interactable):
 		return false
-	if not _has_line_of_sight(interactable):
+	if interactable.requires_line_of_sight and not _has_line_of_sight(interactable):
 		return false
 	var planar_speed = Vector2(_player.velocity.x, _player.velocity.z).length()
 	return planar_speed <= 0.12

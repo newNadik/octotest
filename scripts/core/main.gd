@@ -43,6 +43,9 @@ const ROOM_REGISTRY: Array[Dictionary] = [
 @export var zoom_step := 1.0
 @export var focus_zoom_distance := 2.0
 @export var focus_tween_duration := 0.24
+@export var focus_return_tween_duration := 0.36
+@export var focus_pan_sensitivity := 0.0016
+@export var focus_pan_max_distance := 0.7
 @export var camera_follow_lerp_speed := 10.0
 @export var camera_follow_deadzone := 0.03
 @export var underwater_light_motion_enabled := true
@@ -88,11 +91,19 @@ var _primary_pointer_dragging := false
 var _primary_pointer_start := Vector2.ZERO
 var _yaw := 35.0
 var _pitch := -35.0
+var _roll := 0.0
 var _focus_mode := false
 var _focus_target
 var _focus_pending_target
 var _focus_tween: Tween
 var _saved_spring_length := 9.0
+var _saved_yaw := 35.0
+var _saved_pitch := -35.0
+var _saved_roll := 0.0
+var _saved_min_zoom := 0.0
+var _saved_max_zoom := 0.0
+var _saved_zoom_step := 0.0
+var _focus_pan_offset := Vector3.ZERO
 var _player_visual_root: Node3D
 var _settings_overlay: Control
 var _underwater_light_time := 0.0
@@ -516,12 +527,38 @@ func _update_primary_pointer_drag(screen_position: Vector2, relative: Vector2) -
 	if not _primary_pointer_dragging:
 		return false
 	if _focus_mode:
+		_apply_focus_pan(relative)
 		return true
 	_orbiting = true
 	_yaw -= relative.x * orbit_sensitivity
 	_pitch = clampf(_pitch - relative.y * orbit_sensitivity, orbit_pitch_min_degrees, orbit_pitch_max_degrees)
 	_apply_camera_angles()
 	return true
+
+
+func _apply_focus_pan(relative: Vector2) -> void:
+	if not _is_document_focus_active():
+		return
+	if _focus_target == null or not is_instance_valid(_focus_target):
+		return
+	if _focus_tween != null:
+		_focus_tween.kill()
+	var scale := focus_pan_sensitivity * maxf(0.2, spring_arm.spring_length)
+	var right := camera.global_basis.x
+	var up := camera.global_basis.y
+	var delta := (-right * relative.x + up * relative.y) * scale
+	_focus_pan_offset += delta
+	if _focus_pan_offset.length() > focus_pan_max_distance:
+		_focus_pan_offset = _focus_pan_offset.normalized() * focus_pan_max_distance
+	camera_pivot.global_position = _focus_target.get_focus_position() + _focus_pan_offset
+
+
+func _is_document_focus_active() -> bool:
+	if not _focus_mode:
+		return false
+	if _focus_target == null or not is_instance_valid(_focus_target):
+		return false
+	return _focus_target.get_parent() is DocumentItem
 
 
 func _handle_primary_click(screen_position: Vector2) -> bool:
@@ -538,6 +575,13 @@ func _handle_primary_click(screen_position: Vector2) -> bool:
 	var clicked_focus_target = _interaction_controller.get_focus_target_at_screen(screen_position)
 	if clicked_focus_target != null:
 		_focus_pending_target = clicked_focus_target
+		var focus_host = clicked_focus_target.get_parent()
+		if focus_host is DocumentItem:
+			if _interaction_controller.can_enter_focus_target(clicked_focus_target):
+				_enter_focus_mode(clicked_focus_target)
+			else:
+				_interaction_controller.request_approach_focus_target(clicked_focus_target)
+			return true
 	if _interaction_controller.try_handle_interaction_click(screen_position):
 		return true
 	if clicked_focus_target != null:
@@ -580,8 +624,21 @@ func _enter_focus_mode(target) -> void:
 		return
 	_focus_mode = true
 	_focus_target = target
+	_focus_pan_offset = Vector3.ZERO
 	_focus_pending_target = null
 	_saved_spring_length = spring_arm.spring_length
+	_saved_yaw = _yaw
+	_saved_pitch = _pitch
+	_saved_roll = _roll
+	_saved_min_zoom = min_zoom
+	_saved_max_zoom = max_zoom
+	_saved_zoom_step = zoom_step
+	if target.focus_min_zoom > 0.0:
+		min_zoom = target.focus_min_zoom
+	if target.focus_max_zoom > 0.0:
+		max_zoom = target.focus_max_zoom
+	if target.focus_zoom_step > 0.0:
+		zoom_step = target.focus_zoom_step
 	player.clear_move_target()
 	_interaction_controller.set_focus_locked(true)
 	_interaction_controller.set_focus_display(true, camera)
@@ -590,12 +647,16 @@ func _enter_focus_mode(target) -> void:
 	var target_angles := _compute_focus_angles(target)
 	_yaw = target_angles.x
 	_pitch = target_angles.y
-	_start_focus_tween(_focus_target.get_focus_position(), focus_zoom_distance)
+	_roll = target_angles.z
+	var zoom: float = focus_zoom_distance if target.focus_zoom_start <= 0.0 else target.focus_zoom_start
+	_start_focus_tween(_focus_target.get_focus_position(), zoom)
 
 
 func _exit_focus_mode() -> void:
 	if not _focus_mode:
 		return
+	var exiting_target = _focus_target
+	_focus_pan_offset = Vector3.ZERO
 	_focus_mode = false
 	_focus_target = null
 	_focus_pending_target = null
@@ -603,19 +664,42 @@ func _exit_focus_mode() -> void:
 	_interaction_controller.set_focus_display(false, null)
 	_interaction_controller.set_focus_target(null)
 	_set_focus_visuals_enabled(true)
+	_yaw = _saved_yaw
+	_pitch = _saved_pitch
+	_roll = _saved_roll
+	min_zoom = _saved_min_zoom
+	max_zoom = _saved_max_zoom
+	zoom_step = _saved_zoom_step
 	var follow_position := player.global_position + Vector3(0.0, CAMERA_FOLLOW_HEIGHT, 0.0)
 	follow_position.y = maxf(follow_position.y, CAMERA_MIN_WORLD_Y)
-	_start_focus_tween(follow_position, _saved_spring_length)
+	var is_document_focus := exiting_target != null and exiting_target.get_parent() is DocumentItem
+	if is_document_focus:
+		_start_focus_tween(
+			follow_position,
+			_saved_spring_length,
+			focus_return_tween_duration,
+			Tween.TRANS_SINE,
+			Tween.EASE_IN_OUT
+		)
+	else:
+		_start_focus_tween(follow_position, _saved_spring_length)
 
 
-func _start_focus_tween(target_pivot_position: Vector3, target_zoom: float) -> void:
+func _start_focus_tween(
+	target_pivot_position: Vector3,
+	target_zoom: float,
+	duration: float = focus_tween_duration,
+	trans: Tween.TransitionType = Tween.TRANS_CUBIC,
+	ease: Tween.EaseType = Tween.EASE_OUT
+) -> void:
 	if _focus_tween != null:
 		_focus_tween.kill()
-	_focus_tween = create_tween().set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CUBIC)
-	_focus_tween.tween_property(camera_pivot, "global_position", target_pivot_position, focus_tween_duration)
-	_focus_tween.parallel().tween_property(spring_arm, "spring_length", target_zoom, focus_tween_duration)
-	_focus_tween.parallel().tween_property(camera_yaw, "rotation_degrees:y", _yaw, focus_tween_duration)
-	_focus_tween.parallel().tween_property(camera_pitch, "rotation_degrees:x", _pitch, focus_tween_duration)
+	_focus_tween = create_tween().set_ease(ease).set_trans(trans)
+	_focus_tween.tween_property(camera_pivot, "global_position", target_pivot_position, duration)
+	_focus_tween.parallel().tween_property(spring_arm, "spring_length", target_zoom, duration)
+	_focus_tween.parallel().tween_property(camera_yaw, "rotation_degrees:y", _yaw, duration)
+	_focus_tween.parallel().tween_property(camera_pitch, "rotation_degrees:x", _pitch, duration)
+	_focus_tween.parallel().tween_property(camera_pitch, "rotation_degrees:z", _roll, duration)
 
 
 func _set_focus_visuals_enabled(is_enabled: bool) -> void:
@@ -624,14 +708,15 @@ func _set_focus_visuals_enabled(is_enabled: bool) -> void:
 	_interaction_controller.set_held_item_visuals_visible(is_enabled or _focus_mode)
 
 
-func _compute_focus_angles(target) -> Vector2:
+func _compute_focus_angles(target) -> Vector3:
 	var host := target.get_parent() as Node3D
 	var default_yaw := _yaw
 	if host != null:
 		default_yaw = wrapf(rad_to_deg(host.global_rotation.y) - 180.0, -180.0, 180.0)
 	var desired_yaw = target.get_focus_yaw_degrees(default_yaw)
 	var desired_pitch = target.get_focus_pitch_degrees(-22.0)
-	return Vector2(desired_yaw, desired_pitch)
+	var desired_roll = target.get_focus_roll_degrees(0.0)
+	return Vector3(desired_yaw, desired_pitch, desired_roll)
 
 
 func _create_interaction_controller() -> void:
@@ -659,6 +744,7 @@ func _configure_camera_collision() -> void:
 func _apply_camera_angles() -> void:
 	camera_yaw.rotation_degrees.y = _yaw
 	camera_pitch.rotation_degrees.x = _pitch
+	camera_pitch.rotation_degrees.z = _roll
 
 
 func _raycast_to_ground(screen_position: Vector2) -> Vector3:

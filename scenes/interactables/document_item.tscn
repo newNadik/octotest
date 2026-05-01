@@ -1,0 +1,66 @@
+[gd_scene format=3 uid="uid://bwx4cmp7n3qhv"]
+
+[ext_resource type="Script" uid="uid://cyrs8nx3p4qwk" path="res://scripts/interaction/document_item.gd" id="1_docitem"]
+[ext_resource type="Script" uid="uid://b0r404u7bpvr" path="res://scripts/interaction/focus_target.gd" id="2_focus"]
+[ext_resource type="Script" uid="uid://bt8vvmy3m63u7" path="res://scripts/interaction/interactable.gd" id="3_interact"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_doc_default"]
+albedo_color = Color(0.9, 0.9, 0.9, 1)
+
+[sub_resource type="QuadMesh" id="QuadMesh_yt08w"]
+material = SubResource("StandardMaterial3D_doc_default")
+size = Vector2(0.756, 1.069)
+
+[sub_resource type="QuadMesh" id="QuadMesh_document"]
+material = SubResource("StandardMaterial3D_doc_default")
+size = Vector2(0.756, 1.069)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_yt08w"]
+emission_enabled = true
+emission = Color(1, 1, 1, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_tqt44"]
+size = Vector3(0.756, 1.069, 0.01)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_cyluy"]
+size = Vector3(0.856, 1.169, 0.3)
+
+[node name="DocumentItem" type="StaticBody3D" unique_id=-1447463677]
+collision_mask = 0
+script = ExtResource("1_docitem")
+
+[node name="DocumentMesh" type="MeshInstance3D" parent="." unique_id=-1104682540]
+mesh = SubResource("QuadMesh_yt08w")
+
+[node name="OutlineMesh" type="MeshInstance3D" parent="DocumentMesh" unique_id=845241191]
+transform = Transform3D(1.05, 0, 0, 0, 1.03, 0, 0, 0, 1, 0, 0, -0.005000472)
+visible = false
+mesh = SubResource("QuadMesh_document")
+surface_material_override/0 = SubResource("StandardMaterial3D_yt08w")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1583920471]
+shape = SubResource("BoxShape3D_tqt44")
+
+[node name="FocusTarget" type="Node3D" parent="." unique_id=-271120134]
+script = ExtResource("2_focus")
+auto_exit_on_solved = false
+use_angle_override = true
+focus_pitch_degrees = 0.0
+focus_zoom_start = 1.2
+focus_min_zoom = 0.24
+focus_max_zoom = 2.4
+focus_zoom_step = 0.096
+
+[node name="Interactable" type="Area3D" parent="." unique_id=729481053]
+collision_layer = 8
+collision_mask = 0
+script = ExtResource("3_interact")
+display_name = "Document"
+prompt_action = "Read"
+requires_line_of_sight = false
+highlight_mode = 1
+highlight_visible_paths = Array[NodePath]([NodePath("../DocumentMesh/OutlineMesh")])
+indicator_local_offset = Vector3(0.31752, -0.47402, 0.02)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Interactable" unique_id=-2138228248]
+shape = SubResource("BoxShape3D_cyluy")
