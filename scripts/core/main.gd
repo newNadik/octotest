@@ -128,7 +128,7 @@ func _ready() -> void:
 	in_game_menu.process_mode = Node.PROCESS_MODE_WHEN_PAUSED
 	player.process_mode = Node.PROCESS_MODE_PAUSABLE
 	_apply_platform_visual_overrides()
-	var starting_position := Vector3(0.0, OCTO_START_Y, 16.0)
+	var starting_position := Vector3(5.0, OCTO_START_Y, -26.0)
 	var is_loading_saved_game := _consume_pending_load_request()
 	if is_loading_saved_game:
 		_loaded_save_data = _load_saved_game()

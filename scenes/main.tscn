@@ -64,7 +64,7 @@ environment = SubResource("Environment_1w5qu")
 [node name="station" type="Node3D" parent="." unique_id=680235138]
 
 [node name="Player" parent="." unique_id=445333378 instance=ExtResource("2_vrsh6")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.2166114, 0, -26.836166)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0, -26)
 
 [node name="CameraPivot" type="Node3D" parent="." unique_id=161127609]
 

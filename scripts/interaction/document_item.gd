@@ -14,6 +14,11 @@ const A1_LANDSCAPE_SIZE := Vector2(4.536, 3.207)
 @export var document_texture: Texture2D
 @export var document_texture_ua: Texture2D
 @export_range(-180.0, 180.0, 0.1) var focus_roll_offset_degrees := 0.0
+@export_group("Visual")
+@export_range(0.0, 1.0, 0.01) var paper_roughness := 0.92
+@export_range(0.0, 1.0, 0.01) var paper_specular := 0.04
+@export_range(0.5, 1.5, 0.01) var paper_brightness := 0.9
+@export_group("")
 
 @onready var _mesh: MeshInstance3D = $DocumentMesh
 @onready var _body_collision: CollisionShape3D = $CollisionShape3D
@@ -67,9 +72,14 @@ func _apply_texture() -> void:
 	if texture_to_use == null:
 		return
 	var mat := StandardMaterial3D.new()
-	mat.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+	mat.shading_mode = BaseMaterial3D.SHADING_MODE_PER_PIXEL
 	mat.cull_mode = BaseMaterial3D.CULL_DISABLED
 	mat.albedo_texture = texture_to_use
+	mat.albedo_color = Color(paper_brightness, paper_brightness, paper_brightness, 1.0)
+	mat.roughness = paper_roughness
+	mat.specular = paper_specular
+	mat.metallic = 0.0
+	mat.emission_enabled = false
 	_mesh.material_override = mat
 
 
@@ -196,12 +206,15 @@ func _update_editor_preview_if_needed() -> void:
 
 
 func _build_preview_signature() -> String:
-	return "%d|%s|%s|%s|%s" % [
+	return "%d|%s|%s|%s|%s|%s|%s|%s" % [
 		int(document_size),
 		str(document_texture),
 		str(document_texture_ua),
 		TranslationServer.get_locale(),
-		str(focus_roll_offset_degrees)
+		str(focus_roll_offset_degrees),
+		str(paper_roughness),
+		str(paper_specular),
+		str(paper_brightness)
 	]
 
 
