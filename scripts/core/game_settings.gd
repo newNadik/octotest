@@ -7,6 +7,7 @@ const SECTION_AUDIO := "audio"
 const SECTION_ACCESSIBILITY := "accessibility"
 const SECTION_GRAPHICS := "graphics"
 const KEY_LOCALE := "locale"
+const KEY_EXIT_CODE := "exit_code"
 const KEY_MUSIC_VOLUME := "music_volume"
 const KEY_SOUND_VOLUME := "sound_volume"
 const KEY_AMBIENCE_VOLUME := "ambience_volume"
@@ -18,6 +19,8 @@ const DEFAULT_SOUND_VOLUME := 1.0
 const DEFAULT_AMBIENCE_VOLUME := 1.0
 const DEFAULT_SUBTITLES_ENABLED := true
 const DEFAULT_GOD_RAYS_ENABLED := true
+const EXIT_CODE_MIN := 1100
+const EXIT_CODE_MAX := 1900
 
 signal god_rays_enabled_changed(enabled: bool)
 
@@ -28,6 +31,7 @@ var _sound_volume := DEFAULT_SOUND_VOLUME
 var _ambience_volume := DEFAULT_AMBIENCE_VOLUME
 var _subtitles_enabled := DEFAULT_SUBTITLES_ENABLED
 var _god_rays_enabled := DEFAULT_GOD_RAYS_ENABLED
+var _exit_code := 0
 
 
 func _ready() -> void:
@@ -39,6 +43,26 @@ func _ready() -> void:
 
 func get_locale() -> String:
 	return _locale
+
+
+func get_exit_code() -> int:
+	return _exit_code
+
+
+func set_exit_code(value: int) -> void:
+	var clamped := clampi(value, EXIT_CODE_MIN, EXIT_CODE_MAX)
+	if _exit_code == clamped:
+		return
+	_exit_code = clamped
+	save_settings()
+
+
+func generate_new_exit_code() -> int:
+	var rng := RandomNumberGenerator.new()
+	rng.randomize()
+	_exit_code = rng.randi_range(EXIT_CODE_MIN, EXIT_CODE_MAX)
+	save_settings()
+	return _exit_code
 
 
 func set_locale(locale: String) -> void:
@@ -117,6 +141,7 @@ func load_settings() -> void:
 	var error := _config.load(SETTINGS_PATH)
 	if error == OK:
 		_locale = str(_config.get_value(SECTION_GENERAL, KEY_LOCALE, DEFAULT_LOCALE))
+		_exit_code = int(_config.get_value(SECTION_GENERAL, KEY_EXIT_CODE, 0))
 		_music_volume = float(_config.get_value(SECTION_AUDIO, KEY_MUSIC_VOLUME, DEFAULT_MUSIC_VOLUME))
 		_sound_volume = float(_config.get_value(SECTION_AUDIO, KEY_SOUND_VOLUME, DEFAULT_SOUND_VOLUME))
 		_ambience_volume = float(_config.get_value(SECTION_AUDIO, KEY_AMBIENCE_VOLUME, DEFAULT_AMBIENCE_VOLUME))
@@ -124,6 +149,7 @@ func load_settings() -> void:
 		_god_rays_enabled = bool(_config.get_value(SECTION_GRAPHICS, KEY_GOD_RAYS_ENABLED, DEFAULT_GOD_RAYS_ENABLED))
 	elif error == ERR_FILE_NOT_FOUND:
 		_locale = DEFAULT_LOCALE
+		_exit_code = 0
 		_music_volume = DEFAULT_MUSIC_VOLUME
 		_sound_volume = DEFAULT_SOUND_VOLUME
 		_ambience_volume = DEFAULT_AMBIENCE_VOLUME
@@ -132,6 +158,7 @@ func load_settings() -> void:
 	else:
 		push_warning("Failed to load settings file: %s" % SETTINGS_PATH)
 		_locale = DEFAULT_LOCALE
+		_exit_code = 0
 		_music_volume = DEFAULT_MUSIC_VOLUME
 		_sound_volume = DEFAULT_SOUND_VOLUME
 		_ambience_volume = DEFAULT_AMBIENCE_VOLUME
@@ -140,6 +167,8 @@ func load_settings() -> void:
 
 	if _locale.is_empty():
 		_locale = DEFAULT_LOCALE
+	if _exit_code < EXIT_CODE_MIN or _exit_code > EXIT_CODE_MAX:
+		_exit_code = 0
 	_music_volume = clampf(_music_volume, 0.0, 1.0)
 	_sound_volume = clampf(_sound_volume, 0.0, 1.0)
 	_ambience_volume = clampf(_ambience_volume, 0.0, 1.0)
@@ -147,6 +176,7 @@ func load_settings() -> void:
 
 func save_settings() -> void:
 	_config.set_value(SECTION_GENERAL, KEY_LOCALE, _locale)
+	_config.set_value(SECTION_GENERAL, KEY_EXIT_CODE, _exit_code)
 	_config.set_value(SECTION_AUDIO, KEY_MUSIC_VOLUME, _music_volume)
 	_config.set_value(SECTION_AUDIO, KEY_SOUND_VOLUME, _sound_volume)
 	_config.set_value(SECTION_AUDIO, KEY_AMBIENCE_VOLUME, _ambience_volume)

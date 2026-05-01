@@ -40,6 +40,7 @@
 [ext_resource type="PackedScene" uid="uid://cujh0jfg6qbtp" path="res://scenes/station/items/whiteboard.tscn" id="37_de8xb"]
 [ext_resource type="PackedScene" uid="uid://bwx4cmp7n3qhv" path="res://scenes/interactables/document_item.tscn" id="39_khf22"]
 [ext_resource type="Texture2D" uid="uid://c03w1a6lwi8fw" path="res://assets/textures/documents/Dive Lock Operations Manual-en.png" id="40_1amw7"]
+[ext_resource type="FontFile" uid="uid://c124e1nfx2dee" path="res://assets/ui/Verdana-Bold.ttf" id="41_1mwdg"]
 [ext_resource type="Texture2D" uid="uid://blwwebtoh0odf" path="res://assets/textures/documents/BCRC_Energy_Lab_September_Report_en.png" id="41_1v3wg"]
 [ext_resource type="Texture2D" uid="uid://disqw01812sev" path="res://assets/textures/documents/Dive Lock Operations Manual-ua.png" id="41_neupb"]
 [ext_resource type="Texture2D" uid="uid://cj5sb64axyarx" path="res://assets/textures/documents/BCRC_Energy_Lab_September_Report_ua.png" id="42_1mwdg"]
@@ -389,11 +390,43 @@ screen_image = ExtResource("28_uo8mj")
 transform = Transform3D(0.9812018, -0.19253998, 0.013088915, 0, 0.067823716, 0.9976974, -0.19298439, -0.9789425, 0.06654876, 3.790728, 0.7950039, -27.830137)
 document_texture = ExtResource("40_1amw7")
 document_texture_ua = ExtResource("41_neupb")
+focus_roll_offset_degrees = 0.0
+
+[node name="ExitCodeLabel" type="Label3D" parent="items/DocumentItem" unique_id=200098651]
+transform = Transform3D(0.99999994, 5.9604645e-08, -3.7252903e-09, 5.9604645e-08, 0.99999994, 0, -3.7252903e-09, -2.9802322e-08, 1.0000002, -0.3234682, -0.24791718, 0.0067691803)
+pixel_size = 0.0005
+modulate = Color(0, 0, 0, 0.9882353)
+outline_modulate = Color(0, 0, 0, 0)
+text = "0000"
+font = ExtResource("41_1mwdg")
+font_size = 31
+
+[node name="Label2" type="Label3D" parent="items/DocumentItem" unique_id=1128692986]
+transform = Transform3D(1, 1.3411045e-07, -8.381903e-09, 1.3411045e-07, 0.99999994, 0, -1.0244548e-08, -6.7055225e-08, 1.0000002, -0.32519054, -0.28917694, 0.00059485435)
+pixel_size = 0.0005
+modulate = Color(0, 0, 0, 1)
+outline_modulate = Color(1, 1, 1, 1)
+text = "2407"
+font = ExtResource("41_1mwdg")
+font_size = 31
+outline_size = 20
+
+[node name="Label3" type="Label3D" parent="items/DocumentItem" unique_id=1923427774]
+transform = Transform3D(1, 2.5331974e-07, -1.21071935e-08, 2.2351742e-07, 0.9999999, 0, -1.9557774e-08, -1.1175871e-07, 1.0000002, -0.32596016, -0.3315487, 0.0004963875)
+pixel_size = 0.0005
+modulate = Color(0, 0, 0, 1)
+outline_modulate = Color(1, 1, 1, 1)
+text = "7700
+"
+font = ExtResource("41_1mwdg")
+font_size = 31
+outline_size = 20
 
 [node name="DocumentItem2" parent="items" unique_id=628716117 instance=ExtResource("39_khf22")]
 transform = Transform3D(0.22835085, -0.9735789, -4.2556483e-08, 0, -4.3711385e-08, 0.9999999, -0.9735788, -0.22835086, -9.981533e-09, 1.3568361, 1.56531, -20.92093)
 document_texture = ExtResource("41_1v3wg")
 document_texture_ua = ExtResource("42_1mwdg")
+focus_roll_offset_degrees = 0.0
 
 [node name="whiteboard" parent="items" unique_id=1268081871 instance=ExtResource("37_de8xb")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5587819, 3, -29.733006)

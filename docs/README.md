@@ -26,6 +26,11 @@ Climb and mantle onto low surfaces (chairs, desks) is automatic — no jump requ
 
 Focus mode activates automatically when interacting with precision objects. Click outside the interaction area to exit.
 
+## Exit Code
+
+On every **New Game** (not Continue/Load), the game generates a new 4-digit exit code in the range `1100..1900`.
+The code is persisted in `user://settings.cfg` and shown on `ExitCodeLabel` in the Data Office document.
+
 ## Run
 
 ```bash

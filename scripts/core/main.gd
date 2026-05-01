@@ -20,6 +20,8 @@ const CAMERA_MIN_MARGIN := 0.7
 const CAMERA_NEAR_CLIP := 0.12
 const MOBILE_OS_NAMES := ["iOS", "Android"]
 const ROOM_STREAM_UPDATE_INTERVAL_SEC := 0.35
+const EXIT_CODE_MIN := 1100
+const EXIT_CODE_MAX := 1900
 # Must match loading_screen.gd — rooms within this radius of player start are
 # preloaded by the loading screen and can be sync-instantiated from cache.
 const INITIAL_LOAD_RADIUS := 20.0
@@ -118,6 +120,7 @@ var _stream_station_root: Node3D
 var _stream_rooms: Dictionary = {}
 var _stream_pending_loads: Dictionary = {}
 var _stream_update_accum := 0.0
+var _exit_code := 0
 
 
 func _ready() -> void:
@@ -138,6 +141,7 @@ func _ready() -> void:
 	else:
 		_initialize_game_time({})
 		MusicManager.play_game_start()
+	_initialize_exit_code(is_loading_saved_game)
 	player.global_position = starting_position
 	var follow_position := player.global_position + Vector3(0.0, CAMERA_FOLLOW_HEIGHT, 0.0)
 	follow_position.y = maxf(follow_position.y, CAMERA_MIN_WORLD_Y)
@@ -157,6 +161,7 @@ func _ready() -> void:
 	_connect_autosave_doors()
 	_initialize_room_streaming()
 	_apply_loaded_world_state()
+	_apply_exit_code_to_scene(self)
 	_set_in_game_menu_visible(false)
 
 
@@ -369,6 +374,7 @@ func _load_room_now(room_name: String) -> void:
 		return
 	instance.name = StringName(room_name)
 	_stream_station_root.add_child(instance)
+	_apply_exit_code_to_scene(instance)
 	room_data["node"] = instance
 	_stream_rooms[room_name] = room_data
 	print("[RoomStream] Sync-instantiated (cache hit): ", room_name)
@@ -409,6 +415,7 @@ func _check_pending_room_loads() -> void:
 			continue
 		instance.name = StringName(room_name)
 		_stream_station_root.add_child(instance)
+		_apply_exit_code_to_scene(instance)
 		room_data["node"] = instance
 		_stream_rooms[room_name] = room_data
 		print("[RoomStream] Async-instantiated: ", room_name)
@@ -1101,6 +1108,52 @@ func _show_save_feedback(message: String, is_error: bool) -> void:
 		save_status_icon.visible = false
 		save_status_icon.scale = Vector2.ONE
 	)
+
+
+func _get_game_settings() -> Node:
+	var tree := get_tree()
+	if tree == null or tree.root == null:
+		return null
+	return tree.root.get_node_or_null("GameSettings")
+
+
+func _initialize_exit_code(is_loading_saved_game: bool) -> void:
+	var settings := _get_game_settings()
+	if settings == null:
+		_exit_code = _generate_random_exit_code()
+		return
+	if not is_loading_saved_game and settings.has_method("generate_new_exit_code"):
+		_exit_code = int(settings.call("generate_new_exit_code"))
+		return
+	if settings.has_method("get_exit_code"):
+		_exit_code = int(settings.call("get_exit_code"))
+	if _exit_code >= EXIT_CODE_MIN and _exit_code <= EXIT_CODE_MAX:
+		return
+	if settings.has_method("generate_new_exit_code"):
+		_exit_code = int(settings.call("generate_new_exit_code"))
+	else:
+		_exit_code = _generate_random_exit_code()
+
+
+func _generate_random_exit_code() -> int:
+	var rng := RandomNumberGenerator.new()
+	rng.randomize()
+	return rng.randi_range(EXIT_CODE_MIN, EXIT_CODE_MAX)
+
+
+func _apply_exit_code_to_scene(root_node: Node) -> void:
+	if root_node == null:
+		return
+	var exit_code_text := "%04d" % clampi(_exit_code, EXIT_CODE_MIN, EXIT_CODE_MAX)
+	var stack: Array[Node] = [root_node]
+	while not stack.is_empty():
+		var node: Node = stack.pop_back()
+		if node != null and node.name == "ExitCodeLabel" and node is Label3D:
+			(node as Label3D).text = exit_code_text
+		if node == null:
+			continue
+		for child in node.get_children():
+			stack.append(child)
 
 
 func _animate_underwater_light(delta: float) -> void:
