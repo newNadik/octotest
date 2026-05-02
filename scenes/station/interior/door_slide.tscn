@@ -303,6 +303,8 @@ size = Vector3(1.62, 4.8, 0.42)
 script = ExtResource("1_door_slide_script")
 
 [node name="StaticBody3D" type="StaticBody3D" parent="." unique_id=1198069455]
+collision_layer = 3
+collision_mask = 0
 
 [node name="TitleFront" type="Label3D" parent="StaticBody3D" unique_id=1369437485]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.2, 0.045)

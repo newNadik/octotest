@@ -63,6 +63,8 @@ height = 0.30521485
 radius = 0.05859375
 
 [node name="energy_drink" type="StaticBody3D" unique_id=467443040]
+collision_layer = 64
+collision_mask = 99
 script = ExtResource("1_energy_drink_script")
 label_albedo_texture = ExtResource("1_1yjwj")
 
@@ -80,9 +82,9 @@ collision_mask = 0
 script = ExtResource("4_interactable_script")
 interaction_type = 1
 display_name = "Energy Drink"
-item_id = "energy_drink"
 prompt_action = "Pick up"
 requires_line_of_sight = false
+item_id = "energy_drink"
 hold_offset = Vector3(0, -0.16, -0.08)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Interactable" unique_id=1857264109]

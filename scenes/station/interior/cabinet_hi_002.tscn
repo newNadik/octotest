@@ -258,6 +258,8 @@ shadow_mesh = SubResource("ArrayMesh_6f5qv")
 size = Vector3(1.1, 2.8, 2.8)
 
 [node name="Node3D" type="StaticBody3D" unique_id=56433672]
+collision_layer = 35
+collision_mask = 0
 
 [node name="Cabinets_fbx" type="Node3D" parent="." unique_id=1678622596]
 transform = Transform3D(0.005, 0, 0, 0, 0.005, 0, 0, 0, 0.005, 0, 0, 0)

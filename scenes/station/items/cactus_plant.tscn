@@ -105,6 +105,8 @@ size = Vector3(0.3, 0.5, 0.3)
 size = Vector3(0.3, 0.5, 0.3)
 
 [node name="cactus" type="StaticBody3D" unique_id=589026095]
+collision_layer = 64
+collision_mask = 99
 
 [node name="Object_34" type="MeshInstance3D" parent="." unique_id=1573597759]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.018, 0.191, 0)

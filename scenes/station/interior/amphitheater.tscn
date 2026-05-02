@@ -356,6 +356,8 @@ blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_gashg")
 
 [node name="amphitheater" type="StaticBody3D" unique_id=123859396]
+collision_layer = 35
+collision_mask = 0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1940421142]
 transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 0, 0, 0)

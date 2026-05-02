@@ -160,6 +160,8 @@ blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_dhudk")
 
 [node name="chair" type="StaticBody3D" unique_id=1222624819]
+collision_layer = 35
+collision_mask = 0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=463550628]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.4924895, 1.2301377, -0.10510032)

@@ -157,7 +157,7 @@ ceiling_mesh = NodePath("StaticBody3D/RoofWorkshop")
 lamp_lights = [NodePath("lights/OmniLight3D"), NodePath("lights/OmniLight3D2"), NodePath("lights/OmniLight3D3"), NodePath("lights/OmniLight3D4")]
 
 [node name="StaticBody3D" type="StaticBody3D" parent="." unique_id=818716406]
-collision_layer = 2
+collision_layer = 3
 collision_mask = 0
 
 [node name="window_double" parent="StaticBody3D" unique_id=779599183 instance=ExtResource("1_oa1b6")]

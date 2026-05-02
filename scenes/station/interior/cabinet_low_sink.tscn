@@ -117,6 +117,8 @@ blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_6hers")
 
 [node name="cabinet_low_sink" type="StaticBody3D" unique_id=298210515]
+collision_layer = 35
+collision_mask = 0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1615413839]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.41287512, 0.7, -0.011266436)

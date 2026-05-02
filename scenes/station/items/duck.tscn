@@ -274,6 +274,8 @@ size = Vector3(0.3, 0.3, 0.3)
 size = Vector3(0.3, 0.3, 0.3)
 
 [node name="duck" type="StaticBody3D" unique_id=1120476849]
+collision_layer = 64
+collision_mask = 99
 
 [node name="Sketchfab_model" type="Node3D" parent="." unique_id=732762786]
 transform = Transform3D(0.5, 0, 0, 0, -2.1855694e-08, 0.5, 0, -0.5, -2.1855694e-08, 0.105724335, 0.0083195865, -0.089922756)

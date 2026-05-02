@@ -129,6 +129,8 @@ transform = Transform3D(0.24796286, 0, 0.9687696, 0, 1, 0, -0.9687696, 0, 0.2479
 transform = Transform3D(0.99999964, 0, 0.0008202234, 0, 1, 0, -0.0008202234, 0, 0.99999964, -17.429504, 0, 21.595188)
 
 [node name="StaticBody3D" type="StaticBody3D" parent="." unique_id=1826555228]
+collision_layer = 3
+collision_mask = 0
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="StaticBody3D" unique_id=297097770]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -16.466066, 1, 21.193)

@@ -151,7 +151,7 @@ lamp_lights = [NodePath("lights/OmniLight3D"), NodePath("lights/OmniLight3D2"), 
 
 [node name="StaticBody3D" type="StaticBody3D" parent="." unique_id=1123871398]
 transform = Transform3D(1.0000001, 2.9802322e-08, 2.9802322e-08, 0, 1.0000001, 0, 0, 7.450581e-09, 1.0000001, 3.8146973e-06, 4.7683716e-07, 3.8146973e-06)
-collision_layer = 2
+collision_layer = 3
 collision_mask = 0
 
 [node name="DoorSingle" parent="StaticBody3D" unique_id=224428218 instance=ExtResource("1_xhnal")]
@@ -196,9 +196,6 @@ shape = SubResource("ConcavePolygonShape3D_8ctpj")
 transform = Transform3D(1, 0, 1.5247432e-15, 0, -4.371139e-08, -1, 0, 1, -4.3711314e-08, -18.363, -0.01, -16.282)
 mesh = SubResource("QuadMesh_5fr8h")
 surface_material_override/0 = ExtResource("3_21vip")
-
-[node name="whiteboard" parent="StaticBody3D" unique_id=1268081871 instance=ExtResource("8_urbls")]
-transform = Transform3D(-0.98465884, 2.8045061e-08, 0.17449023, 0, 0.9999999, 0, -0.1744902, 1.2536493e-08, -0.9846588, -21.458761, 3, -11.322815)
 
 [node name="lights" type="Node3D" parent="." unique_id=1225828476]
 
@@ -250,6 +247,9 @@ shadow_blur = 2.0
 omni_range = 10.0
 
 [node name="furniture" type="Node3D" parent="." unique_id=28425833]
+
+[node name="whiteboard" parent="furniture" unique_id=1268081871 instance=ExtResource("8_urbls")]
+transform = Transform3D(-0.98465896, 5.7847384e-08, 0.17449021, 0, 1, 0, -0.17449021, 1.9987073e-08, -0.9846589, -21.45876, 3.000001, -11.322812)
 
 [node name="Cabinet_01" parent="furniture" unique_id=1376455345 instance=ExtResource("10_eb7ah")]
 transform = Transform3D(1, -2.2204455e-16, 0, 0, 1, 0, 0, 0, 1, -16.782166, 0, -17.5)
@@ -313,14 +313,14 @@ transform = Transform3D(-0.9575713, 0, 0.2881962, 0, 1, 0, -0.2881962, 0, -0.957
 
 [node name="items" type="Node3D" parent="." unique_id=1659725905]
 
+[node name="clock" parent="items" unique_id=605620393 instance=ExtResource("20_05str")]
+transform = Transform3D(0.15662405, 0, 0.98765826, 0, 0.99999994, 0, -0.9876582, 0, 0.15662403, -22.080713, 4.292144, -11.3371)
+
+[node name="Sketchfab_Scene" parent="items" unique_id=939841449 instance=ExtResource("18_wrylc")]
+transform = Transform3D(0.76536685, 0, -1.847759, 0, 1.9999999, 0, 1.8477589, 0, 0.7653668, -11.319171, 3.9427648, -17.039974)
+
 [node name="mug" parent="items" unique_id=36977870 instance=ExtResource("16_l0eqh")]
 transform = Transform3D(1, 0, 0, 0, 0.99999994, 0, 0, 0, 0.99999994, -21.003107, 1.570058, -12.684125)
-
-[node name="clock" parent="items/mug" unique_id=605620393 instance=ExtResource("20_05str")]
-transform = Transform3D(0.15662405, 0, 0.98765826, 0, 1, 0, -0.98765826, 0, 0.15662405, -1.0776062, 2.722086, 1.3470249)
-
-[node name="Sketchfab_Scene" parent="items/mug" unique_id=939841449 instance=ExtResource("18_wrylc")]
-transform = Transform3D(0.76536685, 0, -1.847759, 0, 2, 0, 1.847759, 0, 0.76536685, 9.683936, 2.372707, -4.3558493)
 
 [node name="plant" parent="items" unique_id=622791712 instance=ExtResource("9_mcwsc")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -16.790138, 1.4573891, -17.420954)

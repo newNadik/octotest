@@ -245,6 +245,8 @@ shadow_mesh = SubResource("ArrayMesh_r8hpb")
 size = Vector3(0.75, 1, 0.6)
 
 [node name="Cabinet_02" type="StaticBody3D" unique_id=678435141]
+collision_layer = 35
+collision_mask = 0
 
 [node name="Office_Storage_Filing-Cabinet_02_1_8" type="Node3D" parent="." unique_id=1142910416]
 transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 0, 0, 0)

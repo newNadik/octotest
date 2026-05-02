@@ -84,6 +84,8 @@ shadow_mesh = SubResource("ArrayMesh_0dc6r")
 size = Vector3(0.7, 4, 2.2)
 
 [node name="wire_shelf" type="StaticBody3D" unique_id=1747052726]
+collision_layer = 3
+collision_mask = 0
 
 [node name="libreria wire" type="Node3D" parent="." unique_id=86268793]
 transform = Transform3D(-0.017, 1.4861873e-09, 6.496331e-17, 0, -7.4309364e-10, 0.017, 1.4861873e-09, 0.017, 7.4309364e-10, 0.31177425, 0, 0)

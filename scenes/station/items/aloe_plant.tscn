@@ -97,6 +97,8 @@ shadow_mesh = SubResource("ArrayMesh_7floy")
 size = Vector3(0.3, 0.5, 0.3)
 
 [node name="Node3D" type="StaticBody3D" unique_id=1667817107]
+collision_layer = 35
+collision_mask = 0
 
 [node name="Aloe_Vera_A_12" type="Node3D" parent="." unique_id=1970012026]
 

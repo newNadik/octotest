@@ -9,14 +9,6 @@ cull_mode = 2
 albedo_color = Color(0.5882353, 0.84705883, 0.98039216, 1)
 roughness = 0.6
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_mirror"]
-resource_name = "Mirror"
-cull_mode = 2
-albedo_color = Color(0.86, 0.88, 0.9, 1)
-metallic = 0.65
-roughness = 0.42
-clearcoat_enabled = false
-
 [sub_resource type="ArrayMesh" id="ArrayMesh_7nun3"]
 _surfaces = [{
 "aabb": AABB(-1.451176, -1.401293, -0.088062, 4.845147, 2.025412, 2.314989),
@@ -522,7 +514,16 @@ shadow_mesh = SubResource("ArrayMesh_5ow0c")
 [sub_resource type="PlaneMesh" id="PlaneMesh_sne5l"]
 size = Vector2(2.8, 1)
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_mirror"]
+resource_name = "Mirror"
+cull_mode = 2
+albedo_color = Color(0.86, 0.88, 0.9, 1)
+metallic = 0.65
+roughness = 0.42
+
 [node name="Node3D" type="StaticBody3D" unique_id=2117090278]
+collision_layer = 3
+collision_mask = 0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1130604429]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.953069, 1.3801956, 0.59725356)

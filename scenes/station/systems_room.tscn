@@ -144,7 +144,7 @@ led_blink_interval_6 = 0.9
 led_blink_interval_7 = 0.8
 
 [node name="StaticBody3D" type="StaticBody3D" parent="." unique_id=956882956]
-collision_layer = 2
+collision_layer = 3
 collision_mask = 0
 
 [node name="DoorDouble" parent="StaticBody3D" unique_id=1045878697 instance=ExtResource("1_4de62")]
@@ -316,6 +316,12 @@ transform = Transform3D(-0.37528616, 0, 0.926909, 0, 1, 0, -0.926909, 0, -0.3752
 [node name="desk" parent="furniture" unique_id=360776120 instance=ExtResource("11_q87oj")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.990107, 0, -23.214285)
 
+[node name="computer" parent="furniture" unique_id=1576113446 instance=ExtResource("19_k2uky")]
+transform = Transform3D(-0.044159874, 0, -0.99902445, 0, 1, 0, 0.99902445, 0, -0.044159874, -1.2141373, 1.482, -22.842056)
+
+[node name="chair" parent="furniture" unique_id=1222624819 instance=ExtResource("20_c5gw8")]
+transform = Transform3D(0.8841084, 0, 0.46728188, 0, 1, 0, -0.46728188, 0, 0.8841084, -3.4608855, 0, -23.467667)
+
 [node name="powerbox" parent="furniture" unique_id=122672602 instance=ExtResource("17_uj4lm")]
 transform = Transform3D(-0.70710677, 0, 0.70710677, 0, 1, 0, 0.70710677, 0, 0.70710677, -15.020506, 0, -27.705622)
 
@@ -324,9 +330,3 @@ transform = Transform3D(0.99999994, 0, 0, 0, 1, 0, 0, 0, 0.99999994, -7.2122483,
 
 [node name="fire_extinguisher" parent="furniture" unique_id=1012721613 instance=ExtResource("14_hq7nb")]
 transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -1.3612168, 0, -19.742176)
-
-[node name="computer" parent="." unique_id=1576113446 instance=ExtResource("19_k2uky")]
-transform = Transform3D(-0.044159874, 0, -0.99902445, 0, 1, 0, 0.99902445, 0, -0.044159874, -1.2141373, 1.482, -22.842056)
-
-[node name="chair" parent="." unique_id=1222624819 instance=ExtResource("20_c5gw8")]
-transform = Transform3D(0.8841084, 0, 0.46728188, 0, 1, 0, -0.46728188, 0, 0.8841084, -3.4608855, 0, -23.467667)

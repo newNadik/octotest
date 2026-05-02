@@ -1,9 +1,9 @@
 [gd_scene format=4 uid="uid://6knufgyt8qas"]
 
 [ext_resource type="Texture2D" uid="uid://dgeylp6n4k3j1" path="res://assets/models/interior/storage/hospital_kit_3_0.png" id="1_t6xyi"]
-[ext_resource type="Texture2D" path="res://assets/models/interior/storage/hospital_kit_3_1.png" id="2_ak70p"]
+[ext_resource type="Texture2D" uid="uid://dl6xnkuarqtbi" path="res://assets/models/interior/storage/hospital_kit_3_1.png" id="2_ak70p"]
 [ext_resource type="Texture2D" uid="uid://bcp32mkg83123" path="res://assets/models/interior/storage/hospital_kit_3_12.png" id="3_qf43d"]
-[ext_resource type="Texture2D" path="res://assets/models/interior/storage/hospital_kit_3_13.png" id="4_soohw"]
+[ext_resource type="Texture2D" uid="uid://cfy3akdgchaab" path="res://assets/models/interior/storage/hospital_kit_3_13.png" id="4_soohw"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_pbv5s"]
 resource_name = "shkaf14"
@@ -266,6 +266,8 @@ shadow_mesh = SubResource("ArrayMesh_dd4ly")
 size = Vector3(0.6, 0.5, 3)
 
 [node name="cabinet_hi_001" type="StaticBody3D" unique_id=1941764970]
+collision_layer = 35
+collision_mask = 0
 
 [node name="Node3D" type="Node3D" parent="." unique_id=1314396580]
 transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0.3102665, 0, 1.0511514)

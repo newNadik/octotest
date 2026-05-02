@@ -88,6 +88,8 @@ shadow_mesh = SubResource("ArrayMesh_u13qf")
 size = Vector3(0.5, 2, 0.5)
 
 [node name="Node3D" type="StaticBody3D" unique_id=19005477]
+collision_layer = 3
+collision_mask = 0
 
 [node name="RootNode" type="Node3D" parent="." unique_id=1627263649]
 

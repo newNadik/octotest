@@ -55,6 +55,8 @@ shadow_mesh = SubResource("ArrayMesh_p7org")
 size = Vector3(1.1, 2.7, 1.3)
 
 [node name="frifge" type="StaticBody3D" unique_id=1036343478]
+collision_layer = 35
+collision_mask = 0
 
 [node name="Cube" type="Node3D" parent="." unique_id=400979165]
 transform = Transform3D(0.8, 0, 0, 0, -3.4969112e-08, 0.8, 0, -0.8, -3.4969112e-08, 0.623729, 1.980606, 0)

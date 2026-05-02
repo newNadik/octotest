@@ -107,7 +107,7 @@ ceiling_mesh = NodePath("StaticBody3D/RoofWetroom")
 lamp_lights = [NodePath("lights/OmniLight3D"), NodePath("lights/OmniLight3D2"), NodePath("lights/OmniLight3D3")]
 
 [node name="StaticBody3D" type="StaticBody3D" parent="." unique_id=1651889896]
-collision_layer = 2
+collision_layer = 3
 collision_mask = 0
 
 [node name="DoorSingle2" parent="StaticBody3D" unique_id=224428218 instance=ExtResource("1_f5vnd")]
@@ -141,9 +141,6 @@ surface_material_override/0 = ExtResource("4_tnekd")
 transform = Transform3D(0.9238795, 0, 0.38268346, 0, 1, 0, -0.38268346, 0, 0.9238795, 9.943851, -7.5464764e-06, 25.59095)
 shape = SubResource("ConcavePolygonShape3D_62ma4")
 
-[node name="fire_extinguisher" parent="StaticBody3D" unique_id=1012721613 instance=ExtResource("7_gw74l")]
-transform = Transform3D(-0.37580383, 0, 0.9266992, 0, 1, 0, -0.9266992, 0, -0.37580383, 8.714731, 0, 21.126614)
-
 [node name="lights" type="Node3D" parent="." unique_id=1699587579]
 
 [node name="LightSwitch" parent="lights" unique_id=1802619805 instance=ExtResource("6_328kc")]
@@ -175,8 +172,11 @@ omni_range = 10.0
 
 [node name="furniture" type="Node3D" parent="." unique_id=241589741]
 
-[node name="rack" parent="." unique_id=1216544187 instance=ExtResource("8_b0427")]
+[node name="fire_extinguisher" parent="furniture" unique_id=1012721613 instance=ExtResource("7_gw74l")]
+transform = Transform3D(-0.37580383, 0, 0.9266992, 0, 1, 0, -0.9266992, 0, -0.37580383, 8.714731, 0, 21.126614)
+
+[node name="rack" parent="furniture" unique_id=1216544187 instance=ExtResource("8_b0427")]
 transform = Transform3D(0.9135454, 0, 0.40673664, 0, 1, 0, -0.40673664, 0, 0.9135454, 11.555163, 0, 26.966839)
 
-[node name="rack2" parent="." unique_id=514956993 instance=ExtResource("8_b0427")]
+[node name="rack2" parent="furniture" unique_id=514956993 instance=ExtResource("8_b0427")]
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 18.782068, 0, 19.973156)

@@ -46,7 +46,7 @@
 [ext_resource type="Texture2D" uid="uid://sotgv2aj6y1s" path="res://assets/textures/wall_images/decal_3.png" id="44_sxb2l"]
 [ext_resource type="Texture2D" uid="uid://csyym67cm2gv2" path="res://assets/textures/wall_images/decal_5.png" id="45_62j8m"]
 [ext_resource type="Texture2D" uid="uid://fexkp1kbef3c" path="res://assets/ui/Icon_BCRC1024.png" id="46_sxb2l"]
-[ext_resource type="FontFile" path="res://assets/ui/OpenSans-Semibold.ttf" id="47_fnwcc"]
+[ext_resource type="FontFile" uid="uid://dtpeeh64d7x6b" path="res://assets/ui/OpenSans-Semibold.ttf" id="47_fnwcc"]
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_cmvkd"]
 resource_name = "atrium_Plane_123"
@@ -766,9 +766,130 @@ shadow_mesh = SubResource("ArrayMesh_qhtaw")
 
 [node name="atrium" type="Node3D" unique_id=2061005798]
 
+[node name="light" type="Node3D" parent="." unique_id=847088016]
+
+[node name="OmniLight3D" type="OmniLight3D" parent="light" unique_id=1479962631]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.738, 1.5, 17.878)
+light_energy = 0.5
+light_indirect_energy = 10.0
+light_specular = 0.0
+light_bake_mode = 0
+omni_range = 20.0
+omni_attenuation = 0.1
+
+[node name="OmniLight3D2" type="OmniLight3D" parent="light" unique_id=859261439]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.146, 1.5, 9.75)
+light_energy = 0.5
+light_indirect_energy = 10.0
+light_specular = 0.0
+light_bake_mode = 0
+omni_range = 20.0
+omni_attenuation = 0.1
+
+[node name="OmniLight3D3" type="OmniLight3D" parent="light" unique_id=8791833]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.462963, 1.5, -5.18669)
+light_energy = 0.5
+light_indirect_energy = 10.0
+light_specular = 0.0
+light_bake_mode = 0
+omni_range = 20.0
+omni_attenuation = 0.1
+
+[node name="OmniLight3D4" type="OmniLight3D" parent="light" unique_id=597421634]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.888935, 1.5, -3.6325827)
+light_energy = 0.5
+light_indirect_energy = 10.0
+light_specular = 0.0
+light_bake_mode = 0
+omni_range = 20.0
+omni_attenuation = 0.1
+
+[node name="CausticRig" parent="light" unique_id=7604608 instance=ExtResource("11_fy6p5")]
+transform = Transform3D(0.46584922, 0.7857269, -0.40696132, -0.44409522, 0.6054029, 0.6605047, 0.765352, -0.12696601, 0.63096416, 35.80785, 6.0118256, -0.059587)
+light_energy = 1.0
+
+[node name="PathLights" type="Node3D" parent="light" unique_id=1497399200]
+
+[node name="FloorMarkerLightA" parent="light/PathLights" unique_id=2057411001 instance=ExtResource("11_floorlight")]
+transform = Transform3D(0.99859184, 0.05305054, 0, -0.05305054, 0.99859184, 0, 0, 0, 1, 3.2205644, 0, 9.763313)
+
+[node name="FloorMarkerLightB" parent="light/PathLights" unique_id=1631558518 instance=ExtResource("11_floorlight")]
+transform = Transform3D(0.99859184, 0.05305054, 0, -0.05305054, 0.99859184, 0, 0, 0, 1, -11.132465, 0, 18.037563)
+
+[node name="FloorMarkerLightC" parent="light/PathLights" unique_id=137277365 instance=ExtResource("11_floorlight")]
+transform = Transform3D(0.99859184, 0.05305054, 0, -0.05305054, 0.99859184, 0, 0, 0, 1, 3.2285333, 0, 19.406328)
+
+[node name="FloorMarkerLightD" parent="light/PathLights" unique_id=1131463012 instance=ExtResource("11_floorlight")]
+transform = Transform3D(0.70613766, 0.037007112, 0.70710677, -0.05233596, 0.9986295, 0, -0.70613766, -0.037007112, 0.70710677, 7.5284715, 0, 5.4853354)
+
+[node name="FloorMarkerLightE" parent="light/PathLights" unique_id=622270106 instance=ExtResource("11_floorlight")]
+transform = Transform3D(0.99859184, 0.05305054, 0, -0.05305054, 0.99859184, 0, 0, 0, 1, -10.53895, 0, -3.9502912)
+
+[node name="FloorMarkerLightF" parent="light/PathLights" unique_id=1868881450 instance=ExtResource("11_floorlight")]
+transform = Transform3D(0.70613766, 0.037007112, 0.70710677, -0.05233596, 0.9986295, 0, -0.70613766, -0.037007112, 0.70710677, 7.555337, 0, -5.454432)
+
+[node name="FloorMarkerLightG" parent="light/PathLights" unique_id=1992540407 instance=ExtResource("11_floorlight")]
+transform = Transform3D(0.99859184, 0.05305054, 0, -0.05305054, 0.99859184, 0, 0, 0, 1, 27.492481, 0, -13.719322)
+
+[node name="FloorMarkerLightH" parent="light/PathLights" unique_id=1868351720 instance=ExtResource("11_floorlight")]
+transform = Transform3D(0.99859184, 0.05305054, 0, -0.05305054, 0.99859184, 0, 0, 0, 1, 27.491325, 0, 13.716922)
+
+[node name="FloorMarkerLightH2" parent="light/PathLights" unique_id=445975673 instance=ExtResource("11_floorlight")]
+transform = Transform3D(0.99859184, 0.05305054, 0, -0.05305054, 0.99859184, 0, 0, 0, 1, -11.864712, 0, 4.755432)
+
+[node name="OmniLight3D5" type="OmniLight3D" parent="light" unique_id=384785715]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.1045132, 7.1677155, -13.987336)
+light_energy = 5.0
+light_indirect_energy = 10.0
+shadow_enabled = true
+shadow_blur = 2.0
+omni_range = 10.0
+
+[node name="OmniLight3D6" type="OmniLight3D" parent="light" unique_id=325701896]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.862787, 8.173773, -7.7405987)
+light_energy = 5.0
+light_indirect_energy = 10.0
+shadow_enabled = true
+shadow_blur = 2.0
+omni_range = 10.0
+
+[node name="OmniLight3D7" type="OmniLight3D" parent="light" unique_id=289899946]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -18.39268, 6.475928, -7.7405987)
+light_energy = 5.0
+light_indirect_energy = 10.0
+shadow_enabled = true
+shadow_blur = 2.0
+omni_range = 10.0
+
+[node name="OmniLight3D8" type="OmniLight3D" parent="light" unique_id=1301489520]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25.917599, 5.4427094, -7.7405987)
+light_energy = 5.0
+light_indirect_energy = 10.0
+shadow_enabled = true
+shadow_blur = 2.0
+omni_range = 10.0
+
+[node name="OmniLight3D9" type="OmniLight3D" parent="light" unique_id=971586734]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.292988, 6.475928, 14.124443)
+light_energy = 5.0
+light_indirect_energy = 10.0
+shadow_enabled = true
+shadow_blur = 2.0
+omni_range = 10.0
+
+[node name="OmniLight3D10" type="OmniLight3D" parent="light" unique_id=210417179]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.279755, 4.673018, 22.940992)
+light_energy = 5.0
+light_indirect_energy = 10.0
+shadow_enabled = true
+shadow_blur = 2.0
+omni_range = 10.0
+
 [node name="StaticBody3D" type="Node3D" parent="." unique_id=1812206601]
 
 [node name="Floor" type="StaticBody3D" parent="StaticBody3D" unique_id=1884393962]
+collision_layer = 3
+collision_mask = 0
 
 [node name="FloorAtrium" type="MeshInstance3D" parent="StaticBody3D/Floor" unique_id=237392894]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.92853284, -7.5464764e-06, 28.467846)
@@ -825,7 +946,8 @@ mesh = SubResource("BoxMesh_vucpf")
 surface_material_override/0 = ExtResource("1_ijnmb")
 
 [node name="Walls" type="StaticBody3D" parent="StaticBody3D" unique_id=1938661988]
-collision_layer = 31
+collision_layer = 3
+collision_mask = 0
 
 [node name="DoorDouble" parent="StaticBody3D/Walls" unique_id=1045878697 instance=ExtResource("2_ecqnk")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.8, 0, 22.6)
@@ -919,6 +1041,28 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.499224, 0, 19.06)
 privacy_glass_enabled = true
 door_title = "WC"
 
+[node name="doors" type="Node3D" parent="StaticBody3D/Walls" unique_id=570198370]
+
+[node name="DoorDouble" parent="StaticBody3D/Walls/doors" unique_id=1685186809 instance=ExtResource("2_ecqnk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.78, 0, -10.1)
+door_title = "Staff"
+door_title_secondary = "Only"
+
+[node name="DoorSingle" parent="StaticBody3D/Walls/doors" unique_id=1940471585 instance=ExtResource("3_wctxe")]
+transform = Transform3D(0.70710677, 0, 0.70710677, 0, 1, 0, -0.70710677, 0, 0.70710677, -7.938241, 0, -7.1634135)
+privacy_glass_enabled = true
+door_title = "Medic"
+
+[node name="DoorSingle2" parent="StaticBody3D/Walls/doors" unique_id=460529865 instance=ExtResource("3_wctxe")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25.751604, 0, -4.38)
+door_title = "Kitchen"
+
+[node name="DoorDouble2" parent="StaticBody3D/Walls/doors" unique_id=1171473448 instance=ExtResource("2_ecqnk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13.971773, 0, 18.35)
+door_title = "Shop"
+door_title_secondary = "Gift"
+title_side = 1
+
 [node name="Roof" type="Node3D" parent="StaticBody3D" unique_id=1383701249]
 
 [node name="RoofWC" type="MeshInstance3D" parent="StaticBody3D/Roof" unique_id=1504717261]
@@ -966,7 +1110,7 @@ mesh = SubResource("ArrayMesh_johwe")
 surface_material_override/0 = ExtResource("7_harmc")
 
 [node name="CollisionsRoof" type="StaticBody3D" parent="StaticBody3D/Roof" unique_id=1047337657]
-collision_layer = 18
+collision_layer = 3
 collision_mask = 0
 
 [node name="CollisionRoof" type="CollisionShape3D" parent="StaticBody3D/Roof/CollisionsRoof" unique_id=447416178]
@@ -1027,150 +1171,6 @@ surface_material_override/0 = ExtResource("8_xp3kh")
 transform = Transform3D(0.9238795, 0, 0.38268346, 0, 1, 0, -0.38268346, 0, 0.9238795, -18.81647, -7.5464764e-06, 7.64155)
 mesh = SubResource("ArrayMesh_utks8")
 surface_material_override/0 = ExtResource("8_xp3kh")
-
-[node name="garden" parent="StaticBody3D" unique_id=679455543 instance=ExtResource("10_vucpf")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, -0.11054075, 0)
-
-[node name="light" type="Node3D" parent="StaticBody3D" unique_id=847088016]
-
-[node name="OmniLight3D" type="OmniLight3D" parent="StaticBody3D/light" unique_id=1479962631]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.738, 1.5, 17.878)
-light_energy = 0.5
-light_indirect_energy = 10.0
-light_specular = 0.0
-light_bake_mode = 0
-omni_range = 20.0
-omni_attenuation = 0.1
-
-[node name="OmniLight3D2" type="OmniLight3D" parent="StaticBody3D/light" unique_id=859261439]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.146, 1.5, 9.75)
-light_energy = 0.5
-light_indirect_energy = 10.0
-light_specular = 0.0
-light_bake_mode = 0
-omni_range = 20.0
-omni_attenuation = 0.1
-
-[node name="OmniLight3D3" type="OmniLight3D" parent="StaticBody3D/light" unique_id=8791833]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.462963, 1.5, -5.18669)
-light_energy = 0.5
-light_indirect_energy = 10.0
-light_specular = 0.0
-light_bake_mode = 0
-omni_range = 20.0
-omni_attenuation = 0.1
-
-[node name="OmniLight3D4" type="OmniLight3D" parent="StaticBody3D/light" unique_id=597421634]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.888935, 1.5, -3.6325827)
-light_energy = 0.5
-light_indirect_energy = 10.0
-light_specular = 0.0
-light_bake_mode = 0
-omni_range = 20.0
-omni_attenuation = 0.1
-
-[node name="CausticRig" parent="StaticBody3D/light" unique_id=7604608 instance=ExtResource("11_fy6p5")]
-transform = Transform3D(0.46584922, 0.7857269, -0.40696132, -0.44409522, 0.6054029, 0.6605047, 0.765352, -0.12696601, 0.63096416, 35.80785, 6.0118256, -0.059587)
-light_energy = 1.0
-
-[node name="PathLights" type="Node3D" parent="StaticBody3D/light" unique_id=1497399200]
-
-[node name="FloorMarkerLightA" parent="StaticBody3D/light/PathLights" unique_id=2057411001 instance=ExtResource("11_floorlight")]
-transform = Transform3D(0.99859184, 0.05305054, 0, -0.05305054, 0.99859184, 0, 0, 0, 1, 3.2205644, 0, 9.763313)
-
-[node name="FloorMarkerLightB" parent="StaticBody3D/light/PathLights" unique_id=1631558518 instance=ExtResource("11_floorlight")]
-transform = Transform3D(0.99859184, 0.05305054, 0, -0.05305054, 0.99859184, 0, 0, 0, 1, -11.132465, 0, 18.037563)
-
-[node name="FloorMarkerLightC" parent="StaticBody3D/light/PathLights" unique_id=137277365 instance=ExtResource("11_floorlight")]
-transform = Transform3D(0.99859184, 0.05305054, 0, -0.05305054, 0.99859184, 0, 0, 0, 1, 3.2285333, 0, 19.406328)
-
-[node name="FloorMarkerLightD" parent="StaticBody3D/light/PathLights" unique_id=1131463012 instance=ExtResource("11_floorlight")]
-transform = Transform3D(0.70613766, 0.037007112, 0.70710677, -0.05233596, 0.9986295, 0, -0.70613766, -0.037007112, 0.70710677, 7.5284715, 0, 5.4853354)
-
-[node name="FloorMarkerLightE" parent="StaticBody3D/light/PathLights" unique_id=622270106 instance=ExtResource("11_floorlight")]
-transform = Transform3D(0.99859184, 0.05305054, 0, -0.05305054, 0.99859184, 0, 0, 0, 1, -10.53895, 0, -3.9502912)
-
-[node name="FloorMarkerLightF" parent="StaticBody3D/light/PathLights" unique_id=1868881450 instance=ExtResource("11_floorlight")]
-transform = Transform3D(0.70613766, 0.037007112, 0.70710677, -0.05233596, 0.9986295, 0, -0.70613766, -0.037007112, 0.70710677, 7.555337, 0, -5.454432)
-
-[node name="FloorMarkerLightG" parent="StaticBody3D/light/PathLights" unique_id=1992540407 instance=ExtResource("11_floorlight")]
-transform = Transform3D(0.99859184, 0.05305054, 0, -0.05305054, 0.99859184, 0, 0, 0, 1, 27.492481, 0, -13.719322)
-
-[node name="FloorMarkerLightH" parent="StaticBody3D/light/PathLights" unique_id=1868351720 instance=ExtResource("11_floorlight")]
-transform = Transform3D(0.99859184, 0.05305054, 0, -0.05305054, 0.99859184, 0, 0, 0, 1, 27.491325, 0, 13.716922)
-
-[node name="FloorMarkerLightH2" parent="StaticBody3D/light/PathLights" unique_id=445975673 instance=ExtResource("11_floorlight")]
-transform = Transform3D(0.99859184, 0.05305054, 0, -0.05305054, 0.99859184, 0, 0, 0, 1, -11.864712, 0, 4.755432)
-
-[node name="OmniLight3D5" type="OmniLight3D" parent="StaticBody3D/light" unique_id=384785715]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.1045132, 7.1677155, -13.987336)
-light_energy = 5.0
-light_indirect_energy = 10.0
-shadow_enabled = true
-shadow_blur = 2.0
-omni_range = 10.0
-
-[node name="OmniLight3D6" type="OmniLight3D" parent="StaticBody3D/light" unique_id=325701896]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.862787, 8.173773, -7.7405987)
-light_energy = 5.0
-light_indirect_energy = 10.0
-shadow_enabled = true
-shadow_blur = 2.0
-omni_range = 10.0
-
-[node name="OmniLight3D7" type="OmniLight3D" parent="StaticBody3D/light" unique_id=289899946]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -18.39268, 6.475928, -7.7405987)
-light_energy = 5.0
-light_indirect_energy = 10.0
-shadow_enabled = true
-shadow_blur = 2.0
-omni_range = 10.0
-
-[node name="OmniLight3D8" type="OmniLight3D" parent="StaticBody3D/light" unique_id=1301489520]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25.917599, 5.4427094, -7.7405987)
-light_energy = 5.0
-light_indirect_energy = 10.0
-shadow_enabled = true
-shadow_blur = 2.0
-omni_range = 10.0
-
-[node name="OmniLight3D9" type="OmniLight3D" parent="StaticBody3D/light" unique_id=971586734]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.292988, 6.475928, 14.124443)
-light_energy = 5.0
-light_indirect_energy = 10.0
-shadow_enabled = true
-shadow_blur = 2.0
-omni_range = 10.0
-
-[node name="OmniLight3D10" type="OmniLight3D" parent="StaticBody3D/light" unique_id=210417179]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.279755, 4.673018, 22.940992)
-light_energy = 5.0
-light_indirect_energy = 10.0
-shadow_enabled = true
-shadow_blur = 2.0
-omni_range = 10.0
-
-[node name="doors" type="Node3D" parent="StaticBody3D" unique_id=570198370]
-
-[node name="DoorDouble" parent="StaticBody3D/doors" unique_id=1685186809 instance=ExtResource("2_ecqnk")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.78, 0, -10.1)
-door_title = "Staff"
-door_title_secondary = "Only"
-
-[node name="DoorSingle" parent="StaticBody3D/doors" unique_id=1940471585 instance=ExtResource("3_wctxe")]
-transform = Transform3D(0.70710677, 0, 0.70710677, 0, 1, 0, -0.70710677, 0, 0.70710677, -7.938241, 0, -7.1634135)
-privacy_glass_enabled = true
-door_title = "Medic"
-
-[node name="DoorSingle2" parent="StaticBody3D/doors" unique_id=460529865 instance=ExtResource("3_wctxe")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25.751604, 0, -4.38)
-door_title = "Kitchen"
-
-[node name="DoorDouble2" parent="StaticBody3D/doors" unique_id=1171473448 instance=ExtResource("2_ecqnk")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13.971773, 0, 18.35)
-door_title = "Shop"
-door_title_secondary = "Gift"
-title_side = 1
 
 [node name="rooms" type="Node3D" parent="." unique_id=1967129213]
 
@@ -1340,42 +1340,36 @@ transform = Transform3D(1.7, 0, 0, 0, 1.7, 0, 0, 0, 1.7, -27.598127, 1.56, -0.10
 [node name="CCTV_cam3" parent="rooms/attrium" unique_id=1784038098 instance=ExtResource("34_ibub3")]
 transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, 1, -10.758007, 8.035594, -3.903729)
 
-[node name="giftshop" type="Node3D" parent="rooms" unique_id=1483668541]
+[node name="garden" parent="rooms/attrium" unique_id=679455543 instance=ExtResource("10_vucpf")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, -0.11054075, 0)
 
-[node name="CCTV_cam" parent="rooms/giftshop" unique_id=704552698 instance=ExtResource("34_ibub3")]
-transform = Transform3D(-1, 0, -1.509958e-07, 0, 1, 0, -1.509958e-07, 0, 1, -16.392525, 5.6876726, 18.80531)
-
-[node name="giftshop" parent="rooms/giftshop" unique_id=2017872549 instance=ExtResource("37_i3dbr")]
-
-[node name="kitchen" parent="rooms" unique_id=655617701 instance=ExtResource("39_i3dbr")]
-
-[node name="Sprite3D4" type="Sprite3D" parent="rooms" unique_id=609318146]
+[node name="Sprite3D4" type="Sprite3D" parent="rooms/attrium" unique_id=609318146]
 transform = Transform3D(0.4, 0, 0, 0, 0.4, 0, 0, 0, 0.4, -18.755062, 5.293614, -4.0274987)
 texture = ExtResource("41_188u5")
 
-[node name="Sprite3D" type="Sprite3D" parent="rooms" unique_id=1363539521]
+[node name="Sprite3D" type="Sprite3D" parent="rooms/attrium" unique_id=1363539521]
 transform = Transform3D(0.21213204, 0, -0.21213204, 0, 0.3, 0, 0.21213204, 0, 0.21213204, -9.244332, 3.8547516, 19.950344)
 texture = ExtResource("42_62j8m")
 
-[node name="Sprite3D2" type="Sprite3D" parent="rooms" unique_id=249981649]
+[node name="Sprite3D2" type="Sprite3D" parent="rooms/attrium" unique_id=249981649]
 transform = Transform3D(-0.21213204, 0, 0.21213204, 0, 0.3, 0, -0.21213204, 0, -0.21213204, -13.880108, 5.034073, 2.7572122)
 texture = ExtResource("43_pdemt")
 
-[node name="Sprite3D3" type="Sprite3D" parent="rooms" unique_id=383367345]
+[node name="Sprite3D3" type="Sprite3D" parent="rooms/attrium" unique_id=383367345]
 transform = Transform3D(-2.1855694e-08, 0, -0.5, 0, 0.5, 0, 0.5, 0, -2.1855694e-08, 3.2430267, 5.1495705, 14.676611)
 texture = ExtResource("44_sxb2l")
 
-[node name="Sprite3D5" type="Sprite3D" parent="rooms" unique_id=2006259276]
+[node name="Sprite3D5" type="Sprite3D" parent="rooms/attrium" unique_id=2006259276]
 transform = Transform3D(-1.3113417e-08, 0, 0.3, 0, 0.3, 0, -0.3, 0, -1.3113417e-08, -11.870889, 7.451473, 7.374949)
 texture = ExtResource("45_62j8m")
 
-[node name="Node3D" type="Node3D" parent="." unique_id=788589359]
+[node name="Node3D" type="Node3D" parent="rooms/attrium" unique_id=788589359]
 
-[node name="Sprite3D" type="Sprite3D" parent="Node3D" unique_id=148389557]
+[node name="Sprite3D" type="Sprite3D" parent="rooms/attrium/Node3D" unique_id=148389557]
 transform = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, -0.81679153, 8.222376, -9.776364)
 texture = ExtResource("46_sxb2l")
 
-[node name="Label3D" type="Label3D" parent="Node3D" unique_id=553461021]
+[node name="Label3D" type="Label3D" parent="rooms/attrium/Node3D" unique_id=553461021]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.7437167, 6.4434285, -9.738382)
 modulate = Color(0.050980393, 0.14117648, 0.23921569, 1)
 outline_modulate = Color(0.050980393, 0.14117648, 0.23921569, 1)
@@ -1386,7 +1380,7 @@ font_size = 100
 outline_size = 8
 line_spacing = -25.0
 
-[node name="Label3D2" type="Label3D" parent="Node3D" unique_id=2109574501]
+[node name="Label3D2" type="Label3D" parent="rooms/attrium/Node3D" unique_id=2109574501]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.7437167, 5.486403, -9.738382)
 modulate = Color(0.11372549, 0.19607843, 0.28627452, 0.89411765)
 outline_modulate = Color(0.050980393, 0.14117648, 0.23921569, 0)
@@ -1396,3 +1390,12 @@ font = ExtResource("47_fnwcc")
 font_size = 60
 outline_size = 8
 line_spacing = -20.0
+
+[node name="giftshop" type="Node3D" parent="rooms" unique_id=1483668541]
+
+[node name="CCTV_cam" parent="rooms/giftshop" unique_id=704552698 instance=ExtResource("34_ibub3")]
+transform = Transform3D(-1, 0, -1.509958e-07, 0, 1, 0, -1.509958e-07, 0, 1, -16.392525, 5.6876726, 18.80531)
+
+[node name="giftshop" parent="rooms/giftshop" unique_id=2017872549 instance=ExtResource("37_i3dbr")]
+
+[node name="kitchen" parent="rooms" unique_id=655617701 instance=ExtResource("39_i3dbr")]

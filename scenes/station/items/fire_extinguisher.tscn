@@ -5,6 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://bnjtpm8pe61ap" path="res://scenes/station/items/light_sign.tscn" id="3_h5p6b"]
 [ext_resource type="Texture2D" uid="uid://clsxqwl528r78" path="res://assets/models/items/first_aid/first_aid_sign.png" id="4_g0fbs"]
 [ext_resource type="Texture2D" uid="uid://dx37wag44elre" path="res://assets/models/items/first_aid/extinguisher_sign.png" id="4_vpu02"]
+[ext_resource type="Texture2D" uid="uid://cf4mym60hbfy4" path="res://assets/textures/documents/evacuation_plan.png" id="6_wg8rd"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_vimpx"]
 size = Vector3(0.6, 1.2, 0.5)
@@ -518,7 +519,20 @@ _surfaces = [{
 albedo_color = Color(0.80784315, 0, 0, 1)
 roughness_texture = ExtResource("1_lp887")
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_doc_default"]
+albedo_color = Color(0.9, 0.9, 0.9, 1)
+
+[sub_resource type="QuadMesh" id="QuadMesh_06ni2"]
+material = SubResource("StandardMaterial3D_doc_default")
+size = Vector2(1.069, 0.756)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_agwfk"]
+albedo_texture = ExtResource("6_wg8rd")
+metallic_specular = 0.3
+
 [node name="fire_extinguisher" type="StaticBody3D" unique_id=1012721613]
+collision_layer = 3
+collision_mask = 0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=974064209]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00053432584, 0.6, -0.042619646)
@@ -600,3 +614,8 @@ sign_texture = ExtResource("4_vpu02")
 transform = Transform3D(1.5, 0, 0, 0, -6.556708e-08, -1.5, 0, 1.5, -6.556708e-08, 0, 2, -0.131)
 size = Vector3(0.23, 0.11, 0.11)
 texture_albedo = ExtResource("2_h5p6b")
+
+[node name="DocumentMesh" type="MeshInstance3D" parent="." unique_id=175296809]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.6827455, -0.2476005)
+mesh = SubResource("QuadMesh_06ni2")
+surface_material_override/0 = SubResource("StandardMaterial3D_agwfk")

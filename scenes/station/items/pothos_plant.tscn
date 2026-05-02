@@ -99,6 +99,8 @@ shadow_mesh = SubResource("ArrayMesh_8wr3r")
 size = Vector3(0.5, 0.7, 0.5)
 
 [node name="pothos" type="StaticBody3D" unique_id=598657276]
+collision_layer = 35
+collision_mask = 0
 
 [node name="ce6de248fdee413fae242a30c4473ab8_fbx" type="Node3D" parent="." unique_id=2079223498]
 transform = Transform3D(0.01, 0, 0, 0, 0.01, 0, 0, 0, 0.01, 0, 0, 0)
