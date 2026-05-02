@@ -2,6 +2,10 @@ extends Area3D
 class_name Interactable
 
 const DROP_SURFACE_COLLISION_MASK := (1 << 0) | (1 << 1)
+const PLAYER_COLLISION_MASK := 1 << 2
+const FURNITURE_COLLISION_MASK := 1 << 5
+const CARRY_ITEM_COLLISION_MASK := 1 << 6
+const DROP_BLOCKER_COLLISION_MASK := DROP_SURFACE_COLLISION_MASK | FURNITURE_COLLISION_MASK | CARRY_ITEM_COLLISION_MASK
 const OUTLINE_SHADER := preload("res://assets/shaders/interaction_outline.gdshader")
 const DEFAULT_REJECT_SFX := preload("res://assets/sound/hover_sfx.mp3")
 const DEFAULT_SUCCESS_SFX := preload("res://assets/sound/confirm_success.mp3")
@@ -47,6 +51,9 @@ enum HighlightMode {
 @export var item_id := ""
 @export var hold_offset := Vector3(0.0, -0.1, 0.35)
 @export var hold_rotation_degrees := Vector3.ZERO
+@export var dropped_collision_layer := CARRY_ITEM_COLLISION_MASK
+@export var dropped_collision_mask := DROP_BLOCKER_COLLISION_MASK
+@export var dropped_blocks_player := false
 
 @export_group("Advanced")
 @export var visual_root_path: NodePath
@@ -205,8 +212,11 @@ func set_held(is_held: bool) -> void:
 			collision.collision_layer = 0
 			collision.collision_mask = 0
 		else:
-			collision.collision_layer = _saved_pickup_layer
-			collision.collision_mask = _saved_pickup_mask
+			var effective_mask := dropped_collision_mask
+			if dropped_blocks_player:
+				effective_mask |= PLAYER_COLLISION_MASK
+			collision.collision_layer = dropped_collision_layer if dropped_collision_layer != 0 else _saved_pickup_layer
+			collision.collision_mask = effective_mask if effective_mask != 0 else _saved_pickup_mask
 
 	if _pickup_root is RigidBody3D:
 		var body := _pickup_root as RigidBody3D
@@ -797,10 +807,13 @@ func _find_restore_drop_position(player: CharacterBody3D, forward: Vector3, item
 		for lateral_slot in lateral_slots:
 			var candidate = player.global_position + forward * (drop_distance * float(row_scale)) + right * (spacing * float(lateral_slot))
 			var floor_candidate = _resolve_floor_position(candidate)
-			if _is_restore_position_clear(floor_candidate, occupied_positions, spacing * 0.9):
+			if _is_restore_position_clear(floor_candidate, occupied_positions, spacing * 0.9) and _is_restore_drop_space_clear(floor_candidate, player):
 				return floor_candidate
 
-	return _resolve_floor_position(player.global_position + forward * drop_distance)
+	var fallback := _resolve_floor_position(player.global_position + forward * drop_distance)
+	if _is_restore_drop_space_clear(fallback, player):
+		return fallback
+	return _resolve_floor_position(player.global_position)
 
 
 func _collect_other_pickup_positions() -> Array[Vector3]:
@@ -829,6 +842,27 @@ func _is_restore_position_clear(candidate: Vector3, occupied_positions: Array[Ve
 		if delta.length_squared() < min_spacing_sq:
 			return false
 	return true
+
+
+func _is_restore_drop_space_clear(candidate: Vector3, player: CharacterBody3D) -> bool:
+	if _pickup_root == null:
+		return true
+	var world := _pickup_root.get_world_3d()
+	if world == null:
+		return true
+	var shape := SphereShape3D.new()
+	shape.radius = maxf(0.12, _estimate_drop_horizontal_width(_pickup_root) * 0.45)
+	var params := PhysicsShapeQueryParameters3D.new()
+	params.shape = shape
+	params.transform = Transform3D(Basis.IDENTITY, candidate + Vector3.UP * shape.radius)
+	params.collision_mask = DROP_BLOCKER_COLLISION_MASK
+	params.collide_with_bodies = true
+	params.collide_with_areas = false
+	params.exclude = [_pickup_root]
+	if player != null:
+		params.exclude.append(player)
+	var hits := world.direct_space_state.intersect_shape(params, 1)
+	return hits.is_empty()
 
 
 func _estimate_drop_base_offset(root: Node3D) -> float:

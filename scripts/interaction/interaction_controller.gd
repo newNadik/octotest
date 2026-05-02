@@ -5,7 +5,10 @@ class_name InteractionController
 const PICK_SOUND_DEFAULT: AudioStream = preload("res://assets/sound/pick.wav")
 const WALL_COLLISION_MASK := 1 << 0
 const GROUND_COLLISION_MASK := 1 << 1
-const DROP_SURFACE_COLLISION_MASK := WALL_COLLISION_MASK | GROUND_COLLISION_MASK
+const FURNITURE_COLLISION_MASK := 1 << 5
+const CARRY_ITEM_COLLISION_MASK := 1 << 6
+const DROP_SURFACE_COLLISION_MASK := WALL_COLLISION_MASK | GROUND_COLLISION_MASK | FURNITURE_COLLISION_MASK
+const DROP_BLOCKER_COLLISION_MASK := WALL_COLLISION_MASK | GROUND_COLLISION_MASK | FURNITURE_COLLISION_MASK | CARRY_ITEM_COLLISION_MASK
 const INTERACTABLE_COLLISION_MASK := 1 << 3
 const CardReaderScript = preload("res://scripts/interaction/card_reader.gd")
 const CansBoxScript = preload("res://scripts/station/items/cans_box.gd")
@@ -47,6 +50,9 @@ const ARM_SOCKET_ANGLE_BY_NAME := {
 @export var drop_min_forward_distance = 0.45
 @export var drop_probe_height = 1.2
 @export var drop_probe_depth = 2.4
+@export var drop_overlap_probe_height: float = 0.08
+@export var drop_overlap_search_step: float = 0.4
+@export var drop_overlap_max_rings: int = 4
 @export var debug_interaction_logs = false
 @export var focus_reject_feedback_duration = 0.32
 @export var pick_drop_sound: AudioStream = PICK_SOUND_DEFAULT
@@ -873,7 +879,80 @@ func _resolve_drop_position(desired_position: Vector3, item, pickup_root: Node3D
 
 	var floor_position = result.position as Vector3
 	var base_offset = _estimate_drop_base_offset(pickup_root)
+	var base_position := Vector3(desired_position.x, floor_position.y + base_offset, desired_position.z)
+	return _find_non_overlapping_drop_position(base_position, item, pickup_root)
+
+
+func _find_non_overlapping_drop_position(base_position: Vector3, item, pickup_root: Node3D) -> Vector3:
+	if _is_drop_position_clear(base_position, item, pickup_root):
+		return base_position
+
+	var right := _get_drop_forward_direction(pickup_root).cross(Vector3.UP)
+	if right.length_squared() <= 0.0001:
+		right = Vector3.RIGHT
+	else:
+		right = right.normalized()
+	var forward := Vector3.UP.cross(right)
+	if forward.length_squared() <= 0.0001:
+		forward = Vector3.FORWARD
+	else:
+		forward = forward.normalized()
+
+	for ring in range(1, drop_overlap_max_rings + 1):
+		var radius: float = drop_overlap_search_step * float(ring)
+		var offsets := [
+			right * radius,
+			-right * radius,
+			forward * radius,
+			-forward * radius,
+			(right + forward).normalized() * radius,
+			(right - forward).normalized() * radius,
+			(-right + forward).normalized() * radius,
+			(-right - forward).normalized() * radius,
+		]
+		for offset in offsets:
+			var candidate := _resolve_floor_position_for_drop(base_position + offset, item, pickup_root)
+			if _is_drop_position_clear(candidate, item, pickup_root):
+				return candidate
+	return base_position
+
+
+func _resolve_floor_position_for_drop(desired_position: Vector3, item, pickup_root: Node3D) -> Vector3:
+	var from = desired_position + Vector3.UP * drop_probe_height
+	var to = desired_position + Vector3.DOWN * drop_probe_depth
+	var query := PhysicsRayQueryParameters3D.create(from, to)
+	query.collision_mask = DROP_SURFACE_COLLISION_MASK
+	query.collide_with_areas = false
+	query.exclude = [_player, pickup_root]
+	if item != null:
+		query.exclude.append(item)
+	var result = _world_root.get_world_3d().direct_space_state.intersect_ray(query)
+	if result.is_empty():
+		return desired_position
+	var floor_position = result.position as Vector3
+	var base_offset = _estimate_drop_base_offset(pickup_root)
 	return Vector3(desired_position.x, floor_position.y + base_offset, desired_position.z)
+
+
+func _is_drop_position_clear(candidate: Vector3, item, pickup_root: Node3D) -> bool:
+	if pickup_root == null:
+		return true
+	var world := _world_root.get_world_3d()
+	if world == null:
+		return true
+	var shape := SphereShape3D.new()
+	shape.radius = maxf(0.12, _estimate_drop_horizontal_width(pickup_root) * 0.45)
+	var params := PhysicsShapeQueryParameters3D.new()
+	params.shape = shape
+	params.transform = Transform3D(Basis.IDENTITY, candidate + Vector3.UP * maxf(shape.radius, drop_overlap_probe_height))
+	params.collision_mask = DROP_BLOCKER_COLLISION_MASK
+	params.collide_with_bodies = true
+	params.collide_with_areas = false
+	params.exclude = [_player, pickup_root]
+	if item != null:
+		params.exclude.append(item)
+	var hits := world.direct_space_state.intersect_shape(params, 1)
+	return hits.is_empty()
 
 
 func _get_drop_forward_direction(pickup_root: Node3D) -> Vector3:

@@ -227,7 +227,7 @@
 - [x] Whiteboard / corkboard
 - [x] Coffee mug / thermos (desk prop)
 - [x] Fire extinguisher
-- [ ] Evacuation plan (wall-mounted)
+- [x] Evacuation plan (wall-mounted)
 - [x] Sticky notes (on monitors + desk)
 - [x] Printed reports (stacked)
 - [x] desk calendar

@@ -53,6 +53,16 @@ locale/fallback="en_GB"
 
 3d/physics_engine="Jolt Physics"
 
+[layer_names]
+
+3d_physics/layer_1="World_Walls"
+3d_physics/layer_2="World_FloorCeiling"
+3d_physics/layer_3="Player"
+3d_physics/layer_4="InteractableArea"
+3d_physics/layer_5="CameraBlocker"
+3d_physics/layer_6="Furniture"
+3d_physics/layer_7="CarryItem"
+
 [rendering]
 
 rendering_device/driver.windows="d3d12"
