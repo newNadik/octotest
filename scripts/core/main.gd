@@ -723,12 +723,18 @@ func _start_focus_tween(
 ) -> void:
 	if _focus_tween != null:
 		_focus_tween.kill()
+	var current_yaw := camera_yaw.rotation_degrees.y
+	var current_pitch := camera_pitch.rotation_degrees.x
+	var current_roll := camera_pitch.rotation_degrees.z
+	var tween_yaw := _shortest_angle_target_degrees(current_yaw, _yaw)
+	var tween_pitch := _shortest_angle_target_degrees(current_pitch, _pitch)
+	var tween_roll := _shortest_angle_target_degrees(current_roll, _roll)
 	_focus_tween = create_tween().set_ease(ease).set_trans(trans)
 	_focus_tween.tween_property(camera_pivot, "global_position", target_pivot_position, duration)
 	_focus_tween.parallel().tween_property(spring_arm, "spring_length", target_zoom, duration)
-	_focus_tween.parallel().tween_property(camera_yaw, "rotation_degrees:y", _yaw, duration)
-	_focus_tween.parallel().tween_property(camera_pitch, "rotation_degrees:x", _pitch, duration)
-	_focus_tween.parallel().tween_property(camera_pitch, "rotation_degrees:z", _roll, duration)
+	_focus_tween.parallel().tween_property(camera_yaw, "rotation_degrees:y", tween_yaw, duration)
+	_focus_tween.parallel().tween_property(camera_pitch, "rotation_degrees:x", tween_pitch, duration)
+	_focus_tween.parallel().tween_property(camera_pitch, "rotation_degrees:z", tween_roll, duration)
 
 
 func _set_focus_visuals_enabled(is_enabled: bool) -> void:
@@ -746,6 +752,10 @@ func _compute_focus_angles(target) -> Vector3:
 	var desired_pitch = target.get_focus_pitch_degrees(-22.0)
 	var desired_roll = target.get_focus_roll_degrees(0.0)
 	return Vector3(desired_yaw, desired_pitch, desired_roll)
+
+
+func _shortest_angle_target_degrees(current: float, target: float) -> float:
+	return current + wrapf(target - current, -180.0, 180.0)
 
 
 func _create_interaction_controller() -> void:

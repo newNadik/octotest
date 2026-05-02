@@ -173,11 +173,11 @@ func _play_page_flip() -> void:
 func _setup_focus_angles() -> void:
 	if _focus_target == null:
 		return
-	# Use the same stable reading orientation we use for document items.
+	# Fixed, readable orientation with minimal roll travel.
 	_focus_target.use_angle_override = true
-	_focus_target.focus_yaw_degrees = wrapf(global_rotation_degrees.y - 180.0, -180.0, 180.0)
-	_focus_target.focus_pitch_degrees = -90.0
-	_focus_target.focus_roll_degrees = 180.0
+	_focus_target.focus_yaw_degrees = wrapf(global_rotation_degrees.y, -180.0, 180.0)
+	_focus_target.focus_pitch_degrees = -82.0
+	_focus_target.focus_roll_degrees = 0.0
 	_focus_target.focus_zoom_start = 1.0
 	_focus_target.focus_min_zoom = 0.25
 	_focus_target.focus_max_zoom = 2.2

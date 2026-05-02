@@ -13,8 +13,7 @@ enum MusicSlot {
 @export var game_start_music: AudioStream = preload("res://assets/sound/game_start/freecompress-wanderingarc-lost-in-the-wet-hillside-reverie-03-relaxing-ambient-music-230244.mp3")
 @export var game_loop_music: AudioStream
 @export var game_loop_music_tracks: Array[AudioStream] = [preload("res://assets/sound/game_loop/freecompress-wanderingarc-whispering-raindrops-hillside-reverie-02-relaxing-ambient-music-230246.mp3"), 
-preload("res://assets/sound/game_loop/freecompress-wanderingarc-home-before-rain-hillside-reverie-01-relaxing-ambient-music-230245.mp3"),
-preload("res://assets/sound/game_start/freecompress-wanderingarc-lost-in-the-wet-hillside-reverie-03-relaxing-ambient-music-230244.mp3")]
+preload("res://assets/sound/game_loop/freecompress-wanderingarc-home-before-rain-hillside-reverie-01-relaxing-ambient-music-230245.mp3")]
 @export var last_scene_music: AudioStream = preload("res://assets/sound/last_scene/freecompress-orangery-magic-moment-164576.mp3")
 
 @export_group("Mix")
@@ -122,7 +121,9 @@ func _crossfade_to(stream: AudioStream, fade: float) -> void:
 
 
 func _schedule_game_loop_transition() -> void:
-	if game_start_music == null or game_loop_music == null:
+	if game_start_music == null:
+		return
+	if _valid_game_loop_tracks().is_empty() and game_loop_music == null:
 		return
 	var track_length := game_start_music.get_length()
 	if track_length <= 0.0:
