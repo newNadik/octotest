@@ -474,10 +474,16 @@ func _unhandled_input(event: InputEvent) -> void:
 
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_WHEEL_UP and event.pressed:
+			if _focus_mode and not _is_document_focus_active():
+				get_viewport().set_input_as_handled()
+				return
 			spring_arm.spring_length = clampf(spring_arm.spring_length - zoom_step, min_zoom, max_zoom)
 			get_viewport().set_input_as_handled()
 			return
 		if event.button_index == MOUSE_BUTTON_WHEEL_DOWN and event.pressed:
+			if _focus_mode and not _is_document_focus_active():
+				get_viewport().set_input_as_handled()
+				return
 			spring_arm.spring_length = clampf(spring_arm.spring_length + zoom_step, min_zoom, max_zoom)
 			get_viewport().set_input_as_handled()
 			return
@@ -642,12 +648,18 @@ func _enter_focus_mode(target) -> void:
 	_saved_min_zoom = min_zoom
 	_saved_max_zoom = max_zoom
 	_saved_zoom_step = zoom_step
-	if target.focus_min_zoom > 0.0:
-		min_zoom = target.focus_min_zoom
-	if target.focus_max_zoom > 0.0:
-		max_zoom = target.focus_max_zoom
-	if target.focus_zoom_step > 0.0:
-		zoom_step = target.focus_zoom_step
+	var focus_host: Node = target.get_parent()
+	var is_document_focus := (
+		focus_host is DocumentItem
+		or focus_host is IncidentReport
+	)
+	if is_document_focus:
+		if target.focus_min_zoom > 0.0:
+			min_zoom = target.focus_min_zoom
+		if target.focus_max_zoom > 0.0:
+			max_zoom = target.focus_max_zoom
+		if target.focus_zoom_step > 0.0:
+			zoom_step = target.focus_zoom_step
 	player.clear_move_target()
 	_interaction_controller.set_focus_locked(true)
 	_interaction_controller.set_focus_display(true, camera)
@@ -657,7 +669,9 @@ func _enter_focus_mode(target) -> void:
 	_yaw = target_angles.x
 	_pitch = target_angles.y
 	_roll = target_angles.z
-	var zoom: float = focus_zoom_distance if target.focus_zoom_start <= 0.0 else target.focus_zoom_start
+	var zoom: float = _saved_spring_length
+	if is_document_focus:
+		zoom = focus_zoom_distance if target.focus_zoom_start <= 0.0 else target.focus_zoom_start
 	_start_focus_tween(_focus_target.get_focus_position(), zoom)
 
 

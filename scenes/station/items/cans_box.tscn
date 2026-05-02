@@ -2,6 +2,9 @@
 
 [ext_resource type="PackedScene" uid="uid://cghdrv76u8jpv" path="res://scenes/station/items/energy_drink.tscn" id="1_fnf6r"]
 [ext_resource type="Material" uid="uid://bsc2sq4cl7hx5" path="res://assets/materials/cardboard.tres" id="2_s6126"]
+[ext_resource type="Script" uid="uid://cmxxxo5crqhka" path="res://scripts/station/items/cans_box.gd" id="3_cans_box_script"]
+[ext_resource type="Script" uid="uid://bt8vvmy3m63u7" path="res://scripts/interaction/interactable.gd" id="4_interactable_script"]
+[ext_resource type="Script" uid="uid://b0r404u7bpvr" path="res://scripts/interaction/focus_target.gd" id="5_focus_target_script"]
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_fnf6r"]
 size = Vector2(0.5, 0.37)
@@ -12,7 +15,11 @@ size = Vector3(0.006, 0.09, 0.37)
 [sub_resource type="BoxMesh" id="BoxMesh_n2kc2"]
 size = Vector3(0.5, 0.09, 0.006)
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_cans_box_interaction"]
+size = Vector3(0.58, 0.28, 0.46)
+
 [node name="cans_box" type="Node3D" unique_id=870748104]
+script = ExtResource("3_cans_box_script")
 
 [node name="energy_drink" parent="." unique_id=467443040 instance=ExtResource("1_fnf6r")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.06060946, 0, 0)
@@ -86,3 +93,30 @@ surface_material_override/0 = ExtResource("2_s6126")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.045, -0.185)
 mesh = SubResource("BoxMesh_n2kc2")
 surface_material_override/0 = ExtResource("2_s6126")
+
+[node name="FocusTarget" type="Node3D" parent="." unique_id=824006129]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.20413268, 0.2397767)
+script = ExtResource("5_focus_target_script")
+auto_exit_on_solved = false
+solved_method_name = "is_box_filled"
+use_angle_override = true
+focus_yaw_degrees = -125.0
+focus_zoom_start = -2.0
+focus_min_zoom = -2.0
+focus_max_zoom = -2.0
+focus_zoom_step = -2.0
+
+[node name="Interactable" type="Area3D" parent="." unique_id=864412012]
+collision_layer = 8
+collision_mask = 0
+script = ExtResource("4_interactable_script")
+display_name = "Can Box"
+prompt_action = "Arrange cans"
+interaction_range = 2.8
+requires_line_of_sight = false
+focus_offset = Vector3(0, 0.1, 0)
+indicator_local_offset = Vector3(0, 0, 0.15)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Interactable" unique_id=875165029]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.13, 0)
+shape = SubResource("BoxShape3D_cans_box_interaction")

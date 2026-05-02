@@ -3,6 +3,8 @@ class_name Interactable
 
 const DROP_SURFACE_COLLISION_MASK := (1 << 0) | (1 << 1)
 const OUTLINE_SHADER := preload("res://assets/shaders/interaction_outline.gdshader")
+const DEFAULT_REJECT_SFX := preload("res://assets/sound/hover_sfx.mp3")
+const DEFAULT_SUCCESS_SFX := preload("res://assets/sound/confirm_success.mp3")
 
 signal interacted(interactable: Interactable, actor: Node)
 signal clicked(interactable: Interactable, actor: Node)
@@ -62,6 +64,13 @@ enum HighlightMode {
 @export var blocked_color := Color(1.0, 1.0, 1.0, 0.0)
 @export var click_color := Color(1.0, 1.0, 1.0, 1.0)
 @export var click_feedback_duration := 0.14
+@export_group("Audio")
+@export var reject_sfx: AudioStream = DEFAULT_REJECT_SFX
+@export var success_sfx: AudioStream = DEFAULT_SUCCESS_SFX
+@export var reject_sfx_volume_db := -26.0
+@export var success_sfx_volume_db := -2.0
+@export var reject_pitch_min := 0.94
+@export var reject_pitch_max := 1.06
 @export_group("")
 
 var _visual_root: Node3D
@@ -87,6 +96,8 @@ var _indicator_anchor_local := Vector3.ZERO
 var _indicator_override_enabled := false
 var _indicator_override_world_position := Vector3.ZERO
 var _click_feedback_time_left := 0.0
+var _sfx_player: AudioStreamPlayer3D
+var _rng := RandomNumberGenerator.new()
 
 
 func _ready() -> void:
@@ -110,6 +121,8 @@ func _ready() -> void:
 	_initial_save_key = str(get_path())
 	_apply_smart_defaults()
 	_set_visual_state(VisualState.IDLE)
+	_ensure_sfx_player()
+	_rng.randomize()
 	set_process(true)
 
 
@@ -225,6 +238,40 @@ func trigger_click_feedback() -> void:
 		return
 	_click_feedback_time_left = click_feedback_duration
 	_apply_visuals()
+
+
+func play_reject_sfx() -> void:
+	var min_pitch = minf(reject_pitch_min, reject_pitch_max)
+	var max_pitch = maxf(reject_pitch_min, reject_pitch_max)
+	var pitch = _rng.randf_range(min_pitch, max_pitch)
+	_play_sfx(reject_sfx, reject_sfx_volume_db, pitch)
+
+
+func play_success_sfx() -> void:
+	_play_sfx(success_sfx, success_sfx_volume_db, 1.0)
+
+
+func _ensure_sfx_player() -> void:
+	if _sfx_player != null:
+		return
+	_sfx_player = AudioStreamPlayer3D.new()
+	_sfx_player.name = "InteractableSfxPlayer"
+	_sfx_player.volume_db = success_sfx_volume_db
+	_sfx_player.max_distance = 18.0
+	add_child(_sfx_player)
+
+
+func _play_sfx(stream: AudioStream, volume_db: float, pitch_scale: float) -> void:
+	if stream == null:
+		return
+	_ensure_sfx_player()
+	if _sfx_player == null:
+		return
+	_sfx_player.volume_db = volume_db
+	_sfx_player.pitch_scale = pitch_scale
+	_sfx_player.stream = stream
+	_sfx_player.stop()
+	_sfx_player.play()
 
 
 func _apply_visuals() -> void:

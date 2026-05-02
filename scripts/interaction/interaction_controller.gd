@@ -8,6 +8,7 @@ const GROUND_COLLISION_MASK := 1 << 1
 const DROP_SURFACE_COLLISION_MASK := WALL_COLLISION_MASK | GROUND_COLLISION_MASK
 const INTERACTABLE_COLLISION_MASK := 1 << 3
 const CardReaderScript = preload("res://scripts/interaction/card_reader.gd")
+const CansBoxScript = preload("res://scripts/station/items/cans_box.gd")
 const CodePanelScript = preload("res://scripts/interaction/code_panel.gd")
 const FocusTargetScript = preload("res://scripts/interaction/focus_target.gd")
 const FocusRejectFeedbackScript = preload("res://scripts/interaction/focus_reject_feedback.gd")
@@ -54,6 +55,10 @@ const ARM_SOCKET_ANGLE_BY_NAME := {
 @export var pick_drop_sound_pitch_min := 0.82
 @export var pick_drop_sound_pitch_max := 1.22
 @export var pick_drop_sound_max_distance := 22.0
+@export var focus_display_forward_distance := 1.15
+@export var focus_display_bottom_anchor := -0.68
+@export var focus_display_row_spacing := 0.44
+@export var focus_display_column_spacing := 0.62
 
 var _player: CharacterBody3D
 var _camera: Camera3D
@@ -83,6 +88,7 @@ var _focus_display_enabled = false
 var _focus_display_camera: Camera3D
 var _focus_target: FocusTargetScript
 var _focus_card_reader: CardReaderScript
+var _focus_cans_box: CansBoxScript
 var _focus_reject_feedback = FocusRejectFeedbackScript.new()
 var _hint_builder = InteractionHintBuilderScript.new()
 var _octo_rig: OctoRigScript
@@ -355,11 +361,13 @@ func set_focus_display(enabled: bool, camera: Camera3D = null) -> void:
 func set_focus_target(target: FocusTargetScript) -> void:
 	_focus_target = target
 	_focus_card_reader = null
+	_focus_cans_box = null
 	_focus_reject_feedback.reset()
 	if _focus_target == null:
 		return
 	var interactable = _get_interactable_for_focus_target(_focus_target)
 	_focus_card_reader = _get_card_reader_for_interactable(interactable)
+	_focus_cans_box = _get_cans_box_for_interactable(interactable)
 
 
 func get_held_item_names() -> PackedStringArray:
@@ -646,6 +654,7 @@ func _apply_card_to_pending_reader(card) -> void:
 		_attach_item_to_hands(removed_card, false)
 	else:
 		_debug_log("Card inserted successfully: %s" % _describe_interactable(removed_card))
+		_play_focus_target_success_sfx()
 
 	_cancel_card_selection_mode()
 	_update_hint_text()
@@ -984,23 +993,21 @@ func _update_focus_display_transforms(delta: float) -> void:
 	var count = _held_interactables.size()
 	var columns = mini(count, 4)
 	var alpha = minf(1.0, held_item_follow_speed * delta)
-	var bottom_anchor = -1.34
-	var row_spacing = 0.58
 
 	for i in range(count):
 		var held_item = _held_interactables[i]
 		var pickup_root = held_item.get_pickup_root()
 		var col = i % columns
 		var row = i / columns
-		var offset_x = (float(col) - float(columns - 1) * 0.5) * 0.82
-		var offset_y = bottom_anchor + float(row) * row_spacing
+		var offset_x = (float(col) - float(columns - 1) * 0.5) * focus_display_column_spacing
+		var offset_y = focus_display_bottom_anchor + float(row) * focus_display_row_spacing
 
 		var camera_forward = -_focus_display_camera.global_basis.z
 		var camera_right = _focus_display_camera.global_basis.x
 		var camera_up = _focus_display_camera.global_basis.y
 
 		var target_pos = _focus_display_camera.global_position
-		target_pos += camera_forward * 2.2
+		target_pos += camera_forward * focus_display_forward_distance
 		target_pos += camera_right * offset_x
 		target_pos += camera_up * offset_y
 		target_pos += _focus_reject_feedback.get_offset(
@@ -1017,6 +1024,8 @@ func _update_focus_display_transforms(delta: float) -> void:
 func _trigger_focus_reject_feedback(item) -> void:
 	if item == null or not _focus_locked:
 		return
+	if item.has_method("play_reject_sfx"):
+		item.play_reject_sfx()
 	_focus_reject_feedback.trigger(item)
 
 
@@ -1040,6 +1049,9 @@ func _can_focus_target_accept_held_item(item) -> bool:
 
 	# Extension point: add additional focus-target handlers here as new
 	# interactable types gain held-item application behavior.
+	if _focus_cans_box != null:
+		return _focus_cans_box.can_accept_energy_drink(item)
+
 	if _focus_card_reader != null:
 		return item.is_card() and _focus_card_reader.can_accept_card(item)
 
@@ -1051,6 +1063,19 @@ func _apply_held_item_to_focus_target(item) -> void:
 		return
 
 	# Extension point: mirror branching in _can_focus_target_accept_held_item.
+	if _focus_cans_box != null:
+		if not _focus_cans_box.insert_energy_drink(item):
+			return
+		_play_focus_target_success_sfx()
+		var removed_item = _remove_held_item(item)
+		if removed_item == null:
+			return
+		removed_item.set_interaction_enabled(false)
+		var pickup_root = removed_item.get_pickup_root()
+		if pickup_root != null:
+			pickup_root.queue_free()
+		return
+
 	if _focus_card_reader != null:
 		_debug_log("Focus-held click applies card %s" % _describe_interactable(item))
 		_pending_card_reader = _focus_card_reader
@@ -1059,11 +1084,32 @@ func _apply_held_item_to_focus_target(item) -> void:
 
 func _get_focus_item_target_position(fallback_position: Vector3) -> Vector3:
 	# Extension point: return a destination position per focus-target type.
+	if _focus_cans_box != null and _focus_target != null:
+		return _focus_target.get_focus_position()
 	if _focus_card_reader != null:
 		return _focus_card_reader.get_slot_position()
 	if _focus_target != null:
 		return _focus_target.get_focus_position()
 	return fallback_position
+
+
+func _get_cans_box_for_interactable(target) -> CansBoxScript:
+	if target == null:
+		return null
+	var parent = target.get_parent()
+	if parent == null or not (parent is CansBoxScript):
+		return null
+	return parent as CansBoxScript
+
+
+func _play_focus_target_success_sfx() -> void:
+	if _focus_target == null:
+		return
+	var target_interactable = _get_interactable_for_focus_target(_focus_target)
+	if target_interactable == null:
+		return
+	if target_interactable.has_method("play_success_sfx"):
+		target_interactable.play_success_sfx()
 
 
 func _ensure_hand_sockets() -> void:

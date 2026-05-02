@@ -5,6 +5,7 @@ extends StaticBody3D
 	set(value):
 		interaction_enabled = value
 		_apply_interaction_enabled()
+@export var can_variant_id := ""
 
 @export_group("Label")
 @export var label_albedo_texture: Texture2D:

@@ -80,6 +80,7 @@ collision_mask = 0
 script = ExtResource("4_interactable_script")
 interaction_type = 1
 display_name = "Energy Drink"
+item_id = "energy_drink"
 prompt_action = "Pick up"
 requires_line_of_sight = false
 hold_offset = Vector3(0, -0.16, -0.08)
