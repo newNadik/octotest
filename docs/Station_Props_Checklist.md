@@ -224,28 +224,25 @@
 - [x] Shelving with binders / documents
 - [x] Plant pot (desk or floor)
 - [x] fish tank
-- [ ] Whiteboard / corkboard
+- [x] Whiteboard / corkboard
 - [x] Coffee mug / thermos (desk prop)
-- [ ] Trash bin
 - [x] Fire extinguisher
 - [ ] Evacuation plan (wall-mounted)
-- [ ] Emergency procedure document (laminated, wall-mounted)
-- [ ] Desk lamp
-- [ ] Sticky notes (on monitors + desk)
-- [ ] Printed reports (stacked)
-- [ ] desk calendar
+- [x] Sticky notes (on monitors + desk)
+- [x] Printed reports (stacked)
+- [x] desk calendar
 - [x] Printer / scanner (on shelf or side table)
 - [x] Wall clock
 - [ ] Keypad / card reader on door
 
 #### Character touches
-- [ ] Desk A — absolute wall of sticky notes (on monitor, around screen, edge of desk)
-- [ ] Desk A — cold forgotten coffee mug
-- [ ] Desk A — tower of energy drink cans
-- [ ] Desk B — small geek figurines / collectibles (robot, astronaut)
-- [ ] Desk B — anime / sci-fi sticker on laptop lid
-- [ ] Desk B — fidget cube or stress toy
-- [ ] Shared — someone's printed a meme and pinned it to the corkboard
+- [x] Desk A — absolute wall of sticky notes (on monitor, around screen, edge of desk)
+- [x] Desk A — cold forgotten coffee mug
+- [x] Desk A — tower of energy drink cans
+- [x] Desk B — small geek figurines / collectibles (robot, astronaut)
+- [x] Desk B — anime / sci-fi sticker on laptop lid
+- [x] Desk B — fidget cube or stress toy
+- [x] Shared — someone's printed a meme and pinned it to the corkboard
 
 ### Systems Room
 - [x] Server racks (2–3 tall units)

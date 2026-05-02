@@ -77,7 +77,7 @@ func _ready() -> void:
 	_setup_language_select()
 	_setup_display_parallax()
 	_ensure_popup_layer()
-	_play_startup_black_rect_drop()
+	#_play_startup_black_rect_drop()
 	_start_menu_room_preload()
 	_refresh_save_buttons()
 	_deferred_startup_work()
@@ -229,6 +229,7 @@ func _play_startup_black_rect_drop() -> void:
 	black_color_rect.offset_right = 0.0
 	black_color_rect.offset_bottom = 0.0
 	black_color_rect.position = Vector2.ZERO
+	black_color_rect.modulate.a = 1.0
 	black_color_rect.visible = false
 	await get_tree().process_frame
 	var viewport_height := get_viewport_rect().size.y
@@ -242,11 +243,13 @@ func _play_startup_black_rect_drop() -> void:
 	# Full-rect controls move reliably via offsets when anchors are stretched.
 	tween.tween_property(black_color_rect, "offset_top", viewport_height, STARTUP_BLACK_RECT_DURATION).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
 	tween.parallel().tween_property(black_color_rect, "offset_bottom", viewport_height, STARTUP_BLACK_RECT_DURATION).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+	tween.parallel().tween_property(black_color_rect, "modulate:a", 0.7, STARTUP_BLACK_RECT_DURATION).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
 	tween.finished.connect(func() -> void:
 		if black_color_rect == null:
 			return
 		black_color_rect.visible = false
 		black_color_rect.position = Vector2.ZERO
+		black_color_rect.modulate.a = 1.0
 		black_color_rect.offset_left = 0.0
 		black_color_rect.offset_top = 0.0
 		black_color_rect.offset_right = 0.0

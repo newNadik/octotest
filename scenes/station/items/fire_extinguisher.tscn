@@ -584,7 +584,7 @@ mesh = SubResource("PlaneMesh_vpu02")
 surface_material_override/0 = SubResource("StandardMaterial3D_g0fbs")
 
 [node name="aid" type="MeshInstance3D" parent="." unique_id=371407493]
-transform = Transform3D(-3.059797e-07, -7, 0, 7, -3.059797e-07, 0, 0, 0, 7, -0.00014009327, 1.485846, -0.20521626)
+transform = Transform3D(-3.934025e-07, -9, 0, 9, -3.934025e-07, 0, 0, 0, 9, 0, 2, -0.205)
 mesh = SubResource("ArrayMesh_agwfk")
 surface_material_override/0 = SubResource("StandardMaterial3D_6klkk")
 
@@ -597,6 +597,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.5, -0.3)
 sign_texture = ExtResource("4_vpu02")
 
 [node name="Decal" type="Decal" parent="." unique_id=1404573715]
-transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 1.4974995, -0.13094814)
+transform = Transform3D(1.5, 0, 0, 0, -6.556708e-08, -1.5, 0, 1.5, -6.556708e-08, 0, 2, -0.131)
 size = Vector3(0.23, 0.11, 0.11)
 texture_albedo = ExtResource("2_h5p6b")

@@ -107,7 +107,7 @@ Source: [Flaticon](https://www.flaticon.com/)
 - "Plastic Submarine" (https://skfb.ly/oXC9G) by roddstehling is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
 - "watering can" (https://skfb.ly/oFo9T) by 3Dog is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
 - "Voxel BB-8" (https://skfb.ly/6WVEE) by pratamacam is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
-- 
+- "Pen Holder" (https://skfb.ly/orTTW) by HappyFryday is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
 
 ## Textures
 

@@ -1,0 +1,51 @@
+[gd_scene format=3 uid="uid://biv5dasewui4d"]
+
+[ext_resource type="Texture2D" uid="uid://cwslq18syxnh3" path="res://assets/textures/documents/note_2.png" id="2_lfdfp"]
+[ext_resource type="Texture2D" uid="uid://c4bn0t3od7aoo" path="res://assets/textures/documents/note_1.png" id="2_mtw3m"]
+[ext_resource type="Texture2D" uid="uid://3eqrroipjbco" path="res://assets/textures/documents/note_3.png" id="3_helfq"]
+[ext_resource type="Texture2D" uid="uid://dpp0g5uf4mn4v" path="res://assets/textures/documents/note_4.png" id="4_l2i3k"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_doc_default"]
+albedo_color = Color(0.9, 0.9, 0.9, 1)
+
+[sub_resource type="QuadMesh" id="QuadMesh_lfdfp"]
+material = SubResource("StandardMaterial3D_doc_default")
+size = Vector2(0.18, 0.18)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_helfq"]
+albedo_texture = ExtResource("2_mtw3m")
+metallic_specular = 0.1
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_muobd"]
+albedo_texture = ExtResource("2_lfdfp")
+metallic_specular = 0.1
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_he1yj"]
+albedo_texture = ExtResource("3_helfq")
+metallic_specular = 0.1
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_skmbw"]
+albedo_texture = ExtResource("4_l2i3k")
+metallic_specular = 0.1
+
+[node name="notes" type="Node3D" unique_id=391949738]
+
+[node name="DocumentMesh" type="MeshInstance3D" parent="." unique_id=1699386756]
+transform = Transform3D(0.99447805, 0.10442724, 0.010412181, -0.10494504, 0.9895713, 0.098667696, 0, -0.09921556, 0.995066, -0.3894918, 0.28873235, 0.28981596)
+mesh = SubResource("QuadMesh_lfdfp")
+surface_material_override/0 = SubResource("StandardMaterial3D_helfq")
+
+[node name="DocumentMesh2" type="MeshInstance3D" parent="." unique_id=795880432]
+transform = Transform3D(0.97996646, -0.19818002, -0.019760039, 0.19916269, 0.9751313, 0.09722792, 0, -0.09921556, 0.995066, 0.6237863, 0.86474794, 0.2356174)
+mesh = SubResource("QuadMesh_lfdfp")
+surface_material_override/0 = SubResource("StandardMaterial3D_muobd")
+
+[node name="DocumentMesh3" type="MeshInstance3D" parent="." unique_id=1009867903]
+transform = Transform3D(0.9899941, -0.14041235, -0.014000166, 0.14110857, 0.98510945, 0.09822282, 0, -0.09921556, 0.995066, 0.2971832, 0.21154252, 0.29418504)
+mesh = SubResource("QuadMesh_lfdfp")
+surface_material_override/0 = SubResource("StandardMaterial3D_he1yj")
+
+[node name="DocumentMesh4" type="MeshInstance3D" parent="." unique_id=1088168315]
+transform = Transform3D(1, 0, 0, 0, 0.995066, 0.09921556, 0, -0.09921556, 0.995066, 0.48045838, 0.2800876, 0.28981596)
+mesh = SubResource("QuadMesh_lfdfp")
+surface_material_override/0 = SubResource("StandardMaterial3D_skmbw")
