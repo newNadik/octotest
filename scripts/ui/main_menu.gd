@@ -21,6 +21,9 @@ const LANGUAGE_ARROW_COLOR := Color("0d243d")
 const LANGUAGE_POPUP_BG_COLOR := Color("6cc0ff")
 const DISPLAY_REFLECTION_MAX_OFFSET := Vector2(0.06, 0.04)
 const DISPLAY_REFLECTION_SMOOTH_SPEED := 10.0
+const STARTUP_BLACK_RECT_DELAY := 0.15
+const STARTUP_BLACK_RECT_DURATION := 0.8
+static var _startup_black_rect_played_once := false
 
 @onready var play_button: Button = $MainVBoxContainer/MainContainer/HBoxContainer/LeftContent/MenuButtons/PlayButton
 @onready var continue_button: Button = $MainVBoxContainer/MainContainer/HBoxContainer/LeftContent/MenuButtons/ContinueButton
@@ -36,6 +39,7 @@ const DISPLAY_REFLECTION_SMOOTH_SPEED := 10.0
 @onready var display_fx: ColorRect = $DisplayFX
 @onready var main_vbox: VBoxContainer = $MainVBoxContainer
 @onready var sticker_container: Control = $StickerContainer
+@onready var black_color_rect: ColorRect = get_node_or_null("BlackColorRect") as ColorRect
 
 var _slides: Array[Control] = []
 var _slide_index := 0
@@ -60,6 +64,7 @@ func _ready() -> void:
 	_setup_language_select()
 	_setup_display_parallax()
 	_ensure_popup_layer()
+	_play_startup_black_rect_drop()
 	_refresh_save_buttons()
 	_deferred_startup_work()
 	if continue_button.visible and continue_button.disabled == false:
@@ -194,6 +199,45 @@ func _collect_slides() -> void:
 	for child: Node in slides_root.get_children():
 		if child is Control:
 			_slides.append(child as Control)
+
+
+func _play_startup_black_rect_drop() -> void:
+	if black_color_rect == null:
+		return
+	if _startup_black_rect_played_once:
+		black_color_rect.visible = false
+		black_color_rect.position = Vector2.ZERO
+		return
+	_startup_black_rect_played_once = true
+	black_color_rect.set_anchors_preset(Control.PRESET_FULL_RECT)
+	black_color_rect.offset_left = 0.0
+	black_color_rect.offset_top = 0.0
+	black_color_rect.offset_right = 0.0
+	black_color_rect.offset_bottom = 0.0
+	black_color_rect.position = Vector2.ZERO
+	black_color_rect.visible = false
+	await get_tree().process_frame
+	var viewport_height := get_viewport_rect().size.y
+	if viewport_height <= 0.0:
+		black_color_rect.visible = false
+		return
+	black_color_rect.visible = true
+	black_color_rect.position = Vector2.ZERO
+	var tween := create_tween()
+	tween.tween_interval(STARTUP_BLACK_RECT_DELAY)
+	# Full-rect controls move reliably via offsets when anchors are stretched.
+	tween.tween_property(black_color_rect, "offset_top", viewport_height, STARTUP_BLACK_RECT_DURATION).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+	tween.parallel().tween_property(black_color_rect, "offset_bottom", viewport_height, STARTUP_BLACK_RECT_DURATION).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+	tween.finished.connect(func() -> void:
+		if black_color_rect == null:
+			return
+		black_color_rect.visible = false
+		black_color_rect.position = Vector2.ZERO
+		black_color_rect.offset_left = 0.0
+		black_color_rect.offset_top = 0.0
+		black_color_rect.offset_right = 0.0
+		black_color_rect.offset_bottom = 0.0
+	)
 
 
 func _deferred_startup_work() -> void:

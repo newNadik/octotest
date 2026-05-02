@@ -4,7 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://bleasmjxjq0hr" path="res://assets/ui/search.png" id="2_8ln24"]
 [ext_resource type="PackedScene" uid="uid://bydkhwglewp85" path="res://scenes/ui/research_button.tscn" id="2_button"]
 [ext_resource type="PackedScene" uid="uid://cdtoxdrr3lbo4" path="res://scenes/ui/photo_slide.tscn" id="3_slide"]
-[ext_resource type="FontFile" path="res://assets/ui/OpenSans-Semibold.ttf" id="3_tbmy8"]
+[ext_resource type="FontFile" uid="uid://dtpeeh64d7x6b" path="res://assets/ui/OpenSans-Semibold.ttf" id="3_tbmy8"]
 [ext_resource type="LabelSettings" uid="uid://db317mbtlc3uk" path="res://assets/ui/title_label_settings.tres" id="4_jk1qb"]
 [ext_resource type="Texture2D" uid="uid://bveo1mgp8bkut" path="res://icon.png" id="4_wu84c"]
 [ext_resource type="Texture2D" uid="uid://col1g465oecb3" path="res://assets/ui/Icon_BCRC.png" id="5_rtw2f"]
@@ -432,6 +432,16 @@ label_settings = SubResource("LabelSettings_8ln24")
 [node name="SlideTimer" type="Timer" parent="." unique_id=369526518]
 wait_time = 4.5
 autostart = true
+
+[node name="BlackColorRect" type="ColorRect" parent="." unique_id=319403172]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.09019608, 0.09019608, 0.09019608, 1)
 
 [node name="DisplayFX" type="ColorRect" parent="." unique_id=309820831]
 material = SubResource("ShaderMaterial_rtw2f")
