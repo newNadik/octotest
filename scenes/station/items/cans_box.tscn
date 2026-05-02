@@ -1,0 +1,88 @@
+[gd_scene format=3 uid="uid://bc5c7jkpwtxss"]
+
+[ext_resource type="PackedScene" uid="uid://cghdrv76u8jpv" path="res://scenes/station/items/energy_drink.tscn" id="1_fnf6r"]
+[ext_resource type="Material" uid="uid://bsc2sq4cl7hx5" path="res://assets/materials/cardboard.tres" id="2_s6126"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_fnf6r"]
+size = Vector2(0.5, 0.37)
+
+[sub_resource type="BoxMesh" id="BoxMesh_to7fb"]
+size = Vector3(0.006, 0.09, 0.37)
+
+[sub_resource type="BoxMesh" id="BoxMesh_n2kc2"]
+size = Vector3(0.5, 0.09, 0.006)
+
+[node name="cans_box" type="Node3D" unique_id=870748104]
+
+[node name="energy_drink" parent="." unique_id=467443040 instance=ExtResource("1_fnf6r")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.06060946, 0, 0)
+interaction_enabled = false
+
+[node name="energy_drink2" parent="." unique_id=881718037 instance=ExtResource("1_fnf6r")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.059390537, 0, 0)
+interaction_enabled = false
+
+[node name="energy_drink3" parent="." unique_id=1748064480 instance=ExtResource("1_fnf6r")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.18060946, 0, 0)
+interaction_enabled = false
+
+[node name="energy_drink4" parent="." unique_id=1351095084 instance=ExtResource("1_fnf6r")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.06060946, 0, 0.12)
+interaction_enabled = false
+
+[node name="energy_drink5" parent="." unique_id=1654506610 instance=ExtResource("1_fnf6r")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.059390537, 0, 0.12)
+interaction_enabled = false
+
+[node name="energy_drink6" parent="." unique_id=1549317707 instance=ExtResource("1_fnf6r")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.18060946, 0, 0.12)
+interaction_enabled = false
+
+[node name="energy_drink7" parent="." unique_id=1178656451 instance=ExtResource("1_fnf6r")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.06060946, 0, -0.12)
+interaction_enabled = false
+
+[node name="energy_drink8" parent="." unique_id=516066764 instance=ExtResource("1_fnf6r")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.059390537, 0, -0.12)
+interaction_enabled = false
+
+[node name="energy_drink10" parent="." unique_id=1240122305 instance=ExtResource("1_fnf6r")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.17939053, 0, 0)
+interaction_enabled = false
+
+[node name="missing_can" parent="." unique_id=1846402182 instance=ExtResource("1_fnf6r")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.179, 0, 0.12)
+visible = false
+interaction_enabled = false
+
+[node name="energy_drink12" parent="." unique_id=488661612 instance=ExtResource("1_fnf6r")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.17939053, 0, -0.12)
+interaction_enabled = false
+
+[node name="energy_drink9" parent="." unique_id=991957205 instance=ExtResource("1_fnf6r")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.18060946, 0, -0.12)
+interaction_enabled = false
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=2100281034]
+mesh = SubResource("PlaneMesh_fnf6r")
+surface_material_override/0 = ExtResource("2_s6126")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="." unique_id=1149166119]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.25, 0.045, 0)
+mesh = SubResource("BoxMesh_to7fb")
+surface_material_override/0 = ExtResource("2_s6126")
+
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="." unique_id=1504539629]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.25, 0.045, 0)
+mesh = SubResource("BoxMesh_to7fb")
+surface_material_override/0 = ExtResource("2_s6126")
+
+[node name="MeshInstance3D4" type="MeshInstance3D" parent="." unique_id=60338022]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.045, 0.185)
+mesh = SubResource("BoxMesh_n2kc2")
+surface_material_override/0 = ExtResource("2_s6126")
+
+[node name="MeshInstance3D5" type="MeshInstance3D" parent="." unique_id=1395896127]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.045, -0.185)
+mesh = SubResource("BoxMesh_n2kc2")
+surface_material_override/0 = ExtResource("2_s6126")
