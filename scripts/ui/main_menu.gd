@@ -2,6 +2,7 @@ extends Control
 
 
 const LOADING_SCENE_PATH := "res://scenes/ui/loading_screen.tscn"
+const GAME_SCENE_PATH := "res://scenes/main.tscn"
 const SETTINGS_MENU_SCENE := preload("res://scenes/ui/settings_menu.tscn")
 const ABOUT_POPUP_SCENE := preload("res://scenes/ui/about_popup.tscn")
 const CONTACT_POPUP_SCENE := preload("res://scenes/ui/contact_popup.tscn")
@@ -23,6 +24,18 @@ const DISPLAY_REFLECTION_MAX_OFFSET := Vector2(0.06, 0.04)
 const DISPLAY_REFLECTION_SMOOTH_SPEED := 10.0
 const STARTUP_BLACK_RECT_DELAY := 0.15
 const STARTUP_BLACK_RECT_DURATION := 0.8
+const MENU_PRELOAD_INITIAL_RADIUS := 20.0
+const MENU_PRELOAD_NEW_GAME_START_XZ := Vector2(0.0, 16.0)
+const MENU_PRELOAD_ROOM_PATHS: Array[Dictionary] = [
+	{"name": "atrium",     "path": "res://scenes/station/atrium_room.tscn",     "center": Vector2(0.93,  28.47), "neighbors": ["workshop", "chem_lab"]},
+	{"name": "chem_lab",   "path": "res://scenes/station/chem_lab_room.tscn",   "center": Vector2(11.72, -7.54),  "neighbors": ["atrium"]},
+	{"name": "energy_lab", "path": "res://scenes/station/energy_lab_room.tscn", "center": Vector2(10.32, 14.32),  "neighbors": []},
+	{"name": "office",     "path": "res://scenes/station/office_room.tscn",     "center": Vector2(0.78,  -17.63), "neighbors": []},
+	{"name": "quarters",   "path": "res://scenes/station/quarters_room.tscn",   "center": Vector2(0.0,    0.0),   "neighbors": []},
+	{"name": "systems",    "path": "res://scenes/station/systems_room.tscn",    "center": Vector2(-4.45, -17.0),  "neighbors": []},
+	{"name": "wetroom",    "path": "res://scenes/station/wetroom_room.tscn",    "center": Vector2(9.65,  24.85),  "neighbors": []},
+	{"name": "workshop",   "path": "res://scenes/station/workshop_room.tscn",   "center": Vector2(25.78,  5.67),  "neighbors": ["atrium"]},
+]
 static var _startup_black_rect_played_once := false
 
 @onready var play_button: Button = $MainVBoxContainer/MainContainer/HBoxContainer/LeftContent/MenuButtons/PlayButton
@@ -65,6 +78,7 @@ func _ready() -> void:
 	_setup_display_parallax()
 	_ensure_popup_layer()
 	_play_startup_black_rect_drop()
+	_start_menu_room_preload()
 	_refresh_save_buttons()
 	_deferred_startup_work()
 	if continue_button.visible and continue_button.disabled == false:
@@ -238,6 +252,48 @@ func _play_startup_black_rect_drop() -> void:
 		black_color_rect.offset_right = 0.0
 		black_color_rect.offset_bottom = 0.0
 	)
+
+
+func _start_menu_room_preload() -> void:
+	# Fire-and-forget warmup so menu stays responsive while gameplay rooms load in background.
+	var game_err := ResourceLoader.load_threaded_request(GAME_SCENE_PATH, "", true)
+	if game_err != OK and game_err != ERR_BUSY:
+		push_warning("Menu game preload failed: %s (err=%d)" % [GAME_SCENE_PATH, game_err])
+
+	var player_start_xz := _get_menu_predicted_player_start_xz()
+	var near_names: Array[String] = []
+	for room in MENU_PRELOAD_ROOM_PATHS:
+		if player_start_xz.distance_to(room["center"] as Vector2) <= MENU_PRELOAD_INITIAL_RADIUS:
+			near_names.append(room["name"] as String)
+	for room in MENU_PRELOAD_ROOM_PATHS:
+		if near_names.has(room["name"] as String):
+			for neighbor in (room["neighbors"] as Array):
+				var neighbor_name := neighbor as String
+				if not near_names.has(neighbor_name):
+					near_names.append(neighbor_name)
+
+	for room in MENU_PRELOAD_ROOM_PATHS:
+		var room_name := room["name"] as String
+		if not near_names.has(room_name):
+			continue
+		var scene_path := room["path"] as String
+		var err := ResourceLoader.load_threaded_request(scene_path)
+		if err != OK and err != ERR_BUSY:
+			push_warning("Menu room preload failed: %s (err=%d)" % [scene_path, err])
+
+
+func _get_menu_predicted_player_start_xz() -> Vector2:
+	var game_save := _get_game_save()
+	if game_save != null and bool(game_save.call("has_save")):
+		var data = game_save.call("load_game")
+		if data is Dictionary:
+			var player_data = (data as Dictionary).get("player", {})
+			if player_data is Dictionary:
+				var pos_arr = (player_data as Dictionary).get("position", [])
+				if pos_arr is Array and (pos_arr as Array).size() >= 3:
+					var p := pos_arr as Array
+					return Vector2(float(p[0]), float(p[2]))
+	return MENU_PRELOAD_NEW_GAME_START_XZ
 
 
 func _deferred_startup_work() -> void:
