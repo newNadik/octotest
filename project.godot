@@ -44,6 +44,10 @@ enabled=PackedStringArray("res://addons/extra_snaps/plugin.cfg")
 
 import/blender/enabled=false
 
+[global_group]
+
+rope_colliders=""
+
 [internationalization]
 
 locale/translations=PackedStringArray("res://i18n/uk_UA.po")

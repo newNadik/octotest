@@ -163,7 +163,7 @@ func _ready() -> void:
 	_apply_loaded_world_state()
 	_apply_exit_code_to_scene(self)
 	_set_in_game_menu_visible(false)
-
+	
 
 func _apply_platform_visual_overrides() -> void:
 	if not _should_use_mobile_visual_fallbacks():

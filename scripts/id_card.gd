@@ -7,6 +7,9 @@ extends StaticBody3D
 @export var card_face_mesh_path: NodePath = NodePath("id_MeshInstance3D")
 @export var interactable_path: NodePath = NodePath("Interactable")
 
+@onready var sim = $LanyardSkeleton/SpringBoneSimulator3D
+@onready var floor = $LanyardSkeleton/SpringBoneSimulator3D/FloorCollision
+
 
 func _ready() -> void:
 	var interactable = get_node_or_null(interactable_path)
@@ -32,3 +35,8 @@ func _ready() -> void:
 		return
 	unique_material.albedo_texture = card_face_texture
 	face_mesh.set_surface_override_material(0, unique_material)
+	
+	floor.global_position = Vector3.ZERO
+
+func _process(_delta: float) -> void:
+	floor.global_position = Vector3.ZERO

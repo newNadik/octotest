@@ -336,3 +336,6 @@ school_bounds = Vector3(50, 6, 15)
 stream_spawn_outside_distance = 5.0
 stream_recycle_front_distance = 5.0
 mesh_rotation_offset_degrees = Vector3(0, 90, 0)
+
+[node name="SpringBoneCollisionPlane3D" type="SpringBoneCollisionPlane3D" parent="." unique_id=223451594]
+transform = Transform3D(40, 0, 0, 0, 40, 0, 0, 0, 40, 0, 0, 0)
