@@ -264,6 +264,7 @@ mesh = SubResource("ArrayMesh_gaqtw")
 
 [node name="Armature" type="Node3D" parent="Node3D" unique_id=1710313001]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.000112351496, 0.08462491)
+visible = false
 
 [node name="Skeleton3D" type="Skeleton3D" parent="Node3D/Armature" unique_id=2003483436]
 bones/0/name = "Root"
