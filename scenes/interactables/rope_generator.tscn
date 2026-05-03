@@ -1,58 +1,73 @@
-[gd_scene format=3 uid="uid://cxnkmyde8rpsn"]
+[gd_scene format=4 uid="uid://cxnkmyde8rpsn"]
 
 [ext_resource type="Script" uid="uid://cynp0ebj0jgty" path="res://rope_generator.gd" id="1_udubw"]
+[ext_resource type="Texture2D" uid="uid://ccilghl2xkmvs" path="res://assets/models/items/Lanyard.png" id="2_ubtfh"]
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_udubw"]
-cull_mode = 2
-albedo_color = Color(0.050980393, 0.050980393, 1, 1)
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_j373r"]
+transparency = 1
+albedo_texture = ExtResource("2_ubtfh")
 roughness = 0.8
 
-[sub_resource type="BoxMesh" id="BoxMesh_ubtfh"]
-size = Vector3(0.025, 0.1, 0.002)
+[sub_resource type="ArrayMesh" id="ArrayMesh_n2rhv"]
+_surfaces = [{
+"aabb": AABB(-0.1, -1.2, 0, 0.2, 1.2, 1e-05),
+"attribute_data": PackedByteArray("AAAAAAAAAAAAAIA/AAAAAAAAAACrqqo9AACAP6uqqj0AAAAAq6oqPgAAgD+rqio+AAAAAAAAgD4AAIA/AACAPgAAAACrqqo+AACAP6uqqj4AAAAAVVXVPgAAgD9VVdU+AAAAAAAAAD8AAIA/AAAAPwAAAABVVRU/AACAP1VVFT8AAAAAq6oqPwAAgD+rqio/AAAAAAAAQD8AAIA/AABAPwAAAABVVVU/AACAP1VVVT8AAAAAq6pqPwAAgD+rqmo/AAAAAAAAgD8AAIA/AACAPw=="),
+"bone_aabbs": [AABB(-0.1, 0, 0, 0.2, 1e-05, 1e-05), AABB(-0.1, -0.1, 0, 0.2, 9.998679e-06, 1e-05), AABB(-0.1, -0.2, 0, 0.2, 9.998679e-06, 1e-05), AABB(-0.1, -0.3, 0, 0.2, 1.001358e-05, 1e-05), AABB(-0.1, -0.4, 0, 0.2, 1.001358e-05, 1e-05), AABB(-0.1, -0.5, 0, 0.2, 1.001358e-05, 1e-05), AABB(-0.1, -0.6, 0, 0.2, 1.001358e-05, 1e-05), AABB(-0.1, -0.7, 0, 0.2, 1.001358e-05, 1e-05), AABB(-0.1, -0.8, 0, 0.2, 1.001358e-05, 1e-05), AABB(-0.1, -0.9, 0, 0.2, 1.001358e-05, 1e-05), AABB(-0.1, -1, 0, 0.2, 1.001358e-05, 1e-05), AABB(-0.1, -1.2, 0, 0.2, 0.10001004, 1e-05)],
+"format": 34359745559,
+"index_count": 144,
+"index_data": PackedByteArray("AAABAAIAAQADAAIAAAACAAEAAQACAAMAAgADAAQAAwAFAAQAAgAEAAMAAwAEAAUABAAFAAYABQAHAAYABAAGAAUABQAGAAcABgAHAAgABwAJAAgABgAIAAcABwAIAAkACAAJAAoACQALAAoACAAKAAkACQAKAAsACgALAAwACwANAAwACgAMAAsACwAMAA0ADAANAA4ADQAPAA4ADAAOAA0ADQAOAA8ADgAPABAADwARABAADgAQAA8ADwAQABEAEAARABIAEQATABIAEAASABEAEQASABMAEgATABQAEwAVABQAEgAUABMAEwAUABUAFAAVABYAFQAXABYAFAAWABUAFQAWABcAFgAXABgAFwAZABgAFgAYABcAFwAYABkA"),
+"primitive": 3,
+"skin_data": PackedByteArray("AAAAAAAAAAD//wAAAAAAAAAAAAAAAAAA//8AAAAAAAABAAAAAAAAAP//AAAAAAAAAQAAAAAAAAD//wAAAAAAAAIAAAAAAAAA//8AAAAAAAACAAAAAAAAAP//AAAAAAAAAwAAAAAAAAD//wAAAAAAAAMAAAAAAAAA//8AAAAAAAAEAAAAAAAAAP//AAAAAAAABAAAAAAAAAD//wAAAAAAAAUAAAAAAAAA//8AAAAAAAAFAAAAAAAAAP//AAAAAAAABgAAAAAAAAD//wAAAAAAAAYAAAAAAAAA//8AAAAAAAAHAAAAAAAAAP//AAAAAAAABwAAAAAAAAD//wAAAAAAAAgAAAAAAAAA//8AAAAAAAAIAAAAAAAAAP//AAAAAAAACQAAAAAAAAD//wAAAAAAAAkAAAAAAAAA//8AAAAAAAAKAAAAAAAAAP//AAAAAAAACgAAAAAAAAD//wAAAAAAAAsAAAAAAAAA//8AAAAAAAALAAAAAAAAAP//AAAAAAAACwAAAAAAAAD//wAAAAAAAAsAAAAAAAAA//8AAAAAAAA="),
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 26,
+"vertex_data": PackedByteArray("zczMvQAAAAAAAAAAzczMPQAAAAAAAAAAzczMvc3MzL0AAAAAzczMPc3MzL0AAAAAzczMvc3MTL4AAAAAzczMPc3MTL4AAAAAzczMvZqZmb4AAAAAzczMPZqZmb4AAAAAzczMvc3MzL4AAAAAzczMPc3MzL4AAAAAzczMvQAAAL8AAAAAzczMPQAAAL8AAAAAzczMvZqZGb8AAAAAzczMPZqZGb8AAAAAzczMvTMzM78AAAAAzczMPTMzM78AAAAAzczMvc3MTL8AAAAAzczMPc3MTL8AAAAAzczMvWZmZr8AAAAAzczMPWZmZr8AAAAAzczMvQAAgL8AAAAAzczMPQAAgL8AAAAAzczMvc3MjL8AAAAAzczMPc3MjL8AAAAAzczMvZqZmb8AAAAAzczMPZqZmb8AAAAA/3//f/9/AID/f/9//38AgP9//3//fwCA/3//f/9/AID/f/9//38AgP9//3//fwCA/3//f/9/AID/f/9//38AgP9//3//fwCA/3//f/9/AID/f/9//38AgP9//3//fwCA/3//f/9/AID/f/9//38AgP9//3//fwCA/3//f/9/AID/f/9//38AgP9//3//fwCA/3//f/9/AID/f/9//38AgP9//3//fwCA/3//f/9/AID/f/9//38AgP9//3//fwCA/3//f/9/AID/f/9//38AgA==")
+}]
 
-[sub_resource type="BoxMesh" id="BoxMesh_j373r"]
-size = Vector3(0.025, 0.1, 0.002)
-
-[sub_resource type="BoxMesh" id="BoxMesh_n2rhv"]
-size = Vector3(0.025, 0.1, 0.002)
-
-[sub_resource type="BoxMesh" id="BoxMesh_yhasv"]
-size = Vector3(0.025, 0.1, 0.002)
-
-[sub_resource type="BoxMesh" id="BoxMesh_3qsmb"]
-size = Vector3(0.025, 0.1, 0.002)
-
-[sub_resource type="BoxMesh" id="BoxMesh_nni2b"]
-size = Vector3(0.025, 0.1, 0.002)
-
-[sub_resource type="BoxMesh" id="BoxMesh_m5nta"]
-size = Vector3(0.025, 0.1, 0.002)
-
-[sub_resource type="BoxMesh" id="BoxMesh_ienkc"]
-size = Vector3(0.025, 0.1, 0.002)
-
-[sub_resource type="BoxMesh" id="BoxMesh_8lc0f"]
-size = Vector3(0.025, 0.1, 0.002)
-
-[sub_resource type="BoxMesh" id="BoxMesh_fl167"]
-size = Vector3(0.025, 0.1, 0.002)
-
-[sub_resource type="BoxMesh" id="BoxMesh_55ay4"]
-size = Vector3(0.025, 0.1, 0.002)
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_tciri"]
-albedo_color = Color(0.75, 0.75, 0.75, 1)
-metallic = 0.9
-roughness = 0.2
-
-[sub_resource type="BoxMesh" id="BoxMesh_evdfr"]
-size = Vector3(0.03, 0.02, 0.01)
+[sub_resource type="Skin" id="Skin_yhasv"]
+bind_count = 12
+bind/0/name = &"Bone_00"
+bind/0/bone = 0
+bind/0/pose = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+bind/1/name = &"Bone_01"
+bind/1/bone = 1
+bind/1/pose = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0)
+bind/2/name = &"Bone_02"
+bind/2/bone = 2
+bind/2/pose = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, 0)
+bind/3/name = &"Bone_03"
+bind/3/bone = 3
+bind/3/pose = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3, 0)
+bind/4/name = &"Bone_04"
+bind/4/bone = 4
+bind/4/pose = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, 0)
+bind/5/name = &"Bone_05"
+bind/5/bone = 5
+bind/5/pose = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+bind/6/name = &"Bone_06"
+bind/6/bone = 6
+bind/6/pose = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6, 0)
+bind/7/name = &"Bone_07"
+bind/7/bone = 7
+bind/7/pose = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.7, 0)
+bind/8/name = &"Bone_08"
+bind/8/bone = 8
+bind/8/pose = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0)
+bind/9/name = &"Bone_09"
+bind/9/bone = 9
+bind/9/pose = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
+bind/10/name = &"Bone_10"
+bind/10/bone = 10
+bind/10/pose = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+bind/11/name = &"Bone_11"
+bind/11/bone = 11
+bind/11/pose = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, 0)
 
 [node name="rope_generator" type="Node3D" unique_id=835209479]
 script = ExtResource("1_udubw")
+strap_width = 0.2
 strap_color = Color(0.050980393, 0.050980393, 1, 1)
 
-[node name="LanyardSkeleton" type="Skeleton3D" parent="." unique_id=2007691992]
+[node name="LanyardSkeleton" type="Skeleton3D" parent="." unique_id=921903119]
 bones/0/name = "Bone_00"
 bones/0/parent = -1
 bones/0/rest = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
@@ -138,125 +153,12 @@ bones/11/position = Vector3(0, -0.1, 0)
 bones/11/rotation = Quaternion(0, 0, 0, 1)
 bones/11/scale = Vector3(1, 1, 1)
 
-[node name="Attach_00" type="BoneAttachment3D" parent="LanyardSkeleton" unique_id=2144441667]
-bone_name = "Bone_00"
-bone_idx = 0
+[node name="SpringBoneSimulator3D" type="SpringBoneSimulator3D" parent="LanyardSkeleton" unique_id=1671170500]
 
-[node name="Seg_00" type="MeshInstance3D" parent="LanyardSkeleton/Attach_00" unique_id=764735967]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.05, 0)
-material_override = SubResource("StandardMaterial3D_udubw")
-mesh = SubResource("BoxMesh_ubtfh")
+[node name="FloorCollision" type="SpringBoneCollisionPlane3D" parent="LanyardSkeleton/SpringBoneSimulator3D" unique_id=1952425672]
 
-[node name="Attach_01" type="BoneAttachment3D" parent="LanyardSkeleton" unique_id=81442327]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, 0)
-bone_name = "Bone_01"
-bone_idx = 1
-
-[node name="Seg_01" type="MeshInstance3D" parent="LanyardSkeleton/Attach_01" unique_id=1004346705]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.05, 0)
-material_override = SubResource("StandardMaterial3D_udubw")
-mesh = SubResource("BoxMesh_j373r")
-
-[node name="Attach_02" type="BoneAttachment3D" parent="LanyardSkeleton" unique_id=1377115743]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.2, 0)
-bone_name = "Bone_02"
-bone_idx = 2
-
-[node name="Seg_02" type="MeshInstance3D" parent="LanyardSkeleton/Attach_02" unique_id=1818421782]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.05, 0)
-material_override = SubResource("StandardMaterial3D_udubw")
-mesh = SubResource("BoxMesh_n2rhv")
-
-[node name="Attach_03" type="BoneAttachment3D" parent="LanyardSkeleton" unique_id=276691763]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.3, 0)
-bone_name = "Bone_03"
-bone_idx = 3
-
-[node name="Seg_03" type="MeshInstance3D" parent="LanyardSkeleton/Attach_03" unique_id=809084915]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.05, 0)
-material_override = SubResource("StandardMaterial3D_udubw")
-mesh = SubResource("BoxMesh_yhasv")
-
-[node name="Attach_04" type="BoneAttachment3D" parent="LanyardSkeleton" unique_id=927512940]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.4, 0)
-bone_name = "Bone_04"
-bone_idx = 4
-
-[node name="Seg_04" type="MeshInstance3D" parent="LanyardSkeleton/Attach_04" unique_id=1847658065]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.05, 0)
-material_override = SubResource("StandardMaterial3D_udubw")
-mesh = SubResource("BoxMesh_3qsmb")
-
-[node name="Attach_05" type="BoneAttachment3D" parent="LanyardSkeleton" unique_id=1447227740]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
-bone_name = "Bone_05"
-bone_idx = 5
-
-[node name="Seg_05" type="MeshInstance3D" parent="LanyardSkeleton/Attach_05" unique_id=810358740]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.05, 0)
-material_override = SubResource("StandardMaterial3D_udubw")
-mesh = SubResource("BoxMesh_nni2b")
-
-[node name="Attach_06" type="BoneAttachment3D" parent="LanyardSkeleton" unique_id=1841871701]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.6, 0)
-bone_name = "Bone_06"
-bone_idx = 6
-
-[node name="Seg_06" type="MeshInstance3D" parent="LanyardSkeleton/Attach_06" unique_id=85161329]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.05, 0)
-material_override = SubResource("StandardMaterial3D_udubw")
-mesh = SubResource("BoxMesh_m5nta")
-
-[node name="Attach_07" type="BoneAttachment3D" parent="LanyardSkeleton" unique_id=2060130359]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.70000005, 0)
-bone_name = "Bone_07"
-bone_idx = 7
-
-[node name="Seg_07" type="MeshInstance3D" parent="LanyardSkeleton/Attach_07" unique_id=1083334829]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.05, 0)
-material_override = SubResource("StandardMaterial3D_udubw")
-mesh = SubResource("BoxMesh_ienkc")
-
-[node name="Attach_08" type="BoneAttachment3D" parent="LanyardSkeleton" unique_id=2137014670]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.8000001, 0)
-bone_name = "Bone_08"
-bone_idx = 8
-
-[node name="Seg_08" type="MeshInstance3D" parent="LanyardSkeleton/Attach_08" unique_id=1159842305]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.05, 0)
-material_override = SubResource("StandardMaterial3D_udubw")
-mesh = SubResource("BoxMesh_8lc0f")
-
-[node name="Attach_09" type="BoneAttachment3D" parent="LanyardSkeleton" unique_id=64774120]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.9000001, 0)
-bone_name = "Bone_09"
-bone_idx = 9
-
-[node name="Seg_09" type="MeshInstance3D" parent="LanyardSkeleton/Attach_09" unique_id=741039464]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.05, 0)
-material_override = SubResource("StandardMaterial3D_udubw")
-mesh = SubResource("BoxMesh_fl167")
-
-[node name="Attach_10" type="BoneAttachment3D" parent="LanyardSkeleton" unique_id=1174573888]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.0000001, 0)
-bone_name = "Bone_10"
-bone_idx = 10
-
-[node name="Seg_10" type="MeshInstance3D" parent="LanyardSkeleton/Attach_10" unique_id=2114542300]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.05, 0)
-material_override = SubResource("StandardMaterial3D_udubw")
-mesh = SubResource("BoxMesh_55ay4")
-
-[node name="SpringBoneSimulator3D" type="SpringBoneSimulator3D" parent="LanyardSkeleton" unique_id=1437132259]
-
-[node name="FloorCollision" type="SpringBoneCollisionPlane3D" parent="LanyardSkeleton/SpringBoneSimulator3D" unique_id=32503468]
-
-[node name="ClipAttach" type="BoneAttachment3D" parent="LanyardSkeleton" unique_id=1957288807]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.1000001, 0)
-bone_name = "Bone_11"
-bone_idx = 11
-
-[node name="Clip" type="MeshInstance3D" parent="LanyardSkeleton/ClipAttach" unique_id=1624694379]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.01, 0)
-material_override = SubResource("StandardMaterial3D_tciri")
-mesh = SubResource("BoxMesh_evdfr")
+[node name="LanyardMesh" type="MeshInstance3D" parent="." unique_id=221709636]
+material_override = SubResource("StandardMaterial3D_j373r")
+mesh = SubResource("ArrayMesh_n2rhv")
+skin = SubResource("Skin_yhasv")
+skeleton = NodePath("../LanyardSkeleton")
