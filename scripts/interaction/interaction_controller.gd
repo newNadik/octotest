@@ -973,6 +973,10 @@ func _estimate_drop_base_offset(root: Node3D) -> float:
 	if root == null:
 		return 0.0
 
+	var collision_offset := _estimate_drop_base_offset_from_collision(root)
+	if collision_offset >= 0.0:
+		return collision_offset
+
 	var min_y = INF
 	var found = false
 	var stack: Array[Node] = [root]
@@ -1008,6 +1012,10 @@ func _estimate_drop_base_offset(root: Node3D) -> float:
 func _estimate_drop_horizontal_width(root: Node3D) -> float:
 	if root == null:
 		return 0.4
+
+	var collision_width := _estimate_drop_horizontal_width_from_collision(root)
+	if collision_width > 0.0:
+		return collision_width
 
 	var min_x = INF
 	var max_x = -INF
@@ -1045,6 +1053,77 @@ func _estimate_drop_horizontal_width(root: Node3D) -> float:
 		return 0.4
 
 	return maxf(0.2, maxf(max_x - min_x, max_z - min_z))
+
+
+func _estimate_drop_base_offset_from_collision(root: Node3D) -> float:
+	var min_y = INF
+	var found = false
+	var stack: Array[Node] = [root]
+	while not stack.is_empty():
+		var node = stack.pop_back()
+		if node is CollisionShape3D:
+			var collision_shape := node as CollisionShape3D
+			var half_extents := _shape_half_extents(collision_shape.shape)
+			if half_extents != Vector3.ZERO:
+				var world_extents := _basis_abs_mul(collision_shape.global_basis, half_extents)
+				min_y = minf(min_y, collision_shape.global_position.y - world_extents.y)
+				found = true
+		for child in node.get_children():
+			stack.append(child)
+	if not found:
+		return -1.0
+	return maxf(0.0, root.global_position.y - min_y)
+
+
+func _estimate_drop_horizontal_width_from_collision(root: Node3D) -> float:
+	var min_x = INF
+	var max_x = -INF
+	var min_z = INF
+	var max_z = -INF
+	var found = false
+	var stack: Array[Node] = [root]
+	while not stack.is_empty():
+		var node = stack.pop_back()
+		if node is CollisionShape3D:
+			var collision_shape := node as CollisionShape3D
+			var half_extents := _shape_half_extents(collision_shape.shape)
+			if half_extents != Vector3.ZERO:
+				var world_extents := _basis_abs_mul(collision_shape.global_basis, half_extents)
+				min_x = minf(min_x, collision_shape.global_position.x - world_extents.x)
+				max_x = maxf(max_x, collision_shape.global_position.x + world_extents.x)
+				min_z = minf(min_z, collision_shape.global_position.z - world_extents.z)
+				max_z = maxf(max_z, collision_shape.global_position.z + world_extents.z)
+				found = true
+		for child in node.get_children():
+			stack.append(child)
+	if not found:
+		return -1.0
+	return maxf(0.2, maxf(max_x - min_x, max_z - min_z))
+
+
+func _shape_half_extents(shape: Shape3D) -> Vector3:
+	if shape == null:
+		return Vector3.ZERO
+	if shape is BoxShape3D:
+		return (shape as BoxShape3D).size * 0.5
+	if shape is SphereShape3D:
+		var radius := (shape as SphereShape3D).radius
+		return Vector3(radius, radius, radius)
+	if shape is CapsuleShape3D:
+		var capsule := shape as CapsuleShape3D
+		return Vector3(capsule.radius, capsule.height * 0.5 + capsule.radius, capsule.radius)
+	if shape is CylinderShape3D:
+		var cylinder := shape as CylinderShape3D
+		return Vector3(cylinder.radius, cylinder.height * 0.5, cylinder.radius)
+	return Vector3.ZERO
+
+
+func _basis_abs_mul(basis: Basis, v: Vector3) -> Vector3:
+	return Vector3(
+		absf(basis.x.x) * v.x + absf(basis.y.x) * v.y + absf(basis.z.x) * v.z,
+		absf(basis.x.y) * v.x + absf(basis.y.y) * v.y + absf(basis.z.y) * v.z,
+		absf(basis.x.z) * v.x + absf(basis.y.z) * v.y + absf(basis.z.z) * v.z
+	)
 
 
 func _update_held_item_transform(delta: float) -> void:
