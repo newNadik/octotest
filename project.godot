@@ -49,10 +49,6 @@ import/blender/enabled=false
 locale/translations=PackedStringArray("res://i18n/uk_UA.po")
 locale/fallback="en_GB"
 
-[physics]
-
-3d/physics_engine="Jolt Physics"
-
 [layer_names]
 
 3d_physics/layer_1="World_Walls"
@@ -62,6 +58,10 @@ locale/fallback="en_GB"
 3d_physics/layer_5="CameraBlocker"
 3d_physics/layer_6="Furniture"
 3d_physics/layer_7="CarryItem"
+
+[physics]
+
+3d/physics_engine="Jolt Physics"
 
 [rendering]
 

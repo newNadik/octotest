@@ -15,34 +15,38 @@
 ## Critical Path
 
 ```
-Data Office → Quarters → [exit staff wing] → Atrium → Workshop → Energy Lab → Wet Room ✓
+Data Office → Quarters [steal Neil's card] → [exit staff area] → Atrium/Kitchen [steal Mykhailo's card] → Staff only hall → Workshop → Energy Lab → Wet Room ✓
 ```
 
 ## Key Items
 
 | Item | Found | Used |
 |---|---|---|
-| Researcher card | Quarters — sleeping crew member's bed | Staff wing exit + all lab card readers |
+| Neil's access card | Quarters — Neil's bed | Staff area door (both sides), Systems Room, Data Office |
+| Mykhailo's access card | Kitchen — Mykhailo (eating) | Staff only hall, Chem Lab, Energy Lab, Workshop, Wet Room |
 | Dive lock code | Data Office — procedure documents | Wet room hatch code pad |
 
 ## NPCs
 
 | Character | Location | Threat |
 |---|---|---|
-| Sleeping man | Quarters | None — card on his bed |
-| Mechanic (woman) | Systems Room | ⚠️ Resets to start if seen |
-| Man eating | Atrium | None — intentional fake-out card |
+| Neil Carver | Quarters | None — card on his bed |
+| Rory Fraser (Mechanic) | Systems Room | ⚠️ Resets to start if seen |
+| Mykhailo Kovalenko | Kitchen / Atrium | None — card can be stolen |
 
 ## Doors
 
-| Door | Requires |
-|---|---|
-| Staff hall entrance | Researcher card (both sides — flood-containment protocol) |
-| Data Office | Researcher card (re-entry only, player starts inside) |
-| Systems Room | Researcher card |
-| Chemistry / Workshop / Energy Lab | Researcher card |
-| Wet Room | Researcher card + dive code |
-| Quarters / Kitchen / Showers / Medical Bay / Public | No lock |
+| Door | Requires | Access denied if |
+|---|---|---|
+| Staff area entrance | Neil's card (both sides — flood-containment protocol) | Wrong card or no card |
+| Data Office | Neil's card (re-entry only, player starts inside) | Wrong card or no card |
+| Systems Room | Neil's card | Wrong card or no card |
+| Staff only hall | Mykhailo's card | Wrong card or no card |
+| Chemistry Lab | Mykhailo's card | Wrong card or no card |
+| Workshop | Mykhailo's card | Wrong card or no card |
+| Energy Lab | Mykhailo's card | Wrong card or no card |
+| Wet Room | Mykhailo's card + dive code | Wrong card or no card |
+| Quarters / Kitchen / Showers / Medical Bay / Public | No lock | — |
 
 ---
 
@@ -72,8 +76,11 @@ Data Office → Quarters → [exit staff wing] → Atrium → Workshop → Energ
 
 ---
 
-### Kitchen *(optional — staff wing)*
+### Kitchen *(critical — public)*
 
+> Mykhailo Kovalenko eating here — steal his card
+
+- [ ] 🔑 Mykhailo's access card (on Mykhailo)
 - [ ] 💬 Passive-aggressive dishes note
 - [ ] 💬 Note to keep mugs in the kitchen - when all mugs in the kitchen room "Nicest Person in the world" cale appears 
 - [ ] 📦 Single sad banana
@@ -82,8 +89,8 @@ Data Office → Quarters → [exit staff wing] → Atrium → Workshop → Energ
 
 ### Quarters *(critical)*
 
-- [ ] 🎬 Light switch (wakes sleeping man)
-- [ ] 🔑 Researcher card (hanging on sleeping man's bed)
+- [ ] 🎬 Light switch (wakes Neil)
+- [ ] 🔑 Neil's access card (on his bed)
 - [ ] 📦 Toy shark (on pillow)
 - [ ] 💬 Movie poster (above bunk 2)
 - [ ] 📦 Octopus plushie on shelf
@@ -146,7 +153,7 @@ Data Office → Quarters → [exit staff wing] → Atrium → Workshop → Energ
 
 ### Wet Room *(exit)*
 
-- [ ] 🔑 Card reader (researcher card)
+- [ ] 🔑 Card reader (Mykhailo's card)
 - [ ] 🔑 Hatch code pad (dive lock code)
 - [ ] 💬 Dive log board
 - [ ] 🎬 Moon pool (escape sequence)
