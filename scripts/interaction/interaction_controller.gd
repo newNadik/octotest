@@ -61,6 +61,7 @@ const ARM_SOCKET_ANGLE_BY_NAME := {
 @export var focus_display_bottom_anchor := -0.68
 @export var focus_display_row_spacing := 0.44
 @export var focus_display_column_spacing := 0.62
+@export var focus_display_max_row_width := 2.6
 @export var focus_item_apply_delay := 0.2
 @export var focus_item_return_duration := 0.16
 
@@ -92,6 +93,11 @@ var _pick_drop_player: AudioStreamPlayer3D
 var _rng := RandomNumberGenerator.new()
 var _focus_item_apply_ticket := 0
 var _focus_item_motion_by_item_id: Dictionary = {}
+var _focus_target_interactable
+var _suppress_focus_target_visuals := false
+var _saved_indicator_visibility_by_item_id: Dictionary = {}
+var _pending_held_restore_keys: Array[String] = []
+var _held_restore_retries_left := 0
 
 
 func initialize(player: CharacterBody3D, camera: Camera3D, hint_label: Label, world_root: Node3D) -> void:
@@ -99,6 +105,7 @@ func initialize(player: CharacterBody3D, camera: Camera3D, hint_label: Label, wo
 	_camera = camera
 	_hint_label = hint_label
 	_world_root = world_root
+	add_to_group("save_state_provider")
 	_base_move_speed = _player.move_speed
 	_rng.randomize()
 	_focus_reject_feedback.duration = focus_reject_feedback_duration
@@ -272,14 +279,57 @@ func set_focus_display(enabled: bool, camera: Camera3D = null) -> void:
 	_focus_display_camera = camera
 
 
+func set_focus_target_visual_suppressed(suppress: bool) -> void:
+	_suppress_focus_target_visuals = suppress
+	_apply_focus_target_visual_suppression()
+
+
 func set_focus_target(target: FocusTargetScript) -> void:
 	_focus_target = target
 	_focus_behavior = null
 	_focus_reject_feedback.reset()
+	_set_focus_target_interactable(null)
 	if _focus_target == null:
 		return
 	var interactable = _get_interactable_for_focus_target(_focus_target)
+	_set_focus_target_interactable(interactable)
 	_focus_behavior = _get_behavior(interactable)
+
+
+func get_save_key() -> String:
+	return "__interaction_controller__"
+
+
+func get_save_state() -> Dictionary:
+	var held_item_keys: Array[String] = []
+	for held_item in _held_interactables:
+		if held_item == null or not is_instance_valid(held_item):
+			continue
+		if held_item.has_method("get_save_key"):
+			var key = str(held_item.call("get_save_key")).strip_edges()
+			if not key.is_empty():
+				held_item_keys.append(key)
+	return {
+		"held_item_keys": held_item_keys
+	}
+
+
+func apply_save_state(state: Dictionary) -> void:
+	_pending_held_restore_keys.clear()
+	_held_restore_retries_left = 0
+	if state.is_empty():
+		return
+	var keys = state.get("held_item_keys", [])
+	if not (keys is Array):
+		return
+	for key_value in keys:
+		var key := str(key_value).strip_edges()
+		if not key.is_empty():
+			_pending_held_restore_keys.append(key)
+	if _pending_held_restore_keys.is_empty():
+		return
+	_held_restore_retries_left = 30
+	call_deferred("_restore_held_items_from_pending_keys")
 
 
 func get_held_item_names() -> PackedStringArray:
@@ -473,6 +523,10 @@ func _set_hovered_interactable(target, in_range: bool, blocked: bool) -> void:
 	_hovered_blocked = blocked
 
 	if _hovered_interactable != null:
+		if _is_focus_target_visual_suppressed(_hovered_interactable):
+			_hovered_interactable.set_visual_state(InteractableScript.VisualState.IDLE)
+			_update_hint_text()
+			return
 		if _is_item_currently_held(_hovered_interactable):
 			_hovered_interactable.set_visual_state(InteractableScript.VisualState.HOVERED)
 		elif _hovered_blocked:
@@ -483,6 +537,98 @@ func _set_hovered_interactable(target, in_range: bool, blocked: bool) -> void:
 			_hovered_interactable.set_visual_state(InteractableScript.VisualState.HOVERED)
 
 	_update_hint_text()
+
+
+func _set_focus_target_interactable(interactable) -> void:
+	if _focus_target_interactable == interactable:
+		_apply_focus_target_visual_suppression()
+		return
+	_set_interactable_indicator_hidden(_focus_target_interactable, false)
+	_focus_target_interactable = interactable
+	_apply_focus_target_visual_suppression()
+
+
+func _apply_focus_target_visual_suppression() -> void:
+	if _focus_target_interactable == null:
+		return
+	_set_interactable_indicator_hidden(_focus_target_interactable, _suppress_focus_target_visuals)
+	if _suppress_focus_target_visuals:
+		_focus_target_interactable.set_visual_state(InteractableScript.VisualState.IDLE)
+
+
+func _is_focus_target_visual_suppressed(interactable) -> bool:
+	return (
+		_suppress_focus_target_visuals
+		and interactable != null
+		and interactable == _focus_target_interactable
+	)
+
+
+func _set_interactable_indicator_hidden(interactable, hidden: bool) -> void:
+	if interactable == null:
+		return
+	var item_id = interactable.get_instance_id()
+	if hidden:
+		if not _saved_indicator_visibility_by_item_id.has(item_id):
+			_saved_indicator_visibility_by_item_id[item_id] = interactable.show_indicator
+		interactable.set_indicator_visible(false)
+		return
+	if _saved_indicator_visibility_by_item_id.has(item_id):
+		interactable.set_indicator_visible(bool(_saved_indicator_visibility_by_item_id[item_id]))
+		_saved_indicator_visibility_by_item_id.erase(item_id)
+
+
+func _restore_held_items_from_pending_keys() -> void:
+	if _pending_held_restore_keys.is_empty():
+		return
+	var unresolved: Array[String] = []
+	for key in _pending_held_restore_keys:
+		var item = _resolve_interactable_from_save_key(key)
+		if item == null:
+			unresolved.append(key)
+			continue
+		if _is_item_currently_held(item):
+			continue
+		_attach_item_to_hands(item, false)
+	_pending_held_restore_keys = unresolved
+	_update_hint_text()
+	if _pending_held_restore_keys.is_empty():
+		return
+	_held_restore_retries_left -= 1
+	if _held_restore_retries_left <= 0:
+		return
+	var retry_timer := get_tree().create_timer(0.2)
+	retry_timer.timeout.connect(_restore_held_items_from_pending_keys)
+
+
+func _resolve_interactable_from_save_key(path_key: String):
+	if path_key.is_empty():
+		return null
+	var node = get_node_or_null(NodePath(path_key))
+	if node == null and _world_root != null:
+		node = _world_root.get_node_or_null(NodePath(path_key))
+	if node == null and _world_root != null:
+		var world_path := str(_world_root.get_path())
+		var prefix := "%s/" % world_path
+		if path_key.begins_with(prefix):
+			var relative := path_key.trim_prefix(prefix)
+			if not relative.is_empty():
+				node = _world_root.get_node_or_null(NodePath(relative))
+	if node == null:
+		for provider in get_tree().get_nodes_in_group("save_state_provider"):
+			if provider == null or not is_instance_valid(provider):
+				continue
+			if not provider.has_method("get_save_key"):
+				continue
+			var custom_key = str(provider.call("get_save_key")).strip_edges()
+			if custom_key == path_key:
+				node = provider
+				break
+	if node == null:
+		return null
+	if node is InteractableScript:
+		return node
+	return null
 
 
 func _is_interactable_in_range(target) -> bool:
@@ -753,15 +899,19 @@ func _update_held_item_transform(delta: float) -> void:
 
 func _update_focus_display_transforms(delta: float) -> void:
 	var count = _held_interactables.size()
-	var columns = mini(count, 4)
+	var columns = maxi(count, 1)
 	var alpha = 1.0
+	var effective_column_spacing := focus_display_column_spacing
+	if columns > 1 and focus_display_max_row_width > 0.0:
+		var max_spacing = focus_display_max_row_width / float(columns - 1)
+		effective_column_spacing = minf(focus_display_column_spacing, max_spacing)
 
 	for i in range(count):
 		var held_item = _held_interactables[i]
 		var pickup_root = held_item.get_pickup_root()
 		var col = i % columns
-		var row = i / columns
-		var offset_x = (float(col) - float(columns - 1) * 0.5) * focus_display_column_spacing
+		var row = 0
+		var offset_x = (float(col) - float(columns - 1) * 0.5) * effective_column_spacing
 		var offset_y = focus_display_bottom_anchor + float(row) * focus_display_row_spacing
 
 		var camera_forward = -_focus_display_camera.global_basis.z

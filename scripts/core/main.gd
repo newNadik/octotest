@@ -97,6 +97,7 @@ var _roll := 0.0
 var _focus_mode := false
 var _focus_target
 var _focus_pending_target
+var _hide_held_items_in_focus := false
 var _focus_tween: Tween
 var _saved_spring_length := 9.0
 var _saved_yaw := 35.0
@@ -653,6 +654,7 @@ func _enter_focus_mode(target) -> void:
 		focus_host is DocumentItem
 		or focus_host is IncidentReport
 	)
+	_hide_held_items_in_focus = is_document_focus
 	if is_document_focus:
 		if target.focus_min_zoom > 0.0:
 			min_zoom = target.focus_min_zoom
@@ -663,6 +665,7 @@ func _enter_focus_mode(target) -> void:
 	player.clear_move_target()
 	_interaction_controller.set_focus_locked(true)
 	_interaction_controller.set_focus_display(true, camera)
+	_interaction_controller.set_focus_target_visual_suppressed(not is_document_focus and not (focus_host is IncidentReport))
 	_interaction_controller.set_focus_target(_focus_target)
 	_set_focus_visuals_enabled(false)
 	var target_angles := _compute_focus_angles(target)
@@ -685,8 +688,10 @@ func _exit_focus_mode() -> void:
 	_focus_mode = false
 	_focus_target = null
 	_focus_pending_target = null
+	_hide_held_items_in_focus = false
 	_interaction_controller.set_focus_locked(false)
 	_interaction_controller.set_focus_display(false, null)
+	_interaction_controller.set_focus_target_visual_suppressed(false)
 	_interaction_controller.set_focus_target(null)
 	_set_focus_visuals_enabled(true)
 	_yaw = _saved_yaw
@@ -742,7 +747,7 @@ func _start_focus_tween(
 func _set_focus_visuals_enabled(is_enabled: bool) -> void:
 	if _player_visual_root != null:
 		_player_visual_root.visible = is_enabled
-	_interaction_controller.set_held_item_visuals_visible(is_enabled or _focus_mode)
+	_interaction_controller.set_held_item_visuals_visible(is_enabled or (_focus_mode and not _hide_held_items_in_focus))
 
 
 func _compute_focus_angles(target) -> Vector3:
