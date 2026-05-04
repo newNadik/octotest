@@ -847,6 +847,10 @@ func is_focus_target_active(target) -> bool:
 	return _focus_target == target
 
 
+func is_focus_mode_active() -> bool:
+	return _focus_mode
+
+
 func exit_focus_mode() -> void:
 	_exit_focus_mode()
 
