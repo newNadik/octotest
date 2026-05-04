@@ -19,10 +19,15 @@ const FLOOR_ACTIVE_DROPPED_POSITION := Vector3(0.0, -0.14, 0.0)
 var _interactable
 var _is_held := false
 var _drop_delay_left := 0.0
+var _floor_enabled_after_first_pickup := false
+var _initial_save_key := ""
 
 
 
 func _ready() -> void:
+	add_to_group("save_state_provider")
+	_initial_save_key = str(get_path())
+
 	var interactable = get_node_or_null(interactable_path)
 	_interactable = interactable
 	if interactable != null:
@@ -63,6 +68,8 @@ func _update_floor_collision_state() -> void:
 
 	if focus_active:
 		floor.global_position = FLOOR_DISABLED_LOCAL_POSITION
+	elif not _floor_enabled_after_first_pickup:
+		floor.global_position = FLOOR_DISABLED_LOCAL_POSITION
 	elif _is_card_held() or _drop_delay_left > 0.0:
 		floor.global_position = FLOOR_ACTIVE_HELD_POSITION
 	else:
@@ -76,8 +83,27 @@ func _is_card_held() -> bool:
 
 func _on_interactable_picked_up(_interactable_ref, _actor) -> void:
 	_is_held = true
+	_floor_enabled_after_first_pickup = true
 
 
 func _on_interactable_dropped(_interactable_ref, _actor) -> void:
 	_is_held = false
 	_drop_delay_left = floor_drop_delay
+
+
+func get_save_key() -> String:
+	if _interactable != null and _interactable.has_method("get_save_key"):
+		return "%s:id_card" % str(_interactable.call("get_save_key"))
+	return "%s:id_card" % _initial_save_key
+
+
+func get_save_state() -> Dictionary:
+	return {
+		"floor_enabled_after_first_pickup": _floor_enabled_after_first_pickup
+	}
+
+
+func apply_save_state(state: Dictionary) -> void:
+	if state.is_empty():
+		return
+	_floor_enabled_after_first_pickup = bool(state.get("floor_enabled_after_first_pickup", false))
