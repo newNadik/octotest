@@ -754,7 +754,7 @@ func _update_held_item_transform(delta: float) -> void:
 func _update_focus_display_transforms(delta: float) -> void:
 	var count = _held_interactables.size()
 	var columns = mini(count, 4)
-	var alpha = minf(1.0, held_item_follow_speed * delta)
+	var alpha = 1.0
 
 	for i in range(count):
 		var held_item = _held_interactables[i]
@@ -784,40 +784,21 @@ func _update_focus_display_transforms(delta: float) -> void:
 		_apply_interpolated_transform_preserving_scale(pickup_root, target_transform, alpha)
 
 
-func _trigger_focus_reject_feedback(item) -> void:
-	if item == null or not _focus_locked:
-		return
-	if item.has_method("play_reject_sfx"):
-		item.play_reject_sfx()
-	_focus_reject_feedback.trigger(item)
-
-
 func _try_apply_focus_held_item(item) -> void:
 	if item == null:
 		return
-	_play_focus_target_interaction_arm_gesture()
-	if _can_focus_target_accept_held_item(item):
-		_apply_held_item_to_focus_target(item)
-		return
-	_debug_log("Focus-held click rejected for %s" % _describe_interactable(item))
-	_trigger_focus_reject_feedback(item)
+	_apply_held_item_to_focus_target(item)
 
 
 func _get_focus_reject_target_position(fallback_position: Vector3) -> Vector3:
 	return _get_focus_item_target_position(fallback_position)
 
 
-func _can_focus_target_accept_held_item(item) -> bool:
-	if item == null or _focus_behavior == null:
-		return false
-	return _focus_behavior.can_receive_item(item)
-
-
 func _apply_held_item_to_focus_target(item) -> void:
 	_focus_item_apply_ticket += 1
 	var ticket := _focus_item_apply_ticket
 	var target_position = _get_focus_item_target_position(_player.global_position if _player != null else Vector3.ZERO)
-	var should_return := not _focus_behavior.should_consume_received_item(item)
+	var should_return := true
 	_register_focus_item_motion(item, target_position, should_return)
 	_play_held_item_gesture(item, target_position)
 	var timer := get_tree().create_timer(maxf(0.01, focus_item_apply_delay))
@@ -835,10 +816,11 @@ func _apply_held_item_to_focus_target_now(item) -> void:
 		return
 	if not _is_item_currently_held(item):
 		return
-	if not _focus_behavior.can_receive_item(item):
-		return
-
-	if not _focus_behavior.receive_item(item):
+	var can_receive := _focus_behavior.can_receive_item(item)
+	var applied := can_receive and _focus_behavior.receive_item(item)
+	if not applied:
+		_debug_log("Focus-held apply failed for %s" % _describe_interactable(item))
+		_play_focus_target_reject_sfx()
 		return
 	_play_focus_target_success_sfx()
 	if not _focus_behavior.should_consume_received_item(item):
@@ -856,8 +838,13 @@ func _apply_held_item_to_focus_target_now(item) -> void:
 func _register_focus_item_motion(item, world_target: Vector3, should_return: bool) -> void:
 	if item == null:
 		return
+	var start_position := world_target
+	var pickup_root = item.get_pickup_root()
+	if pickup_root != null:
+		start_position = pickup_root.global_position
 	_focus_item_motion_by_item_id[item.get_instance_id()] = {
 		"start_time": Time.get_ticks_msec() / 1000.0,
+		"start": start_position,
 		"target": world_target,
 		"return_after_apply": should_return,
 	}
@@ -871,6 +858,7 @@ func _apply_focus_item_motion_offset(item, row_target: Vector3) -> Vector3:
 		return row_target
 	var motion = _focus_item_motion_by_item_id[item_id]
 	var start_time = float(motion.get("start_time", 0.0))
+	var start_position = motion.get("start", row_target)
 	var world_target = motion.get("target", row_target)
 	var return_after_apply = bool(motion.get("return_after_apply", false))
 	var now = Time.get_ticks_msec() / 1000.0
@@ -879,14 +867,14 @@ func _apply_focus_item_motion_offset(item, row_target: Vector3) -> Vector3:
 
 	if elapsed <= apply_duration:
 		var t = clampf(elapsed / apply_duration, 0.0, 1.0)
-		return row_target.lerp(world_target, ease(t, 0.8))
+		return (start_position as Vector3).lerp(world_target as Vector3, ease(t, 1.4))
 
 	if return_after_apply:
 		var return_duration = maxf(0.01, focus_item_return_duration)
 		var return_elapsed = elapsed - apply_duration
 		if return_elapsed <= return_duration:
 			var t_back = clampf(return_elapsed / return_duration, 0.0, 1.0)
-			return world_target.lerp(row_target, ease(t_back, 1.4))
+			return (world_target as Vector3).lerp(row_target, ease(t_back, 1.8))
 
 	_focus_item_motion_by_item_id.erase(item_id)
 	return row_target
