@@ -7,27 +7,20 @@ extends StaticBody3D
 @export var card_face_mesh_path: NodePath = NodePath("id_MeshInstance3D")
 @export var interactable_path: NodePath = NodePath("Interactable")
 
-
 @onready var sim = $LanyardSkeleton/SpringBoneSimulator3D
 @onready var floor = $LanyardSkeleton/SpringBoneSimulator3D/FloorCollision
 @onready var _main_scene := get_tree().current_scene
 
 const FLOOR_DISABLED_LOCAL_POSITION := Vector3(0.0, -1000.0, 0.0)
 const FLOOR_ACTIVE_HELD_POSITION := Vector3(0.0, 0.02, 0.0)
-const FLOOR_ACTIVE_DROPPED_POSITION := Vector3(0.0, -0.14, 0.0)
-@export var floor_drop_delay := 0.0
+const FLOOR_ACTIVE_DROPPED_POSITION := Vector3(0.0, -0.01, 0.0)
+var floor_drop_delay := 0.0
 var _interactable
 var _is_held := false
 var _drop_delay_left := 0.0
-var _floor_enabled_after_first_pickup := false
-var _initial_save_key := ""
-
 
 
 func _ready() -> void:
-	add_to_group("save_state_provider")
-	_initial_save_key = str(get_path())
-
 	var interactable = get_node_or_null(interactable_path)
 	_interactable = interactable
 	if interactable != null:
@@ -44,13 +37,13 @@ func _ready() -> void:
 		if face_mesh != null:
 			var material := face_mesh.get_active_material(0) as StandardMaterial3D
 			if material != null:
-				# Each instance needs its own material, otherwise all card instances share one texture.
 				var unique_material := material.duplicate() as StandardMaterial3D
 				if unique_material != null:
 					unique_material.albedo_texture = card_face_texture
 					face_mesh.set_surface_override_material(0, unique_material)
-	
+
 	_update_floor_collision_state()
+
 
 func _process(delta: float) -> void:
 	if _drop_delay_left > 0.0:
@@ -68,13 +61,12 @@ func _update_floor_collision_state() -> void:
 
 	if focus_active:
 		floor.global_position = FLOOR_DISABLED_LOCAL_POSITION
-	elif not _floor_enabled_after_first_pickup:
-		floor.global_position = FLOOR_DISABLED_LOCAL_POSITION
 	elif _is_card_held() or _drop_delay_left > 0.0:
 		floor.global_position = FLOOR_ACTIVE_HELD_POSITION
 	else:
-		floor.position = FLOOR_ACTIVE_DROPPED_POSITION
-		#print("ready card=", global_position, " floor_local=", floor.position, " floor_global=", floor.global_position)
+		floor.global_position = FLOOR_ACTIVE_DROPPED_POSITION
+		print("ready card=", global_position, " floor_local=", floor.position, " floor_global=", floor.global_position)
+
 
 
 func _is_card_held() -> bool:
@@ -83,27 +75,8 @@ func _is_card_held() -> bool:
 
 func _on_interactable_picked_up(_interactable_ref, _actor) -> void:
 	_is_held = true
-	_floor_enabled_after_first_pickup = true
 
 
 func _on_interactable_dropped(_interactable_ref, _actor) -> void:
 	_is_held = false
 	_drop_delay_left = floor_drop_delay
-
-
-func get_save_key() -> String:
-	if _interactable != null and _interactable.has_method("get_save_key"):
-		return "%s:id_card" % str(_interactable.call("get_save_key"))
-	return "%s:id_card" % _initial_save_key
-
-
-func get_save_state() -> Dictionary:
-	return {
-		"floor_enabled_after_first_pickup": _floor_enabled_after_first_pickup
-	}
-
-
-func apply_save_state(state: Dictionary) -> void:
-	if state.is_empty():
-		return
-	_floor_enabled_after_first_pickup = bool(state.get("floor_enabled_after_first_pickup", false))

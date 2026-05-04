@@ -453,7 +453,7 @@ settings/0/enable_all_child_collisions = true
 settings/0/exclude_collision_count = 0
 
 [node name="FloorCollision" type="SpringBoneCollisionPlane3D" parent="LanyardSkeleton/SpringBoneSimulator3D" unique_id=632889455]
-transform = Transform3D(1, 0, 0, 0, 0.99999875, -0.0015882701, 0, 0.0015882701, 0.99999875, 0, -0.13113195, 0.02700001)
+transform = Transform3D(1, 0, 0, 0, 0.9999984, -0.0017453282, 0, 0.0017453282, 0.9999984, 0, -0.1, 0.027)
 
 [node name="SpringBoneCollisionSphere3D" type="SpringBoneCollisionSphere3D" parent="LanyardSkeleton/SpringBoneSimulator3D" unique_id=53415969]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, -0.2)
