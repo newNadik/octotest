@@ -1,4 +1,4 @@
-extends Node
+extends InteractionBehavior
 class_name CardReader
 
 
@@ -37,6 +37,18 @@ func _ready() -> void:
 	_red_material = _make_led_material(Color(0.9, 0.2, 0.2, 1.0))
 	_green_material = _make_led_material(Color(0.2, 0.92, 0.3, 1.0))
 	_set_state(ReaderState.IDLE)
+
+
+func on_interacted(_actor: Node) -> void:
+	pass
+
+
+func can_receive_item(item: Interactable) -> bool:
+	return can_accept_card(item)
+
+
+func receive_item(item: Interactable) -> bool:
+	return try_tap_card(item)
 
 
 func can_accept_card(card) -> bool:

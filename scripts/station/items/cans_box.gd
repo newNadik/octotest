@@ -1,4 +1,4 @@
-extends Node3D
+extends InteractionBehavior
 class_name CansBox
 
 @export var required_item_id := "energy_drink"
@@ -11,6 +11,14 @@ var _is_filled := false
 
 func _ready() -> void:
 	_update_visual_state()
+
+
+func can_receive_item(item: Interactable) -> bool:
+	return can_accept_energy_drink(item)
+
+
+func receive_item(item: Interactable) -> bool:
+	return insert_energy_drink(item)
 
 
 func can_accept_energy_drink(item) -> bool:

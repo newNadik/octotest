@@ -10,9 +10,8 @@ const CARRY_ITEM_COLLISION_MASK := 1 << 6
 const DROP_SURFACE_COLLISION_MASK := WALL_COLLISION_MASK | GROUND_COLLISION_MASK | FURNITURE_COLLISION_MASK
 const DROP_BLOCKER_COLLISION_MASK := WALL_COLLISION_MASK | GROUND_COLLISION_MASK | FURNITURE_COLLISION_MASK | CARRY_ITEM_COLLISION_MASK
 const INTERACTABLE_COLLISION_MASK := 1 << 3
+const InteractionBehaviorScript = preload("res://scripts/interaction/interaction_behavior.gd")
 const CardReaderScript = preload("res://scripts/interaction/card_reader.gd")
-const CansBoxScript = preload("res://scripts/station/items/cans_box.gd")
-const CodePanelScript = preload("res://scripts/interaction/code_panel.gd")
 const FocusTargetScript = preload("res://scripts/interaction/focus_target.gd")
 const FocusRejectFeedbackScript = preload("res://scripts/interaction/focus_reject_feedback.gd")
 const InteractableScript = preload("res://scripts/interaction/interactable.gd")
@@ -70,8 +69,6 @@ var _player: CharacterBody3D
 var _camera: Camera3D
 var _hint_label: Label
 var _world_root: Node3D
-var _room_light: OmniLight3D
-
 var _interaction_enabled = true
 var _hovered_interactable
 var _hovered_in_range = false
@@ -86,15 +83,13 @@ var _queued_interaction_target
 var _pending_card_reader: CardReaderScript
 var _awaiting_card_selection = false
 var _eligible_held_cards: Array = []
-var _light_toggle_on = true
-var _default_light_energy = 4.0
 var _base_move_speed = 6.0
 var _focus_locked = false
 var _focus_display_enabled = false
 var _focus_display_camera: Camera3D
 var _focus_target: FocusTargetScript
+var _focus_behavior: InteractionBehaviorScript
 var _focus_card_reader: CardReaderScript
-var _focus_cans_box: CansBoxScript
 var _focus_reject_feedback = FocusRejectFeedbackScript.new()
 var _hint_builder = InteractionHintBuilderScript.new()
 var _octo_rig: OctoRigScript
@@ -102,22 +97,18 @@ var _pick_drop_player: AudioStreamPlayer3D
 var _rng := RandomNumberGenerator.new()
 
 
-func initialize(player: CharacterBody3D, camera: Camera3D, hint_label: Label, world_root: Node3D, room_light: OmniLight3D = null) -> void:
+func initialize(player: CharacterBody3D, camera: Camera3D, hint_label: Label, world_root: Node3D) -> void:
 	_player = player
 	_camera = camera
 	_hint_label = hint_label
 	_world_root = world_root
-	_room_light = room_light
 	_base_move_speed = _player.move_speed
 	_rng.randomize()
-	if _room_light != null:
-		_default_light_energy = _room_light.light_energy
 	_focus_reject_feedback.duration = focus_reject_feedback_duration
 	_ensure_pick_drop_audio_player()
 	_ensure_hand_sockets()
 	_resolve_octo_rig()
 	_configure_hold_arm_slot_mapping()
-	_setup_scene_interactables()
 	_update_carry_mobility()
 	_update_hint_text()
 
@@ -164,6 +155,7 @@ func try_handle_interaction_click(screen_position: Vector2) -> bool:
 			var clicked_card = _get_eligible_card_at_screen(screen_position, FOCUS_SELECTION_CLICK_RADIUS)
 			if clicked_card != null and _is_click_confirmed_for_held_item(clicked_card):
 				_debug_log("Card selection: screen-picked %s" % _describe_interactable(clicked_card))
+				_mark_interactable_clicked(clicked_card)
 				_apply_card_to_pending_reader(clicked_card)
 				return true
 			var clicked_held = _get_held_item_at_screen(screen_position, FOCUS_SELECTION_CLICK_RADIUS)
@@ -173,6 +165,7 @@ func try_handle_interaction_click(screen_position: Vector2) -> bool:
 				return true
 		if target != null and _is_item_currently_held(target) and _eligible_held_cards.has(target):
 			_debug_log("Card selection: ray-picked %s" % _describe_interactable(target))
+			_mark_interactable_clicked(target)
 			_apply_card_to_pending_reader(target)
 			return true
 		if target != null and _is_item_currently_held(target) and not _eligible_held_cards.has(target) and _focus_card_reader != null:
@@ -240,11 +233,19 @@ func try_handle_interaction_click(screen_position: Vector2) -> bool:
 		var reader = _get_card_reader_for_interactable(target)
 		if reader != null:
 			_debug_log("Reader interaction click on %s" % _describe_interactable(target))
+			if _focus_locked and reader == _focus_card_reader:
+				var held_cards := _get_held_cards()
+				if held_cards.size() == 1:
+					_try_apply_focus_held_item(held_cards[0])
+					return true
 			_play_object_interaction_arm_gesture(target)
 			_handle_card_reader_click(reader)
 			return true
 		if target.interaction_type == InteractableScript.InteractionType.CLICK:
 			_play_object_interaction_arm_gesture(target)
+			var behavior = _get_behavior(target)
+			if behavior != null:
+				behavior.on_interacted(_player)
 			target.interact(_player)
 			return true
 		if target.interaction_type == InteractableScript.InteractionType.PICKUP:
@@ -345,6 +346,8 @@ func _is_click_confirmed_for_held_item(item) -> bool:
 
 func set_focus_locked(is_locked: bool) -> void:
 	_focus_locked = is_locked
+	if not is_locked:
+		_cancel_card_selection_mode()
 	_update_carry_mobility()
 
 
@@ -362,14 +365,14 @@ func set_focus_display(enabled: bool, camera: Camera3D = null) -> void:
 
 func set_focus_target(target: FocusTargetScript) -> void:
 	_focus_target = target
+	_focus_behavior = null
 	_focus_card_reader = null
-	_focus_cans_box = null
 	_focus_reject_feedback.reset()
 	if _focus_target == null:
 		return
 	var interactable = _get_interactable_for_focus_target(_focus_target)
-	_focus_card_reader = _get_card_reader_for_interactable(interactable)
-	_focus_cans_box = _get_cans_box_for_interactable(interactable)
+	_focus_behavior = _get_behavior(interactable)
+	_focus_card_reader = _focus_behavior as CardReaderScript
 
 
 func get_held_item_names() -> PackedStringArray:
@@ -515,11 +518,20 @@ func _process_queued_interaction() -> void:
 	if _queued_interaction_target.interaction_type == InteractableScript.InteractionType.CLICK:
 		var reader = _get_card_reader_for_interactable(_queued_interaction_target)
 		if reader != null:
+			if _focus_locked and reader == _focus_card_reader:
+				var held_cards := _get_held_cards()
+				if held_cards.size() == 1:
+					_try_apply_focus_held_item(held_cards[0])
+					_queued_interaction_target = null
+					return
 			_play_object_interaction_arm_gesture(_queued_interaction_target)
 			_handle_card_reader_click(reader)
 			_queued_interaction_target = null
 			return
 		_play_object_interaction_arm_gesture(_queued_interaction_target)
+		var behavior = _get_behavior(_queued_interaction_target)
+		if behavior != null:
+			behavior.on_interacted(_player)
 		_queued_interaction_target.interact(_player)
 		_queued_interaction_target = null
 
@@ -630,6 +642,8 @@ func _apply_card_to_pending_reader(card) -> void:
 		_update_hint_text()
 		return
 
+	_mark_interactable_clicked(card)
+	_play_held_item_gesture(card, _pending_card_reader.global_position)
 	if _pending_card_reader.try_tap_card(card):
 		_debug_log("Card tap granted: %s" % _describe_interactable(card))
 		_play_focus_target_success_sfx()
@@ -730,17 +744,6 @@ func _collider_belongs_to_target(target, target_root, collider: Variant) -> bool
 	return false
 
 
-func _get_code_panel_for_interactable(target) -> CodePanelScript:
-	if target == null:
-		return null
-	var node = target.get_parent()
-	while node != null:
-		if node is CodePanelScript:
-			return node as CodePanelScript
-		node = node.get_parent()
-	return null
-
-
 func _move_toward_interactable(target) -> void:
 	var player_pos: Vector3 = _player.global_position
 	var target_pos: Vector3 = target.get_focus_position()
@@ -808,7 +811,7 @@ func _drop_held_item_by_index(index: int) -> void:
 	item.drop(_player)
 
 	var forward = _get_drop_forward_direction(pickup_root)
-	var item_width = _estimate_drop_horizontal_width(pickup_root)
+	var item_width = InteractionGeometry.estimate_drop_horizontal_width(pickup_root)
 	var drop_distance = maxf(drop_min_forward_distance, item_width * drop_width_distance_multiplier)
 	var desired_drop_position: Vector3 = _player.global_position + forward * drop_distance
 	var drop_position := _resolve_drop_position(desired_drop_position, item, pickup_root)
@@ -849,11 +852,11 @@ func _resolve_drop_position(desired_position: Vector3, item, pickup_root: Node3D
 		if player_floor_result.is_empty():
 			return desired_position
 		var player_floor_position = player_floor_result.position as Vector3
-		var fallback_base_offset = _estimate_drop_base_offset(pickup_root)
+		var fallback_base_offset = InteractionGeometry.estimate_drop_base_offset(pickup_root)
 		return Vector3(desired_position.x, player_floor_position.y + fallback_base_offset, desired_position.z)
 
 	var floor_position = result.position as Vector3
-	var base_offset = _estimate_drop_base_offset(pickup_root)
+	var base_offset = InteractionGeometry.estimate_drop_base_offset(pickup_root)
 	var base_position := Vector3(desired_position.x, floor_position.y + base_offset, desired_position.z)
 	return _find_non_overlapping_drop_position(base_position, item, pickup_root)
 
@@ -905,7 +908,7 @@ func _resolve_floor_position_for_drop(desired_position: Vector3, item, pickup_ro
 	if result.is_empty():
 		return desired_position
 	var floor_position = result.position as Vector3
-	var base_offset = _estimate_drop_base_offset(pickup_root)
+	var base_offset = InteractionGeometry.estimate_drop_base_offset(pickup_root)
 	return Vector3(desired_position.x, floor_position.y + base_offset, desired_position.z)
 
 
@@ -916,7 +919,7 @@ func _is_drop_position_clear(candidate: Vector3, item, pickup_root: Node3D) -> b
 	if world == null:
 		return true
 	var shape := SphereShape3D.new()
-	shape.radius = maxf(0.12, _estimate_drop_horizontal_width(pickup_root) * 0.45)
+	shape.radius = maxf(0.12, InteractionGeometry.estimate_drop_horizontal_width(pickup_root) * 0.45)
 	var params := PhysicsShapeQueryParameters3D.new()
 	params.shape = shape
 	params.transform = Transform3D(Basis.IDENTITY, candidate + Vector3.UP * maxf(shape.radius, drop_overlap_probe_height))
@@ -944,161 +947,6 @@ func _get_drop_forward_direction(pickup_root: Node3D) -> Vector3:
 	return facing.normalized()
 
 
-func _estimate_drop_base_offset(root: Node3D) -> float:
-	if root == null:
-		return 0.0
-
-	var collision_offset := _estimate_drop_base_offset_from_collision(root)
-	if collision_offset >= 0.0:
-		return collision_offset
-
-	var min_y = INF
-	var found = false
-	var stack: Array[Node] = [root]
-	while not stack.is_empty():
-		var node = stack.pop_back()
-		if node is MeshInstance3D:
-			var mesh_instance = node as MeshInstance3D
-			if mesh_instance.mesh != null:
-				var aabb = mesh_instance.mesh.get_aabb()
-				var corners = [
-					Vector3(aabb.position.x, aabb.position.y, aabb.position.z),
-					Vector3(aabb.end.x, aabb.position.y, aabb.position.z),
-					Vector3(aabb.position.x, aabb.end.y, aabb.position.z),
-					Vector3(aabb.position.x, aabb.position.y, aabb.end.z),
-					Vector3(aabb.end.x, aabb.end.y, aabb.position.z),
-					Vector3(aabb.end.x, aabb.position.y, aabb.end.z),
-					Vector3(aabb.position.x, aabb.end.y, aabb.end.z),
-					Vector3(aabb.end.x, aabb.end.y, aabb.end.z),
-				]
-				for corner in corners:
-					var world_corner = mesh_instance.global_transform * corner
-					min_y = minf(min_y, world_corner.y)
-					found = true
-		for child in node.get_children():
-			stack.append(child)
-
-	if not found:
-		return 0.0
-
-	return maxf(0.0, root.global_position.y - min_y)
-
-
-func _estimate_drop_horizontal_width(root: Node3D) -> float:
-	if root == null:
-		return 0.4
-
-	var collision_width := _estimate_drop_horizontal_width_from_collision(root)
-	if collision_width > 0.0:
-		return collision_width
-
-	var min_x = INF
-	var max_x = -INF
-	var min_z = INF
-	var max_z = -INF
-	var found = false
-	var stack: Array[Node] = [root]
-	while not stack.is_empty():
-		var node = stack.pop_back()
-		if node is MeshInstance3D:
-			var mesh_instance = node as MeshInstance3D
-			if mesh_instance.mesh != null:
-				var aabb = mesh_instance.mesh.get_aabb()
-				var corners = [
-					Vector3(aabb.position.x, aabb.position.y, aabb.position.z),
-					Vector3(aabb.end.x, aabb.position.y, aabb.position.z),
-					Vector3(aabb.position.x, aabb.end.y, aabb.position.z),
-					Vector3(aabb.position.x, aabb.position.y, aabb.end.z),
-					Vector3(aabb.end.x, aabb.end.y, aabb.position.z),
-					Vector3(aabb.end.x, aabb.position.y, aabb.end.z),
-					Vector3(aabb.position.x, aabb.end.y, aabb.end.z),
-					Vector3(aabb.end.x, aabb.end.y, aabb.end.z),
-				]
-				for corner in corners:
-					var world_corner = mesh_instance.global_transform * corner
-					min_x = minf(min_x, world_corner.x)
-					max_x = maxf(max_x, world_corner.x)
-					min_z = minf(min_z, world_corner.z)
-					max_z = maxf(max_z, world_corner.z)
-					found = true
-		for child in node.get_children():
-			stack.append(child)
-
-	if not found:
-		return 0.4
-
-	return maxf(0.2, maxf(max_x - min_x, max_z - min_z))
-
-
-func _estimate_drop_base_offset_from_collision(root: Node3D) -> float:
-	var min_y = INF
-	var found = false
-	var stack: Array[Node] = [root]
-	while not stack.is_empty():
-		var node = stack.pop_back()
-		if node is CollisionShape3D:
-			var collision_shape := node as CollisionShape3D
-			var half_extents := _shape_half_extents(collision_shape.shape)
-			if half_extents != Vector3.ZERO:
-				var world_extents := _basis_abs_mul(collision_shape.global_basis, half_extents)
-				min_y = minf(min_y, collision_shape.global_position.y - world_extents.y)
-				found = true
-		for child in node.get_children():
-			stack.append(child)
-	if not found:
-		return -1.0
-	return maxf(0.0, root.global_position.y - min_y)
-
-
-func _estimate_drop_horizontal_width_from_collision(root: Node3D) -> float:
-	var min_x = INF
-	var max_x = -INF
-	var min_z = INF
-	var max_z = -INF
-	var found = false
-	var stack: Array[Node] = [root]
-	while not stack.is_empty():
-		var node = stack.pop_back()
-		if node is CollisionShape3D:
-			var collision_shape := node as CollisionShape3D
-			var half_extents := _shape_half_extents(collision_shape.shape)
-			if half_extents != Vector3.ZERO:
-				var world_extents := _basis_abs_mul(collision_shape.global_basis, half_extents)
-				min_x = minf(min_x, collision_shape.global_position.x - world_extents.x)
-				max_x = maxf(max_x, collision_shape.global_position.x + world_extents.x)
-				min_z = minf(min_z, collision_shape.global_position.z - world_extents.z)
-				max_z = maxf(max_z, collision_shape.global_position.z + world_extents.z)
-				found = true
-		for child in node.get_children():
-			stack.append(child)
-	if not found:
-		return -1.0
-	return maxf(0.2, maxf(max_x - min_x, max_z - min_z))
-
-
-func _shape_half_extents(shape: Shape3D) -> Vector3:
-	if shape == null:
-		return Vector3.ZERO
-	if shape is BoxShape3D:
-		return (shape as BoxShape3D).size * 0.5
-	if shape is SphereShape3D:
-		var radius := (shape as SphereShape3D).radius
-		return Vector3(radius, radius, radius)
-	if shape is CapsuleShape3D:
-		var capsule := shape as CapsuleShape3D
-		return Vector3(capsule.radius, capsule.height * 0.5 + capsule.radius, capsule.radius)
-	if shape is CylinderShape3D:
-		var cylinder := shape as CylinderShape3D
-		return Vector3(cylinder.radius, cylinder.height * 0.5, cylinder.radius)
-	return Vector3.ZERO
-
-
-func _basis_abs_mul(basis: Basis, v: Vector3) -> Vector3:
-	return Vector3(
-		absf(basis.x.x) * v.x + absf(basis.y.x) * v.y + absf(basis.z.x) * v.z,
-		absf(basis.x.y) * v.x + absf(basis.y.y) * v.y + absf(basis.z.y) * v.z,
-		absf(basis.x.z) * v.x + absf(basis.y.z) * v.y + absf(basis.z.z) * v.z
-	)
 
 
 func _update_held_item_transform(delta: float) -> void:
@@ -1165,7 +1013,8 @@ func _trigger_focus_reject_feedback(item) -> void:
 func _try_apply_focus_held_item(item) -> void:
 	if item == null:
 		return
-	_play_focus_target_interaction_arm_gesture()
+	if _focus_card_reader == null:
+		_play_focus_target_interaction_arm_gesture()
 	if _can_focus_target_accept_held_item(item):
 		_apply_held_item_to_focus_target(item)
 		return
@@ -1178,62 +1027,50 @@ func _get_focus_reject_target_position(fallback_position: Vector3) -> Vector3:
 
 
 func _can_focus_target_accept_held_item(item) -> bool:
-	if item == null:
+	if item == null or _focus_behavior == null:
 		return false
-
-	# Extension point: add additional focus-target handlers here as new
-	# interactable types gain held-item application behavior.
-	if _focus_cans_box != null:
-		return _focus_cans_box.can_accept_energy_drink(item)
-
 	if _focus_card_reader != null:
 		return item.is_card() and _focus_card_reader.can_accept_card(item)
-
-	return false
+	return _focus_behavior.can_receive_item(item)
 
 
 func _apply_held_item_to_focus_target(item) -> void:
-	if item == null:
-		return
-
-	# Extension point: mirror branching in _can_focus_target_accept_held_item.
-	if _focus_cans_box != null:
-		if not _focus_cans_box.insert_energy_drink(item):
-			return
-		_play_focus_target_success_sfx()
-		var removed_item = _remove_held_item(item)
-		if removed_item == null:
-			return
-		removed_item.set_interaction_enabled(false)
-		var pickup_root = removed_item.get_pickup_root()
-		if pickup_root != null:
-			pickup_root.queue_free()
+	if item == null or _focus_behavior == null:
 		return
 
 	if _focus_card_reader != null:
 		_debug_log("Focus-held click applies card %s" % _describe_interactable(item))
 		_pending_card_reader = _focus_card_reader
 		_apply_card_to_pending_reader(item)
+		return
+
+	if not _focus_behavior.receive_item(item):
+		return
+	_play_focus_target_success_sfx()
+	var removed_item = _remove_held_item(item)
+	if removed_item == null:
+		return
+	removed_item.set_interaction_enabled(false)
+	var pickup_root = removed_item.get_pickup_root()
+	if pickup_root != null:
+		pickup_root.queue_free()
 
 
 func _get_focus_item_target_position(fallback_position: Vector3) -> Vector3:
-	# Extension point: return a destination position per focus-target type.
-	if _focus_cans_box != null and _focus_target != null:
-		return _focus_target.get_focus_position()
-	if _focus_card_reader != null and _focus_target != null:
-		return _focus_target.get_focus_position()
 	if _focus_target != null:
 		return _focus_target.get_focus_position()
 	return fallback_position
 
 
-func _get_cans_box_for_interactable(target) -> CansBoxScript:
+func _get_behavior(target) -> InteractionBehaviorScript:
 	if target == null:
 		return null
-	var parent = target.get_parent()
-	if parent == null or not (parent is CansBoxScript):
-		return null
-	return parent as CansBoxScript
+	var node = target.get_parent()
+	while node != null:
+		if node is InteractionBehaviorScript:
+			return node as InteractionBehaviorScript
+		node = node.get_parent()
+	return null
 
 
 func _play_focus_target_success_sfx() -> void:
@@ -1572,6 +1409,23 @@ func _play_object_interaction_arm_gesture(target) -> void:
 	_player.call("play_interaction_arm_gesture", arm_name, focus_position)
 
 
+func _play_held_item_gesture(item, target_position: Vector3) -> void:
+	if _player == null or not _player.has_method("play_interaction_arm_gesture"):
+		return
+	if item == null:
+		return
+	var item_id = item.get_instance_id()
+	var socket_index = int(_held_socket_by_item_id.get(item_id, -1))
+	if socket_index < 0:
+		return
+	if not _arm_name_by_socket_index.has(socket_index):
+		return
+	var arm_name := str(_arm_name_by_socket_index[socket_index])
+	if arm_name.is_empty():
+		return
+	_player.call("play_interaction_arm_gesture", arm_name, target_position)
+
+
 func _choose_free_front_interaction_arm(target_position: Vector3) -> String:
 	var left_free := not _is_arm_currently_holding(FRONT_LEFT_ARM_NAME)
 	var right_free := not _is_arm_currently_holding(FRONT_RIGHT_ARM_NAME)
@@ -1596,19 +1450,6 @@ func _is_arm_currently_holding(arm_name: String) -> bool:
 	return false
 
 
-func _setup_scene_interactables() -> void:
-	if _room_light == null:
-		return
-
-	var button = _world_root.get_node_or_null("Interactables/LightButton/Interactable")
-	if button == null:
-		return
-
-	var handler = _on_button_clicked.bind(button.get_parent() as StaticBody3D)
-	if not button.clicked.is_connected(handler):
-		button.clicked.connect(handler)
-
-
 func _update_hint_text() -> void:
 	if _hint_label == null:
 		return
@@ -1629,28 +1470,6 @@ func _update_hint_text() -> void:
 	}
 	var lines = _hint_builder.build_lines(context)
 	_hint_label.text = "\n".join(lines)
-
-
-func _make_material(color: Color, roughness: float) -> StandardMaterial3D:
-	var material = StandardMaterial3D.new()
-	material.albedo_color = color
-	material.roughness = roughness
-	return material
-
-
-func _on_button_clicked(_interactable, _actor: Node, button_body: StaticBody3D) -> void:
-	if _room_light == null:
-		return
-
-	_light_toggle_on = not _light_toggle_on
-	_room_light.light_energy = _default_light_energy if _light_toggle_on else 0.35
-
-	if button_body.has_node("MeshInstance3D"):
-		var mesh = button_body.get_node("MeshInstance3D") as MeshInstance3D
-		mesh.material_override = _make_material(
-			Color(0.84, 0.24, 0.2, 1.0) if _light_toggle_on else Color(0.36, 0.36, 0.38, 1.0),
-			0.5
-		)
 
 
 func _ensure_pick_drop_audio_player() -> void:

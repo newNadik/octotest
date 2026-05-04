@@ -750,7 +750,7 @@ func _restore_saved_held_item_as_dropped() -> void:
 	else:
 		forward = forward.normalized()
 
-	var item_width = _estimate_drop_horizontal_width(_pickup_root)
+	var item_width = InteractionGeometry.estimate_drop_horizontal_width(_pickup_root)
 	var desired_position = _find_restore_drop_position(player, forward, item_width)
 	_pickup_root.global_position = desired_position
 
@@ -787,7 +787,7 @@ func _resolve_floor_position(desired_position: Vector3) -> Vector3:
 		return desired_position
 
 	var floor_position = result.position as Vector3
-	var base_offset = _estimate_drop_base_offset(_pickup_root)
+	var base_offset = InteractionGeometry.estimate_drop_base_offset(_pickup_root)
 	return Vector3(desired_position.x, floor_position.y + base_offset, desired_position.z)
 
 
@@ -851,7 +851,7 @@ func _is_restore_drop_space_clear(candidate: Vector3, player: CharacterBody3D) -
 	if world == null:
 		return true
 	var shape := SphereShape3D.new()
-	shape.radius = maxf(0.12, _estimate_drop_horizontal_width(_pickup_root) * 0.45)
+	shape.radius = maxf(0.12, InteractionGeometry.estimate_drop_horizontal_width(_pickup_root) * 0.45)
 	var params := PhysicsShapeQueryParameters3D.new()
 	params.shape = shape
 	params.transform = Transform3D(Basis.IDENTITY, candidate + Vector3.UP * shape.radius)
@@ -863,152 +863,3 @@ func _is_restore_drop_space_clear(candidate: Vector3, player: CharacterBody3D) -
 		params.exclude.append(player)
 	var hits := world.direct_space_state.intersect_shape(params, 1)
 	return hits.is_empty()
-
-
-func _estimate_drop_base_offset(root: Node3D) -> float:
-	if root == null:
-		return 0.0
-	var collision_offset := _estimate_drop_base_offset_from_collision(root)
-	if collision_offset >= 0.0:
-		return collision_offset
-	var min_y = INF
-	var found = false
-	var stack: Array[Node] = [root]
-	while not stack.is_empty():
-		var node = stack.pop_back()
-		if node is MeshInstance3D:
-			var mesh_instance = node as MeshInstance3D
-			if mesh_instance.mesh != null:
-				var aabb = mesh_instance.mesh.get_aabb()
-				var corners = [
-					Vector3(aabb.position.x, aabb.position.y, aabb.position.z),
-					Vector3(aabb.end.x, aabb.position.y, aabb.position.z),
-					Vector3(aabb.position.x, aabb.end.y, aabb.position.z),
-					Vector3(aabb.position.x, aabb.position.y, aabb.end.z),
-					Vector3(aabb.end.x, aabb.end.y, aabb.position.z),
-					Vector3(aabb.end.x, aabb.position.y, aabb.end.z),
-					Vector3(aabb.position.x, aabb.end.y, aabb.end.z),
-					Vector3(aabb.end.x, aabb.end.y, aabb.end.z),
-				]
-				for corner in corners:
-					var world_corner = mesh_instance.global_transform * corner
-					min_y = minf(min_y, world_corner.y)
-					found = true
-		for child in node.get_children():
-			stack.append(child)
-	if not found:
-		return 0.0
-	return maxf(0.0, root.global_position.y - min_y)
-
-
-func _estimate_drop_horizontal_width(root: Node3D) -> float:
-	if root == null:
-		return 0.4
-	var collision_width := _estimate_drop_horizontal_width_from_collision(root)
-	if collision_width > 0.0:
-		return collision_width
-	var min_x = INF
-	var max_x = -INF
-	var min_z = INF
-	var max_z = -INF
-	var found = false
-	var stack: Array[Node] = [root]
-	while not stack.is_empty():
-		var node = stack.pop_back()
-		if node is MeshInstance3D:
-			var mesh_instance = node as MeshInstance3D
-			if mesh_instance.mesh != null:
-				var aabb = mesh_instance.mesh.get_aabb()
-				var corners = [
-					Vector3(aabb.position.x, aabb.position.y, aabb.position.z),
-					Vector3(aabb.end.x, aabb.position.y, aabb.position.z),
-					Vector3(aabb.position.x, aabb.end.y, aabb.position.z),
-					Vector3(aabb.position.x, aabb.position.y, aabb.end.z),
-					Vector3(aabb.end.x, aabb.end.y, aabb.position.z),
-					Vector3(aabb.end.x, aabb.position.y, aabb.end.z),
-					Vector3(aabb.position.x, aabb.end.y, aabb.end.z),
-					Vector3(aabb.end.x, aabb.end.y, aabb.end.z),
-				]
-				for corner in corners:
-					var world_corner = mesh_instance.global_transform * corner
-					min_x = minf(min_x, world_corner.x)
-					max_x = maxf(max_x, world_corner.x)
-					min_z = minf(min_z, world_corner.z)
-					max_z = maxf(max_z, world_corner.z)
-					found = true
-		for child in node.get_children():
-			stack.append(child)
-	if not found:
-		return 0.4
-	return maxf(0.2, maxf(max_x - min_x, max_z - min_z))
-
-
-func _estimate_drop_base_offset_from_collision(root: Node3D) -> float:
-	var min_y = INF
-	var found = false
-	var stack: Array[Node] = [root]
-	while not stack.is_empty():
-		var node = stack.pop_back()
-		if node is CollisionShape3D:
-			var collision_shape := node as CollisionShape3D
-			var half_extents := _shape_half_extents(collision_shape.shape)
-			if half_extents != Vector3.ZERO:
-				var world_extents := _basis_abs_mul(collision_shape.global_basis, half_extents)
-				min_y = minf(min_y, collision_shape.global_position.y - world_extents.y)
-				found = true
-		for child in node.get_children():
-			stack.append(child)
-	if not found:
-		return -1.0
-	return maxf(0.0, root.global_position.y - min_y)
-
-
-func _estimate_drop_horizontal_width_from_collision(root: Node3D) -> float:
-	var min_x = INF
-	var max_x = -INF
-	var min_z = INF
-	var max_z = -INF
-	var found = false
-	var stack: Array[Node] = [root]
-	while not stack.is_empty():
-		var node = stack.pop_back()
-		if node is CollisionShape3D:
-			var collision_shape := node as CollisionShape3D
-			var half_extents := _shape_half_extents(collision_shape.shape)
-			if half_extents != Vector3.ZERO:
-				var world_extents := _basis_abs_mul(collision_shape.global_basis, half_extents)
-				min_x = minf(min_x, collision_shape.global_position.x - world_extents.x)
-				max_x = maxf(max_x, collision_shape.global_position.x + world_extents.x)
-				min_z = minf(min_z, collision_shape.global_position.z - world_extents.z)
-				max_z = maxf(max_z, collision_shape.global_position.z + world_extents.z)
-				found = true
-		for child in node.get_children():
-			stack.append(child)
-	if not found:
-		return -1.0
-	return maxf(0.2, maxf(max_x - min_x, max_z - min_z))
-
-
-func _shape_half_extents(shape: Shape3D) -> Vector3:
-	if shape == null:
-		return Vector3.ZERO
-	if shape is BoxShape3D:
-		return (shape as BoxShape3D).size * 0.5
-	if shape is SphereShape3D:
-		var radius := (shape as SphereShape3D).radius
-		return Vector3(radius, radius, radius)
-	if shape is CapsuleShape3D:
-		var capsule := shape as CapsuleShape3D
-		return Vector3(capsule.radius, capsule.height * 0.5 + capsule.radius, capsule.radius)
-	if shape is CylinderShape3D:
-		var cylinder := shape as CylinderShape3D
-		return Vector3(cylinder.radius, cylinder.height * 0.5, cylinder.radius)
-	return Vector3.ZERO
-
-
-func _basis_abs_mul(basis: Basis, v: Vector3) -> Vector3:
-	return Vector3(
-		absf(basis.x.x) * v.x + absf(basis.y.x) * v.y + absf(basis.z.x) * v.z,
-		absf(basis.x.y) * v.x + absf(basis.y.y) * v.y + absf(basis.z.y) * v.z,
-		absf(basis.x.z) * v.x + absf(basis.y.z) * v.y + absf(basis.z.z) * v.z
-	)

@@ -1,5 +1,4 @@
-# LightSwitch.gd
-extends Node3D
+extends InteractionBehavior
 class_name LightSwitch
 
 const CLICK_SOUND_DEFAULT: AudioStream = preload("res://assets/sound/light-switch.wav")
@@ -12,7 +11,6 @@ signal toggled(is_on: bool)
 @export var click_pitch_min := 0.97
 @export var click_pitch_max := 1.03
 var is_on := true
-var _interactable: Interactable
 var _click_player: AudioStreamPlayer3D
 var _rng := RandomNumberGenerator.new()
 
@@ -20,20 +18,13 @@ func _ready() -> void:
 	add_to_group("save_state_provider")
 	_rng.randomize()
 	is_on = start_on
-	_interactable = get_node_or_null("Interactable") as Interactable
-	if _interactable != null and not _interactable.clicked.is_connected(_on_interactable_clicked):
-		_interactable.clicked.connect(_on_interactable_clicked)
 	_ensure_audio_player()
 	_apply_visual()
 
-# Call this from click/input/raycast interaction
-func interact() -> void:
+
+func on_interacted(_actor: Node) -> void:
 	_play_click_sound()
 	set_switch_state(not is_on, true)
-
-
-func _on_interactable_clicked(_interactable_ref: Interactable, _actor: Node) -> void:
-	interact()
 
 
 func _apply_visual() -> void:

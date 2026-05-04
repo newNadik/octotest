@@ -103,15 +103,17 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.11, 0)
 shape = SubResource("CylinderShape3D_3yqkp")
 
 [node name="Decal" type="Decal" parent="." unique_id=323491526]
-transform = Transform3D(-4.371139e-08, 1, -4.371139e-08, 0, -4.371139e-08, -1, -1, -4.371139e-08, 1.9106855e-15, 0.13856907, 0.13, 0)
-size = Vector3(0.1, 0.1, 0.1)
+transform = Transform3D(-4.371139e-08, 1, -4.371139e-08, 0, -4.371139e-08, -1, -1, -4.371139e-08, 1.9106855e-15, 0.09721165, 0.13, 1.8077903e-09)
+size = Vector3(0.1, 0.017285157, 0.1)
 texture_albedo = ExtResource("2_3yqkp")
+emission_energy = 0.0
 upper_fade = 0.0007213706
 lower_fade = 0.0011319568
 
 [node name="Decal2" type="Decal" parent="." unique_id=473184620]
-transform = Transform3D(-4.371139e-08, -1, 4.371139e-08, 0, -4.371139e-08, -1, 1, -4.371139e-08, 1.9106855e-15, -0.129085, 0.13, 0)
-size = Vector3(0.1, 0.1, 0.1)
+transform = Transform3D(-4.371139e-08, -1, 4.371139e-08, 0, -4.371139e-08, -1, 1, -4.371139e-08, 1.9106855e-15, -0.087971725, 0.13, 1.7971186e-09)
+size = Vector3(0.1, 0.017773438, 0.1)
 texture_albedo = ExtResource("2_3yqkp")
+emission_energy = 0.0
 upper_fade = 0.0007213706
 lower_fade = 0.0011319568

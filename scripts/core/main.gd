@@ -772,7 +772,7 @@ func _create_interaction_controller() -> void:
 	_interaction_controller.name = "InteractionController"
 	add_child(_interaction_controller)
 	_interaction_controller.process_mode = Node.PROCESS_MODE_PAUSABLE
-	_interaction_controller.initialize(player, camera, hint_label, self, room_light)
+	_interaction_controller.initialize(player, camera, hint_label, self)
 
 
 func _configure_camera_collision() -> void:
