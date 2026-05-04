@@ -804,6 +804,24 @@ light_bake_mode = 0
 omni_range = 20.0
 omni_attenuation = 0.1
 
+[node name="OmniLight3D11" type="OmniLight3D" parent="light" unique_id=699851109]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25.779638, 5.225267, -1.1171088)
+light_energy = 0.3
+light_indirect_energy = 10.0
+light_specular = 0.0
+light_bake_mode = 0
+omni_range = 20.0
+omni_attenuation = 0.1
+
+[node name="OmniLight3D12" type="OmniLight3D" parent="light" unique_id=1954649476]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.300717, 5.225267, 15.365448)
+light_energy = 0.3
+light_indirect_energy = 10.0
+light_specular = 0.0
+light_bake_mode = 0
+omni_range = 20.0
+omni_attenuation = 0.1
+
 [node name="CausticRig" parent="light" unique_id=7604608 instance=ExtResource("11_fy6p5")]
 transform = Transform3D(0.46584922, 0.7857269, -0.40696132, -0.44409522, 0.6054029, 0.6605047, 0.765352, -0.12696601, 0.63096416, 35.80785, 6.0118256, -0.059587)
 light_energy = 1.0
