@@ -1,4 +1,4 @@
-[gd_scene format=3 uid="uid://0l72omhbrx5x"]
+[gd_scene format=3 uid="uid://s5s2cecpt7y3"]
 
 [ext_resource type="Script" uid="uid://df0uvmmccqeho" path="res://scripts/interaction/card_reader.gd" id="1_2a3f1"]
 [ext_resource type="Script" uid="uid://b0r404u7bpvr" path="res://scripts/interaction/focus_target.gd" id="2_q3nq0"]
@@ -38,7 +38,6 @@ size = Vector3(1.3, 1.4, 0.85)
 transform = Transform3D(-1.13649605e-08, 0, 0.26, 0, 0.26, 0, -0.26, 0, -1.13649605e-08, 0, 0, 0)
 collision_mask = 0
 script = ExtResource("1_2a3f1")
-required_card_id = "card_access_a"
 
 [node name="BodyMesh" type="MeshInstance3D" parent="." unique_id=414892367]
 material_override = SubResource("StandardMaterial3D_card_reader")
@@ -71,8 +70,8 @@ collision_layer = 8
 collision_mask = 0
 script = ExtResource("3_43nfb")
 display_name = "Card Reader"
-interaction_range = 2.8
 prompt_action = "Use card"
+interaction_range = 2.8
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Interactable" unique_id=928540877]
 shape = SubResource("BoxShape3D_card_reader_interaction")

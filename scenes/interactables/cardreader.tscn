@@ -1,6 +1,9 @@
 [gd_scene format=4 uid="uid://cxtcm4i75e1pb"]
 
 [ext_resource type="Texture2D" uid="uid://va1jxphkq0n3" path="res://assets/ui/tap_card.png" id="1_0k5k6"]
+[ext_resource type="Script" uid="uid://df0uvmmccqeho" path="res://scripts/interaction/card_reader.gd" id="2_reader"]
+[ext_resource type="Script" uid="uid://bt8vvmy3m63u7" path="res://scripts/interaction/interactable.gd" id="3_interactable"]
+[ext_resource type="Script" uid="uid://b0r404u7bpvr" path="res://scripts/interaction/focus_target.gd" id="4_focus"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_fl2mk"]
 resource_name = "Material"
@@ -163,10 +166,15 @@ transparency = 1
 albedo_texture = ExtResource("1_0k5k6")
 metallic_specular = 0.0
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_reader_interact"]
+size = Vector3(0.9, 0.7, 0.6)
+
 [node name="cardreader" type="Node3D" unique_id=34228145]
+script = ExtResource("2_reader")
+allowed_access_levels = PackedInt32Array(1, 3)
 
 [node name="Node3D" type="Node3D" parent="." unique_id=909528419]
-transform = Transform3D(0.6, 0, 0, 0, -2.6226834e-08, -0.6, 0, 0.6, -2.6226834e-08, 0.25, 1.8, 0)
+transform = Transform3D(0.6, 0, 0, 0, -2.6226834e-08, -0.6, 0, 0.6, -2.6226834e-08, 0.25, 1.9, 0)
 
 [node name="frame" type="MeshInstance3D" parent="Node3D" unique_id=180112403]
 mesh = SubResource("ArrayMesh_fl2mk")
@@ -185,8 +193,11 @@ transform = Transform3D(0.99999976, 0, 0, 0, 0.99999976, 7.1054274e-15, 0, -7.10
 mesh = SubResource("PlaneMesh_1mrfb")
 surface_material_override/0 = SubResource("StandardMaterial3D_l2ans")
 
+[node name="FocusAnchor" type="Node3D" parent="Node3D" unique_id=744219803]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.04, 0.18)
+
 [node name="access_granted_label" type="Label3D" parent="." unique_id=1699064873]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.25, 1.8998629, 0.072724044)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.25, 1.9982368, 0.072724044)
 visible = false
 pixel_size = 0.001
 modulate = Color(0.1990839, 0.7470654, 0, 1)
@@ -196,7 +207,7 @@ GRANTED"
 font_size = 28
 
 [node name="access_denied_label" type="Label3D" parent="." unique_id=1277088554]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.25, 1.8998629, 0.072724044)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.25, 1.9982368, 0.072724044)
 visible = false
 pixel_size = 0.001
 modulate = Color(1, 0.27058825, 0.08235294, 1)
@@ -204,3 +215,24 @@ outline_modulate = Color(0, 0.08235294, 0, 0.2784314)
 text = "ACCESS
 DENIED"
 font_size = 28
+
+[node name="FocusTarget" type="Node3D" parent="." unique_id=1918951152]
+script = ExtResource("4_focus")
+focus_anchor_path = NodePath("../Node3D/FocusAnchor")
+click_outside_exit_px = 210.0
+focus_pitch_degrees = -10.0
+focus_zoom_start = 1.2
+
+[node name="Interactable" type="Area3D" parent="." unique_id=1541832901]
+transform = Transform3D(0.6, 0, 0, 0, -2.6226834e-08, -0.6, 0, 0.6, -2.6226834e-08, 0.25, 1.8, 0)
+collision_layer = 8
+collision_mask = 0
+script = ExtResource("3_interactable")
+display_name = "Card Reader"
+prompt_action = "Tap Card"
+requires_line_of_sight = false
+highlight_mesh_paths = Array[NodePath]([NodePath("../Node3D/base")])
+indicator_local_offset = Vector3(0, -0.01, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Interactable" unique_id=1378954128]
+shape = SubResource("BoxShape3D_reader_interact")

@@ -296,10 +296,6 @@ func _is_click_near_focus_card_reader(screen_position: Vector2) -> bool:
 		var focus_screen = _focus_display_camera.unproject_position(_focus_target.get_focus_position())
 		if focus_screen.distance_to(screen_position) <= _focus_target.click_outside_exit_px:
 			return true
-	if _focus_card_reader.has_inserted_card():
-		var inserted_screen = _focus_display_camera.unproject_position(_focus_card_reader.get_inserted_card_position())
-		if inserted_screen.distance_to(screen_position) <= FOCUS_READER_INSERTED_CLICK_RADIUS:
-			return true
 	return false
 
 
@@ -573,20 +569,6 @@ func _handle_card_reader_click(reader: CardReaderScript) -> void:
 	if reader == null:
 		return
 
-	if reader.has_inserted_card():
-		_debug_log("Reader has inserted card; attempting eject")
-		if _held_interactables.size() >= max_held_items:
-			_debug_log("Eject blocked: hands are full")
-			_update_hint_text()
-			return
-		var ejected_card = reader.eject_card()
-		if ejected_card != null:
-			_debug_log("Ejected card %s" % _describe_interactable(ejected_card))
-			_attach_item_to_hands(ejected_card, false)
-		_cancel_card_selection_mode()
-		_update_hint_text()
-		return
-
 	var held_cards = _get_held_cards()
 	if held_cards.is_empty():
 		_debug_log("Reader empty and no held cards")
@@ -648,19 +630,12 @@ func _apply_card_to_pending_reader(card) -> void:
 		_update_hint_text()
 		return
 
-	var removed_card = _remove_held_item(card)
-	if removed_card == null:
-		_debug_log("Card apply failed: could not remove held card")
-		_cancel_card_selection_mode()
-		return
-
-	removed_card.set_held(true)
-	if not _pending_card_reader.insert_card(removed_card):
-		_debug_log("Card apply failed: reader insert returned false; reattaching")
-		_attach_item_to_hands(removed_card, false)
-	else:
-		_debug_log("Card inserted successfully: %s" % _describe_interactable(removed_card))
+	if _pending_card_reader.try_tap_card(card):
+		_debug_log("Card tap granted: %s" % _describe_interactable(card))
 		_play_focus_target_success_sfx()
+	else:
+		_debug_log("Card tap denied: %s" % _describe_interactable(card))
+		_play_focus_target_reject_sfx()
 
 	_cancel_card_selection_mode()
 	_update_hint_text()
@@ -1190,6 +1165,7 @@ func _trigger_focus_reject_feedback(item) -> void:
 func _try_apply_focus_held_item(item) -> void:
 	if item == null:
 		return
+	_play_focus_target_interaction_arm_gesture()
 	if _can_focus_target_accept_held_item(item):
 		_apply_held_item_to_focus_target(item)
 		return
@@ -1244,8 +1220,8 @@ func _get_focus_item_target_position(fallback_position: Vector3) -> Vector3:
 	# Extension point: return a destination position per focus-target type.
 	if _focus_cans_box != null and _focus_target != null:
 		return _focus_target.get_focus_position()
-	if _focus_card_reader != null:
-		return _focus_card_reader.get_slot_position()
+	if _focus_card_reader != null and _focus_target != null:
+		return _focus_target.get_focus_position()
 	if _focus_target != null:
 		return _focus_target.get_focus_position()
 	return fallback_position
@@ -1268,6 +1244,26 @@ func _play_focus_target_success_sfx() -> void:
 		return
 	if target_interactable.has_method("play_success_sfx"):
 		target_interactable.play_success_sfx()
+
+
+func _play_focus_target_reject_sfx() -> void:
+	if _focus_target == null:
+		return
+	var target_interactable = _get_interactable_for_focus_target(_focus_target)
+	if target_interactable == null:
+		return
+	if target_interactable.has_method("play_reject_sfx"):
+		target_interactable.play_reject_sfx()
+
+
+func _play_focus_target_interaction_arm_gesture() -> void:
+	if _player == null or not _player.has_method("play_interaction_arm_gesture"):
+		return
+	var target_position = _get_focus_item_target_position(_player.global_position)
+	var arm_name := _choose_free_front_interaction_arm(target_position)
+	if arm_name.is_empty():
+		return
+	_player.call("play_interaction_arm_gesture", arm_name, target_position)
 
 
 func _ensure_hand_sockets() -> void:

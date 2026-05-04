@@ -8,6 +8,7 @@ class_name FocusTarget
 @export var solved_method_name := ""
 @export var use_angle_override := false
 @export var focus_yaw_degrees := 0.0
+@export var focus_yaw_offset_degrees := 0.0
 @export var focus_pitch_degrees := -22.0
 @export var focus_roll_degrees := 0.0
 @export var focus_zoom_start := -1.0
@@ -35,7 +36,7 @@ func is_solved() -> bool:
 func get_focus_yaw_degrees(default_yaw: float) -> float:
 	if use_angle_override:
 		return focus_yaw_degrees
-	return default_yaw
+	return default_yaw + focus_yaw_offset_degrees
 
 
 func get_focus_pitch_degrees(default_pitch: float) -> float:

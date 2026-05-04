@@ -2,7 +2,7 @@ extends Node3D
 
 const SLIDE_SOUND_DEFAULT: AudioStream = preload("res://assets/sound/sliding-noise.wav")
 
-signal open_requested(source: Node)
+signal open_requested(source: Node, actor: Node)
 signal door_opened(source: Node)
 
 enum TitleSide {
@@ -49,6 +49,7 @@ var _button_green_material: StandardMaterial3D
 var _button_red_material: StandardMaterial3D
 var _button_green_highlight_material: StandardMaterial3D
 var _button_red_highlight_material: StandardMaterial3D
+var _allow_interaction_when_locked := false
 
 
 func _ready() -> void:
@@ -69,6 +70,13 @@ func _ready() -> void:
 
 func open() -> void:
 	if not can_open():
+		return
+	_auto_close_ticket += 1
+	_animate_open()
+
+
+func force_open() -> void:
+	if _is_moving or _is_open:
 		return
 	_auto_close_ticket += 1
 	_animate_open()
@@ -97,6 +105,11 @@ func is_locked() -> bool:
 
 func set_open_distance(value: float) -> void:
 	open_distance = maxf(0.01, value)
+
+
+func set_allow_interaction_when_locked(value: bool) -> void:
+	_allow_interaction_when_locked = value
+	_update_button_state()
 
 
 func set_group_highlight(active: bool) -> void:
@@ -164,8 +177,12 @@ func close_if_clear() -> void:
 	_animate_close()
 
 
-func _on_door_clicked(_interactable_ref: Interactable, _actor: Node) -> void:
-	emit_signal("open_requested", self)
+func _on_door_clicked(_interactable_ref: Interactable, actor: Node) -> void:
+	emit_signal("open_requested", self, actor)
+	var parent_node := get_parent()
+	if parent_node != null and parent_node.has_method("request_open_from_slide"):
+		parent_node.call("request_open_from_slide", self, actor)
+		return
 	open()
 
 
@@ -261,13 +278,19 @@ func _update_button_state() -> void:
 		_build_button_materials()
 
 	var door_can_open := can_open()
+	var door_can_interact := (not _is_moving and not _is_open and (door_can_open or _allow_interaction_when_locked))
 	if door_can_open:
 		_button_mesh.material_override = _button_green_highlight_material if _group_highlight else _button_green_material
 	else:
 		_button_mesh.material_override = _button_red_highlight_material if _group_highlight else _button_red_material
 	if _interactable != null:
-		_interactable.set_interaction_enabled(door_can_open)
-		_interactable.prompt_action = "Open" if door_can_open else "Locked"
+		_interactable.set_interaction_enabled(door_can_interact)
+		if door_can_open:
+			_interactable.prompt_action = "Open"
+		elif _allow_interaction_when_locked:
+			_interactable.prompt_action = "Swipe Card"
+		else:
+			_interactable.prompt_action = "Locked"
 
 
 func _build_button_materials() -> void:

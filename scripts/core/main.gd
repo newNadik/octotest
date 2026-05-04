@@ -670,7 +670,9 @@ func _enter_focus_mode(target) -> void:
 	_pitch = target_angles.y
 	_roll = target_angles.z
 	var zoom: float = _saved_spring_length
-	if is_document_focus:
+	if target.focus_zoom_start > 0.0:
+		zoom = target.focus_zoom_start
+	elif is_document_focus:
 		zoom = focus_zoom_distance if target.focus_zoom_start <= 0.0 else target.focus_zoom_start
 	_start_focus_tween(_focus_target.get_focus_position(), zoom)
 
@@ -744,10 +746,17 @@ func _set_focus_visuals_enabled(is_enabled: bool) -> void:
 
 
 func _compute_focus_angles(target) -> Vector3:
-	var host := target.get_parent() as Node3D
+	var target_position: Vector3 = target.get_focus_position()
+	var to_camera: Vector3 = camera.global_position - target_position
+	to_camera.y = 0.0
 	var default_yaw := _yaw
-	if host != null:
-		default_yaw = wrapf(rad_to_deg(host.global_rotation.y) - 180.0, -180.0, 180.0)
+	if to_camera.length_squared() > 0.0001:
+		# Keep the camera on the same side of the target when entering focus.
+		default_yaw = wrapf(rad_to_deg(atan2(to_camera.x, to_camera.z)), -180.0, 180.0)
+	else:
+		var host := target.get_parent() as Node3D
+		if host != null:
+			default_yaw = wrapf(rad_to_deg(host.global_rotation.y) - 180.0, -180.0, 180.0)
 	var desired_yaw = target.get_focus_yaw_degrees(default_yaw)
 	var desired_pitch = target.get_focus_pitch_degrees(-22.0)
 	var desired_roll = target.get_focus_roll_degrees(0.0)

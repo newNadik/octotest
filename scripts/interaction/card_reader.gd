@@ -1,127 +1,111 @@
-extends StaticBody3D
+extends Node
 class_name CardReader
 
 
+signal card_tap_result(granted: bool)
+
 enum ReaderState {
-	EMPTY,
-	WRONG,
-	CORRECT,
+	IDLE,
+	DENIED,
+	GRANTED,
 }
 
-@export var required_card_id = "card_main"
-@export var led_mesh_path: NodePath = NodePath("Led")
-@export var slot_anchor_path: NodePath = NodePath("CardSlotAnchor")
-@export var inserted_card_local_position = Vector3(0.0, -0.08, -0.32)
-@export var inserted_card_local_rotation_degrees = Vector3(0.0, 0.0, 0.0)
+@export var allowed_access_levels: PackedInt32Array = PackedInt32Array([3])
+@export var linked_door_group_path: NodePath
+@export var indicator_mesh_path: NodePath = NodePath("Node3D/indicator")
+@export var granted_label_path: NodePath = NodePath("access_granted_label")
+@export var denied_label_path: NodePath = NodePath("access_denied_label")
+@export var feedback_duration := 1.1
 
-var _led_mesh: MeshInstance3D
-var _slot_anchor: Node3D
-var _inserted_card
-var _state: ReaderState = ReaderState.EMPTY
+var _indicator_mesh: MeshInstance3D
+var _granted_label: Label3D
+var _denied_label: Label3D
+var _linked_door_group: Node
+var _state: ReaderState = ReaderState.IDLE
+var _feedback_ticket := 0
 var _yellow_material: StandardMaterial3D
 var _red_material: StandardMaterial3D
 var _green_material: StandardMaterial3D
 
 
 func _ready() -> void:
-	_led_mesh = get_node_or_null(led_mesh_path) as MeshInstance3D
-	_slot_anchor = get_node_or_null(slot_anchor_path) as Node3D
-	if _slot_anchor == null:
-		_slot_anchor = self
-
+	_indicator_mesh = get_node_or_null(indicator_mesh_path) as MeshInstance3D
+	_granted_label = get_node_or_null(granted_label_path) as Label3D
+	_denied_label = get_node_or_null(denied_label_path) as Label3D
+	_linked_door_group = get_node_or_null(linked_door_group_path)
 	_yellow_material = _make_led_material(Color(0.96, 0.84, 0.2, 1.0))
 	_red_material = _make_led_material(Color(0.9, 0.2, 0.2, 1.0))
 	_green_material = _make_led_material(Color(0.2, 0.92, 0.3, 1.0))
-	_set_state(ReaderState.EMPTY)
-
-
-func has_inserted_card() -> bool:
-	return _inserted_card != null
-
-
-func is_correct_card_inserted() -> bool:
-	return _state == ReaderState.CORRECT
+	_set_state(ReaderState.IDLE)
 
 
 func can_accept_card(card) -> bool:
-	if card == null:
-		return false
-	if has_inserted_card():
-		return false
-	return card.is_card()
+	return card != null and card.is_card()
 
 
-func insert_card(card) -> bool:
-	if card == null or not can_accept_card(card):
-		return false
-	if has_inserted_card():
+func try_tap_card(card) -> bool:
+	if not can_accept_card(card):
+		_show_denied_feedback()
 		return false
 
-	_inserted_card = card
-	_inserted_card.set_interaction_enabled(true)
-	var pickup_root = card.get_pickup_root()
-	var preserved_global_scale = pickup_root.global_basis.get_scale().abs()
-	pickup_root.reparent(_slot_anchor, true)
-	var local_basis = Basis.from_euler(Vector3(
-		deg_to_rad(inserted_card_local_rotation_degrees.x),
-		deg_to_rad(inserted_card_local_rotation_degrees.y),
-		deg_to_rad(inserted_card_local_rotation_degrees.z)
-	))
-	var slot_local_transform = Transform3D(local_basis, inserted_card_local_position)
-	var target_global = _slot_anchor.global_transform * slot_local_transform
-	var target_rotation = target_global.basis.orthonormalized()
-	target_global.basis = target_rotation.scaled(preserved_global_scale)
-	pickup_root.global_transform = target_global
-
-	if _inserted_card.item_id == required_card_id:
-		_set_state(ReaderState.CORRECT)
+	var card_level := int(card.get_meta("access_level", 0))
+	var granted := allowed_access_levels.has(card_level)
+	if granted:
+		_show_granted_feedback()
+		_open_linked_door_group()
 	else:
-		_set_state(ReaderState.WRONG)
-
-	return true
-
-
-func eject_card() :
-	if _inserted_card == null:
-		return null
-
-	var card = _inserted_card
-	_inserted_card = null
-	card.set_interaction_enabled(true)
-	_set_state(ReaderState.EMPTY)
-	return card
+		_show_denied_feedback()
+	emit_signal("card_tap_result", granted)
+	return granted
 
 
-func is_inserted_card(card) -> bool:
-	return card != null and card == _inserted_card
+func _open_linked_door_group() -> void:
+	if _linked_door_group == null:
+		return
+	if _linked_door_group.has_method("grant_access_and_open"):
+		_linked_door_group.call("grant_access_and_open")
 
 
-func get_inserted_card_position() -> Vector3:
-	if _inserted_card != null:
-		return _inserted_card.get_pickup_root().global_position
-	return _slot_anchor.global_position
+func _show_granted_feedback() -> void:
+	_set_state(ReaderState.GRANTED)
+	_schedule_reset_feedback()
 
 
-func get_slot_position() -> Vector3:
-	return _slot_anchor.global_position
+func _show_denied_feedback() -> void:
+	_set_state(ReaderState.DENIED)
+	_schedule_reset_feedback()
+
+
+func _schedule_reset_feedback() -> void:
+	_feedback_ticket += 1
+	var ticket := _feedback_ticket
+	var timer := get_tree().create_timer(maxf(0.05, feedback_duration))
+	timer.timeout.connect(func() -> void:
+		if ticket != _feedback_ticket:
+			return
+		_set_state(ReaderState.IDLE)
+	)
 
 
 func _set_state(state: ReaderState) -> void:
 	_state = state
-	if _led_mesh == null:
-		return
+	if _indicator_mesh != null:
+		match _state:
+			ReaderState.IDLE:
+				_indicator_mesh.material_override = _yellow_material
+			ReaderState.DENIED:
+				_indicator_mesh.material_override = _red_material
+			ReaderState.GRANTED:
+				_indicator_mesh.material_override = _green_material
 
-	match _state:
-		ReaderState.EMPTY:
-			_led_mesh.material_override = _yellow_material
-		ReaderState.WRONG:
-			_led_mesh.material_override = _red_material
-		ReaderState.CORRECT:
-			_led_mesh.material_override = _green_material
+	if _granted_label != null:
+		_granted_label.visible = _state == ReaderState.GRANTED
+	if _denied_label != null:
+		_denied_label.visible = _state == ReaderState.DENIED
 
 
 func _make_led_material(color: Color) -> StandardMaterial3D:
-	var material = StandardMaterial3D.new()
+	var material := StandardMaterial3D.new()
 	material.albedo_color = color
 	material.emission_enabled = true
 	material.emission = color

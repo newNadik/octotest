@@ -65,7 +65,7 @@ func _update_floor_collision_state() -> void:
 		floor.global_position = FLOOR_ACTIVE_HELD_POSITION
 	else:
 		floor.global_position = FLOOR_ACTIVE_DROPPED_POSITION
-		print("ready card=", global_position, " floor_local=", floor.position, " floor_global=", floor.global_position)
+		#print("ready card=", global_position, " floor_local=", floor.position, " floor_global=", floor.global_position)
 
 
 

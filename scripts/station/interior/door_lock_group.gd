@@ -1,5 +1,12 @@
 extends Node3D
 
+enum AccessMode {
+	DISABLED,
+	UNLOCKED,
+	CARD_LOCKED,
+}
+
+@export var access_mode: AccessMode = AccessMode.UNLOCKED
 @export var locked := false
 @export_group("Door Metadata")
 @export var privacy_glass_enabled := false
@@ -14,14 +21,17 @@ var synchronize_hover_highlight := true
 
 var _slide_nodes: Array[Node] = []
 var _group_highlight_active := false
+var _authorized_next_open := false
 
 
 func _ready() -> void:
+	if locked and access_mode == AccessMode.UNLOCKED:
+		access_mode = AccessMode.CARD_LOCKED
 	_collect_slide_nodes()
 	_apply_metadata_to_slides()
 	_apply_open_distance_overrides()
 	_connect_slide_signals()
-	_apply_locked_state()
+	_apply_access_mode_state()
 	_configure_group_indicator()
 	set_process(synchronize_hover_highlight and _slide_nodes.size() > 1)
 
@@ -51,15 +61,26 @@ func _process(_delta: float) -> void:
 
 func set_locked(value: bool) -> void:
 	locked = value
-	_apply_locked_state()
+	access_mode = AccessMode.CARD_LOCKED if value else AccessMode.UNLOCKED
+	_apply_access_mode_state()
 
 
 func lock() -> void:
-	set_locked(true)
+	locked = true
+	access_mode = AccessMode.CARD_LOCKED
+	_apply_access_mode_state()
 
 
 func unlock() -> void:
-	set_locked(false)
+	locked = false
+	access_mode = AccessMode.UNLOCKED
+	_apply_access_mode_state()
+
+
+func disable() -> void:
+	locked = true
+	access_mode = AccessMode.DISABLED
+	_apply_access_mode_state()
 
 
 func _collect_slide_nodes() -> void:
@@ -80,10 +101,14 @@ func _connect_slide_signals() -> void:
 			slide.connect("open_requested", handler)
 
 
-func _apply_locked_state() -> void:
+func _apply_access_mode_state() -> void:
+	locked = access_mode != AccessMode.UNLOCKED
+	var allow_locked_interaction := access_mode == AccessMode.CARD_LOCKED
 	for slide in _slide_nodes:
 		if slide != null and is_instance_valid(slide):
 			slide.call("set_locked", locked)
+			if slide.has_method("set_allow_interaction_when_locked"):
+				slide.call("set_allow_interaction_when_locked", allow_locked_interaction)
 
 
 func _apply_metadata_to_slides() -> void:
@@ -138,10 +163,51 @@ func _apply_open_distance_override_for_path(path: NodePath, distance: float) -> 
 		slide.call("set_open_distance", distance)
 
 
-func _on_slide_open_requested(_source: Node) -> void:
+func _on_slide_open_requested(_source: Node, _actor: Node = null) -> void:
+	return
+
+
+func request_open_from_slide(source: Node, actor: Node = null) -> void:
+	if access_mode == AccessMode.DISABLED:
+		return
+	if access_mode == AccessMode.UNLOCKED:
+		_open_group()
+		return
+	if access_mode == AccessMode.CARD_LOCKED:
+		if _authorized_next_open or _is_actor_inside(source, actor):
+			_authorized_next_open = false
+			_open_group()
+
+
+func authorize_next_open() -> void:
+	_authorized_next_open = true
+
+
+func grant_access_and_open() -> void:
+	if access_mode != AccessMode.CARD_LOCKED:
+		return
+	_authorized_next_open = true
+	_open_group()
+
+
+func _open_group() -> void:
 	for slide in _slide_nodes:
-		if slide != null and is_instance_valid(slide) and slide.has_method("open"):
-			slide.call("open")
+		if slide != null and is_instance_valid(slide) and slide.has_method("force_open"):
+			slide.call("force_open")
+
+
+func _is_actor_inside(source: Node, actor: Node) -> bool:
+	if source == null or actor == null:
+		return false
+	if not (source is Node3D) or not (actor is Node3D):
+		return false
+	var source_node := source as Node3D
+	var actor_node := actor as Node3D
+	var to_actor := actor_node.global_position - source_node.global_position
+	if to_actor.length_squared() <= 0.0001:
+		return false
+	var forward := -source_node.global_transform.basis.z.normalized()
+	return forward.dot(to_actor.normalized()) < 0.0
 
 
 func _apply_group_hover_highlight(active: bool) -> void:
