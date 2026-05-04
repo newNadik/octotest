@@ -51,6 +51,10 @@ func receive_item(item: Interactable) -> bool:
 	return try_tap_card(item)
 
 
+func should_consume_received_item(_item: Interactable) -> bool:
+	return false
+
+
 func can_accept_card(card) -> bool:
 	return card != null and card.is_card()
 

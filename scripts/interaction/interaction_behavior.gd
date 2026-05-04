@@ -12,3 +12,8 @@ func can_receive_item(_item: Interactable) -> bool:
 # Override to apply the held item. Return true on success.
 func receive_item(_item: Interactable) -> bool:
 	return false
+
+# Override to control whether a successful item application should consume
+# (remove and free) the held item from the player's inventory.
+func should_consume_received_item(_item: Interactable) -> bool:
+	return true

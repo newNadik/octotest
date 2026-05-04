@@ -11,7 +11,6 @@ const DROP_SURFACE_COLLISION_MASK := WALL_COLLISION_MASK | GROUND_COLLISION_MASK
 const DROP_BLOCKER_COLLISION_MASK := WALL_COLLISION_MASK | GROUND_COLLISION_MASK | FURNITURE_COLLISION_MASK | CARRY_ITEM_COLLISION_MASK
 const INTERACTABLE_COLLISION_MASK := 1 << 3
 const InteractionBehaviorScript = preload("res://scripts/interaction/interaction_behavior.gd")
-const CardReaderScript = preload("res://scripts/interaction/card_reader.gd")
 const FocusTargetScript = preload("res://scripts/interaction/focus_target.gd")
 const FocusRejectFeedbackScript = preload("res://scripts/interaction/focus_reject_feedback.gd")
 const InteractableScript = preload("res://scripts/interaction/interactable.gd")
@@ -19,9 +18,7 @@ const InteractionHintBuilderScript = preload("res://scripts/interaction/interact
 const OctoRigScript = preload("res://scripts/rig/OctoRig.gd")
 const FRONT_LEFT_ARM_NAME := "arm_0"
 const FRONT_RIGHT_ARM_NAME := "arm_1"
-const FOCUS_SELECTION_CLICK_RADIUS := 220.0
 const FOCUS_HELD_CLICK_RADIUS := 170.0
-const FOCUS_READER_INSERTED_CLICK_RADIUS := 190.0
 const FALLBACK_HOLD_ARM_PRIORITY := ["arm_2", "arm_3", "arm_5", "arm_4", "arm_0", "arm_1", "arm_6", "arm_7"]
 const ARM_SOCKET_ANGLE_BY_NAME := {
 	"arm_0": 2.36,   # left front
@@ -64,6 +61,8 @@ const ARM_SOCKET_ANGLE_BY_NAME := {
 @export var focus_display_bottom_anchor := -0.68
 @export var focus_display_row_spacing := 0.44
 @export var focus_display_column_spacing := 0.62
+@export var focus_item_apply_delay := 0.2
+@export var focus_item_return_duration := 0.16
 
 var _player: CharacterBody3D
 var _camera: Camera3D
@@ -80,21 +79,19 @@ var _held_clearance_by_item_id: Dictionary = {}
 var _socket_index_by_arm_name: Dictionary = {}
 var _arm_name_by_socket_index: Dictionary = {}
 var _queued_interaction_target
-var _pending_card_reader: CardReaderScript
-var _awaiting_card_selection = false
-var _eligible_held_cards: Array = []
 var _base_move_speed = 6.0
 var _focus_locked = false
 var _focus_display_enabled = false
 var _focus_display_camera: Camera3D
 var _focus_target: FocusTargetScript
 var _focus_behavior: InteractionBehaviorScript
-var _focus_card_reader: CardReaderScript
 var _focus_reject_feedback = FocusRejectFeedbackScript.new()
 var _hint_builder = InteractionHintBuilderScript.new()
 var _octo_rig: OctoRigScript
 var _pick_drop_player: AudioStreamPlayer3D
 var _rng := RandomNumberGenerator.new()
+var _focus_item_apply_ticket := 0
+var _focus_item_motion_by_item_id: Dictionary = {}
 
 
 func initialize(player: CharacterBody3D, camera: Camera3D, hint_label: Label, world_root: Node3D) -> void:
@@ -118,7 +115,6 @@ func set_interaction_enabled(is_enabled: bool) -> void:
 		return
 	_interaction_enabled = is_enabled
 	if not _interaction_enabled:
-		_cancel_card_selection_mode()
 		_set_hovered_interactable(null, false, false)
 
 
@@ -131,9 +127,6 @@ func process_interactions(delta: float) -> void:
 
 
 func consume_escape() -> bool:
-	if _awaiting_card_selection:
-		_cancel_card_selection_mode()
-		return true
 	return false
 
 
@@ -143,51 +136,11 @@ func try_handle_interaction_click(screen_position: Vector2) -> bool:
 		return false
 
 	var target = _raycast_to_interactable(screen_position)
-	_debug_log("Click at %s target=%s focus_locked=%s awaiting_card_selection=%s" % [
+	_debug_log("Click at %s target=%s focus_locked=%s" % [
 		str(screen_position),
 		_describe_interactable(target),
 		str(_focus_locked),
-		str(_awaiting_card_selection),
 	])
-
-	if _awaiting_card_selection:
-		if target == null and _focus_locked:
-			var clicked_card = _get_eligible_card_at_screen(screen_position, FOCUS_SELECTION_CLICK_RADIUS)
-			if clicked_card != null and _is_click_confirmed_for_held_item(clicked_card):
-				_debug_log("Card selection: screen-picked %s" % _describe_interactable(clicked_card))
-				_mark_interactable_clicked(clicked_card)
-				_apply_card_to_pending_reader(clicked_card)
-				return true
-			var clicked_held = _get_held_item_at_screen(screen_position, FOCUS_SELECTION_CLICK_RADIUS)
-			if clicked_held != null and _is_click_confirmed_for_held_item(clicked_held) and _focus_card_reader != null and not _eligible_held_cards.has(clicked_held):
-				_debug_log("Card selection: non-eligible item clicked %s" % _describe_interactable(clicked_held))
-				_trigger_focus_reject_feedback(clicked_held)
-				return true
-		if target != null and _is_item_currently_held(target) and _eligible_held_cards.has(target):
-			_debug_log("Card selection: ray-picked %s" % _describe_interactable(target))
-			_mark_interactable_clicked(target)
-			_apply_card_to_pending_reader(target)
-			return true
-		if target != null and _is_item_currently_held(target) and not _eligible_held_cards.has(target) and _focus_card_reader != null:
-			_debug_log("Card selection: non-eligible ray item clicked %s" % _describe_interactable(target))
-			_trigger_focus_reject_feedback(target)
-			return true
-		if target != null and _get_card_reader_for_interactable(target) == _pending_card_reader:
-			_debug_log("Card selection cancelled by clicking reader")
-			_cancel_card_selection_mode()
-			return true
-		if _focus_locked:
-			var near_reader = _is_click_near_focus_card_reader(screen_position)
-			var over_focus_items = is_click_over_focus_items(screen_position, FOCUS_SELECTION_CLICK_RADIUS)
-			if near_reader or over_focus_items:
-				_debug_log("Card selection pending: click inside focus interaction area")
-				_update_hint_text()
-				return true
-			_debug_log("Card selection pending: outside click, allowing focus exit")
-			return false
-		_debug_log("Card selection pending: click did not resolve to eligible card")
-		_update_hint_text()
-		return true
 
 	if target == null:
 		if _focus_locked:
@@ -216,9 +169,6 @@ func try_handle_interaction_click(screen_position: Vector2) -> bool:
 	var blocked := false
 	if target.requires_line_of_sight:
 		blocked = not _has_line_of_sight(target)
-	if _is_focus_reader_interactable(target):
-		in_range = true
-		blocked = false
 	if target.interaction_type == InteractableScript.InteractionType.PICKUP and _held_interactables.size() >= max_held_items:
 		blocked = true
 		in_range = false
@@ -230,17 +180,6 @@ func try_handle_interaction_click(screen_position: Vector2) -> bool:
 	if _hovered_in_range:
 		_mark_interactable_clicked(target)
 		_queued_interaction_target = null
-		var reader = _get_card_reader_for_interactable(target)
-		if reader != null:
-			_debug_log("Reader interaction click on %s" % _describe_interactable(target))
-			if _focus_locked and reader == _focus_card_reader:
-				var held_cards := _get_held_cards()
-				if held_cards.size() == 1:
-					_try_apply_focus_held_item(held_cards[0])
-					return true
-			_play_object_interaction_arm_gesture(target)
-			_handle_card_reader_click(reader)
-			return true
 		if target.interaction_type == InteractableScript.InteractionType.CLICK:
 			_play_object_interaction_arm_gesture(target)
 			var behavior = _get_behavior(target)
@@ -273,14 +212,15 @@ func handle_drop_input(drop_all: bool) -> void:
 
 
 func try_interact_with_focus_target(screen_position := Vector2.INF) -> bool:
-	if not _focus_locked or _focus_card_reader == null:
-		_debug_log("Focus-target interact ignored: no focus reader")
+	if not _focus_locked or _focus_behavior == null:
+		_debug_log("Focus-target interact ignored: no focus behavior")
 		return false
-	if screen_position.is_finite() and not _is_click_near_focus_card_reader(screen_position):
-		_debug_log("Focus-target interact ignored: click not near reader")
+	if screen_position.is_finite() and not is_click_over_focus_items(screen_position, FOCUS_HELD_CLICK_RADIUS):
+		_debug_log("Focus-target interact ignored: click not over focus item")
 		return false
 	_debug_log("Focus-target interact accepted")
-	_handle_card_reader_click(_focus_card_reader)
+	_play_focus_target_interaction_arm_gesture()
+	_focus_behavior.on_interacted(_player)
 	return true
 
 
@@ -288,16 +228,6 @@ func is_click_over_focus_items(screen_position: Vector2, max_distance_px := 110.
 	if not _focus_display_enabled or _focus_display_camera == null:
 		return false
 	return _get_held_item_at_screen(screen_position, max_distance_px) != null
-
-
-func _is_click_near_focus_card_reader(screen_position: Vector2) -> bool:
-	if _focus_display_camera == null:
-		return false
-	if _focus_target != null:
-		var focus_screen = _focus_display_camera.unproject_position(_focus_target.get_focus_position())
-		if focus_screen.distance_to(screen_position) <= _focus_target.click_outside_exit_px:
-			return true
-	return false
 
 
 func _get_held_item_at_screen(screen_position: Vector2, max_distance_px: float) :
@@ -317,25 +247,6 @@ func _get_held_item_at_screen(screen_position: Vector2, max_distance_px: float) 
 	return closest
 
 
-func _get_eligible_card_at_screen(screen_position: Vector2, max_distance_px: float) :
-	if not _focus_display_enabled or _focus_display_camera == null:
-		return null
-	var closest
-	var best_distance = max_distance_px
-	for card in _eligible_held_cards:
-		if card == null or not is_instance_valid(card):
-			continue
-		var pickup_root = card.get_pickup_root()
-		if pickup_root == null:
-			continue
-		var item_screen = _focus_display_camera.unproject_position(pickup_root.global_position)
-		var distance = item_screen.distance_to(screen_position)
-		if distance <= best_distance:
-			best_distance = distance
-			closest = card
-	return closest
-
-
 func _is_click_confirmed_for_held_item(item) -> bool:
 	if item == null:
 		return false
@@ -346,8 +257,6 @@ func _is_click_confirmed_for_held_item(item) -> bool:
 
 func set_focus_locked(is_locked: bool) -> void:
 	_focus_locked = is_locked
-	if not is_locked:
-		_cancel_card_selection_mode()
 	_update_carry_mobility()
 
 
@@ -366,13 +275,11 @@ func set_focus_display(enabled: bool, camera: Camera3D = null) -> void:
 func set_focus_target(target: FocusTargetScript) -> void:
 	_focus_target = target
 	_focus_behavior = null
-	_focus_card_reader = null
 	_focus_reject_feedback.reset()
 	if _focus_target == null:
 		return
 	var interactable = _get_interactable_for_focus_target(_focus_target)
 	_focus_behavior = _get_behavior(interactable)
-	_focus_card_reader = _focus_behavior as CardReaderScript
 
 
 func get_held_item_names() -> PackedStringArray:
@@ -385,32 +292,22 @@ func get_held_item_names() -> PackedStringArray:
 func get_held_items_for_focus() -> Array[Dictionary]:
 	var items: Array[Dictionary] = []
 	for held_item in _held_interactables:
-		var eligible = true
-		if _awaiting_card_selection:
-			eligible = _eligible_held_cards.has(held_item)
 		items.append({
 			"name": held_item.display_name,
-			"eligible": eligible,
+			"eligible": true,
 		})
 	return items
 
 
 func select_held_item_by_index(index: int) -> bool:
-	if index < 0 or index >= _held_interactables.size():
+	if index < 0 or index >= _held_interactables.size() or not _focus_locked:
 		return false
-	if not _awaiting_card_selection:
-		return false
-
-	var item = _held_interactables[index]
-	if not _eligible_held_cards.has(item):
-		return false
-
-	_apply_card_to_pending_reader(item)
+	_try_apply_focus_held_item(_held_interactables[index])
 	return true
 
 
 func is_awaiting_card_selection() -> bool:
-	return _awaiting_card_selection
+	return false
 
 
 func get_focus_target_at_screen(screen_position: Vector2) -> FocusTargetScript:
@@ -516,18 +413,6 @@ func _process_queued_interaction() -> void:
 		return
 
 	if _queued_interaction_target.interaction_type == InteractableScript.InteractionType.CLICK:
-		var reader = _get_card_reader_for_interactable(_queued_interaction_target)
-		if reader != null:
-			if _focus_locked and reader == _focus_card_reader:
-				var held_cards := _get_held_cards()
-				if held_cards.size() == 1:
-					_try_apply_focus_held_item(held_cards[0])
-					_queued_interaction_target = null
-					return
-			_play_object_interaction_arm_gesture(_queued_interaction_target)
-			_handle_card_reader_click(reader)
-			_queued_interaction_target = null
-			return
 		_play_object_interaction_arm_gesture(_queued_interaction_target)
 		var behavior = _get_behavior(_queued_interaction_target)
 		if behavior != null:
@@ -550,109 +435,11 @@ func _update_hovered_interactable() -> void:
 	var blocked := false
 	if target.requires_line_of_sight:
 		blocked = not _has_line_of_sight(target)
-	if _is_focus_reader_interactable(target):
-		in_range = true
-		blocked = false
 	if target.interaction_type == InteractableScript.InteractionType.PICKUP and _held_interactables.size() >= max_held_items:
 		blocked = true
 		in_range = false
 
 	_set_hovered_interactable(target, in_range, blocked)
-
-
-func _get_card_reader_for_interactable(target) -> CardReaderScript:
-	if target == null:
-		return null
-	var node = target.get_parent()
-	while node != null:
-		if node is CardReaderScript:
-			return node as CardReaderScript
-		node = node.get_parent()
-	return null
-
-
-func _is_focus_reader_interactable(target) -> bool:
-	if not _focus_locked or _focus_card_reader == null or target == null:
-		return false
-	return _get_card_reader_for_interactable(target) == _focus_card_reader
-
-
-func _handle_card_reader_click(reader: CardReaderScript) -> void:
-	if reader == null:
-		return
-
-	var held_cards = _get_held_cards()
-	if held_cards.is_empty():
-		_debug_log("Reader empty and no held cards")
-		_cancel_card_selection_mode()
-		_update_hint_text()
-		return
-
-	if held_cards.size() == 1:
-		_debug_log("Reader empty; single held card %s" % _describe_interactable(held_cards[0]))
-		_pending_card_reader = reader
-		_apply_card_to_pending_reader(held_cards[0])
-		return
-
-	_debug_log("Reader empty; entering card selection with %d cards" % held_cards.size())
-	_enter_card_selection_mode(reader, held_cards)
-
-
-func _get_held_cards() -> Array:
-	var cards: Array = []
-	for held_item in _held_interactables:
-		if held_item.is_card():
-			cards.append(held_item)
-	return cards
-
-
-func _enter_card_selection_mode(reader: CardReaderScript, held_cards: Array) -> void:
-	_cancel_card_selection_mode()
-	_pending_card_reader = reader
-	_awaiting_card_selection = true
-	_eligible_held_cards = held_cards.duplicate()
-
-	_debug_log("Card selection started: %d eligible cards" % _eligible_held_cards.size())
-	_update_hint_text()
-
-
-func _cancel_card_selection_mode() -> void:
-	if _awaiting_card_selection:
-		_debug_log("Card selection cancelled")
-	_awaiting_card_selection = false
-	_pending_card_reader = null
-	for card in _eligible_held_cards:
-		if card != null and is_instance_valid(card):
-			card.set_visual_state(InteractableScript.VisualState.HELD)
-	_eligible_held_cards.clear()
-	_update_hint_text()
-
-
-func _apply_card_to_pending_reader(card) -> void:
-	if _pending_card_reader == null or card == null:
-		_debug_log("Card apply failed: pending reader or card missing")
-		_cancel_card_selection_mode()
-		return
-	if not _is_item_currently_held(card):
-		_debug_log("Card apply failed: card not held %s" % _describe_interactable(card))
-		_cancel_card_selection_mode()
-		return
-	if not _pending_card_reader.can_accept_card(card):
-		_debug_log("Card apply rejected by reader for %s" % _describe_interactable(card))
-		_update_hint_text()
-		return
-
-	_mark_interactable_clicked(card)
-	_play_held_item_gesture(card, _pending_card_reader.global_position)
-	if _pending_card_reader.try_tap_card(card):
-		_debug_log("Card tap granted: %s" % _describe_interactable(card))
-		_play_focus_target_success_sfx()
-	else:
-		_debug_log("Card tap denied: %s" % _describe_interactable(card))
-		_play_focus_target_reject_sfx()
-
-	_cancel_card_selection_mode()
-	_update_hint_text()
 
 
 func _debug_log(message: String) -> void:
@@ -755,11 +542,7 @@ func _move_toward_interactable(target) -> void:
 	else:
 		away = away.normalized()
 
-	var standoff = interact_move_standoff
-	if _get_card_reader_for_interactable(target) != null:
-		standoff = maxf(standoff, 2.6)
-
-	var move_position: Vector3 = target_pos + away * standoff
+	var move_position: Vector3 = target_pos + away * interact_move_standoff
 	move_position.y = player_pos.y
 	_player.set_move_target(move_position)
 
@@ -775,7 +558,6 @@ func _pick_up_interactable(target) -> void:
 	_play_pick_drop_sound(pickup_position)
 	target.interact(_player)
 	_player.clear_move_target()
-	_cancel_card_selection_mode()
 
 
 func _drop_last_held_item() -> void:
@@ -824,7 +606,6 @@ func _drop_held_item_by_index(index: int) -> void:
 		_set_hovered_interactable(null, false, false)
 
 	_play_pick_drop_sound(drop_position)
-	_cancel_card_selection_mode()
 	_update_hint_text()
 
 
@@ -991,6 +772,7 @@ func _update_focus_display_transforms(delta: float) -> void:
 		target_pos += camera_forward * focus_display_forward_distance
 		target_pos += camera_right * offset_x
 		target_pos += camera_up * offset_y
+		target_pos = _apply_focus_item_motion_offset(held_item, target_pos)
 		target_pos += _focus_reject_feedback.get_offset(
 			held_item,
 			target_pos,
@@ -1013,8 +795,7 @@ func _trigger_focus_reject_feedback(item) -> void:
 func _try_apply_focus_held_item(item) -> void:
 	if item == null:
 		return
-	if _focus_card_reader == null:
-		_play_focus_target_interaction_arm_gesture()
+	_play_focus_target_interaction_arm_gesture()
 	if _can_focus_target_accept_held_item(item):
 		_apply_held_item_to_focus_target(item)
 		return
@@ -1029,31 +810,86 @@ func _get_focus_reject_target_position(fallback_position: Vector3) -> Vector3:
 func _can_focus_target_accept_held_item(item) -> bool:
 	if item == null or _focus_behavior == null:
 		return false
-	if _focus_card_reader != null:
-		return item.is_card() and _focus_card_reader.can_accept_card(item)
 	return _focus_behavior.can_receive_item(item)
 
 
 func _apply_held_item_to_focus_target(item) -> void:
+	_focus_item_apply_ticket += 1
+	var ticket := _focus_item_apply_ticket
+	var target_position = _get_focus_item_target_position(_player.global_position if _player != null else Vector3.ZERO)
+	var should_return := not _focus_behavior.should_consume_received_item(item)
+	_register_focus_item_motion(item, target_position, should_return)
+	_play_held_item_gesture(item, target_position)
+	var timer := get_tree().create_timer(maxf(0.01, focus_item_apply_delay))
+	timer.timeout.connect(func() -> void:
+		if ticket != _focus_item_apply_ticket:
+			return
+		_apply_held_item_to_focus_target_now(item)
+	)
+
+
+func _apply_held_item_to_focus_target_now(item) -> void:
 	if item == null or _focus_behavior == null:
 		return
-
-	if _focus_card_reader != null:
-		_debug_log("Focus-held click applies card %s" % _describe_interactable(item))
-		_pending_card_reader = _focus_card_reader
-		_apply_card_to_pending_reader(item)
+	if not _focus_locked:
+		return
+	if not _is_item_currently_held(item):
+		return
+	if not _focus_behavior.can_receive_item(item):
 		return
 
 	if not _focus_behavior.receive_item(item):
 		return
 	_play_focus_target_success_sfx()
+	if not _focus_behavior.should_consume_received_item(item):
+		return
 	var removed_item = _remove_held_item(item)
 	if removed_item == null:
 		return
+	_focus_item_motion_by_item_id.erase(removed_item.get_instance_id())
 	removed_item.set_interaction_enabled(false)
 	var pickup_root = removed_item.get_pickup_root()
 	if pickup_root != null:
 		pickup_root.queue_free()
+
+
+func _register_focus_item_motion(item, world_target: Vector3, should_return: bool) -> void:
+	if item == null:
+		return
+	_focus_item_motion_by_item_id[item.get_instance_id()] = {
+		"start_time": Time.get_ticks_msec() / 1000.0,
+		"target": world_target,
+		"return_after_apply": should_return,
+	}
+
+
+func _apply_focus_item_motion_offset(item, row_target: Vector3) -> Vector3:
+	if item == null:
+		return row_target
+	var item_id = item.get_instance_id()
+	if not _focus_item_motion_by_item_id.has(item_id):
+		return row_target
+	var motion = _focus_item_motion_by_item_id[item_id]
+	var start_time = float(motion.get("start_time", 0.0))
+	var world_target = motion.get("target", row_target)
+	var return_after_apply = bool(motion.get("return_after_apply", false))
+	var now = Time.get_ticks_msec() / 1000.0
+	var elapsed = maxf(0.0, now - start_time)
+	var apply_duration = maxf(0.01, focus_item_apply_delay)
+
+	if elapsed <= apply_duration:
+		var t = clampf(elapsed / apply_duration, 0.0, 1.0)
+		return row_target.lerp(world_target, ease(t, 0.8))
+
+	if return_after_apply:
+		var return_duration = maxf(0.01, focus_item_return_duration)
+		var return_elapsed = elapsed - apply_duration
+		if return_elapsed <= return_duration:
+			var t_back = clampf(return_elapsed / return_duration, 0.0, 1.0)
+			return world_target.lerp(row_target, ease(t_back, 1.4))
+
+	_focus_item_motion_by_item_id.erase(item_id)
+	return row_target
 
 
 func _get_focus_item_target_position(fallback_position: Vector3) -> Vector3:
@@ -1343,8 +1179,6 @@ func _is_mirrored_basis(basis: Basis) -> bool:
 func _estimate_item_clearance(item, root: Node3D) -> float:
 	if root == null:
 		return 0.0
-	if item != null and item.has_method("is_card") and bool(item.is_card()):
-		return 0.0
 	var max_extent = _estimate_mesh_max_extent(root)
 	# Keep small props close; push larger objects outward enough to avoid body clipping.
 	return clampf((max_extent - 0.2) * 0.7, 0.0, held_item_clearance_max)
@@ -1466,7 +1300,7 @@ func _update_hint_text() -> void:
 		"immobilized_at": immobilized_at_item_count,
 		"slow_at": slow_at_item_count,
 		"queued_target_name": _queued_interaction_target.display_name if _queued_interaction_target != null and is_instance_valid(_queued_interaction_target) else "",
-		"awaiting_card_selection": _awaiting_card_selection and _pending_card_reader != null,
+		"awaiting_card_selection": false,
 	}
 	var lines = _hint_builder.build_lines(context)
 	_hint_label.text = "\n".join(lines)

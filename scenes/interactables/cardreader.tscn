@@ -221,7 +221,10 @@ script = ExtResource("4_focus")
 focus_anchor_path = NodePath("../Node3D/FocusAnchor")
 click_outside_exit_px = 210.0
 focus_pitch_degrees = -10.0
-focus_zoom_start = 1.2
+focus_zoom_start = 1.65
+focus_min_zoom = 1.2
+focus_max_zoom = 2.2
+focus_zoom_step = 0.08
 
 [node name="Interactable" type="Area3D" parent="." unique_id=1541832901]
 transform = Transform3D(0.6, 0, 0, 0, -2.6226834e-08, -0.6, 0, 0.6, -2.6226834e-08, 0.25, 1.8, 0)

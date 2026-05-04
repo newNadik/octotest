@@ -286,7 +286,7 @@ interaction_type = 1
 display_name = "ID Card"
 requires_line_of_sight = false
 item_kind = 1
-hold_offset = Vector3(0, -0.15, -0.2)
+hold_offset = Vector3(0, -0.15, -0.7)
 highlight_mode = 1
 highlight_visible_paths = Array[NodePath]([NodePath("../glow")])
 
@@ -449,8 +449,10 @@ settings/0/joints/11/bone_name = "Bone.011"
 settings/0/joints/11/bone = 11
 settings/0/joints/12/bone_name = "Bone.012"
 settings/0/joints/12/bone = 12
-settings/0/enable_all_child_collisions = true
-settings/0/exclude_collision_count = 0
+settings/0/enable_all_child_collisions = false
+settings/0/collision_count = 2
+settings/0/collisions/0 = NodePath("FloorCollision")
+settings/0/collisions/1 = NodePath("SpringBoneCollisionSphere3D")
 
 [node name="FloorCollision" type="SpringBoneCollisionPlane3D" parent="LanyardSkeleton/SpringBoneSimulator3D" unique_id=632889455]
 transform = Transform3D(1, 0, 0, 0, 0.9999984, -0.0017453282, 0, 0.0017453282, 0.9999984, 0, -0.1, 0.027)

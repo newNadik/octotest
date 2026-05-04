@@ -101,10 +101,10 @@ auto_exit_on_solved = false
 solved_method_name = "is_box_filled"
 use_angle_override = true
 focus_yaw_degrees = -125.0
-focus_zoom_start = -2.0
-focus_min_zoom = -2.0
-focus_max_zoom = -2.0
-focus_zoom_step = -2.0
+focus_zoom_start = 1.55
+focus_min_zoom = 1.15
+focus_max_zoom = 2.1
+focus_zoom_step = 0.08
 
 [node name="Interactable" type="Area3D" parent="." unique_id=864412012]
 collision_layer = 8

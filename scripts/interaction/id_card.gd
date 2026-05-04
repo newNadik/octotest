@@ -69,6 +69,7 @@ func _update_floor_collision_state() -> void:
 
 
 
+
 func _is_card_held() -> bool:
 	return _is_held
 
