@@ -9,11 +9,12 @@ enum DocumentSize {
 
 const PAGE_FLIP_SOUND := preload("res://assets/sound/page_flip.wav")
 const A4_SIZE := Vector2(0.756, 1.069)
-const A1_LANDSCAPE_SIZE := Vector2(4.536, 3.207)
+const A1_LANDSCAPE_SIZE := Vector2(3.0, 2.1)
 
 @export var document_size: DocumentSize = DocumentSize.A4_PORTRAIT
 @export var document_texture: Texture2D
 @export var document_texture_ua: Texture2D
+@export var interactable_enabled := true
 @export_range(-180.0, 180.0, 0.1) var focus_roll_offset_degrees := 0.0
 @export_group("Visual")
 @export_range(0.0, 1.0, 0.01) var paper_roughness := 0.92
@@ -24,10 +25,11 @@ const A1_LANDSCAPE_SIZE := Vector2(4.536, 3.207)
 @onready var _mesh: MeshInstance3D = $DocumentMesh
 @onready var _body_collision: CollisionShape3D = $CollisionShape3D
 @onready var _area_collision: CollisionShape3D = $Interactable/CollisionShape3D
-@onready var _interactable: Interactable = $Interactable
+@onready var _interactable: Area3D = $Interactable
 @onready var _focus_target: FocusTarget = $FocusTarget
 @onready var _outline_mesh: MeshInstance3D = get_node_or_null("DocumentMesh/OutlineMesh") as MeshInstance3D
 var _focus_active_last_frame := false
+var _interactable_enabled_last_frame := true
 var _locale_last_frame := ""
 var _outline_base_scale := Vector3.ONE
 var _preview_signature := ""
@@ -43,6 +45,8 @@ func _ready() -> void:
 	_apply_document_size()
 	_apply_texture()
 	_setup_focus_angles()
+	_interactable_enabled_last_frame = not interactable_enabled
+	_apply_interactable_enabled_state()
 	_locale_last_frame = TranslationServer.get_locale()
 	_setup_page_flip_player()
 	# Force first _process() reconciliation so interaction state is corrected
@@ -53,6 +57,9 @@ func _ready() -> void:
 
 
 func _process(_delta: float) -> void:
+	_update_interactable_enabled_if_needed()
+	if not interactable_enabled:
+		_enforce_non_interactable_visuals()
 	if Engine.is_editor_hint():
 		_update_editor_preview_if_needed()
 		return
@@ -193,10 +200,66 @@ func _update_focus_interaction_state() -> void:
 	if focus_active == _focus_active_last_frame:
 		return
 	_focus_active_last_frame = focus_active
-	_interactable.set_interaction_enabled(not focus_active)
+	_set_interactable_enabled(interactable_enabled and not focus_active)
 	if focus_active:
-		_interactable.set_visual_state(Interactable.VisualState.IDLE)
+		_set_interactable_idle_visual()
 		_play_page_flip()
+
+
+func _update_interactable_enabled_if_needed() -> void:
+	if interactable_enabled == _interactable_enabled_last_frame:
+		return
+	_interactable_enabled_last_frame = interactable_enabled
+	_apply_interactable_enabled_state()
+
+
+func _apply_interactable_enabled_state() -> void:
+	_set_interactable_indicator_visible(interactable_enabled)
+	_set_interactable_enabled(interactable_enabled and not _is_focus_active())
+	if not interactable_enabled:
+		_enforce_non_interactable_visuals()
+
+
+func _enforce_non_interactable_visuals() -> void:
+	_set_interactable_indicator_visible(false)
+	_set_interactable_enabled(false)
+	_set_interactable_idle_visual()
+	if _outline_mesh != null:
+		_outline_mesh.visible = false
+
+
+func _set_interactable_indicator_visible(is_visible: bool) -> void:
+	if _interactable == null:
+		return
+	if Engine.is_editor_hint():
+		return
+	if _interactable.has_method("set_indicator_visible"):
+		_interactable.call("set_indicator_visible", is_visible)
+	elif "show_indicator" in _interactable:
+		_interactable.set("show_indicator", is_visible)
+
+
+func _set_interactable_enabled(is_enabled: bool) -> void:
+	if _interactable == null:
+		return
+	if Engine.is_editor_hint():
+		_interactable.collision_layer = 8 if is_enabled else 0
+		_interactable.collision_mask = 0
+		return
+	if _interactable.has_method("set_interaction_enabled"):
+		_interactable.call("set_interaction_enabled", is_enabled)
+		return
+	_interactable.collision_layer = 8 if is_enabled else 0
+	_interactable.collision_mask = 0
+
+
+func _set_interactable_idle_visual() -> void:
+	if _interactable == null:
+		return
+	if Engine.is_editor_hint():
+		return
+	if _interactable.has_method("set_visual_state"):
+		_interactable.call("set_visual_state", Interactable.VisualState.IDLE)
 
 
 func _update_editor_preview_if_needed() -> void:

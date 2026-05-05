@@ -16,12 +16,16 @@
 [ext_resource type="PackedScene" uid="uid://6vcqkboq1fps" path="res://scenes/effects/floor_marker_light.tscn" id="11_floorlight"]
 [ext_resource type="PackedScene" uid="uid://c5tv72lyq8d8h" path="res://scenes/effects/caustic_rig.tscn" id="11_fy6p5"]
 [ext_resource type="PackedScene" uid="uid://cxtcm4i75e1pb" path="res://scenes/interactables/cardreader.tscn" id="12_fnwcc"]
+[ext_resource type="PackedScene" uid="uid://bwx4cmp7n3qhv" path="res://scenes/interactables/document_item.tscn" id="14_db0oj"]
 [ext_resource type="PackedScene" uid="uid://b7vnunwlus20w" path="res://scenes/station/interior/toilet.tscn" id="14_hefio"]
 [ext_resource type="PackedScene" uid="uid://b18qdk7b4q77l" path="res://scenes/station/interior/desk.tscn" id="15_mpvso"]
+[ext_resource type="Texture2D" uid="uid://cqn51jxe4ghf7" path="res://assets/textures/documents/ALS-FA-poster-workplace-v3.png" id="15_yjx6n"]
 [ext_resource type="PackedScene" uid="uid://cro6qqaafsit1" path="res://scenes/station/interior/shower.tscn" id="16_2ysy5"]
 [ext_resource type="PackedScene" uid="uid://can7o07havaxf" path="res://scenes/station/interior/wet_floor_sign.tscn" id="16_o6nh8"]
+[ext_resource type="Texture2D" uid="uid://bpr834g84skbc" path="res://assets/textures/documents/ALS-FA-poster-resus-adult-v3.png" id="16_t581r"]
 [ext_resource type="PackedScene" uid="uid://bqfmosbr5347w" path="res://scenes/station/interior/bunk_bed.tscn" id="17_2ysy5"]
 [ext_resource type="PackedScene" uid="uid://bnjtpm8pe61ap" path="res://scenes/station/items/light_sign.tscn" id="17_k4tdq"]
+[ext_resource type="Texture2D" uid="uid://6btwl45px64n" path="res://assets/textures/documents/ALS-FA-poster-aed-cpr-v3.png" id="17_vecpw"]
 [ext_resource type="PackedScene" uid="uid://dru35iaiah18i" path="res://scenes/station/interior/standing_courtains.tscn" id="18_i2ypu"]
 [ext_resource type="Texture2D" uid="uid://b5c5wdqiwtuyx" path="res://assets/models/items/first_aid/WC_sign.png" id="18_jt052"]
 [ext_resource type="PackedScene" uid="uid://cdw2saup0bxdx" path="res://scenes/station/interior/med_monitor.tscn" id="20_46ahj"]
@@ -29,6 +33,7 @@
 [ext_resource type="PackedScene" uid="uid://vwo7teuwrwl8" path="res://scenes/station/interior/cabinet_low_sink.tscn" id="21_i3dbr"]
 [ext_resource type="PackedScene" uid="uid://dac1j07k7sd70" path="res://scenes/station/interior/bench.tscn" id="23_7do4q"]
 [ext_resource type="PackedScene" uid="uid://b21bahphpnv3o" path="res://scenes/station/items/computer.tscn" id="23_bq35r"]
+[ext_resource type="PackedScene" uid="uid://fp5yhak7qv5v" path="res://scenes/station/items/stethoscope.tscn" id="24_t1a77"]
 [ext_resource type="PackedScene" uid="uid://lnt7a3iskajx" path="res://scenes/station/interior/amphitheater.tscn" id="26_fan24"]
 [ext_resource type="PackedScene" uid="uid://wxpj00rcd3mq" path="res://scenes/station/interior/trash_bin.tscn" id="26_np73v"]
 [ext_resource type="PackedScene" uid="uid://cofo0vasii446" path="res://scenes/station/items/mug.tscn" id="26_wmtnf"]
@@ -48,6 +53,8 @@
 [ext_resource type="Texture2D" uid="uid://fexkp1kbef3c" path="res://assets/ui/Icon_BCRC1024.png" id="46_sxb2l"]
 [ext_resource type="FontFile" uid="uid://dtpeeh64d7x6b" path="res://assets/ui/OpenSans-Semibold.ttf" id="47_fnwcc"]
 [ext_resource type="PackedScene" uid="uid://cd8rc4e3iadac" path="res://scenes/station/items/sketchbook.tscn" id="48_fnwcc"]
+[ext_resource type="PackedScene" uid="uid://b3d8p8ww4xd88" path="res://scenes/station/items/gloves_pack.tscn" id="49_3mkx7"]
+[ext_resource type="PackedScene" uid="uid://vndshl03h2xa" path="res://assets/models/items/uk_automated_external_defibrillator.glb" id="50_r6uhx"]
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_cmvkd"]
 resource_name = "atrium_Plane_123"
@@ -1205,6 +1212,30 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -17.468838, 0.09971724, -8.13
 
 [node name="medbay" type="Node3D" parent="rooms" unique_id=272159100]
 
+[node name="DocumentItem" parent="rooms/medbay" unique_id=-1447463677 instance=ExtResource("14_db0oj")]
+transform = Transform3D(-0.9997951, 0, 0.02024432, 0, 1, 0, -0.02024432, 0, -0.9997951, -12.567, 3.5, -4.706)
+document_size = 1
+document_texture = ExtResource("15_yjx6n")
+document_texture_ua = ExtResource("15_yjx6n")
+interactable_enabled = false
+
+[node name="DocumentItem2" parent="rooms/medbay" unique_id=567468882 instance=ExtResource("14_db0oj")]
+transform = Transform3D(-0.70710665, 0, -0.70710665, 0, 1, 0, 0.70710665, 0, -0.70710665, -9.78035, 3.5, -5.7300596)
+document_size = 1
+document_texture = ExtResource("16_t581r")
+document_texture_ua = ExtResource("16_t581r")
+interactable_enabled = false
+
+[node name="DocumentItem3" parent="rooms/medbay" unique_id=1416189345 instance=ExtResource("14_db0oj")]
+transform = Transform3D(0.9999997, 0, 0, 0, 1, 0, 0, 0, 0.9999997, -9.371946, 3.5, -9.752626)
+document_size = 1
+document_texture = ExtResource("17_vecpw")
+document_texture_ua = ExtResource("17_vecpw")
+interactable_enabled = false
+
+[node name="Sketchfab_Scene" parent="rooms/medbay" unique_id=494877261 instance=ExtResource("50_r6uhx")]
+transform = Transform3D(-7.4309364e-10, 0, -0.017, 0, 0.017, 0, 0.017, 0, -7.4309364e-10, -11.526186, 2.0595434, -9.691129)
+
 [node name="clock" parent="rooms/medbay" unique_id=605620393 instance=ExtResource("27_i5gpl")]
 transform = Transform3D(-0.70710677, 0, 0.70710677, 0, 1, 0, -0.70710677, 0, -0.70710677, -8.163929, 5.5, -7.3273926)
 
@@ -1224,7 +1255,7 @@ transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -13.
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -13.482237, 0, -7.69268)
 
 [node name="fire_extinguisher" parent="rooms/medbay" unique_id=1012721613 instance=ExtResource("8_j5434")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.967724, 0, -9.549301)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.967724, 0, -9.474988)
 
 [node name="cabinet_low" parent="rooms/medbay" unique_id=671800329 instance=ExtResource("20_h502i")]
 transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -8.658228, 0.004095316, -9.6991625)
@@ -1237,6 +1268,9 @@ transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -14.
 
 [node name="computer" parent="rooms/medbay" unique_id=1576113446 instance=ExtResource("23_bq35r")]
 transform = Transform3D(0.95735985, 0, -0.2888981, 0, 1, 0, 0.2888981, 0, 0.95735985, -10.55065, 1.482, -7.5644755)
+
+[node name="stethoscope" parent="rooms/medbay" unique_id=51356367 instance=ExtResource("24_t1a77")]
+transform = Transform3D(-0.5557878, 0, 0.83132416, 0, 1, 0, -0.83132416, 0, -0.5557878, -11.886675, 1.5916116, -7.387905)
 
 [node name="WC" type="Node3D" parent="rooms" unique_id=234633914]
 
@@ -1386,6 +1420,9 @@ texture = ExtResource("44_sxb2l")
 transform = Transform3D(-1.3113417e-08, 0, 0.3, 0, 0.3, 0, -0.3, 0, -1.3113417e-08, -11.870889, 7.451473, 7.374949)
 texture = ExtResource("45_62j8m")
 
+[node name="sketchbook" parent="rooms/attrium" unique_id=169987685 instance=ExtResource("48_fnwcc")]
+transform = Transform3D(-0.49972787, 0, -0.86618245, 0, 1, 0, 0.86618245, 0, -0.49972787, -14.869717, 1.9198987, 9.211098)
+
 [node name="Node3D" type="Node3D" parent="rooms/attrium" unique_id=788589359]
 
 [node name="Sprite3D" type="Sprite3D" parent="rooms/attrium/Node3D" unique_id=148389557]
@@ -1414,6 +1451,9 @@ font_size = 60
 outline_size = 8
 line_spacing = -20.0
 
+[node name="GlovesPack" parent="rooms/attrium" unique_id=1134276401 instance=ExtResource("49_3mkx7")]
+transform = Transform3D(0.56287706, 0, 0.8265406, 0, 1, 0, -0.8265406, 0, 0.56287706, -8.465298, 1.1022824, -9.355844)
+
 [node name="giftshop" type="Node3D" parent="rooms" unique_id=1483668541]
 
 [node name="CCTV_cam" parent="rooms/giftshop" unique_id=704552698 instance=ExtResource("34_ibub3")]
@@ -1422,6 +1462,3 @@ transform = Transform3D(-1, 0, -1.509958e-07, 0, 1, 0, -1.509958e-07, 0, 1, -16.
 [node name="giftshop" parent="rooms/giftshop" unique_id=2017872549 instance=ExtResource("37_i3dbr")]
 
 [node name="kitchen" parent="rooms" unique_id=655617701 instance=ExtResource("39_i3dbr")]
-
-[node name="sketchbook" parent="." unique_id=169987685 instance=ExtResource("48_fnwcc")]
-transform = Transform3D(-0.49972787, 0, -0.86618245, 0, 1, 0, 0.86618245, 0, -0.49972787, -14.869717, 1.9198987, 9.211098)
