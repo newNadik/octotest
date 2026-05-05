@@ -10,6 +10,7 @@
 [ext_resource type="PackedScene" uid="uid://b7vd8cvq5kxdt" path="res://scenes/station/items/light_switch.tscn" id="7_o720b"]
 [ext_resource type="PackedScene" uid="uid://3qcq4vmexl3s" path="res://scenes/station/items/fire_extinguisher.tscn" id="8_01b5l"]
 [ext_resource type="PackedScene" uid="uid://8vcajaaad64" path="res://scenes/station/interior/rack.tscn" id="9_v5biw"]
+[ext_resource type="PackedScene" uid="uid://cxtcm4i75e1pb" path="res://scenes/interactables/cardreader.tscn" id="9_wogao"]
 [ext_resource type="PackedScene" uid="uid://b18qdk7b4q77l" path="res://scenes/station/interior/desk.tscn" id="9_yhhgg"]
 [ext_resource type="PackedScene" uid="uid://qs8sh7iux1qk" path="res://scenes/station/interior/chair.tscn" id="10_v5biw"]
 [ext_resource type="PackedScene" uid="uid://cn11icvh14euy" path="res://scenes/station/items/soldering_station.tscn" id="12_f6l0s"]
@@ -168,6 +169,7 @@ transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 25.7
 
 [node name="DoorDouble" parent="StaticBody3D" unique_id=1045878697 instance=ExtResource("2_uvbm7")]
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 25.777, 0, -0.095)
+access_mode = 2
 door_title = "WORK"
 door_title_secondary = "SHOP"
 
@@ -199,6 +201,27 @@ surface_material_override/0 = ExtResource("4_u121v")
 
 [node name="fire_extinguisher" parent="StaticBody3D" unique_id=1012721613 instance=ExtResource("8_01b5l")]
 transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 25.182371, 0, 2.0331986)
+
+[node name="cardreader" parent="StaticBody3D" unique_id=34228145 instance=ExtResource("9_wogao")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 26.093, 0, -1.5716121)
+allowed_access_levels = PackedInt32Array(1, 2, 3)
+linked_door_group_path = NodePath("../DoorDouble")
+
+[node name="Sprite3D" type="Sprite3D" parent="StaticBody3D" unique_id=1680259873]
+transform = Transform3D(-1.5303623e-08, 1.142031e-13, 0.35, 0.008618438, 0.34989387, 3.767239e-10, -0.34989387, 0.008618438, -1.5298985e-08, 9.152083, 7.3455577, 0.08696771)
+texture = ExtResource("17_yi2a8")
+
+[node name="Sprite3D2" type="Sprite3D" parent="StaticBody3D" unique_id=1992259805]
+transform = Transform3D(0.46193975, 0, -0.19134173, 0, 0.5, 0, 0.19134173, 0, 0.46193975, 13.293844, 5.477845, 4.633915)
+texture = ExtResource("18_smysb")
+
+[node name="Sprite3D3" type="Sprite3D" parent="StaticBody3D" unique_id=1887426902]
+transform = Transform3D(0.46193975, 0, -0.19134173, 0, 0.5, 0, 0.19134173, 0, 0.46193975, 18.839722, 5.477845, 6.9255433)
+texture = ExtResource("19_yi2a8")
+
+[node name="Sprite3D4" type="Sprite3D" parent="StaticBody3D" unique_id=57053951]
+transform = Transform3D(0.9198215, 0, 0.3923371, 0, 1, 0, -0.3923371, 0, 0.9198215, 16.999424, 4.879722, -6.16563)
+texture = ExtResource("20_yi2a8")
 
 [node name="lights" type="Node3D" parent="." unique_id=1974684578]
 
@@ -322,19 +345,3 @@ transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 25.4
 
 [node name="printer" parent="items" unique_id=1111848469 instance=ExtResource("16_dy2wj")]
 transform = Transform3D(0.9270465, 0, 0.3749464, 0, 1, 0, -0.3749464, 0, 0.9270465, 16.413132, 1.5030924, -4.447668)
-
-[node name="Sprite3D" type="Sprite3D" parent="." unique_id=1680259873]
-transform = Transform3D(-1.5303623e-08, 1.142031e-13, 0.35, 0.008618438, 0.34989387, 3.767239e-10, -0.34989387, 0.008618438, -1.5298985e-08, 9.152083, 7.3455577, 0.08696771)
-texture = ExtResource("17_yi2a8")
-
-[node name="Sprite3D2" type="Sprite3D" parent="." unique_id=1992259805]
-transform = Transform3D(0.46193975, 0, -0.19134173, 0, 0.5, 0, 0.19134173, 0, 0.46193975, 13.293844, 5.477845, 4.633915)
-texture = ExtResource("18_smysb")
-
-[node name="Sprite3D3" type="Sprite3D" parent="." unique_id=1887426902]
-transform = Transform3D(0.46193975, 0, -0.19134173, 0, 0.5, 0, 0.19134173, 0, 0.46193975, 18.839722, 5.477845, 6.9255433)
-texture = ExtResource("19_yi2a8")
-
-[node name="Sprite3D4" type="Sprite3D" parent="." unique_id=57053951]
-transform = Transform3D(0.9198215, 0, 0.3923371, 0, 1, 0, -0.3923371, 0, 0.9198215, 16.999424, 4.879722, -6.16563)
-texture = ExtResource("20_yi2a8")

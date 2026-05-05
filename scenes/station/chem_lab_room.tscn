@@ -18,6 +18,7 @@
 [ext_resource type="PackedScene" uid="uid://bp2qgp1sbmraf" path="res://scenes/station/items/clock.tscn" id="15_lxvvl"]
 [ext_resource type="PackedScene" uid="uid://b21bahphpnv3o" path="res://scenes/station/items/computer.tscn" id="16_qkewc"]
 [ext_resource type="PackedScene" uid="uid://ccmtakyjiuxeg" path="res://scenes/station/items/printer.tscn" id="17_b2j56"]
+[ext_resource type="PackedScene" uid="uid://cxtcm4i75e1pb" path="res://scenes/interactables/cardreader.tscn" id="19_dnitr"]
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_irqvq"]
 resource_name = "chem_lab_Plane_095"
@@ -169,6 +170,7 @@ transform = Transform3D(0.9238795, 0, 0.38268346, 0, 1, 0, -0.38268346, 0, 0.923
 
 [node name="DoorDouble" parent="StaticBody3D" unique_id=1045878697 instance=ExtResource("2_0o3lh")]
 transform = Transform3D(0.9238795, 0, 0.38268346, 0, 1, 0, -0.38268346, 0, 0.9238795, 17.431269, 0, -9.916206)
+access_mode = 2
 door_title = "Chem"
 door_title_secondary = "Lab"
 
@@ -206,6 +208,11 @@ surface_material_override/0 = ExtResource("5_otath")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D" unique_id=1812398153]
 transform = Transform3D(0.7071068, 0, -0.7071067, 0, 1, 0, 0.7071067, 0, 0.7071068, 13.78595, -7.5464764e-06, -27.881907)
 shape = SubResource("ConcavePolygonShape3D_4vmjw")
+
+[node name="cardreader" parent="StaticBody3D" unique_id=34228145 instance=ExtResource("19_dnitr")]
+transform = Transform3D(0.9238795, 0, 0.38268346, 0, 1, 0, -0.38268346, 0, 0.9238795, 18.920813, 0, -10.191642)
+allowed_access_levels = PackedInt32Array(2)
+linked_door_group_path = NodePath("../DoorDouble")
 
 [node name="lights" type="Node3D" parent="." unique_id=2042704074]
 

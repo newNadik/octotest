@@ -15,6 +15,7 @@
 [ext_resource type="PackedScene" uid="uid://c1nq1i0twyqej" path="res://scenes/station/interior/garden.tscn" id="10_vucpf"]
 [ext_resource type="PackedScene" uid="uid://6vcqkboq1fps" path="res://scenes/effects/floor_marker_light.tscn" id="11_floorlight"]
 [ext_resource type="PackedScene" uid="uid://c5tv72lyq8d8h" path="res://scenes/effects/caustic_rig.tscn" id="11_fy6p5"]
+[ext_resource type="PackedScene" uid="uid://cxtcm4i75e1pb" path="res://scenes/interactables/cardreader.tscn" id="12_fnwcc"]
 [ext_resource type="PackedScene" uid="uid://b7vnunwlus20w" path="res://scenes/station/interior/toilet.tscn" id="14_hefio"]
 [ext_resource type="PackedScene" uid="uid://b18qdk7b4q77l" path="res://scenes/station/interior/desk.tscn" id="15_mpvso"]
 [ext_resource type="PackedScene" uid="uid://cro6qqaafsit1" path="res://scenes/station/interior/shower.tscn" id="16_2ysy5"]
@@ -38,7 +39,6 @@
 [ext_resource type="PackedScene" uid="uid://b55kryvd17ry2" path="res://scenes/station/items/rhyzone_plant.tscn" id="34_h502i"]
 [ext_resource type="PackedScene" uid="uid://d0tq5lhvb74vc" path="res://scenes/station/interior/cctv_cam.tscn" id="34_ibub3"]
 [ext_resource type="PackedScene" uid="uid://bc1e233sg7d7l" path="res://scenes/station/interior/giftshop.tscn" id="37_i3dbr"]
-[ext_resource type="PackedScene" uid="uid://bhw6qsm3wjcd7" path="res://scenes/station/items/noodle_cup.tscn" id="39_bq35r"]
 [ext_resource type="PackedScene" uid="uid://cvmc4k2rg5tih" path="res://scenes/station/interior/kitchen.tscn" id="39_i3dbr"]
 [ext_resource type="Texture2D" uid="uid://dlfqj07cv7jkn" path="res://assets/textures/wall_images/decal_4.png" id="41_188u5"]
 [ext_resource type="Texture2D" uid="uid://bnv1u2s2f57ow" path="res://assets/textures/wall_images/decal_1.png" id="42_62j8m"]
@@ -969,6 +969,7 @@ collision_mask = 0
 
 [node name="DoorDouble" parent="StaticBody3D/Walls" unique_id=1045878697 instance=ExtResource("2_ecqnk")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.8, 0, 22.6)
+access_mode = 0
 locked = true
 door_title = "Exit"
 door_title_secondary = "Exit"
@@ -1061,8 +1062,9 @@ door_title = "WC"
 
 [node name="doors" type="Node3D" parent="StaticBody3D/Walls" unique_id=570198370]
 
-[node name="DoorDouble" parent="StaticBody3D/Walls/doors" unique_id=1685186809 instance=ExtResource("2_ecqnk")]
+[node name="DoorStaffDouble" parent="StaticBody3D/Walls/doors" unique_id=1685186809 instance=ExtResource("2_ecqnk")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.78, 0, -10.1)
+access_mode = 2
 door_title = "Staff"
 door_title_secondary = "Only"
 
@@ -1189,6 +1191,11 @@ surface_material_override/0 = ExtResource("8_xp3kh")
 transform = Transform3D(0.9238795, 0, 0.38268346, 0, 1, 0, -0.38268346, 0, 0.9238795, -18.81647, -7.5464764e-06, 7.64155)
 mesh = SubResource("ArrayMesh_utks8")
 surface_material_override/0 = ExtResource("8_xp3kh")
+
+[node name="StaffCardreader" parent="StaticBody3D" unique_id=34228145 instance=ExtResource("12_fnwcc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.7109455, 0, -9.802208)
+allowed_access_levels = PackedInt32Array(1, 2, 3)
+linked_door_group_path = NodePath("../Walls/doors/DoorStaffDouble")
 
 [node name="rooms" type="Node3D" parent="." unique_id=1967129213]
 
@@ -1351,9 +1358,6 @@ transform = Transform3D(0.6075976, 0, 0.7942449, 0, 1, 0, -0.7942449, 0, 0.60759
 
 [node name="trash_bin2" parent="rooms/attrium" unique_id=953683941 instance=ExtResource("26_np73v")]
 transform = Transform3D(-0.7135562, 0, 0.70059806, 0, 1, 0, -0.70059806, 0, -0.7135562, -7.330523, 0, 21.295156)
-
-[node name="noodle_cup" parent="rooms/attrium" unique_id=365145535 instance=ExtResource("39_bq35r")]
-transform = Transform3D(1.7, 0, 0, 0, 1.7, 0, 0, 0, 1.7, -27.598127, 1.56, -0.10236883)
 
 [node name="CCTV_cam3" parent="rooms/attrium" unique_id=1784038098 instance=ExtResource("34_ibub3")]
 transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, 1, -10.758007, 8.035594, -3.903729)

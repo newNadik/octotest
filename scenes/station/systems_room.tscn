@@ -2,6 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://crrm51jmovvon" path="res://scenes/station/interior/door_double.tscn" id="1_4de62"]
 [ext_resource type="Script" uid="uid://b64dlqrrlkl7n" path="res://scripts/interaction/room_light.gd" id="1_ywlqd"]
+[ext_resource type="PackedScene" uid="uid://cxtcm4i75e1pb" path="res://scenes/interactables/cardreader.tscn" id="2_c5gw8"]
 [ext_resource type="Material" uid="uid://b1a0xbuetfwpo" path="res://assets/materials/concrete.tres" id="2_pnk4a"]
 [ext_resource type="PackedScene" uid="uid://b0uf1y0c75xpc" path="res://scenes/station/interior/window_single.tscn" id="2_ua4mq"]
 [ext_resource type="Material" uid="uid://biog7mv21velq" path="res://assets/materials/ceiling.tres" id="3_fb2ae"]
@@ -147,8 +148,14 @@ led_blink_interval_7 = 0.8
 collision_layer = 3
 collision_mask = 0
 
+[node name="cardreader" parent="StaticBody3D" unique_id=34228145 instance=ExtResource("2_c5gw8")]
+transform = Transform3D(0.9238795, 0, 0.38268346, 0, 1, 0, -0.38268346, 0, 0.9238795, -2.946475, 0, -17.316751)
+allowed_access_levels = PackedInt32Array(3)
+linked_door_group_path = NodePath("../DoorDouble")
+
 [node name="DoorDouble" parent="StaticBody3D" unique_id=1045878697 instance=ExtResource("1_4de62")]
 transform = Transform3D(0.9238795, 0, 0.38268346, 0, 1, 0, -0.38268346, 0, 0.9238795, -4.4453554, 0, -17)
+access_mode = 2
 door_title = "Systems"
 door_title_secondary = "Room"
 

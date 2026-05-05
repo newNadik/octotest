@@ -15,6 +15,7 @@
 [ext_resource type="PackedScene" uid="uid://qs8sh7iux1qk" path="res://scenes/station/interior/chair.tscn" id="10_7lkr6"]
 [ext_resource type="PackedScene" uid="uid://bp2qgp1sbmraf" path="res://scenes/station/items/clock.tscn" id="13_m4mmn"]
 [ext_resource type="PackedScene" uid="uid://b21bahphpnv3o" path="res://scenes/station/items/computer.tscn" id="14_oce6r"]
+[ext_resource type="PackedScene" uid="uid://cxtcm4i75e1pb" path="res://scenes/interactables/cardreader.tscn" id="16_go3fr"]
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_eoqii"]
 resource_name = "energy_lab_Plane_115"
@@ -198,10 +199,15 @@ door_title_secondary = "Dive"
 title_side = 1
 
 [node name="DoorDouble2" parent="StaticBody3D" unique_id=683268443 instance=ExtResource("1_1hvab")]
-transform = Transform3D(0.9238795, 0, -0.38268346, 0, 1, 0, 0.38268346, 0, 0.9238795, 17.420347, 0, 9.889815)
+transform = Transform3D(-0.9238795, 0, 0.3826835, 0, 1, 0, -0.3826835, 0, -0.9238795, 17.40911, 0, 9.889815)
+access_mode = 2
 door_title = "Lab"
 door_title_secondary = "Energy"
-title_side = 1
+
+[node name="cardreader" parent="StaticBody3D" unique_id=34228145 instance=ExtResource("16_go3fr")]
+transform = Transform3D(-0.9238795, 0, 0.3826835, 0, 1, 0, -0.3826835, 0, -0.9238795, 16.151329, 0, 9.056422)
+allowed_access_levels = PackedInt32Array(2)
+linked_door_group_path = NodePath("../DoorDouble2")
 
 [node name="lights" type="Node3D" parent="." unique_id=1568145273]
 
