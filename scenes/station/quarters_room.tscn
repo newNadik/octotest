@@ -15,6 +15,7 @@
 [ext_resource type="PackedScene" uid="uid://bqfmosbr5347w" path="res://scenes/station/interior/bunk_bed.tscn" id="10_6rgpq"]
 [ext_resource type="PackedScene" uid="uid://c6u2h3iksfaya" path="res://scenes/station/interior/cabinet_01.tscn" id="10_eb7ah"]
 [ext_resource type="PackedScene" uid="uid://ib88jjclimqc" path="res://scenes/station/items/flip_flop.tscn" id="11_btc4l"]
+[ext_resource type="Texture2D" uid="uid://bxnep57jq8ysu" path="res://assets/models/items/dirt_dirty.png" id="12_mwren"]
 [ext_resource type="PackedScene" uid="uid://b18qdk7b4q77l" path="res://scenes/station/interior/desk.tscn" id="13_knys5"]
 [ext_resource type="PackedScene" uid="uid://qs8sh7iux1qk" path="res://scenes/station/interior/chair.tscn" id="14_je4rm"]
 [ext_resource type="PackedScene" uid="uid://8vcajaaad64" path="res://scenes/station/interior/rack.tscn" id="15_cdlwy"]
@@ -23,6 +24,8 @@
 [ext_resource type="PackedScene" uid="uid://cncn15ux5kawl" path="res://assets/models/interior/furniture/benchk_pull-up_bar_d9.glb" id="18_wrylc"]
 [ext_resource type="PackedScene" uid="uid://cbu1wt6omt36j" path="res://assets/models/items/darts_asset.glb" id="19_kdk8m"]
 [ext_resource type="PackedScene" uid="uid://bp2qgp1sbmraf" path="res://scenes/station/items/clock.tscn" id="20_05str"]
+[ext_resource type="PackedScene" uid="uid://bo16wlmnig3ca" path="res://assets/models/items/variety_of_books.glb" id="24_clg7e"]
+[ext_resource type="PackedScene" uid="uid://bt04p3agpj65r" path="res://scenes/station/items/toilet_paper.tscn" id="24_n8elp"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_4vwfq"]
 resource_name = "Roof"
@@ -143,6 +146,17 @@ data = PackedVector3Array(-0.29999998, 0, -1.0976, 0.29999998, 0, -3, -0.2999999
 [sub_resource type="QuadMesh" id="QuadMesh_5fr8h"]
 size = Vector2(24, 12)
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_d3chd"]
+albedo_color = Color(0.9, 0.9, 0.9, 1)
+
+[sub_resource type="QuadMesh" id="QuadMesh_f07sw"]
+material = SubResource("StandardMaterial3D_d3chd")
+size = Vector2(1.448, 0.42)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_xhyst"]
+transparency = 1
+albedo_texture = ExtResource("12_mwren")
+
 [node name="quarters" type="Node3D" unique_id=150172973 node_paths=PackedStringArray("light_switch", "ceiling_mesh", "lamp_lights")]
 script = ExtResource("1_bwpjq")
 light_switch = NodePath("lights/LightSwitch")
@@ -173,7 +187,6 @@ transform = Transform3D(0.70710677, -0.6941152, -0.13492236, 0, -0.19080903, 0.9
 
 [node name="RoofQuarters" type="MeshInstance3D" parent="StaticBody3D" unique_id=2062910619]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.8054073, -7.5464764e-06, 0.006915656)
-visible = false
 instance_shader_parameters/offset_xz = Vector2(2, 3.5)
 mesh = SubResource("ArrayMesh_a4y7k")
 surface_material_override/0 = ExtResource("4_44o56")
@@ -251,6 +264,11 @@ omni_range = 10.0
 [node name="whiteboard" parent="furniture" unique_id=1268081871 instance=ExtResource("8_urbls")]
 transform = Transform3D(-0.98465896, 5.7847384e-08, 0.17449021, 0, 1, 0, -0.17449021, 1.9987073e-08, -0.9846589, -21.45876, 3.000001, -11.322812)
 
+[node name="DocumentMesh2" type="MeshInstance3D" parent="furniture/whiteboard" unique_id=167925045]
+transform = Transform3D(0.9902626, -0.13917226, -0.0034906566, 0.13917315, 0.99026805, 0, 0.003456682, -0.00048581883, 0.9999942, -0.59132576, 0.02676487, 0.042409897)
+mesh = SubResource("QuadMesh_f07sw")
+surface_material_override/0 = SubResource("StandardMaterial3D_xhyst")
+
 [node name="Cabinet_01" parent="furniture" unique_id=1376455345 instance=ExtResource("10_eb7ah")]
 transform = Transform3D(1, -2.2204455e-16, 0, 0, 1, 0, 0, 0, 1, -16.782166, 0, -17.5)
 
@@ -313,6 +331,9 @@ transform = Transform3D(-0.9575713, 0, 0.2881962, 0, 1, 0, -0.2881962, 0, -0.957
 
 [node name="items" type="Node3D" parent="." unique_id=1659725905]
 
+[node name="Sketchfab_Scene2" parent="items" unique_id=1351681480 instance=ExtResource("24_clg7e")]
+transform = Transform3D(-1.7484556e-08, 0, 0.4, 0, 0.4, 0, -0.4, 0, -1.7484556e-08, -13.283109, 3.470738, -11.118489)
+
 [node name="clock" parent="items" unique_id=605620393 instance=ExtResource("20_05str")]
 transform = Transform3D(0.15662405, 0, 0.98765826, 0, 0.99999994, 0, -0.9876582, 0, 0.15662403, -22.080713, 4.292144, -11.3371)
 
@@ -327,6 +348,12 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -16.790138, 1.4573891, -17.42
 
 [node name="flip_flop" parent="items" unique_id=207116838 instance=ExtResource("11_btc4l")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, -1, -15.513511, 0, -19.299)
+
+[node name="toilet_paper" parent="items" unique_id=1917790962 instance=ExtResource("24_n8elp")]
+transform = Transform3D(-4.3711385e-08, 0, 0.99999994, 0, 1, 0, -0.99999994, 0, -4.3711385e-08, -15.055481, 4.3819213, -11.126171)
+
+[node name="toilet_paper2" parent="items" unique_id=536049941 instance=ExtResource("24_n8elp")]
+transform = Transform3D(-4.3711385e-08, 0, 0.99999994, 0, 1, 0, -0.99999994, 0, -4.3711385e-08, -14.141712, 4.3819213, -11.126171)
 
 [node name="darts" parent="items" unique_id=447770883 instance=ExtResource("19_kdk8m")]
 transform = Transform3D(0.5720896, 0, -1.3866196, 0, 1.4999999, 0, 1.3866196, 0, 0.5720896, -9.005959, 2.4622211, -16.444967)

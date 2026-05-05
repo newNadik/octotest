@@ -108,6 +108,9 @@ Source: [Flaticon](https://www.flaticon.com/)
 - "watering can" (https://skfb.ly/oFo9T) by 3Dog is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
 - "Voxel BB-8" (https://skfb.ly/6WVEE) by pratamacam is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
 - "Pen Holder" (https://skfb.ly/orTTW) by HappyFryday is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+- "Toiletries" (https://skfb.ly/6S9CO) by HippoStance is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+- "Paper Towel Roll" (https://skfb.ly/6WKIU) by HippoStance is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+- 
 
 ## Textures
 
@@ -121,6 +124,8 @@ Source: [Flaticon](https://www.flaticon.com/)
 - <a href="https://www.freepik.com/free-vector/world-habitat-day-banners-marine-animals_947404.htm">Image by freepik</a>
 - <a href="https://www.freepik.com/free-vector/turtles-fishes_27271884.htm">Image by gstudioimagen1 on Freepik</a>
 - <a href="https://www.freepik.com/free-vector/world-oceans-day-banner_8422590.htm">Image by freepik</a>
+- <a href="https://www.magnific.com/free-vector/hand-drawn-seaweed-drawing-illustration_71897379.htm#fromView=search&page=2&position=30&uuid=7b995263-2639-4f37-a070-4e01482e213a&query=sketch+underwater?log-in=google">Image by freepik</a>
+- <a href="https://www.magnific.com/free-vector/hand-drawn-seaweed-drawing-illustration_71897367.htm#fromView=search&page=2&position=33&uuid=7b995263-2639-4f37-a070-4e01482e213a&query=sketch+underwater">Image by freepik</a>
 - 
 
 ## Sounds

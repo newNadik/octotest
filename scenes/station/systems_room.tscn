@@ -21,6 +21,7 @@
 [ext_resource type="PackedScene" uid="uid://dyy2h0h5k8326" path="res://scenes/station/interior/powerbox.tscn" id="17_uj4lm"]
 [ext_resource type="PackedScene" uid="uid://b21bahphpnv3o" path="res://scenes/station/items/computer.tscn" id="19_k2uky"]
 [ext_resource type="PackedScene" uid="uid://qs8sh7iux1qk" path="res://scenes/station/interior/chair.tscn" id="20_c5gw8"]
+[ext_resource type="PackedScene" uid="uid://c7ww45kbbvedo" path="res://assets/models/items/flashlight.glb" id="22_ah0oy"]
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_lf4d5"]
 resource_name = "system_Plane_099"
@@ -337,3 +338,17 @@ transform = Transform3D(0.99999994, 0, 0, 0, 1, 0, 0, 0, 0.99999994, -7.2122483,
 
 [node name="fire_extinguisher" parent="furniture" unique_id=1012721613 instance=ExtResource("14_hq7nb")]
 transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -1.3612168, 0, -19.742176)
+
+[node name="items" type="Node3D" parent="." unique_id=2100652152]
+
+[node name="flashlight" parent="items" unique_id=1633577545 instance=ExtResource("22_ah0oy")]
+transform = Transform3D(0.08, 0, 0, 0, -0.08, 1.20796635e-08, 0, -1.20796635e-08, -0.08, -8.84204, 2.2923295, -20.217125)
+
+[node name="flashlight2" parent="items" unique_id=1922090246 instance=ExtResource("22_ah0oy")]
+transform = Transform3D(0.08, 0, 0, 0, -0.08, 1.20796635e-08, 0, -1.20796635e-08, -0.08, -8.84204, 2.2923295, -19.848507)
+
+[node name="flashlight3" parent="items" unique_id=551790401 instance=ExtResource("22_ah0oy")]
+transform = Transform3D(0.08, 0, 0, 0, -0.08, 1.20796635e-08, 0, -1.20796635e-08, -0.08, -9.241045, 2.2923295, -20.642464)
+
+[node name="flashlight4" parent="items" unique_id=2084586343 instance=ExtResource("22_ah0oy")]
+transform = Transform3D(0.08, 0, 0, 0, -0.08, 1.20796635e-08, 0, -1.20796635e-08, -0.08, -9.241045, 2.2923295, -20.273846)

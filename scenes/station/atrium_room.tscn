@@ -47,6 +47,7 @@
 [ext_resource type="Texture2D" uid="uid://csyym67cm2gv2" path="res://assets/textures/wall_images/decal_5.png" id="45_62j8m"]
 [ext_resource type="Texture2D" uid="uid://fexkp1kbef3c" path="res://assets/ui/Icon_BCRC1024.png" id="46_sxb2l"]
 [ext_resource type="FontFile" uid="uid://dtpeeh64d7x6b" path="res://assets/ui/OpenSans-Semibold.ttf" id="47_fnwcc"]
+[ext_resource type="PackedScene" uid="uid://cd8rc4e3iadac" path="res://scenes/station/items/sketchbook.tscn" id="48_fnwcc"]
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_cmvkd"]
 resource_name = "atrium_Plane_123"
@@ -1421,3 +1422,6 @@ transform = Transform3D(-1, 0, -1.509958e-07, 0, 1, 0, -1.509958e-07, 0, 1, -16.
 [node name="giftshop" parent="rooms/giftshop" unique_id=2017872549 instance=ExtResource("37_i3dbr")]
 
 [node name="kitchen" parent="rooms" unique_id=655617701 instance=ExtResource("39_i3dbr")]
+
+[node name="sketchbook" parent="." unique_id=169987685 instance=ExtResource("48_fnwcc")]
+transform = Transform3D(-0.49972787, 0, -0.86618245, 0, 1, 0, 0.86618245, 0, -0.49972787, -14.869717, 1.9198987, 9.211098)

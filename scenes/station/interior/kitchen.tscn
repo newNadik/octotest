@@ -18,6 +18,31 @@
 [ext_resource type="PackedScene" uid="uid://6s8bdeheoqgc" path="res://assets/models/interior/kitchen/dish_rack.glb" id="16_72xsu"]
 [ext_resource type="PackedScene" uid="uid://b5t7caj035lsd" path="res://scenes/station/items/coffee_machine.tscn" id="17_5edgn"]
 [ext_resource type="PackedScene" uid="uid://bwdnxj30053j8" path="res://assets/models/interior/kitchen/microwave.glb" id="18_0ol15"]
+[ext_resource type="PackedScene" uid="uid://dcwkssdp31n5m" path="res://assets/models/items/lays_classic__hd_textures__free_download.glb" id="19_wcf1j"]
+[ext_resource type="PackedScene" uid="uid://b8skt23qv2wvx" path="res://assets/models/items/paper_towel_roll.glb" id="20_4yc44"]
+[ext_resource type="PackedScene" uid="uid://cucd23o4uv87y" path="res://scenes/station/items/dishsoap.tscn" id="21_v72q7"]
+[ext_resource type="Texture2D" uid="uid://b3xg32i7g4il7" path="res://assets/models/items/wash_dishes.png" id="22_61snl"]
+[ext_resource type="Texture2D" uid="uid://6oewt5aqxxfe" path="res://assets/models/items/keep_mugs.png" id="23_60dk0"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_doc_default"]
+albedo_color = Color(0.9, 0.9, 0.9, 1)
+
+[sub_resource type="QuadMesh" id="QuadMesh_5vpod"]
+material = SubResource("StandardMaterial3D_doc_default")
+size = Vector2(0.756, 1.069)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_2uixk"]
+albedo_texture = ExtResource("22_61snl")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_d3chd"]
+albedo_color = Color(0.9, 0.9, 0.9, 1)
+
+[sub_resource type="QuadMesh" id="QuadMesh_b5kwh"]
+material = SubResource("StandardMaterial3D_d3chd")
+size = Vector2(0.756, 1.069)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_go1bm"]
+albedo_texture = ExtResource("23_60dk0")
 
 [node name="kitchen" type="Node3D" unique_id=655617701]
 
@@ -85,7 +110,7 @@ transform = Transform3D(-0.22574264, 0, -1.28025, 0, 1.3, 0, 1.28025, 0, -0.2257
 transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -28.851173, 0, -4.7988214)
 
 [node name="Node3D" parent="." unique_id=1667817107 instance=ExtResource("8_x8g26")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -30.10227, 1.7613952, -4.848313)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -29.61065, 1.7613952, -5.207574)
 
 [node name="fairy_lights" parent="." unique_id=486168498 instance=ExtResource("9_ic7gy")]
 transform = Transform3D(0.98480767, 0, -0.17364816, 0, 1, 0, 0.17364816, 0, 0.98480767, -24.890347, 3.4533925, -10.514729)
@@ -97,7 +122,7 @@ transform = Transform3D(0.98480767, 0, -0.17364816, 0, 1, 0, 0.17364816, 0, 0.98
 transform = Transform3D(0.15174392, 0, -0.98841983, 0, 1, 0, 0.98841983, 0, 0.15174392, -21.735996, 1.7347195, -10.227603)
 
 [node name="noodles pack" parent="." unique_id=1047820714 instance=ExtResource("11_x8g26")]
-transform = Transform3D(0.7488024, 0, -1.5262029, 0, 1.7000003, 0, 1.5262029, 0, 0.7488024, -21.589214, 1.7583888, -8.479774)
+transform = Transform3D(0.8809441, 0, -1.7955327, 0, 2, 0, 1.7955327, 0, 0.8809441, -21.589214, 1.7583888, -8.479774)
 
 [node name="mug" parent="." unique_id=36977870 instance=ExtResource("12_wunaa")]
 transform = Transform3D(0.9914061, 0, 0.13082035, 0, 1, 0, -0.13082035, 0, 0.9914061, -30.098969, 1.7693241, -6.3905373)
@@ -127,3 +152,34 @@ transform = Transform3D(0.63143414, 0, -0.77542967, 0, 1, 0, 0.77542967, 0, 0.63
 
 [node name="Sketchfab_Scene2" parent="." unique_id=661158621 instance=ExtResource("18_0ol15")]
 transform = Transform3D(0.3095378, 0, 0.16335958, 0, 0.35, 0, -0.16335958, 0, 0.3095378, -29.561726, 2.1346734, -11.429094)
+
+[node name="Sketchfab_Scene3" parent="." unique_id=126340713 instance=ExtResource("19_wcf1j")]
+transform = Transform3D(0.058191266, 0, 0.99830544, 0, 1, 0, -0.99830544, 0, 0.058191266, -28.871992, 1.9889898, -11.703361)
+
+[node name="Sketchfab_Scene4" parent="." unique_id=116471279 instance=ExtResource("19_wcf1j")]
+transform = Transform3D(0.12547174, 0, 0.9920973, 0, 1, 0, -0.9920973, 0, 0.12547174, -28.7135, 1.9889898, -11.703361)
+
+[node name="Sketchfab_Scene5" parent="." unique_id=104074097 instance=ExtResource("19_wcf1j")]
+transform = Transform3D(0.014388674, -0.11554395, 0.9931983, 0.0016737343, 0.99330235, 0.11553184, -0.9998952, 0, 0.0144856945, -28.536518, 1.9889898, -11.703361)
+
+[node name="Sketchfab_Scene6" parent="." unique_id=1367714431 instance=ExtResource("19_wcf1j")]
+transform = Transform3D(0.009259411, -0.7690316, 0.6391438, 0.011139955, 0.6392109, 0.76895094, -0.9998951, -5.18557e-10, 0.014485694, -28.305065, 1.916147, -11.703361)
+
+[node name="Sketchfab_Scene7" parent="." unique_id=1057531846 instance=ExtResource("19_wcf1j")]
+transform = Transform3D(0.99964887, -0.022396788, 0.014169935, 0.008921673, 0.7878281, 0.6158308, -0.024956102, -0.61548793, 0.7877512, -27.923304, 1.9507494, -11.74128)
+
+[node name="Sketchfab_Scene8" parent="." unique_id=831270909 instance=ExtResource("20_4yc44")]
+transform = Transform3D(0.018, 0, 0, 0, 0.018, 0, 0, 0, 0.018, -30.205637, 1.7568555, -8.968918)
+
+[node name="dishsoap" parent="." unique_id=1534490268 instance=ExtResource("21_v72q7")]
+transform = Transform3D(-0.4978067, 0, 0.867288, 0, 1, 0, -0.867288, 0, -0.4978067, -30.238157, 1.7522686, -8.411104)
+
+[node name="DocumentMesh" type="MeshInstance3D" parent="." unique_id=1584871414]
+transform = Transform3D(0.014080472, 0.006446012, 0.9998801, 0.0033231366, 0.999973, -0.006493399, -0.99989545, 0.0034141492, 0.014058508, -30.492338, 2.7651086, -8.040696)
+mesh = SubResource("QuadMesh_5vpod")
+surface_material_override/0 = SubResource("StandardMaterial3D_2uixk")
+
+[node name="DocumentMesh2" type="MeshInstance3D" parent="." unique_id=522662231]
+transform = Transform3D(-4.371138e-08, 0, -0.9999999, -0.13872372, 0.99033123, 6.0638063e-09, 0.9903311, 0.13872373, -4.3288747e-08, -22.946095, 2.8791127, -6.563135)
+mesh = SubResource("QuadMesh_b5kwh")
+surface_material_override/0 = SubResource("StandardMaterial3D_go1bm")
