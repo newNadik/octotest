@@ -29,7 +29,8 @@ enum TitleSide {
 @export var slide_sound_volume_jitter_db := 1.5
 
 @onready var _door_body: Node3D = $StaticBody3D
-@onready var _button_mesh: MeshInstance3D = $StaticBody3D/button
+@onready var _indicator_front: MeshInstance3D = get_node_or_null("StaticBody3D/door_indicator_front") as MeshInstance3D
+@onready var _indicator_back: MeshInstance3D = get_node_or_null("StaticBody3D/door_indicator_back") as MeshInstance3D
 @onready var _interactable: Interactable = $Interactable
 @onready var _close_sensor: Area3D = $CloseSensor
 @onready var _glass_mesh: MeshInstance3D = get_node_or_null("StaticBody3D/glass") as MeshInstance3D
@@ -45,11 +46,16 @@ var _group_highlight := false
 var _group_visual_override_active := false
 var _slide_player: AudioStreamPlayer3D
 var _rng := RandomNumberGenerator.new()
-var _button_green_material: StandardMaterial3D
-var _button_red_material: StandardMaterial3D
-var _button_green_highlight_material: StandardMaterial3D
-var _button_red_highlight_material: StandardMaterial3D
+var _indicator_green_material: StandardMaterial3D
+var _indicator_yellow_material: StandardMaterial3D
+var _indicator_red_material: StandardMaterial3D
+var _indicator_dark_material: StandardMaterial3D
+var _indicator_green_highlight_material: StandardMaterial3D
+var _indicator_yellow_highlight_material: StandardMaterial3D
+var _indicator_red_highlight_material: StandardMaterial3D
 var _allow_interaction_when_locked := false
+var _is_access_disabled := false
+var _blink_tween: Tween
 
 
 func _ready() -> void:
@@ -60,7 +66,7 @@ func _ready() -> void:
 	if _close_sensor != null:
 		# Player is on layer 4, loose items are on layer 8.
 		_close_sensor.collision_mask = 12
-	_build_button_materials()
+	_build_indicator_materials()
 	_update_button_state()
 	_ensure_audio_player()
 	_apply_metadata_visuals()
@@ -110,6 +116,33 @@ func set_open_distance(value: float) -> void:
 func set_allow_interaction_when_locked(value: bool) -> void:
 	_allow_interaction_when_locked = value
 	_update_button_state()
+
+
+func set_access_disabled(value: bool) -> void:
+	_is_access_disabled = value
+	_update_button_state()
+
+
+func trigger_indicator_blink(granted: bool) -> void:
+	if _indicator_green_material == null:
+		_build_indicator_materials()
+	if _blink_tween != null and _blink_tween.is_running():
+		_blink_tween.kill()
+	var blink_mat := _indicator_green_material if granted else _indicator_red_material
+	_blink_tween = create_tween()
+	for _i in 2:
+		_blink_tween.tween_callback(func(): _set_both_indicators(blink_mat))
+		_blink_tween.tween_interval(0.13)
+		_blink_tween.tween_callback(func(): _set_both_indicators(_indicator_dark_material))
+		_blink_tween.tween_interval(0.08)
+	_blink_tween.tween_callback(_update_button_state)
+
+
+func _set_both_indicators(mat: StandardMaterial3D) -> void:
+	if _indicator_front != null:
+		_indicator_front.material_override = mat
+	if _indicator_back != null:
+		_indicator_back.material_override = mat
 
 
 func set_group_highlight(active: bool) -> void:
@@ -271,50 +304,88 @@ func _is_close_blocked_for_group() -> bool:
 
 
 func _update_button_state() -> void:
-	if _button_mesh == null:
-		return
-	if _button_green_material == null or _button_red_material == null \
-		or _button_green_highlight_material == null or _button_red_highlight_material == null:
-		_build_button_materials()
+	if _indicator_green_material == null:
+		_build_indicator_materials()
 
 	var door_can_open := can_open()
 	var door_can_interact := (not _is_moving and not _is_open and (door_can_open or _allow_interaction_when_locked))
+
+	# door_slide2 in a double door is rotated 180° (flipped X basis), so its
+	# door_indicator_front faces inward. Swap outside/inside assignment for it.
+	var flipped := transform.basis.x.dot(Vector3.RIGHT) < 0.0
+	var outside_indicator := _indicator_back if flipped else _indicator_front
+	var inside_indicator := _indicator_front if flipped else _indicator_back
+
+	# Outside: green = unlocked, yellow = card required, red = disabled
+	var outside_mat: StandardMaterial3D
+	var outside_mat_hi: StandardMaterial3D
 	if door_can_open:
-		_button_mesh.material_override = _button_green_highlight_material if _group_highlight else _button_green_material
+		outside_mat = _indicator_green_material
+		outside_mat_hi = _indicator_green_highlight_material
+	elif _is_access_disabled:
+		outside_mat = _indicator_red_material
+		outside_mat_hi = _indicator_red_highlight_material
+	elif _allow_interaction_when_locked:
+		outside_mat = _indicator_yellow_material
+		outside_mat_hi = _indicator_yellow_highlight_material
 	else:
-		_button_mesh.material_override = _button_red_highlight_material if _group_highlight else _button_red_material
+		outside_mat = _indicator_red_material
+		outside_mat_hi = _indicator_red_highlight_material
+
+	# Inside: green = accessible from inside (unlocked or card-locked), red = fully disabled
+	var inside_mat: StandardMaterial3D
+	var inside_mat_hi: StandardMaterial3D
+	if door_can_open or (_allow_interaction_when_locked and not _is_access_disabled):
+		inside_mat = _indicator_green_material
+		inside_mat_hi = _indicator_green_highlight_material
+	else:
+		inside_mat = _indicator_red_material
+		inside_mat_hi = _indicator_red_highlight_material
+
+	if outside_indicator != null:
+		outside_indicator.material_override = outside_mat_hi if _group_highlight else outside_mat
+	if inside_indicator != null:
+		inside_indicator.material_override = inside_mat_hi if _group_highlight else inside_mat
+
 	if _interactable != null:
 		_interactable.set_interaction_enabled(door_can_interact)
 		if door_can_open:
 			_interactable.prompt_action = "Open"
+		elif _is_access_disabled:
+			_interactable.prompt_action = "Locked"
 		elif _allow_interaction_when_locked:
 			_interactable.prompt_action = "Swipe Card"
 		else:
 			_interactable.prompt_action = "Locked"
 
 
-func _build_button_materials() -> void:
-	_button_green_material = StandardMaterial3D.new()
-	_button_green_material.albedo_color = Color("#3ed180")
-	_button_green_material.emission_enabled = true
-	_button_green_material.emission = Color("#1f6e44")
-	_button_green_material.metallic = 0.15
-	_button_green_material.roughness = 0.52
+func _build_indicator_materials() -> void:
+	_indicator_dark_material = _make_indicator_material(Color(0.02, 0.02, 0.02, 1.0))
+	_indicator_dark_material.emission_energy_multiplier = 0.05
+	_indicator_green_material = _make_indicator_material(Color(0.2, 0.92, 0.3, 1.0))
+	_indicator_green_highlight_material = _indicator_green_material.duplicate()
+	_indicator_green_highlight_material.albedo_color = _indicator_green_material.albedo_color.lightened(0.32)
+	_indicator_green_highlight_material.emission = _indicator_green_material.emission.lightened(0.45)
 
-	_button_green_highlight_material = _button_green_material.duplicate()
-	_button_green_highlight_material.albedo_color = _button_green_material.albedo_color.lightened(0.32)
-	_button_green_highlight_material.emission = _button_green_material.emission.lightened(0.45)
+	_indicator_yellow_material = _make_indicator_material(Color(0.96, 0.84, 0.2, 1.0))
+	_indicator_yellow_highlight_material = _indicator_yellow_material.duplicate()
+	_indicator_yellow_highlight_material.albedo_color = _indicator_yellow_material.albedo_color.lightened(0.32)
+	_indicator_yellow_highlight_material.emission = _indicator_yellow_material.emission.lightened(0.45)
 
-	_button_red_material = StandardMaterial3D.new()
-	_button_red_material.albedo_color = Color("#de3d4d")
-	_button_red_material.emission_enabled = true
-	_button_red_material.emission = Color("#7a1f2b")
-	_button_red_material.metallic = 0.15
-	_button_red_material.roughness = 0.52
+	_indicator_red_material = _make_indicator_material(Color(0.9, 0.2, 0.2, 1.0))
+	_indicator_red_highlight_material = _indicator_red_material.duplicate()
+	_indicator_red_highlight_material.albedo_color = _indicator_red_material.albedo_color.lightened(0.32)
+	_indicator_red_highlight_material.emission = _indicator_red_material.emission.lightened(0.45)
 
-	_button_red_highlight_material = _button_red_material.duplicate()
-	_button_red_highlight_material.albedo_color = _button_red_material.albedo_color.lightened(0.32)
-	_button_red_highlight_material.emission = _button_red_material.emission.lightened(0.45)
+
+func _make_indicator_material(color: Color) -> StandardMaterial3D:
+	var material := StandardMaterial3D.new()
+	material.albedo_color = color
+	material.emission_enabled = true
+	material.emission = color
+	material.emission_energy_multiplier = 1.2
+	material.roughness = 0.35
+	return material
 
 
 func _apply_metadata_visuals() -> void:

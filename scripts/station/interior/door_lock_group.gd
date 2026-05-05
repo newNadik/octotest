@@ -103,12 +103,15 @@ func _connect_slide_signals() -> void:
 
 func _apply_access_mode_state() -> void:
 	locked = access_mode != AccessMode.UNLOCKED
-	var allow_locked_interaction := access_mode == AccessMode.CARD_LOCKED
+	var allow_locked_interaction := locked
+	var is_disabled := access_mode == AccessMode.DISABLED
 	for slide in _slide_nodes:
 		if slide != null and is_instance_valid(slide):
 			slide.call("set_locked", locked)
 			if slide.has_method("set_allow_interaction_when_locked"):
 				slide.call("set_allow_interaction_when_locked", allow_locked_interaction)
+			if slide.has_method("set_access_disabled"):
+				slide.call("set_access_disabled", is_disabled)
 
 
 func _apply_metadata_to_slides() -> void:
@@ -169,6 +172,7 @@ func _on_slide_open_requested(_source: Node, _actor: Node = null) -> void:
 
 func request_open_from_slide(source: Node, actor: Node = null) -> void:
 	if access_mode == AccessMode.DISABLED:
+		_trigger_blink_on_slides(false)
 		return
 	if access_mode == AccessMode.UNLOCKED:
 		_open_group()
@@ -177,6 +181,8 @@ func request_open_from_slide(source: Node, actor: Node = null) -> void:
 		if _authorized_next_open or _is_actor_inside(source, actor):
 			_authorized_next_open = false
 			_open_group()
+		else:
+			_trigger_blink_on_slides(false)
 
 
 func authorize_next_open() -> void:
@@ -186,27 +192,36 @@ func authorize_next_open() -> void:
 func grant_access_and_open() -> void:
 	if access_mode != AccessMode.CARD_LOCKED:
 		return
-	_authorized_next_open = true
 	_open_group()
 
 
 func _open_group() -> void:
+	_trigger_blink_on_slides(true)
 	for slide in _slide_nodes:
 		if slide != null and is_instance_valid(slide) and slide.has_method("force_open"):
 			slide.call("force_open")
 
 
-func _is_actor_inside(source: Node, actor: Node) -> bool:
-	if source == null or actor == null:
+func _trigger_blink_on_slides(granted: bool) -> void:
+	for slide in _slide_nodes:
+		if slide != null and is_instance_valid(slide) and slide.has_method("trigger_indicator_blink"):
+			slide.call("trigger_indicator_blink", granted)
+
+
+func signal_access_denied() -> void:
+	_trigger_blink_on_slides(false)
+
+
+func _is_actor_inside(_source: Node, actor: Node) -> bool:
+	if actor == null or not (actor is Node3D):
 		return false
-	if not (source is Node3D) or not (actor is Node3D):
-		return false
-	var source_node := source as Node3D
 	var actor_node := actor as Node3D
-	var to_actor := actor_node.global_position - source_node.global_position
+	# Always use the group's own orientation as the canonical reference so that
+	# double-door slides rotated 180° don't invert the inside/outside result.
+	var to_actor := actor_node.global_position - global_position
 	if to_actor.length_squared() <= 0.0001:
 		return false
-	var forward := -source_node.global_transform.basis.z.normalized()
+	var forward := global_transform.basis.z.normalized()
 	return forward.dot(to_actor.normalized()) < 0.0
 
 

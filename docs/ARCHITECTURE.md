@@ -215,11 +215,15 @@ This document describes the current runtime architecture of Gone Exploring and m
 - Head-chain data model mirroring arm setup patterns (resolved indices, grouped parts, rest pose caches).
 18. `res://scripts/station/interior/door_slide.gd`
 - Sliding-door leaf controller.
-- Handles open/close tweening, lock state, clickable open requests, indicator-button materials, auto-close timing, and doorway blockage checks.
- - Exposes group-highlight source/override helpers so double-door wrappers can mirror leaf visual state without creating permanent hover-feedback loops.
+- Handles open/close tweening, lock state, clickable open requests, auto-close timing, and doorway blockage checks.
+- Maintains two physical LED indicator meshes (`door_indicator_front`, `door_indicator_back`) using cardreader-matching colors: green (unlocked), yellow (card required), red (disabled). Detects which face is outside vs inside from the slide's own X-basis flip (accounts for door_slide2's 180° rotation in double doors).
+- Plays a 2-pulse blink animation on both indicators for access feedback: green blink on open, red blink on denied/disabled. Ongoing blink is interrupted and restarted if a new event fires.
+- Exposes group-highlight source/override helpers so double-door wrappers can mirror leaf visual state without creating permanent hover-feedback loops.
 19. `res://scripts/station/interior/door_lock_group.gd`
 - Single/double door group controller.
-- Propagates lock state to leaf doors, fans open requests across all leaves, applies per-leaf open-distance overrides, and synchronizes double-door highlight state.
+- Propagates lock state and access-disabled flag to leaf doors, fans open/blink requests across all leaves, applies per-leaf open-distance overrides, and synchronizes double-door highlight state.
+- Inside/outside detection uses the group node's own world orientation (+Z faces outside by convention). For CARD_LOCKED doors: opens freely from inside, requires card from outside. For DISABLED doors: interaction remains enabled so the red blink feedback is visible, but the door never opens.
+- Exposes `signal_access_denied()` for card readers to trigger the door's red blink on a failed tap.
 - For double doors, computes a shared midpoint indicator position from leaf interactable indicator world positions and applies it as the primary override marker.
 20. `res://scripts/station/fish_school.gd`
 - School controller for animated fish waves:

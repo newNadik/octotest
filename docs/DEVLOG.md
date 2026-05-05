@@ -1,5 +1,29 @@
 # Dev Log
 
+## 2026-05-05
+
+### Step 57 - Door access logic, indicator overhaul, and card-reader integration
+
+- Rewrote inside/outside detection in `door_lock_group.gd`:
+  - Uses the group node's own world orientation instead of the clicked slide's orientation so double-door leaves (door_slide2 rotated 180°) give consistent results.
+  - Convention: group's **+Z axis faces outside**. Doors should be oriented accordingly in the editor.
+  - CARD_LOCKED doors open freely from inside; require card from outside.
+  - `grant_access_and_open` no longer sets `_authorized_next_open`, preventing the door from staying unlocked after auto-close.
+
+- Replaced single `button` indicator mesh with two separate LED meshes per leaf (`door_indicator_front`, `door_indicator_back`):
+  - Colors match card reader scheme: green (unlocked/accessible), yellow (card required), red (disabled).
+  - Front/back assignment auto-detects door_slide2's 180° flip via X-basis dot product.
+  - Inside face (room side) always shows green when the door is openable from inside; outside face shows yellow when card is required.
+
+- Added 2-pulse blink feedback to door indicators:
+  - **Green blink**: door opens (from inside click or card grant).
+  - **Red blink**: unauthorized outside click on CARD_LOCKED door, click on DISABLED door, or wrong/insufficient card at reader.
+  - Ongoing blink is cancelled and restarted if a new event fires during playback.
+
+- DISABLED doors now allow player interaction (prompt: "Locked") so the red blink feedback is visible rather than silently ignoring clicks.
+
+- Card reader exits focus mode (deferred) on successful card tap, and calls `signal_access_denied()` on the linked door group when a card is rejected.
+
 ## 2026-04-29
 
 ### Step 56 - TV and computer screen image support + computer screensaver proximity

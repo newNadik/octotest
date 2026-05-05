@@ -85,11 +85,16 @@ func _open_linked_door_group() -> void:
 func _show_granted_feedback() -> void:
 	_set_state(ReaderState.GRANTED)
 	_schedule_reset_feedback()
+	var main_scene := get_tree().current_scene
+	if main_scene != null and main_scene.has_method("exit_focus_mode"):
+		main_scene.call_deferred("exit_focus_mode")
 
 
 func _show_denied_feedback() -> void:
 	_set_state(ReaderState.DENIED)
 	_schedule_reset_feedback()
+	if _linked_door_group != null and _linked_door_group.has_method("signal_access_denied"):
+		_linked_door_group.call("signal_access_denied")
 
 
 func _schedule_reset_feedback() -> void:
