@@ -110,6 +110,13 @@ Source: [Flaticon](https://www.flaticon.com/)
 - "Pen Holder" (https://skfb.ly/orTTW) by HappyFryday is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
 - "Toiletries" (https://skfb.ly/6S9CO) by HippoStance is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
 - "Paper Towel Roll" (https://skfb.ly/6WKIU) by HippoStance is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+- https://www.cgtrader.com/designers/17kamaraahmed?utm_source=credit&utm_source=credit_item_page
+- "Medium-Duty Portable Generator" (https://skfb.ly/pAOwo) by The Third Dimension is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+- "Blue Electrical Tape" (https://skfb.ly/oG6IY) by _GStep_ is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+- "Cable Drum" (https://skfb.ly/oRNqQ) by YodhaGameStudio is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+- "tool_set" (https://skfb.ly/pywSF) by teacherap123 is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+- "Arc Reactor - Tony Stark - LOW POLY" (https://skfb.ly/oozPU) by Atmo is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+- "NES Console and Controller" (https://skfb.ly/onGrq) by Daz is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
 - 
 
 ## Textures

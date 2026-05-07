@@ -1,0 +1,28 @@
+[gd_scene format=3 uid="uid://c3kjoa2asdyyh"]
+
+[ext_resource type="PackedScene" uid="uid://dejlrv7wgfecv" path="res://assets/models/items/blue_electrical_tape.glb" id="1_b46hl"]
+[ext_resource type="Script" uid="uid://bt8vvmy3m63u7" path="res://scripts/interaction/interactable.gd" id="2_interactable"]
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_y3tvu"]
+height = 0.09838867
+radius = 0.23632813
+
+[node name="blue_tape" type="Node3D" unique_id=882091345]
+
+[node name="Sketchfab_Scene" parent="." unique_id=1436531133 instance=ExtResource("1_b46hl")]
+transform = Transform3D(-8.742278e-09, -0.2, 0, 0.2, -8.742278e-09, 0, 0, 0, 0.2, 0, 0, 0)
+
+[node name="Interactable" type="Area3D" parent="." unique_id=2039301008]
+collision_layer = 8
+collision_mask = 0
+script = ExtResource("2_interactable")
+interaction_type = 1
+display_name = "Blue Tape"
+prompt_action = "Pick up"
+requires_line_of_sight = false
+item_id = "blue_tape"
+hold_offset = Vector3(0, -0.16, -0.08)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Interactable" unique_id=1106231952]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.024291992, 0)
+shape = SubResource("CylinderShape3D_y3tvu")
