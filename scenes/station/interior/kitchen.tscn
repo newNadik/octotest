@@ -20,7 +20,6 @@
 [ext_resource type="PackedScene" uid="uid://bwdnxj30053j8" path="res://assets/models/interior/kitchen/microwave.glb" id="18_0ol15"]
 [ext_resource type="PackedScene" uid="uid://dcwkssdp31n5m" path="res://assets/models/items/lays_classic__hd_textures__free_download.glb" id="19_wcf1j"]
 [ext_resource type="PackedScene" uid="uid://b8skt23qv2wvx" path="res://assets/models/items/paper_towel_roll.glb" id="20_4yc44"]
-[ext_resource type="PackedScene" uid="uid://cucd23o4uv87y" path="res://scenes/station/items/dishsoap.tscn" id="21_v72q7"]
 [ext_resource type="Texture2D" uid="uid://b3xg32i7g4il7" path="res://assets/models/items/wash_dishes.png" id="22_61snl"]
 [ext_resource type="Texture2D" uid="uid://6oewt5aqxxfe" path="res://assets/models/items/keep_mugs.png" id="23_60dk0"]
 
@@ -170,9 +169,6 @@ transform = Transform3D(0.99964887, -0.022396788, 0.014169935, 0.008921673, 0.78
 
 [node name="Sketchfab_Scene8" parent="." unique_id=831270909 instance=ExtResource("20_4yc44")]
 transform = Transform3D(0.018, 0, 0, 0, 0.018, 0, 0, 0, 0.018, -30.205637, 1.7568555, -8.968918)
-
-[node name="dishsoap" parent="." unique_id=1534490268 instance=ExtResource("21_v72q7")]
-transform = Transform3D(-0.4978067, 0, 0.867288, 0, 1, 0, -0.867288, 0, -0.4978067, -30.238157, 1.7522686, -8.411104)
 
 [node name="DocumentMesh" type="MeshInstance3D" parent="." unique_id=1584871414]
 transform = Transform3D(0.014080472, 0.006446012, 0.9998801, 0.0033231366, 0.999973, -0.006493399, -0.99989545, 0.0034141492, 0.014058508, -30.492338, 2.7651086, -8.040696)
