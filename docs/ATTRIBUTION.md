@@ -48,7 +48,7 @@ Source: [Flaticon](https://www.flaticon.com/)
 - "GAME READY FIRE EXTINGUISHER" (https://skfb.ly/pAXYN) by Oxygen3D is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
 - "Locker and rack" (https://skfb.ly/pEN6D) by Oxygen3D is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
 - "GAME READY POS-TERMINAL ASSET" (https://skfb.ly/pADDB) by Oxygen3D is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
-- "GAME READY DARTS ASSET" (https://skfb.ly/pAxIE) by Oxygen3D is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+- "Dart game" (https://skfb.ly/otMZy) by 1-3D.com is licensed under Creative Commons Attribution-ShareAlike (http://creativecommons.org/licenses/by-sa/4.0/).
 - "M1090-01 office chair" (https://skfb.ly/oNYyO) by rongphuongbacfurniture is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
 - "Modern Bench 1" (https://skfb.ly/6VIxM) by Elasta Kristya is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
 - "Furniture Pack For Summer Caffe FREE" (https://skfb.ly/o7Kw6) by Kozlov Maksim is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
@@ -109,7 +109,7 @@ Source: [Flaticon](https://www.flaticon.com/)
 - "Voxel BB-8" (https://skfb.ly/6WVEE) by pratamacam is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
 - "Pen Holder" (https://skfb.ly/orTTW) by HappyFryday is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
 - "Toiletries" (https://skfb.ly/6S9CO) by HippoStance is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
-- "Paper Towel Roll" (https://skfb.ly/6WKIU) by HippoStance is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+- "Paper towel holder" (https://skfb.ly/otVCL) by 1-3D.com is licensed under Creative Commons Attribution-ShareAlike (http://creativecommons.org/licenses/by-sa/4.0/).
 - https://www.cgtrader.com/designers/17kamaraahmed?utm_source=credit&utm_source=credit_item_page
 - "Medium-Duty Portable Generator" (https://skfb.ly/pAOwo) by The Third Dimension is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
 - "Blue Electrical Tape" (https://skfb.ly/oG6IY) by _GStep_ is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
@@ -117,6 +117,21 @@ Source: [Flaticon](https://www.flaticon.com/)
 - "tool_set" (https://skfb.ly/pywSF) by teacherap123 is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
 - "Arc Reactor - Tony Stark - LOW POLY" (https://skfb.ly/oozPU) by Atmo is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
 - "NES Console and Controller" (https://skfb.ly/onGrq) by Daz is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+- "Pile of Clothes" (https://skfb.ly/o8PQ9) by lyricizt is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+- "Clothes" (https://skfb.ly/oFAYs) by Naira is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+- "Folded clothes" (https://skfb.ly/otN7v) by 1-3D.com is licensed under Creative Commons Attribution-ShareAlike (http://creativecommons.org/licenses/by-sa/4.0/).
+- "Sneakers 39" (https://skfb.ly/otPZT) by 1-3D.com is licensed under Creative Commons Attribution-ShareAlike (http://creativecommons.org/licenses/by-sa/4.0/).
+- "Watch 475" (https://skfb.ly/ounIP) by 1-3D.com is licensed under Creative Commons Attribution-ShareAlike (http://creativecommons.org/licenses/by-sa/4.0/).
+- "Soap" (https://skfb.ly/otPBo) by 1-3D.com is licensed under Creative Commons Attribution-ShareAlike (http://creativecommons.org/licenses/by-sa/4.0/).
+- "Sports Bag" (https://skfb.ly/oqvxz) by Zeps3D is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+- "Sports bag" (https://skfb.ly/p7Q7s) by mfyma is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+- "Experience the 3D AR Backpack" (https://skfb.ly/pH86o) by DAC-3D AR is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+- "Secondary forms [Backpack] [XYZ HOMEWORK]" (https://skfb.ly/6W8uG) by YuryTheCreator is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+- "Headphones" (https://skfb.ly/oRFAr) by ~Drift~ is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+- "Dipper's cap" (https://skfb.ly/6AvG9) by Nick Pekarsky is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+- "M&M'S Peanut/Mani Chocolate Bag" (https://skfb.ly/oFrTG) by Miguel Vega is licensed under Creative Commons Attribution-NonCommercial (http://creativecommons.org/licenses/by-nc/4.0/).
+- "Board Game Boxes" (https://skfb.ly/o9HGw) by jon u is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+- "Thermos" (https://skfb.ly/6xBRY) by swingonaset is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
 - 
 
 ## Textures
