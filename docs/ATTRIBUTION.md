@@ -132,6 +132,7 @@ Source: [Flaticon](https://www.flaticon.com/)
 - "M&M'S Peanut/Mani Chocolate Bag" (https://skfb.ly/oFrTG) by Miguel Vega is licensed under Creative Commons Attribution-NonCommercial (http://creativecommons.org/licenses/by-nc/4.0/).
 - "Board Game Boxes" (https://skfb.ly/o9HGw) by jon u is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
 - "Thermos" (https://skfb.ly/6xBRY) by swingonaset is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+- "Sunglasses" (https://skfb.ly/oUNwz) by Pacheco2099 is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
 - 
 
 ## Textures

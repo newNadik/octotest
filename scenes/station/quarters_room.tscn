@@ -22,6 +22,7 @@
 [ext_resource type="PackedScene" uid="uid://b21bahphpnv3o" path="res://scenes/station/items/computer.tscn" id="16_1x66l"]
 [ext_resource type="PackedScene" uid="uid://cofo0vasii446" path="res://scenes/station/items/mug.tscn" id="16_l0eqh"]
 [ext_resource type="PackedScene" uid="uid://cncn15ux5kawl" path="res://assets/models/interior/furniture/benchk_pull-up_bar_d9.glb" id="18_wrylc"]
+[ext_resource type="PackedScene" uid="uid://c1u5xwptwma4s" path="res://scenes/station/items/hoberman_sphere.tscn" id="19_f07sw"]
 [ext_resource type="PackedScene" uid="uid://cbu1wt6omt36j" path="res://assets/models/items/darts_asset.glb" id="19_kdk8m"]
 [ext_resource type="PackedScene" uid="uid://bp2qgp1sbmraf" path="res://scenes/station/items/clock.tscn" id="20_05str"]
 [ext_resource type="PackedScene" uid="uid://bo16wlmnig3ca" path="res://assets/models/items/variety_of_books.glb" id="24_clg7e"]
@@ -328,6 +329,9 @@ transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -10.
 
 [node name="computer" parent="furniture" unique_id=1576113446 instance=ExtResource("16_1x66l")]
 transform = Transform3D(-0.9575713, 0, 0.2881962, 0, 1, 0, -0.2881962, 0, -0.9575713, -22.336, 1.482, -11.749011)
+
+[node name="hoberman_sphere" parent="furniture" unique_id=1730059339 instance=ExtResource("19_f07sw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15.09258, 1.7741857, -11.286407)
 
 [node name="items" type="Node3D" parent="." unique_id=1659725905]
 
