@@ -43,19 +43,23 @@ func _ready() -> void:
 	_apply_visual_state(false)
 
 
-func _unhandled_input(event: InputEvent) -> void:
+func _input(event: InputEvent) -> void:
 	if not _is_pointer_holding:
 		return
-	if not (event is InputEventMouseButton):
+	if event is InputEventMouseButton:
+		var mouse_event := event as InputEventMouseButton
+		if mouse_event.button_index != MOUSE_BUTTON_LEFT:
+			return
+		if mouse_event.pressed:
+			return
+		_release_pointer_press()
 		return
-	var mouse_event := event as InputEventMouseButton
-	if mouse_event.button_index != MOUSE_BUTTON_LEFT:
+	if event is InputEventScreenTouch:
+		var touch_event := event as InputEventScreenTouch
+		if touch_event.pressed:
+			return
+		_release_pointer_press()
 		return
-	if mouse_event.pressed:
-		return
-	_is_pointer_holding = false
-	is_pressed = false
-	_set_pressed_visual(false)
 
 
 func on_interacted(_actor: Node) -> void:
@@ -120,25 +124,39 @@ func _on_interactable_clicked(_interactable_ref: Interactable, actor: Node) -> v
 
 
 func _on_interactable_input_event(_camera: Node, event: InputEvent, _position: Vector3, _normal: Vector3, _shape_idx: int) -> void:
-	if not (event is InputEventMouseButton):
+	if event is InputEventMouseButton:
+		var mouse_event := event as InputEventMouseButton
+		if mouse_event.button_index != MOUSE_BUTTON_LEFT:
+			return
+		if mouse_event.pressed:
+			_begin_pointer_press()
+		else:
+			_release_pointer_press()
 		return
 
-	var mouse_event := event as InputEventMouseButton
-	if mouse_event.button_index != MOUSE_BUTTON_LEFT:
+	if event is InputEventScreenTouch:
+		var touch_event := event as InputEventScreenTouch
+		if touch_event.pressed:
+			_begin_pointer_press()
+		else:
+			_release_pointer_press()
 		return
 
-	if mouse_event.pressed:
-		_is_pointer_holding = true
-		is_pressed = true
-		if _release_tween != null:
-			_release_tween.kill()
-		_play_press_sound()
-		_set_pressed_visual(true)
-		_play_pop_animation()
-	else:
-		_is_pointer_holding = false
-		is_pressed = false
-		_set_pressed_visual(false)
+
+func _begin_pointer_press() -> void:
+	_is_pointer_holding = true
+	is_pressed = true
+	if _release_tween != null:
+		_release_tween.kill()
+	_play_press_sound()
+	_set_pressed_visual(true)
+	_play_pop_animation()
+
+
+func _release_pointer_press() -> void:
+	_is_pointer_holding = false
+	is_pressed = false
+	_set_pressed_visual(false)
 
 
 func _ensure_audio_player() -> void:

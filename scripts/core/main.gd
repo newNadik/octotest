@@ -473,6 +473,15 @@ func _unhandled_input(event: InputEvent) -> void:
 	if in_game_menu.visible:
 		return
 
+
+func _input(event: InputEvent) -> void:
+	_handle_pointer_input(event)
+
+
+func _handle_pointer_input(event: InputEvent) -> void:
+	if in_game_menu.visible:
+		return
+
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_WHEEL_UP and event.pressed:
 			if _focus_mode and not _is_document_focus_active():
