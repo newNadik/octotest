@@ -119,7 +119,7 @@ func _on_switch_toggled(is_on: bool) -> void:
 	_is_on = is_on
 	if _allow_runtime_toggle_fx and is_on:
 		_play_lamp_on_sound()
-	if is_on and flicker_on_startup:
+	if _allow_runtime_toggle_fx and is_on and flicker_on_startup:
 		flicker()
 	else:
 		_apply_state(is_on)

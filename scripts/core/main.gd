@@ -20,6 +20,7 @@ const CAMERA_MIN_MARGIN := 0.7
 const CAMERA_NEAR_CLIP := 0.12
 const MOBILE_OS_NAMES := ["iOS", "Android"]
 const ROOM_STREAM_UPDATE_INTERVAL_SEC := 0.35
+const FPS_LABEL_UPDATE_INTERVAL_SEC := 0.25
 const EXIT_CODE_MIN := 1100
 const EXIT_CODE_MAX := 1900
 # Must match loading_screen.gd — rooms within this radius of player start are
@@ -75,6 +76,7 @@ const ROOM_REGISTRY: Array[Dictionary] = [
 @onready var hud_root: Control = $UI/HUD
 @onready var hint_label: Label = $UI/HUD/HintPanel/HintMargin/HintLabel
 @onready var save_status_icon: TextureRect = $UI/SaveStatusIcon
+@onready var fps_label: Label = $UI/FPSLabel
 @onready var in_game_menu: Control = $UI/InGameMenu
 @onready var in_game_resume_button: Button = $UI/InGameMenu/MenuCenter/MenuPanel/MenuMargin/MenuButtons/ResumeButton
 @onready var in_game_save_button: Button = $UI/InGameMenu/MenuCenter/MenuPanel/MenuMargin/MenuButtons/SaveButton
@@ -121,6 +123,7 @@ var _stream_station_root: Node3D
 var _stream_rooms: Dictionary = {}
 var _stream_pending_loads: Dictionary = {}
 var _stream_update_accum := 0.0
+var _fps_label_update_accum := 0.0
 var _exit_code := 0
 
 
@@ -164,7 +167,22 @@ func _ready() -> void:
 	_apply_loaded_world_state()
 	_apply_exit_code_to_scene(self)
 	_set_in_game_menu_visible(false)
+	_update_fps_label()
 	
+
+func _process(delta: float) -> void:
+	_fps_label_update_accum += delta
+	if _fps_label_update_accum < FPS_LABEL_UPDATE_INTERVAL_SEC:
+		return
+	_fps_label_update_accum = 0.0
+	_update_fps_label()
+
+
+func _update_fps_label() -> void:
+	if fps_label == null:
+		return
+	fps_label.text = "FPS: %d" % Engine.get_frames_per_second()
+
 
 func _apply_platform_visual_overrides() -> void:
 	if not _should_use_mobile_visual_fallbacks():
