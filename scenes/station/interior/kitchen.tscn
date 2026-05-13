@@ -12,7 +12,6 @@
 [ext_resource type="PackedScene" uid="uid://bvm2yhaf5t477" path="res://scenes/station/items/pothos_plant.tscn" id="10_wunaa"]
 [ext_resource type="PackedScene" uid="uid://djbxa50jd4frh" path="res://assets/models/interior/kitchen/noodles pack.glb" id="11_x8g26"]
 [ext_resource type="PackedScene" uid="uid://cofo0vasii446" path="res://scenes/station/items/mug.tscn" id="12_wunaa"]
-[ext_resource type="Texture2D" uid="uid://bfgnuwfpokato" path="res://assets/models/interior/kitchen/mondays.png" id="13_2ag42"]
 [ext_resource type="PackedScene" uid="uid://rhvqg2kqm3gg" path="res://scenes/station/items/banana.tscn" id="14_2ag42"]
 [ext_resource type="PackedScene" uid="uid://dntmmnjb062jb" path="res://scenes/station/items/kettle.tscn" id="15_0bwtm"]
 [ext_resource type="PackedScene" uid="uid://6s8bdeheoqgc" path="res://assets/models/interior/kitchen/dish_rack.glb" id="16_72xsu"]
@@ -128,8 +127,6 @@ transform = Transform3D(0.9914061, 0, 0.13082035, 0, 1, 0, -0.13082035, 0, 0.991
 
 [node name="mug2" parent="." unique_id=2129939341 instance=ExtResource("12_wunaa")]
 transform = Transform3D(0.9652963, 0.004434149, -0.26111907, -0.003601299, 0.99998677, 0.0036679208, 0.2611319, -0.0026002543, 0.9652996, -30.05722, 2.1613436, -6.8476787)
-front_decal_texture = ExtResource("13_2ag42")
-back_decal_texture = ExtResource("13_2ag42")
 
 [node name="mug3" parent="." unique_id=504639743 instance=ExtResource("12_wunaa")]
 transform = Transform3D(0.96953946, 0, -0.24493513, 0, 1, 0, 0.24493513, 0, 0.96953946, -29.62172, 1.7693241, -6.059309)

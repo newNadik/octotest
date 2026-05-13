@@ -14,30 +14,38 @@
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_7yl8v"]
 sky_top_color = Color(0.055, 0.135, 0.17, 1)
-sky_horizon_color = Color(0.12, 0.22, 0.24, 1)
+sky_horizon_color = Color(0.07058824, 0.10980392, 0.12156863, 1)
+sky_energy_multiplier = 0.8
+sky_cover_modulate = Color(0, 0, 0, 1)
 ground_bottom_color = Color(0.025, 0.04, 0.045, 1)
 ground_horizon_color = Color(0.07, 0.11, 0.12, 1)
+ground_energy_multiplier = 0.8
+energy_multiplier = 0.8
 
 [sub_resource type="Sky" id="Sky_tavjh"]
 sky_material = SubResource("ProceduralSkyMaterial_7yl8v")
 
 [sub_resource type="Environment" id="Environment_1w5qu"]
 background_mode = 2
+background_energy_multiplier = 0.8
 sky = SubResource("Sky_tavjh")
-ambient_light_sky_contribution = 0.74
+ambient_light_sky_contribution = 0.5
+ambient_light_energy = 0.8
 fog_enabled = true
-fog_light_color = Color(0.11, 0.15, 0.16, 1)
-fog_density = 0.024
-fog_sky_affect = 0.14
-fog_depth_begin = 2.8
-fog_depth_end = 20.0
-volumetric_fog_enabled = true
+fog_mode = 1
+fog_light_color = Color(0.043782413, 0.074715026, 0.08399359, 1)
+fog_light_energy = 0.5
+fog_density = 1.0
+fog_aerial_perspective = 0.5
+fog_depth_curve = 0.6830214
+fog_depth_begin = 30.0
+fog_depth_end = 35.0
 volumetric_fog_density = 0.09
 volumetric_fog_albedo = Color(0.09, 0.13, 0.14, 1)
 volumetric_fog_ambient_inject = 0.08
 adjustment_enabled = true
-adjustment_brightness = 1.02
-adjustment_contrast = 0.97
+adjustment_brightness = 0.8
+adjustment_contrast = 0.98
 adjustment_saturation = 0.95
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_gameplay_fx"]
@@ -192,6 +200,7 @@ bus = &"Ambience"
 
 [node name="Caustics" parent="lights" unique_id=118230011 instance=ExtResource("20_caustic")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.805, 10.670206, 0.007)
+light_energy = 10.0
 rotation_speed_a_degrees = 4.2
 rotation_speed_b_degrees = -5.8
 energy_pulse_speed = 0.34
@@ -199,6 +208,7 @@ energy_pulse_strength = 0.06
 
 [node name="Caustics2" parent="lights" unique_id=7604608 instance=ExtResource("20_caustic")]
 transform = Transform3D(0.2668087, -0.66073227, 0.70160246, 0.780207, 0.57544845, 0.2452264, -0.56576496, 0.4819666, 0.66904247, -27.704458, 5.4356356, 11.229486)
+light_energy = 10.0
 rotation_speed_a_degrees = 4.2
 rotation_speed_b_degrees = -5.8
 energy_pulse_speed = 0.34
@@ -206,7 +216,9 @@ energy_pulse_strength = 0.06
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="lights" unique_id=210934476]
 transform = Transform3D(0.9902681, -0.13908833, 0.0048570717, 0, 0.0348995, 0.99939084, -0.13917312, -0.98966485, 0.034559857, -0.805, 76.67352, 0.007)
-light_color = Color(0.72, 0.82, 0.84, 1)
+light_color = Color(0.44635653, 0.5757678, 0.6013973, 1)
+light_energy = 0.8
+light_bake_mode = 1
 shadow_enabled = true
 shadow_bias = 0.02
 shadow_normal_bias = 0.2

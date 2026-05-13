@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bfgnuwfpokato"
-path="res://.godot/imported/mondays.png-b39c7d209452bb8ed3f29b97f4497a40.ctex"
+uid="uid://ulcxe4me47kc"
+path="res://.godot/imported/mondays_mug.png-125be705638fda4f79fa683e5c33532f.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/models/interior/kitchen/mondays.png"
-dest_files=["res://.godot/imported/mondays.png-b39c7d209452bb8ed3f29b97f4497a40.ctex"]
+source_file="res://assets/models/interior/kitchen/mondays_mug.png"
+dest_files=["res://.godot/imported/mondays_mug.png-125be705638fda4f79fa683e5c33532f.ctex"]
 
 [params]
 

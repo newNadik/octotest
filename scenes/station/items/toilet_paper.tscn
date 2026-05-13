@@ -6,8 +6,9 @@
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_e0rx3"]
 resource_name = "ToiletPaperPackage"
-transparency = 4
+transparency = 1
 cull_mode = 2
+depth_draw_mode = 1
 albedo_texture = ExtResource("1_wn76f")
 metallic = 1.0
 metallic_texture = ExtResource("2_hqlq6")

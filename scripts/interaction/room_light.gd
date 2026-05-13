@@ -14,6 +14,7 @@ const LAMP_ON_SOUND_DEFAULT: AudioStream = preload("res://assets/sound/lamp-on.w
 @export var ceiling_albedo_boost_off := 1.0
 @export var auto_collect_lamp_lights := true
 @export var lamp_lights: Array[Light3D] = []
+@export var lamp_light_energy_off := 0.2
 
 @export_group("Flicker")
 @export var flicker_on_startup := true         # flicker when switched on
@@ -151,9 +152,9 @@ func _apply_state(is_on: bool) -> void:
 		if is_on:
 			l.light_energy = _lamp_base_energies.get(id, l.light_energy if l.light_energy > 0.0 else 1.0)
 		else:
-			if l.light_energy > 0.0:
+			if l.light_energy > 0.0 and not is_equal_approx(l.light_energy, lamp_light_energy_off):
 				_lamp_base_energies[id] = l.light_energy
-			l.light_energy = 0.0
+			l.light_energy = lamp_light_energy_off
 	if _ceiling_mat is StandardMaterial3D:
 		var mat := _ceiling_mat as StandardMaterial3D
 		mat.emission_enabled = true
