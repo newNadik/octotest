@@ -7,11 +7,11 @@ const LAMP_ON_SOUND_DEFAULT: AudioStream = preload("res://assets/sound/lamp-on.w
 @export var ceiling_mesh: MeshInstance3D
 @export var ceiling_surface := 0
 @export var emission_on_color := Color(0.95, 0.97, 1.0)
-@export var emission_off_color := Color(0, 0, 0)
-@export var emission_energy_on := 2.0
-@export var emission_energy_off := 0.0
-@export var ceiling_albedo_boost_on := 1.18
-@export var ceiling_albedo_boost_off := 0.78
+@export var emission_off_color := Color(0x82a6b3ff)
+@export var emission_energy_on := 0.3
+@export var emission_energy_off := 0.05
+@export var ceiling_albedo_boost_on := 1.0
+@export var ceiling_albedo_boost_off := 1.0
 @export var auto_collect_lamp_lights := true
 @export var lamp_lights: Array[Light3D] = []
 
@@ -144,7 +144,8 @@ func flicker() -> void:
 
 func _apply_state(is_on: bool) -> void:
 	for l in lamp_lights:
-		l.visible = is_on
+		if l != null: 
+			l.visible = is_on
 	if _ceiling_mat is StandardMaterial3D:
 		var mat := _ceiling_mat as StandardMaterial3D
 		mat.emission_enabled = true
