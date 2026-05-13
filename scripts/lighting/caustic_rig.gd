@@ -37,7 +37,7 @@ func _ready() -> void:
 
 
 func _supports_light_projector() -> bool:
-	return not OS.has_feature("mobile") and not MOBILE_OS_NAMES.has(OS.get_name())
+	return true #not OS.has_feature("mobile") and not MOBILE_OS_NAMES.has(OS.get_name())
 
 
 func _process(delta: float) -> void:

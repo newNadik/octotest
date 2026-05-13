@@ -5,7 +5,6 @@
 [ext_resource type="PackedScene" uid="uid://63bbsnp8k0ew" path="res://scenes/player.tscn" id="2_vrsh6"]
 [ext_resource type="PackedScene" uid="uid://ojtj5eewvf4n" path="res://scenes/ui/in_game_menu.tscn" id="7_o6xl0"]
 [ext_resource type="AudioStream" uid="uid://djsajf7b1jgf" path="res://assets/sound/underwater-loop-amb.mp3" id="13_dp3eg"]
-[ext_resource type="Script" uid="uid://cdsji1uitym1j" path="res://scripts/lighting/god_rays.gd" id="16_godrays"]
 [ext_resource type="PackedScene" uid="uid://6qexu3mk541a" path="res://scenes/station/items/fish_school.tscn" id="17_fishschool"]
 [ext_resource type="PackedScene" uid="uid://drkdj8tkrup8" path="res://assets/models/underwater/underwater_terrain_-_agisoftnaturechallenge.glb" id="18_dp3eg"]
 [ext_resource type="Shader" uid="uid://b5rx1t38of3h7" path="res://assets/shaders/gameplay_cohesion.gdshader" id="19_gameplayfx"]
@@ -186,47 +185,6 @@ shadow_blur = 1.9
 spot_range = 48.0
 spot_angle = 20.0
 
-[node name="GodRays" type="Node3D" parent="lights" unique_id=901234000]
-script = ExtResource("16_godrays")
-sway_speed = 0.8
-sway_pitch_degrees = 4.0
-sway_yaw_degrees = 4.0
-energy_pulse_strength = 0.2
-volumetric_pulse_strength = 1.0
-
-[node name="RoofShaft" type="SpotLight3D" parent="lights/GodRays" unique_id=901234001]
-transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, -0.805, 14, 0.007)
-light_color = Color(0.78, 0.94, 1, 1)
-light_energy = 5.4
-light_volumetric_fog_energy = 72.0
-light_size = 1.4
-shadow_enabled = true
-shadow_blur = 2.1
-spot_range = 24.0
-spot_angle = 12.0
-
-[node name="RoofShaftFillA" type="SpotLight3D" parent="lights/GodRays" unique_id=901234002]
-transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, -2.7, 14, -0.65)
-light_color = Color(0.67, 0.9, 0.98, 1)
-light_energy = 2.6
-light_volumetric_fog_energy = 36.0
-light_size = 0.9
-shadow_enabled = true
-shadow_blur = 2.2
-spot_range = 18.0
-spot_angle = 10.0
-
-[node name="RoofShaftFillB" type="SpotLight3D" parent="lights/GodRays" unique_id=901234003]
-transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 1.6, 14, 0.9)
-light_color = Color(0.63, 0.87, 0.96, 1)
-light_energy = 2.1
-light_volumetric_fog_energy = 30.0
-light_size = 0.8
-shadow_enabled = true
-shadow_blur = 2.2
-spot_range = 17.0
-spot_angle = 9.0
-
 [node name="Caustics" parent="lights" unique_id=118230011 instance=ExtResource("20_caustic")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.805, 10.670206, 0.007)
 rotation_speed_a_degrees = 4.2
@@ -336,6 +294,3 @@ school_bounds = Vector3(50, 6, 15)
 stream_spawn_outside_distance = 5.0
 stream_recycle_front_distance = 5.0
 mesh_rotation_offset_degrees = Vector3(0, 90, 0)
-
-[node name="SpringBoneCollisionPlane3D" type="SpringBoneCollisionPlane3D" parent="." unique_id=223451594]
-transform = Transform3D(40, 0, 0, 0, 40, 0, 0, 0, 40, 0, 0, 0)

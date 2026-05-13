@@ -169,32 +169,11 @@ func _ready() -> void:
 func _apply_platform_visual_overrides() -> void:
 	if not _should_use_mobile_visual_fallbacks():
 		return
-	#_apply_mobile_environment_fallbacks()
 	_apply_mobile_material_fallbacks()
-	#_apply_mobile_light_fallbacks()
-	#_apply_mobile_omni_fallbacks()
 
 
 func _should_use_mobile_visual_fallbacks() -> bool:
 	return OS.has_feature("mobile") or MOBILE_OS_NAMES.has(OS.get_name())
-
-
-func _apply_mobile_environment_fallbacks() -> void:
-	var environment := world_environment.environment
-	if environment == null:
-		return
-
-	# iOS/Metal drops or changes several desktop-biased features; lean on plain depth fog instead.
-	environment.fog_enabled = true
-	environment.fog_density = 0.026
-	environment.fog_depth_begin = 2.6
-	environment.fog_depth_end = 20.0
-	environment.fog_sky_affect = 0.16
-	environment.volumetric_fog_enabled = false
-	environment.ambient_light_sky_contribution = 0.58
-	environment.adjustment_brightness = 1.0
-	environment.adjustment_contrast = 1.0
-	environment.adjustment_saturation = 0.96
 
 
 func _apply_mobile_material_fallbacks() -> void:
@@ -231,48 +210,6 @@ func _simplify_mobile_standard_material(material: Material, remove_next_pass: bo
 	standard_material.heightmap_enabled = false
 	if remove_next_pass:
 		standard_material.next_pass = null
-
-
-func _apply_mobile_light_fallbacks() -> void:
-	if sun_light != null:
-		sun_light.shadow_enabled = false
-		sun_light.shadow_blur = 0.0
-		sun_light.light_energy = 0.24
-
-	if skylight_hero_light != null:
-		skylight_hero_light.shadow_enabled = true
-		skylight_hero_light.shadow_blur = 0.0
-		skylight_hero_light.shadow_bias = 0.03
-		skylight_hero_light.shadow_normal_bias = 0.18
-		skylight_hero_light.light_volumetric_fog_energy = 0.0
-		skylight_hero_light.light_energy = 1.05
-		skylight_hero_light.light_indirect_energy = 0.42
-
-	_set_mobile_spot_light("lights/GodRays/RoofShaft", false, 0.0, 0.0)
-	_set_mobile_spot_light("lights/GodRays/RoofShaftFillA", false, 0.0, 0.0)
-	_set_mobile_spot_light("lights/GodRays/RoofShaftFillB", false, 0.0, 0.0)
-	_set_mobile_spot_light("lights/Caustics/CausticLightA", false, 0.0, 20.0)
-	_set_mobile_spot_light("lights/Caustics/CausticLightB", false, 0.0, 20.0)
-	_set_mobile_spot_light("lights/Caustics2/CausticLightA", false, 0.0, 20.0)
-	_set_mobile_spot_light("lights/Caustics2/CausticLightB", false, 0.0, 20.0)
-
-
-func _set_mobile_spot_light(light_path: String, keep_shadow: bool, blur: float, energy: float) -> void:
-	var spot_light := get_node_or_null(light_path) as SpotLight3D
-	if spot_light == null:
-		return
-	spot_light.shadow_enabled = keep_shadow
-	spot_light.shadow_blur = blur
-	spot_light.light_volumetric_fog_energy = 0.0
-	spot_light.light_energy = energy
-
-
-func _apply_mobile_omni_fallbacks() -> void:
-	for omni_light in _collect_omni_lights(self):
-		omni_light.shadow_enabled = false
-		omni_light.light_indirect_energy = 0.0
-		omni_light.light_energy = 0.0
-
 
 func _collect_omni_lights(node: Node) -> Array[OmniLight3D]:
 	var lights: Array[OmniLight3D] = []
