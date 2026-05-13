@@ -51,6 +51,7 @@ var _flickering := false
 var _lamp_on_player: AudioStreamPlayer3D
 var _allow_runtime_toggle_fx := false
 var _random_led_states: Dictionary = {}
+var _lamp_base_energies: Dictionary = {}
 
 func _ready() -> void:
 	add_to_group("save_state_provider")
@@ -144,8 +145,15 @@ func flicker() -> void:
 
 func _apply_state(is_on: bool) -> void:
 	for l in lamp_lights:
-		if l != null: 
-			l.visible = is_on
+		if l == null:
+			continue
+		var id := l.get_instance_id()
+		if is_on:
+			l.light_energy = _lamp_base_energies.get(id, l.light_energy if l.light_energy > 0.0 else 1.0)
+		else:
+			if l.light_energy > 0.0:
+				_lamp_base_energies[id] = l.light_energy
+			l.light_energy = 0.0
 	if _ceiling_mat is StandardMaterial3D:
 		var mat := _ceiling_mat as StandardMaterial3D
 		mat.emission_enabled = true

@@ -1,7 +1,9 @@
 [gd_scene format=4 uid="uid://8vcajaaad64"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_bei7b"]
-albedo_color = Color(0.7490196, 0.7490196, 0.7490196, 1)
+albedo_color = Color(0.9, 0.9, 0.9, 1)
+metallic = 0.5
+roughness = 0.5
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_c3jtp"]
 _surfaces = [{
