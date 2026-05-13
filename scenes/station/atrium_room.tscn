@@ -364,6 +364,12 @@ data = PackedVector3Array(7.5, 0, 0, 5.3033, 13.5, -5.3033, 5.3033, 0, -5.3033, 
 [sub_resource type="BoxShape3D" id="BoxShape3D_5jbdu"]
 size = Vector3(2, 31, 30)
 
+[sub_resource type="BoxOccluder3D" id="BoxOccluder3D_db0oj"]
+size = Vector3(3.0110402, 11.186673, 0.39431036)
+
+[sub_resource type="BoxOccluder3D" id="BoxOccluder3D_yjx6n"]
+size = Vector3(3.6725025, 11.186673, 0.39431036)
+
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_rgc7e"]
 resource_name = "Roof"
 cull_mode = 2
@@ -973,11 +979,6 @@ shape = SubResource("BoxShape3D_5jbdu")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 29.4, 3, 0)
 shape = SubResource("BoxShape3D_5jbdu")
 
-[node name="DoorSingle" parent="StaticBody3D/Walls" unique_id=224428218 instance=ExtResource("3_wctxe")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.499224, 0, 19.06)
-privacy_glass_enabled = true
-door_title = "WC"
-
 [node name="doors" type="Node3D" parent="StaticBody3D/Walls" unique_id=570198370]
 
 [node name="DoorStaffDouble" parent="StaticBody3D/Walls/doors" unique_id=1685186809 instance=ExtResource("2_ecqnk")]
@@ -1000,6 +1001,19 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13.971773, 0, 18.35)
 door_title = "Shop"
 door_title_secondary = "Gift"
 title_side = 1
+
+[node name="DoorSingle" parent="StaticBody3D/Walls" unique_id=224428218 instance=ExtResource("3_wctxe")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.499224, 0, 19.06)
+privacy_glass_enabled = true
+door_title = "WC"
+
+[node name="OccluderInstance3D" type="OccluderInstance3D" parent="StaticBody3D/Walls" unique_id=1675674862]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.9397589, 4.7323995, -10.132033)
+occluder = SubResource("BoxOccluder3D_db0oj")
+
+[node name="OccluderInstance3D2" type="OccluderInstance3D" parent="StaticBody3D/Walls" unique_id=1547441590]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.0353413, 4.7323995, -10.132033)
+occluder = SubResource("BoxOccluder3D_yjx6n")
 
 [node name="Roof" type="Node3D" parent="StaticBody3D" unique_id=1383701249]
 

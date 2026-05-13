@@ -4,6 +4,9 @@
 [ext_resource type="PackedScene" uid="uid://bwdy63omrocxt" path="res://scenes/station/interior/door_slide.tscn" id="2_obwqj"]
 [ext_resource type="Script" uid="uid://dl7taqvc1mi1o" path="res://scripts/station/interior/door_lock_group.gd" id="3_lock_group_script"]
 
+[sub_resource type="BoxOccluder3D" id="BoxOccluder3D_iof5d"]
+size = Vector3(0.5, 4.483016, 2.9750721)
+
 [node name="DoorDouble" type="Node3D" unique_id=1045878697]
 script = ExtResource("3_lock_group_script")
 
@@ -14,3 +17,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.73, 0, 0.03)
 
 [node name="door_slide2" parent="." unique_id=1702248822 instance=ExtResource("2_obwqj")]
 transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0.73, 0, 0.03)
+
+[node name="OccluderInstance3D5" type="OccluderInstance3D" parent="." unique_id=1265126131]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -0.0113248825, 6.853887, 0.02579546)
+occluder = SubResource("BoxOccluder3D_iof5d")
