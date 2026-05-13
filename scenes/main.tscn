@@ -165,7 +165,7 @@ texture = ExtResource("21_saveicon")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="FPSLabel" type="Label" parent="UI"]
+[node name="FPSLabel" type="Label" parent="UI" unique_id=682804768]
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
@@ -174,7 +174,6 @@ offset_top = 14.0
 offset_right = -14.0
 offset_bottom = 38.0
 grow_horizontal = 0
-mouse_filter = 2
 theme_override_colors/font_color = Color(0.86, 0.97, 0.95, 0.92)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.85)
 theme_override_constants/shadow_offset_x = 1
