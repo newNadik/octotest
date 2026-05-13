@@ -1,5 +1,7 @@
 extends Node3D
 
+const CARD_REJECT_SOUND_DEFAULT: AudioStream = preload("res://assets/sound/card-reject.mp3")
+
 enum AccessMode {
 	DISABLED,
 	UNLOCKED,
@@ -8,6 +10,9 @@ enum AccessMode {
 
 @export var access_mode: AccessMode = AccessMode.UNLOCKED
 @export var locked := false
+@export_group("Audio")
+@export var card_reject_sound: AudioStream = CARD_REJECT_SOUND_DEFAULT
+@export var card_reject_sound_volume_db := -6.0
 @export_group("Door Metadata")
 @export var privacy_glass_enabled := false
 @export var door_title := ""
@@ -22,6 +27,7 @@ var synchronize_hover_highlight := true
 var _slide_nodes: Array[Node] = []
 var _group_highlight_active := false
 var _authorized_next_open := false
+var _card_reject_player: AudioStreamPlayer3D
 
 
 func _ready() -> void:
@@ -33,6 +39,7 @@ func _ready() -> void:
 	_connect_slide_signals()
 	_apply_access_mode_state()
 	_configure_group_indicator()
+	_ensure_card_reject_player()
 	set_process(synchronize_hover_highlight and _slide_nodes.size() > 1)
 
 
@@ -182,7 +189,7 @@ func request_open_from_slide(source: Node, actor: Node = null) -> void:
 			_authorized_next_open = false
 			_open_group()
 		else:
-			_trigger_blink_on_slides(false)
+			_reject_card_locked_access()
 
 
 func authorize_next_open() -> void:
@@ -209,7 +216,42 @@ func _trigger_blink_on_slides(granted: bool) -> void:
 
 
 func signal_access_denied() -> void:
+	if access_mode == AccessMode.CARD_LOCKED:
+		_reject_card_locked_access()
+	else:
+		_trigger_blink_on_slides(false)
+
+
+func _reject_card_locked_access() -> void:
 	_trigger_blink_on_slides(false)
+	_play_card_reject_sound()
+
+
+func _ensure_card_reject_player() -> void:
+	if _card_reject_player != null:
+		return
+	_card_reject_player = AudioStreamPlayer3D.new()
+	_card_reject_player.name = "CardRejectAudio"
+	_card_reject_player.stream = card_reject_sound
+	_card_reject_player.volume_db = card_reject_sound_volume_db
+	_card_reject_player.max_distance = 16.0
+	_card_reject_player.bus = _resolve_sfx_bus_name()
+	add_child(_card_reject_player)
+
+
+func _play_card_reject_sound() -> void:
+	if card_reject_sound == null:
+		return
+	_ensure_card_reject_player()
+	_card_reject_player.stream = card_reject_sound
+	_card_reject_player.volume_db = card_reject_sound_volume_db
+	_card_reject_player.pitch_scale = 1.0
+	_card_reject_player.stop()
+	_card_reject_player.play()
+
+
+func _resolve_sfx_bus_name() -> String:
+	return "SFX" if AudioServer.get_bus_index("SFX") >= 0 else "Master"
 
 
 func _is_actor_inside(_source: Node, actor: Node) -> bool:
