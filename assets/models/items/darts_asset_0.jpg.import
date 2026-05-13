@@ -2,7 +2,7 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://b8j0jt1v8ht7c"
+uid="uid://cy0yhoc22o02r"
 path.s3tc="res://.godot/imported/darts_asset_0.jpg-0fa9cd4ee41b0fab56fac552fdc7a3d7.s3tc.ctex"
 path.etc2="res://.godot/imported/darts_asset_0.jpg-0fa9cd4ee41b0fab56fac552fdc7a3d7.etc2.ctex"
 metadata={
@@ -10,7 +10,7 @@ metadata={
 "vram_texture": true
 }
 generator_parameters={
-"md5": "f5e15ea4a29ec7f8f983eaff0750ae73"
+"md5": "0f7167085ca96512347e98d158b51687"
 }
 
 [deps]
