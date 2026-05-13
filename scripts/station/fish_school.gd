@@ -82,7 +82,10 @@ var _positions: Array[Vector3] = []
 var _dirs: Array[Vector3] = []
 var _speeds: Array[float] = []
 var _phases: Array[float] = []
+var _steers: Array[Vector3] = []
 var _active_species: Array[PackedScene] = []
+var _mesh_offset_basis := Basis.IDENTITY
+var _flock_frame := 0
 
 
 func _ready() -> void:
@@ -146,9 +149,12 @@ func _spawn_school() -> void:
 	_dirs.resize(count)
 	_speeds.resize(count)
 	_phases.resize(count)
+	_steers.resize(count)
+	_flock_frame = 0
 
 	var half := school_bounds * 0.5
-	var mesh_offset_basis := Basis.from_euler(mesh_rotation_offset_degrees * (PI / 180.0))
+	_mesh_offset_basis = Basis.from_euler(mesh_rotation_offset_degrees * (PI / 180.0))
+	var mesh_offset_basis := _mesh_offset_basis
 	_cluster_center = school_center + Vector3(
 		_rng.randf_range(-half.x * 0.35, half.x * 0.35),
 		_rng.randf_range(-half.y * 0.35, half.y * 0.35),
@@ -206,71 +212,80 @@ func _step_school(delta: float) -> void:
 
 	var half := school_bounds * 0.5
 	var flow := _current_flow
-	var mesh_offset_basis := Basis.from_euler(mesh_rotation_offset_degrees * (PI / 180.0))
 	_cluster_center += flow * _school_anchor_speed * maxf(delta, 0.0)
 
-	for i in _fish_nodes.size():
-		var pos := _positions[i]
-		var dir := _dirs[i]
-		var center_sum := Vector3.ZERO
-		var alignment_sum := Vector3.ZERO
-		var separation_sum := Vector3.ZERO
-		var neighbors := 0
-
-		for j in _positions.size():
-			if i == j:
-				continue
-			var to_other := _positions[j] - pos
-			var dist_sq := to_other.length_squared()
-			if dist_sq > neighbor_radius * neighbor_radius:
-				continue
-			neighbors += 1
-			center_sum += _positions[j]
-			alignment_sum += _dirs[j]
-			if dist_sq < separation_radius * separation_radius:
-				separation_sum -= to_other / maxf(dist_sq, 0.001)
-
-		var steer := flow * flow_strength
-		var cluster_pull := (_cluster_center - pos)
-		if not cluster_pull.is_zero_approx():
-			steer += cluster_pull.normalized() * cluster_pull_strength
-		if neighbors > 0:
-			var inv_n := 1.0 / float(neighbors)
-			var cohesion_vec := (center_sum * inv_n) - pos
-			if not cohesion_vec.is_zero_approx():
-				steer += cohesion_vec.normalized() * cohesion_strength
-			var alignment_vec := alignment_sum * inv_n
-			if not alignment_vec.is_zero_approx():
-				steer += alignment_vec.normalized() * alignment_strength
-			if not separation_sum.is_zero_approx():
-				steer += separation_sum.normalized() * separation_strength
-
-		var local := pos - school_center
-		var containment := Vector3.ZERO
+	# Flocking forces (O(n²)) run every 3rd frame — direction changes are gradual.
+	_flock_frame = (_flock_frame + 1) % 3
+	if _flock_frame == 0:
+		var nr_sq := neighbor_radius * neighbor_radius
+		var sr_sq := separation_radius * separation_radius
 		var edge_x := half.x * 0.9
 		var edge_y := half.y * 0.9
 		var edge_z := half.z * 0.9
-		if absf(local.x) > edge_x:
-			containment.x = -sign(local.x)
-		if absf(local.y) > edge_y:
-			containment.y = -sign(local.y)
-		if absf(local.z) > edge_z:
-			containment.z = -sign(local.z)
-		if _travel_axis == 0:
-			containment.x = 0.0
-		else:
-			containment.z = 0.0
-		if not containment.is_zero_approx():
-			steer += containment.normalized() * flow_strength
+		for i in _fish_nodes.size():
+			var pos := _positions[i]
+			var center_sum := Vector3.ZERO
+			var alignment_sum := Vector3.ZERO
+			var separation_sum := Vector3.ZERO
+			var neighbors := 0
 
-		var wander := Vector3(
-			_rng.randf_range(-1.0, 1.0),
-			_rng.randf_range(-0.25, 0.25),
-			_rng.randf_range(-1.0, 1.0)
-		).normalized() * noise_strength
-		steer += wander
+			for j in _positions.size():
+				if i == j:
+					continue
+				var to_other := _positions[j] - pos
+				var dist_sq := to_other.length_squared()
+				if dist_sq > nr_sq:
+					continue
+				neighbors += 1
+				center_sum += _positions[j]
+				alignment_sum += _dirs[j]
+				if dist_sq < sr_sq:
+					separation_sum -= to_other / maxf(dist_sq, 0.001)
 
-		var target_dir := (dir + steer * maxf(delta, 0.0)).normalized()
+			var steer := flow * flow_strength
+			var cluster_pull := (_cluster_center - pos)
+			if not cluster_pull.is_zero_approx():
+				steer += cluster_pull.normalized() * cluster_pull_strength
+			if neighbors > 0:
+				var inv_n := 1.0 / float(neighbors)
+				var cohesion_vec := (center_sum * inv_n) - pos
+				if not cohesion_vec.is_zero_approx():
+					steer += cohesion_vec.normalized() * cohesion_strength
+				var alignment_vec := alignment_sum * inv_n
+				if not alignment_vec.is_zero_approx():
+					steer += alignment_vec.normalized() * alignment_strength
+				if not separation_sum.is_zero_approx():
+					steer += separation_sum.normalized() * separation_strength
+
+			var local := pos - school_center
+			var containment := Vector3.ZERO
+			if absf(local.x) > edge_x:
+				containment.x = -sign(local.x)
+			if absf(local.y) > edge_y:
+				containment.y = -sign(local.y)
+			if absf(local.z) > edge_z:
+				containment.z = -sign(local.z)
+			if _travel_axis == 0:
+				containment.x = 0.0
+			else:
+				containment.z = 0.0
+			if not containment.is_zero_approx():
+				steer += containment.normalized() * flow_strength
+
+			var wander := Vector3(
+				_rng.randf_range(-1.0, 1.0),
+				_rng.randf_range(-0.25, 0.25),
+				_rng.randf_range(-1.0, 1.0)
+			).normalized() * noise_strength
+			steer += wander
+			_steers[i] = steer
+
+	# Movement and transform update every frame.
+	for i in _fish_nodes.size():
+		var pos := _positions[i]
+		var dir := _dirs[i]
+
+		var target_dir := (dir + _steers[i] * maxf(delta, 0.0)).normalized()
 		var blend := clampf(turn_strength * maxf(delta, 0.0), 0.0, 1.0)
 		dir = dir.slerp(target_dir, blend).normalized()
 		var forward_dot := dir.dot(flow)
@@ -281,7 +296,7 @@ func _step_school(delta: float) -> void:
 		_dirs[i] = dir
 
 		pos += dir * _speeds[i] * maxf(delta, 0.0)
-		local = pos - school_center
+		var local := pos - school_center
 		if _travel_axis != 0:
 			if local.x > half.x:
 				local.x = half.x
@@ -317,7 +332,7 @@ func _step_school(delta: float) -> void:
 
 		var bob := sin(_time * bob_speed + _phases[i]) * bob_amplitude
 		var draw_pos := pos + Vector3(0.0, bob, 0.0)
-		var basis := Basis.looking_at(_dirs[i], Vector3.UP) * mesh_offset_basis
+		var basis := Basis.looking_at(_dirs[i], Vector3.UP) * _mesh_offset_basis
 		_fish_nodes[i].transform = Transform3D(basis, draw_pos)
 
 
@@ -347,6 +362,7 @@ func _clear_school() -> void:
 	_dirs.clear()
 	_speeds.clear()
 	_phases.clear()
+	_steers.clear()
 	_school_active = false
 
 

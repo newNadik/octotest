@@ -83,6 +83,7 @@ fov = 60.0
 [node name="UI" type="CanvasLayer" parent="." unique_id=618850917]
 
 [node name="GameplayFX" type="ColorRect" parent="UI" unique_id=1902257100]
+visible = false
 material = SubResource("ShaderMaterial_gameplay_fx")
 anchors_preset = 15
 anchor_right = 1.0
@@ -188,18 +189,6 @@ autoplay = true
 bus = &"Ambience"
 
 [node name="lights" type="Node3D" parent="." unique_id=1594734138]
-
-[node name="SkylightHeroLight" type="SpotLight3D" parent="lights" unique_id=622259033]
-transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, -0.805, 36, 0.007)
-light_color = Color(0.68, 0.8, 0.82, 1)
-light_energy = 0.85
-light_indirect_energy = 0.5
-light_volumetric_fog_energy = 5.0
-light_specular = 2.0
-shadow_enabled = true
-shadow_blur = 1.9
-spot_range = 48.0
-spot_angle = 20.0
 
 [node name="Caustics" parent="lights" unique_id=118230011 instance=ExtResource("20_caustic")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.805, 10.670206, 0.007)

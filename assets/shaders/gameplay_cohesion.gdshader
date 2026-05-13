@@ -1,7 +1,7 @@
 shader_type canvas_item;
 render_mode unshaded;
 
-uniform sampler2D screen_tex : hint_screen_texture, filter_linear_mipmap;
+uniform sampler2D screen_tex : hint_screen_texture, filter_linear;
 uniform float grade_strength : hint_range(0.0, 1.0) = 0.82;
 uniform float saturation : hint_range(0.0, 1.2) = 0.9;
 uniform float contrast : hint_range(0.6, 1.2) = 0.95;
@@ -34,8 +34,7 @@ void fragment() {
 
 	float wave_a = sin((uv.x * 11.0 + uv.y * 3.6) + TIME * caustic_speed);
 	float wave_b = sin((uv.x * 17.0 - uv.y * 6.5) - TIME * caustic_speed * 1.35);
-	float wave_c = sin((uv.y * 23.0 + uv.x * 4.0) + TIME * caustic_speed * 0.82);
-	float caustic_pattern = wave_a * 0.45 + wave_b * 0.35 + wave_c * 0.2;
+	float caustic_pattern = wave_a * 0.6 + wave_b * 0.4;
 	float caustic = smoothstep(0.62, 0.95, caustic_pattern);
 	float caustic_mask = smoothstep(0.35, 0.82, luma);
 	graded += vec3(0.012, 0.018, 0.02) * caustic * caustic_mask * caustic_strength * 24.0;
