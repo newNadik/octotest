@@ -7,8 +7,9 @@
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_u62c1"]
 resource_name = "Scene_-_Root"
-transparency = 4
-cull_mode = 2
+transparency = 2
+alpha_scissor_threshold = 0.5
+alpha_antialiasing_mode = 0
 albedo_texture = ExtResource("1_wlm16")
 metallic = 1.0
 metallic_texture = ExtResource("2_dpuim")
