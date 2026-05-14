@@ -139,6 +139,8 @@ Source: [Flaticon](https://www.flaticon.com/)
 - "White Towel" (https://skfb.ly/6yCnI) by Anežka Hájková is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
 - "Water Bottles" (https://skfb.ly/oxCQL) by HGowl is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
 - "Table Tennis With Ping Pong Ball" (https://skfb.ly/psTBG) by Rukh3D is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+- "Yoga Mat" (https://skfb.ly/6QYTC) by Jeremy E. Grayson is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+- "Nintendo Switch" (https://skfb.ly/onRvD) by Smoggybeard is licensed under CC Attribution-NonCommercial-ShareAlike (http://creativecommons.org/licenses/by-nc-sa/4.0/).
 - 
 
 ## Textures

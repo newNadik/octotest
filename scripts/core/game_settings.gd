@@ -11,12 +11,14 @@ const KEY_EXIT_CODE := "exit_code"
 const KEY_MUSIC_VOLUME := "music_volume"
 const KEY_SOUND_VOLUME := "sound_volume"
 const KEY_AMBIENCE_VOLUME := "ambience_volume"
+const KEY_VOICE_VOLUME := "voice_volume"
 const KEY_SUBTITLES_ENABLED := "subtitles_enabled"
 const KEY_GOD_RAYS_ENABLED := "god_rays_enabled"
 const DEFAULT_LOCALE := "en_GB"
 const DEFAULT_MUSIC_VOLUME := 1.0
 const DEFAULT_SOUND_VOLUME := 1.0
 const DEFAULT_AMBIENCE_VOLUME := 1.0
+const DEFAULT_VOICE_VOLUME := 1.0
 const DEFAULT_SUBTITLES_ENABLED := true
 const DEFAULT_GOD_RAYS_ENABLED := true
 const EXIT_CODE_MIN := 1100
@@ -29,6 +31,7 @@ var _locale := DEFAULT_LOCALE
 var _music_volume := DEFAULT_MUSIC_VOLUME
 var _sound_volume := DEFAULT_SOUND_VOLUME
 var _ambience_volume := DEFAULT_AMBIENCE_VOLUME
+var _voice_volume := DEFAULT_VOICE_VOLUME
 var _subtitles_enabled := DEFAULT_SUBTITLES_ENABLED
 var _god_rays_enabled := DEFAULT_GOD_RAYS_ENABLED
 var _exit_code := 0
@@ -118,6 +121,19 @@ func set_ambience_volume(value: float) -> void:
 	save_settings()
 
 
+func get_voice_volume() -> float:
+	return _voice_volume
+
+
+func set_voice_volume(value: float) -> void:
+	var clamped := clampf(value, 0.0, 1.0)
+	if is_equal_approx(_voice_volume, clamped):
+		return
+	_voice_volume = clamped
+	_apply_audio_settings()
+	save_settings()
+
+
 func set_subtitles_enabled(enabled: bool) -> void:
 	if _subtitles_enabled == enabled:
 		return
@@ -145,6 +161,7 @@ func load_settings() -> void:
 		_music_volume = float(_config.get_value(SECTION_AUDIO, KEY_MUSIC_VOLUME, DEFAULT_MUSIC_VOLUME))
 		_sound_volume = float(_config.get_value(SECTION_AUDIO, KEY_SOUND_VOLUME, DEFAULT_SOUND_VOLUME))
 		_ambience_volume = float(_config.get_value(SECTION_AUDIO, KEY_AMBIENCE_VOLUME, DEFAULT_AMBIENCE_VOLUME))
+		_voice_volume = float(_config.get_value(SECTION_AUDIO, KEY_VOICE_VOLUME, DEFAULT_VOICE_VOLUME))
 		_subtitles_enabled = bool(_config.get_value(SECTION_ACCESSIBILITY, KEY_SUBTITLES_ENABLED, DEFAULT_SUBTITLES_ENABLED))
 		_god_rays_enabled = bool(_config.get_value(SECTION_GRAPHICS, KEY_GOD_RAYS_ENABLED, DEFAULT_GOD_RAYS_ENABLED))
 	elif error == ERR_FILE_NOT_FOUND:
@@ -153,6 +170,7 @@ func load_settings() -> void:
 		_music_volume = DEFAULT_MUSIC_VOLUME
 		_sound_volume = DEFAULT_SOUND_VOLUME
 		_ambience_volume = DEFAULT_AMBIENCE_VOLUME
+		_voice_volume = DEFAULT_VOICE_VOLUME
 		_subtitles_enabled = DEFAULT_SUBTITLES_ENABLED
 		_god_rays_enabled = DEFAULT_GOD_RAYS_ENABLED
 	else:
@@ -162,6 +180,7 @@ func load_settings() -> void:
 		_music_volume = DEFAULT_MUSIC_VOLUME
 		_sound_volume = DEFAULT_SOUND_VOLUME
 		_ambience_volume = DEFAULT_AMBIENCE_VOLUME
+		_voice_volume = DEFAULT_VOICE_VOLUME
 		_subtitles_enabled = DEFAULT_SUBTITLES_ENABLED
 		_god_rays_enabled = DEFAULT_GOD_RAYS_ENABLED
 
@@ -172,6 +191,7 @@ func load_settings() -> void:
 	_music_volume = clampf(_music_volume, 0.0, 1.0)
 	_sound_volume = clampf(_sound_volume, 0.0, 1.0)
 	_ambience_volume = clampf(_ambience_volume, 0.0, 1.0)
+	_voice_volume = clampf(_voice_volume, 0.0, 1.0)
 
 
 func save_settings() -> void:
@@ -180,6 +200,7 @@ func save_settings() -> void:
 	_config.set_value(SECTION_AUDIO, KEY_MUSIC_VOLUME, _music_volume)
 	_config.set_value(SECTION_AUDIO, KEY_SOUND_VOLUME, _sound_volume)
 	_config.set_value(SECTION_AUDIO, KEY_AMBIENCE_VOLUME, _ambience_volume)
+	_config.set_value(SECTION_AUDIO, KEY_VOICE_VOLUME, _voice_volume)
 	_config.set_value(SECTION_ACCESSIBILITY, KEY_SUBTITLES_ENABLED, _subtitles_enabled)
 	_config.set_value(SECTION_GRAPHICS, KEY_GOD_RAYS_ENABLED, _god_rays_enabled)
 	var error := _config.save(SETTINGS_PATH)
@@ -195,6 +216,7 @@ func _apply_audio_settings() -> void:
 	_set_bus_volume_if_exists("Music", _music_volume)
 	_set_bus_volume_if_exists("SFX", _sound_volume)
 	_set_bus_volume_if_exists("Ambience", _ambience_volume)
+	_set_bus_volume_if_exists("Voice", _voice_volume)
 
 
 func _set_bus_volume_if_exists(bus_name: String, linear_value: float) -> void:
@@ -209,6 +231,7 @@ func _ensure_required_audio_buses() -> void:
 	_ensure_bus_exists("Music")
 	_ensure_bus_exists("SFX")
 	_ensure_bus_exists("Ambience")
+	_ensure_bus_exists("Voice")
 
 
 func _ensure_bus_exists(bus_name: String) -> void:

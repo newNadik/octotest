@@ -24,14 +24,13 @@ const COLOR_MID_BLUE := Color(0.007843138, 0.2627451, 0.43137255, 1.0) # 02436e
 @onready var ambience_label: Label = $TopContainer/MainContainer/SettingsRows/AmbienceRow/AmbienceLabel
 @onready var ambience_slider: HSlider = $TopContainer/MainContainer/SettingsRows/AmbienceRow/AmbienceSlider
 @onready var ambience_value: Label = $TopContainer/MainContainer/SettingsRows/AmbienceRow/AmbienceValue
+@onready var voice_label: Label = $TopContainer/MainContainer/SettingsRows/VoiceRow/VoiceLabel
+@onready var voice_slider: HSlider = $TopContainer/MainContainer/SettingsRows/VoiceRow/VoiceSlider
+@onready var voice_value: Label = $TopContainer/MainContainer/SettingsRows/VoiceRow/VoiceValue
 @onready var subtitles_label: Label = $TopContainer/MainContainer/SettingsRows/SubtitlesRow/SubtitlesLabel
 @onready var subtitles_prev_button: Button = $TopContainer/MainContainer/SettingsRows/SubtitlesRow/SubtitlesSelector/SubtitlesPrevButton
 @onready var subtitles_value_label: Label = $TopContainer/MainContainer/SettingsRows/SubtitlesRow/SubtitlesSelector/SubtitlesValueLabel
 @onready var subtitles_next_button: Button = $TopContainer/MainContainer/SettingsRows/SubtitlesRow/SubtitlesSelector/SubtitlesNextButton
-@onready var god_rays_label: Label = $TopContainer/MainContainer/SettingsRows/GodRaysRow/GodRaysLabel
-@onready var god_rays_prev_button: Button = $TopContainer/MainContainer/SettingsRows/GodRaysRow/GodRaysSelector/GodRaysPrevButton
-@onready var god_rays_value_label: Label = $TopContainer/MainContainer/SettingsRows/GodRaysRow/GodRaysSelector/GodRaysValueLabel
-@onready var god_rays_next_button: Button = $TopContainer/MainContainer/SettingsRows/GodRaysRow/GodRaysSelector/GodRaysNextButton
 @onready var language_label: Label = $TopContainer/MainContainer/SettingsRows/LanguageRow/LanguageLabel
 @onready var language_prev_button: Button = $TopContainer/MainContainer/SettingsRows/LanguageRow/LanguageSelector/LanguagePrevButton
 @onready var language_value_label: Label = $TopContainer/MainContainer/SettingsRows/LanguageRow/LanguageSelector/LanguageValueLabel
@@ -40,22 +39,30 @@ const COLOR_MID_BLUE := Color(0.007843138, 0.2627451, 0.43137255, 1.0) # 02436e
 var _is_updating_ui := false
 
 
+func _enter_tree() -> void:
+	process_mode = Node.PROCESS_MODE_ALWAYS if is_overlay else Node.PROCESS_MODE_INHERIT
+
+
 func _ready() -> void:
-	var running_paused := get_tree() != null and get_tree().paused
-	process_mode = Node.PROCESS_MODE_WHEN_PAUSED if (is_overlay and running_paused) else Node.PROCESS_MODE_INHERIT
+	process_mode = Node.PROCESS_MODE_ALWAYS if is_overlay else Node.PROCESS_MODE_INHERIT
 	back_button.pressed.connect(_on_back_pressed)
 	music_slider.value_changed.connect(_on_music_changed)
 	sounds_slider.value_changed.connect(_on_sounds_changed)
 	ambience_slider.value_changed.connect(_on_ambience_changed)
+	voice_slider.value_changed.connect(_on_voice_changed)
 	subtitles_prev_button.pressed.connect(_on_subtitles_cycle.bind(-1))
 	subtitles_next_button.pressed.connect(_on_subtitles_cycle.bind(1))
-	god_rays_prev_button.pressed.connect(_on_god_rays_cycle.bind(-1))
-	god_rays_next_button.pressed.connect(_on_god_rays_cycle.bind(1))
 	language_prev_button.pressed.connect(_on_language_cycle.bind(-1))
 	language_next_button.pressed.connect(_on_language_cycle.bind(1))
 	_apply_slider_grabber_icons()
 	_load_settings_into_ui()
 	_apply_localized_text()
+	_grab_initial_focus()
+
+
+func _grab_initial_focus() -> void:
+	if back_button == null:
+		return
 	back_button.grab_focus()
 
 
@@ -105,6 +112,15 @@ func _on_ambience_changed(value: float) -> void:
 	_update_percent_label(ambience_value, value)
 
 
+func _on_voice_changed(value: float) -> void:
+	if _is_updating_ui:
+		return
+	var settings := _get_game_settings()
+	if settings != null and settings.has_method("set_voice_volume"):
+		settings.call("set_voice_volume", value)
+	_update_percent_label(voice_value, value)
+
+
 func _on_subtitles_cycle(_direction: int) -> void:
 	var settings := _get_game_settings()
 	var enabled := true
@@ -114,17 +130,6 @@ func _on_subtitles_cycle(_direction: int) -> void:
 	if settings != null and settings.has_method("set_subtitles_enabled"):
 		settings.call("set_subtitles_enabled", enabled)
 	_update_subtitles_value(enabled)
-
-
-func _on_god_rays_cycle(_direction: int) -> void:
-	var settings := _get_game_settings()
-	var enabled := true
-	if settings != null and settings.has_method("get_god_rays_enabled"):
-		enabled = bool(settings.call("get_god_rays_enabled"))
-	enabled = not enabled
-	if settings != null and settings.has_method("set_god_rays_enabled"):
-		settings.call("set_god_rays_enabled", enabled)
-	_update_god_rays_value(enabled)
 
 
 func _on_language_cycle(direction: int) -> void:
@@ -148,8 +153,8 @@ func _load_settings_into_ui() -> void:
 	var music := 1.0
 	var sounds := 1.0
 	var ambience := 1.0
+	var voice := 1.0
 	var subtitles_enabled := true
-	var god_rays_enabled := true
 	var locale: String = TranslationServer.get_locale()
 	if settings != null:
 		if settings.has_method("get_music_volume"):
@@ -158,21 +163,22 @@ func _load_settings_into_ui() -> void:
 			sounds = float(settings.call("get_sound_volume"))
 		if settings.has_method("get_ambience_volume"):
 			ambience = float(settings.call("get_ambience_volume"))
+		if settings.has_method("get_voice_volume"):
+			voice = float(settings.call("get_voice_volume"))
 		if settings.has_method("get_subtitles_enabled"):
 			subtitles_enabled = bool(settings.call("get_subtitles_enabled"))
-		if settings.has_method("get_god_rays_enabled"):
-			god_rays_enabled = bool(settings.call("get_god_rays_enabled"))
 		if settings.has_method("get_locale"):
 			locale = str(settings.call("get_locale"))
 
 	music_slider.value = music
 	sounds_slider.value = sounds
 	ambience_slider.value = ambience
+	voice_slider.value = voice
 	_update_percent_label(music_value, music)
 	_update_percent_label(sounds_value, sounds)
 	_update_percent_label(ambience_value, ambience)
+	_update_percent_label(voice_value, voice)
 	_update_subtitles_value(subtitles_enabled)
-	_update_god_rays_value(god_rays_enabled)
 	_update_language_value(locale)
 	_is_updating_ui = false
 
@@ -182,11 +188,10 @@ func _apply_localized_text() -> void:
 	music_label.text = tr("Music")
 	sounds_label.text = tr("Sound Effects")
 	ambience_label.text = tr("Ambience")
+	voice_label.text = tr("Voice")
 	subtitles_label.text = tr("Subtitles")
-	god_rays_label.text = tr("Light Effects")
 	language_label.text = tr("Language")
 	_update_subtitles_value(_get_subtitles_enabled())
-	_update_god_rays_value(_get_god_rays_enabled())
 	_update_language_value(_get_active_locale())
 
 
@@ -196,17 +201,6 @@ func _update_percent_label(label: Label, value: float) -> void:
 
 func _update_subtitles_value(enabled: bool) -> void:
 	subtitles_value_label.text = tr("On") if enabled else tr("Off")
-
-
-func _update_god_rays_value(enabled: bool) -> void:
-	god_rays_value_label.text = tr("On") if enabled else tr("Off")
-
-
-func _get_god_rays_enabled() -> bool:
-	var settings := _get_game_settings()
-	if settings != null and settings.has_method("get_god_rays_enabled"):
-		return bool(settings.call("get_god_rays_enabled"))
-	return true
 
 
 func _update_language_value(locale: String) -> void:
@@ -239,6 +233,8 @@ func _apply_slider_grabber_icons() -> void:
 	sounds_slider.add_theme_icon_override("grabber_highlight", grabber)
 	ambience_slider.add_theme_icon_override("grabber", grabber)
 	ambience_slider.add_theme_icon_override("grabber_highlight", grabber)
+	voice_slider.add_theme_icon_override("grabber", grabber)
+	voice_slider.add_theme_icon_override("grabber_highlight", grabber)
 
 
 func _build_slider_grabber_texture() -> Texture2D:

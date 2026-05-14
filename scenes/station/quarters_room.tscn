@@ -47,6 +47,7 @@
 [ext_resource type="PackedScene" uid="uid://ke46h88s1cv1" path="res://scenes/station/items/cardbox_3.tscn" id="29_jb1ug"]
 [ext_resource type="PackedScene" uid="uid://de37b0314jllh" path="res://assets/models/items/quarters/sports_bag-2.glb" id="35_holjy"]
 [ext_resource type="PackedScene" uid="uid://7bd1yce17yng" path="res://assets/models/items/quarters/dippers_cap.glb" id="39_y5ofa"]
+[ext_resource type="Script" uid="uid://b2xoxvpo52tl7" path="res://scripts/station/neil_bed_dialogue.gd" id="40_neil"]
 [ext_resource type="PackedScene" uid="uid://bb7xr4lbthtcs" path="res://assets/models/items/quarters/board_game_boxes.glb" id="42_xiaq4"]
 [ext_resource type="PackedScene" uid="uid://b16x5s6xvy0va" path="res://assets/models/items/quarters/sunglasses.glb" id="43_34v0f"]
 
@@ -377,6 +378,11 @@ transform = Transform3D(0.93607795, 0, -0.35179263, 0, 1, 0, 0.35179263, 0, 0.93
 
 [node name="Sketchfab_Scene2" parent="furniture" unique_id=375892744 instance=ExtResource("24_7xvgq")]
 transform = Transform3D(0.019750703, 0, -0.07188269, 0, 0.08, 0, 0.04043402, 0, 0.03511236, -23.466421, 1.5988138, -17.370403)
+
+[node name="NeilBedDialogue" type="Node3D" parent="." unique_id=987654324 node_paths=PackedStringArray("light_switch")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -20.20934, 0.8, -20.618605)
+script = ExtResource("40_neil")
+light_switch = NodePath("../lights/LightSwitch")
 
 [node name="items" type="Node3D" parent="." unique_id=1659725905]
 

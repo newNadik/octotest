@@ -100,63 +100,66 @@ Data Office → Quarters [steal Neil's card] → [exit staff area] → Atrium/Ki
 # Light Switch Dialogue Sequence
 # Character: Sleeping crew member (night shift worker)
 # Trigger: Player toggles lights in quarters
+//LightSwitchDialogue_Neil(orus)
 
 ## FIRST LIGHT ON:
-"Mike, I told you... I have night shift. Please."
-"Майк, я ж казав... У мене нічна зміна. Будь ласка."
+// light_switch_on_1.mp3
+"Mike, I told you... I have night shift. Please"
+"Майк, я ж казав... У мене нічна зміна. Будь ласка"
 
 ## LIGHT OFF:
-"Thank you."
-"Дякую."
+// light_switch_off_1.mp3
+"Thank you"
+"Дякую"
 ## SECOND LIGHT ON:
-"Seriously? I need to sleep."
-"Серйозно? Мені треба спати."
+// light_switch_on_2.mp3
+"Seriously? I need to sleep"
+"Серйозно? Мені треба спати"
 
 ## LIGHT OFF:
-*grumbles* "...fine."
-*буркоче* "...добре."
+// light_switch_off_2.mp3
+*grumbles* "...fine"
+*буркоче* "...добре"
 
 ## THIRD LIGHT ON:
+// light_switch_on_3.mp3
 "Are you kidding me right now?"
 "Ти що, жартуєш?"
 
 ## LIGHT OFF:
-*heavy sigh* "...thank you."
-*важко зітхає* "...дякую."
+// light_switch_off_3.mp3
+*heavy sigh* "...thank you"
+*важко зітхає* "...дякую"
 
 ## FOURTH LIGHT ON:
+// light_switch_on_4.mp3
 "Mike! What is WRONG with you?!"
-"Майк! Що з тобою не так?!"
-
-## LIGHT OFF:
-"......"
-"......"
+"Майк! Та що з тобою не так?!"
 
 ## FIFTH LIGHT ON:
-"I swear to god, Mike... I'm putting in a complaint."
-"Клянусь богом, Майк... Я подам скаргу."
+// light_switch_on_5.mp3
+"I swear to god, Mike... I'm putting in a complaint"
+"Богом клянусь, Майк... Я подам скаргу"
 
 ## LIGHT OFF:
-*muffled angry muttering*
-*приглушене злісне буркотіння*
+// light_switch_off_5.mp3
+"Unbelievable... every single time... ridiculous..."
+"Не можу повірити... кожного разу... абсурдно..."
 
 ## SIXTH LIGHT ON:
-"THAT'S IT. I'm writing this down. Date, time, EVERYTHING."
-"ВСЕ. Я все записую. Дата, час, ВСЕ."
-
-## LIGHT OFF:
-*silence*
+// light_switch_on_6.mp3
+"THAT'S IT. I'm writing this down. Date, time, EVERYTHING"
+"ВСЕ. Я все записую. Дата, час, ВСЕ"
 
 ## SEVENTH LIGHT ON:
-"You know what? Fine. FINE. You win. Hope you're happy."
-"Знаєш що? Добре. ДОБРЕ. Ти переміг. Сподіваюся, ти задоволений."
+// light_switch_on_7.mp3
+"You know what? Fine. FINE. You win. Hope you're happy"
+"Знаєш що? Добре. ДОБРЕ. Ти переміг. Сподіваюся, ти задоволений"
 
 ## EIGHTH LIGHT ON:
-"You are being CHILDISH. I won't speak to you ever again. We're done. DONE."
-"Ти поводишся ЯК ДИТИНА. Я більше ніколи з тобою не розмовлятиму. Все. ВСЕ."
-
-## LIGHT OFF (after 8th):
-*complete silence*
+// light_switch_on_8.mp3
+"You are being CHILDISH. I won't speak to you ever again. We're done. DONE"
+"Ти поводишся ЯК ДИТИНА. Я більше ніколи з тобою не розмовлятиму. Все. ВСЕ"
 
 ## ANY SUBSEQUENT LIGHT TOGGLES:
 *no response - he's given up*

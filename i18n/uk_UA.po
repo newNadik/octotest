@@ -301,3 +301,42 @@ msgstr "WC"
 
 msgid "Shop"
 msgstr " "
+
+msgid "Mike, I told you... I have night shift. Please"
+msgstr "Майк, я ж казав... У мене нічна зміна. Будь ласка"
+
+msgid "Seriously? I need to sleep"
+msgstr "Серйозно? Мені треба спати"
+
+msgid "Are you kidding me right now?"
+msgstr "Ти що, жартуєш?"
+
+msgid "Mike! What is WRONG with you?!"
+msgstr "Майк! Та що з тобою не так?!"
+
+msgid "I swear to god, Mike... I'm putting in a complaint"
+msgstr "Богом клянусь, Майк... Я подам скаргу"
+
+msgid "THAT'S IT. I'm writing this down. Date, time, EVERYTHING"
+msgstr "ВСЕ. Я все записую. Дата, час, ВСЕ"
+
+msgid "You know what? Fine. FINE. You win. Hope you're happy"
+msgstr "Знаєш що? Добре. ДОБРЕ. Ти переміг. Сподіваюся, ти задоволений"
+
+msgid "You are being CHILDISH. I won't speak to you ever again. We're done. DONE"
+msgstr "Ти поводишся ЯК ДИТИНА. Я більше ніколи з тобою не розмовлятиму. Все. ВСЕ"
+
+msgid "Thank you"
+msgstr "Дякую"
+
+msgid "*grumbles* ...fine"
+msgstr "*буркоче* ...добре"
+
+msgid "*heavy sigh* ...thank you"
+msgstr "*важко зітхає* ...дякую"
+
+msgid "Unbelievable... every single time... ridiculous..."
+msgstr "Не можу повірити... кожного разу... абсурдно..."
+
+msgid "Voice"
+msgstr "Голос"

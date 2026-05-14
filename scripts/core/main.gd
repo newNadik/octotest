@@ -407,7 +407,7 @@ func _apply_room_streaming() -> void:
 
 
 func _unhandled_input(event: InputEvent) -> void:
-	if _settings_overlay != null and is_instance_valid(_settings_overlay):
+	if _has_settings_overlay():
 		if _is_escape_press(event):
 			_close_settings_overlay()
 			get_viewport().set_input_as_handled()
@@ -434,6 +434,9 @@ func _input(event: InputEvent) -> void:
 
 
 func _handle_pointer_input(event: InputEvent) -> void:
+	if _has_settings_overlay():
+		return
+
 	if in_game_menu.visible:
 		return
 
@@ -854,7 +857,7 @@ func _on_resume_pressed() -> void:
 
 
 func _on_pause_menu_button_pressed() -> void:
-	if _settings_overlay != null and is_instance_valid(_settings_overlay):
+	if _has_settings_overlay():
 		return
 	if _focus_mode:
 		_exit_focus_mode()
@@ -870,13 +873,14 @@ func _on_save_pressed() -> void:
 
 
 func _on_settings_pressed() -> void:
-	if _settings_overlay != null and is_instance_valid(_settings_overlay):
+	if _has_settings_overlay():
 		return
 
 	var settings_menu := SETTINGS_MENU_SCENE.instantiate() as Control
 	settings_menu.set("is_overlay", true)
 	settings_menu.closed.connect(_on_settings_overlay_closed)
-	add_child(settings_menu)
+	$UI.add_child(settings_menu)
+	settings_menu.call_deferred("_grab_initial_focus")
 	_settings_overlay = settings_menu
 	in_game_menu.visible = false
 
@@ -893,6 +897,10 @@ func _close_settings_overlay() -> void:
 	_settings_overlay = null
 	in_game_menu.visible = true
 	in_game_resume_button.grab_focus()
+
+
+func _has_settings_overlay() -> bool:
+	return _settings_overlay != null and is_instance_valid(_settings_overlay)
 
 
 func _connect_autosave_doors() -> void:

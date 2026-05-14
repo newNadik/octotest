@@ -11,6 +11,7 @@
 [ext_resource type="PackedScene" uid="uid://c5tv72lyq8d8h" path="res://scenes/effects/caustic_rig.tscn" id="20_caustic"]
 [ext_resource type="Texture2D" uid="uid://kxj121ocl7jm" path="res://assets/ui/save.png" id="21_saveicon"]
 [ext_resource type="Texture2D" uid="uid://45skik4ua1t5" path="res://assets/ui/menu.png" id="22_menuicon"]
+[ext_resource type="Script" path="res://scripts/ui/subtitle_display.gd" id="23_subtitle"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_7yl8v"]
 sky_top_color = Color(0.055, 0.135, 0.17, 1)
@@ -189,6 +190,36 @@ theme_override_constants/shadow_offset_x = 1
 theme_override_constants/shadow_offset_y = 1
 text = "FPS: --"
 horizontal_alignment = 2
+
+[node name="SubtitlePanel" type="PanelContainer" parent="UI" unique_id=987654321]
+visible = false
+layout_mode = 1
+anchor_left = 0.5
+anchor_right = 0.5
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = -300.0
+offset_top = -112.0
+offset_right = 300.0
+offset_bottom = -20.0
+grow_horizontal = 3
+grow_vertical = 0
+mouse_filter = 2
+script = ExtResource("23_subtitle")
+
+[node name="SubtitleMargin" type="MarginContainer" parent="UI/SubtitlePanel" unique_id=987654322]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 8
+
+[node name="SubtitleLabel" type="Label" parent="UI/SubtitlePanel/SubtitleMargin" unique_id=987654323]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+horizontal_alignment = 1
+autowrap_mode = 3
 
 [node name="UnderwaterAmbient" type="AudioStreamPlayer" parent="." unique_id=1890427101]
 stream = ExtResource("13_dp3eg")
