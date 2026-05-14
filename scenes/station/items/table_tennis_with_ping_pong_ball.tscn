@@ -1,0 +1,45 @@
+[gd_scene format=3 uid="uid://cs16qwb81gpot"]
+
+[ext_resource type="PackedScene" uid="uid://bccrra7a6sj3d" path="res://assets/models/items/quarters/table_tennis_with_ping_pong_ball.glb" id="1_table_mesh"]
+[ext_resource type="Script" uid="uid://bt8vvmy3m63u7" path="res://scripts/interaction/interactable.gd" id="2_interactable_script"]
+[ext_resource type="Script" uid="uid://bfj7okbvrkgag" path="res://scripts/station/items/table_tennis_with_ping_pong_ball_behavior.gd" id="3_behavior_script"]
+[ext_resource type="AudioStream" uid="uid://yevpoboquc43" path="res://assets/sound/ping-pong.mp3" id="4_ping_pong_sfx"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_body"]
+size = Vector3(0.40068358, 0.035312504, 0.6533911)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_interactable"]
+size = Vector3(0.41739988, 0.05376953, 0.6565576)
+
+[node name="table_tennis_with_ping_pong_ball" type="StaticBody3D" unique_id=680073475]
+collision_layer = 64
+collision_mask = 99
+script = ExtResource("3_behavior_script")
+
+[node name="Model" parent="." unique_id=822168670 instance=ExtResource("1_table_mesh")]
+transform = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, 0, 0, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=460286560]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.002978526, 0.017656252, -0.19667114)
+shape = SubResource("BoxShape3D_body")
+
+[node name="Interactable" type="Area3D" parent="." unique_id=71775982]
+collision_layer = 8
+collision_mask = 0
+script = ExtResource("2_interactable_script")
+interaction_type = 1
+display_name = "Table Tennis Paddle"
+prompt_action = "Pick up"
+requires_line_of_sight = false
+item_id = "table_tennis_with_ping_pong_ball"
+hold_offset = Vector3(0, -0.15, 0.05)
+hold_rotation_degrees = Vector3(0, 180, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Interactable" unique_id=1622981442]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0019103959, 0.009462893, -0.19674073)
+shape = SubResource("BoxShape3D_interactable")
+
+[node name="CarrySfx" type="AudioStreamPlayer3D" parent="." unique_id=877846501]
+stream = ExtResource("4_ping_pong_sfx")
+volume_db = -4.0
+max_distance = 14.0
