@@ -133,6 +133,12 @@ Source: [Flaticon](https://www.flaticon.com/)
 - "Board Game Boxes" (https://skfb.ly/o9HGw) by jon u is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
 - "Thermos" (https://skfb.ly/6xBRY) by swingonaset is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
 - "Sunglasses" (https://skfb.ly/oUNwz) by Pacheco2099 is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+- "MILLENNIUM CHOCOLATE" (https://skfb.ly/oZzrP) by Mykola is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+- "Chocolate" (https://skfb.ly/oyVVH) by Christian.Bittner is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+- "Blanket and pillows" (https://skfb.ly/osI7Y) by niteris is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+- "White Towel" (https://skfb.ly/6yCnI) by Anežka Hájková is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+- "Water Bottles" (https://skfb.ly/oxCQL) by HGowl is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+- "Table Tennis With Ping Pong Ball" (https://skfb.ly/psTBG) by Rukh3D is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
 - 
 
 ## Textures

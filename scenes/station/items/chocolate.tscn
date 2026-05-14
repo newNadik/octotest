@@ -1,0 +1,47 @@
+[gd_scene format=4 uid="uid://cty23ql0430y3"]
+
+[ext_resource type="Texture2D" uid="uid://cnrit68eabhc2" path="res://assets/models/items/quarters/realistic_chocolate_bar_-_cashew_0.png" id="1_xdjyn"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_m5qly"]
+resource_name = "Material"
+cull_mode = 2
+albedo_texture = ExtResource("1_xdjyn")
+roughness = 0.5
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_ktmsv"]
+_surfaces = [{
+"aabb": AABB(-0.83, -1.9, -0.14, 1.66, 3.8, 0.28),
+"format": 34896613377,
+"index_count": 36,
+"index_data": PackedByteArray("AAABAAIAAwACAAEAAAAEAAEAAwAFAAIABQAAAAIABgAEAAAABQAGAAAABwABAAQABwADAAEABgAHAAQABQADAAcABQAHAAYA"),
+"name": "Material",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 8,
+"vertex_data": PackedByteArray("/////wAAAAAAAP////8AAAAA//8AAAAAAAAAAP//AAD///////8AAAAAAAAAAAAA//8AAAAAAAD//wAA//8AAA==")
+}]
+blend_shape_mode = 0
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_ys0o2"]
+resource_name = "Sketchfab_Scene_Object_0"
+_surfaces = [{
+"aabb": AABB(-0.83, -1.9, -0.14, 1.66, 3.8, 0.28),
+"attribute_data": PackedByteArray("a7nfgUGKJ4pBit+Ba7kniv///v9SyVuA/f9agFTJ//9MiST/E4CWgEyJloATgCT/0PzpgabNMYqmzemB0PwxijrJ4P8twH6AOsl+gC3A4P/wv9//Y4nyf/C/8n9jid//"),
+"format": 34896613399,
+"index_count": 36,
+"index_data": PackedByteArray("AAABAAIAAAADAAEABAAFAAYABAAHAAUACAAJAAoACAALAAkADAANAA4ADAAPAA0AEAARABIAEAATABEAFAAVABYAFAAXABUA"),
+"material": SubResource("StandardMaterial3D_m5qly"),
+"name": "Material",
+"primitive": 3,
+"uv_scale": Vector4(1.999727, 2.00156, 0, 0),
+"vertex_count": 24,
+"vertex_data": PackedByteArray("/////wAA/78AAP//////vwAA//8AAP+//////////7///wAA//8AgAAA/////wCA////////AIAAAAAA//8AgAAAAAD///+/AAD//wAA/78AAP//////vwAAAAAAAP+/AAAAAAAA/////wAA////////AAAAAP//AAAAAP///////wAAAAD/v/////////+//////wAA/7///wAA////vwAAAAAAAP///////wAA//8AAP//AAD/////AAAAAP//////f////3////9/////f/9//3//f/9//3//f/9//3//f////3////9/////f////3//P/9//z//f/8//3//P/9/AAD/fwAA/38AAP9/AAD/f////3////9/////f///")
+}]
+blend_shape_mode = 0
+shadow_mesh = SubResource("ArrayMesh_ktmsv")
+
+[node name="Node3D" type="Node3D" unique_id=381937516]
+
+[node name="Object_4" type="MeshInstance3D" parent="." unique_id=1259692174]
+transform = Transform3D(0.15, 0, 0, 0, -6.5567085e-09, 0.15, 0, -0.15, -6.5567085e-09, 0, 0, 0)
+mesh = SubResource("ArrayMesh_ys0o2")
