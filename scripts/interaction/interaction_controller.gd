@@ -13,6 +13,7 @@ const INTERACTABLE_COLLISION_MASK := 1 << 3
 const InteractionBehaviorScript = preload("res://scripts/interaction/interaction_behavior.gd")
 const FocusTargetScript = preload("res://scripts/interaction/focus_target.gd")
 const FocusRejectFeedbackScript = preload("res://scripts/interaction/focus_reject_feedback.gd")
+const FocusItemReceiverScript = preload("res://scripts/interaction/focus_item_receiver.gd")
 const InteractableScript = preload("res://scripts/interaction/interactable.gd")
 const InteractionHintBuilderScript = preload("res://scripts/interaction/interaction_hint_builder.gd")
 const OctoRigScript = preload("res://scripts/rig/OctoRig.gd")
@@ -87,6 +88,7 @@ var _focus_display_camera: Camera3D
 var _focus_target: FocusTargetScript
 var _focus_behavior: InteractionBehaviorScript
 var _focus_reject_feedback = FocusRejectFeedbackScript.new()
+var _focus_item_receiver = FocusItemReceiverScript.new()
 var _hint_builder = InteractionHintBuilderScript.new()
 var _octo_rig: OctoRigScript
 var _pick_drop_player: AudioStreamPlayer3D
@@ -960,20 +962,24 @@ func _apply_held_item_to_focus_target(item) -> void:
 
 
 func _apply_held_item_to_focus_target_now(item) -> void:
-	if item == null or _focus_behavior == null:
-		return
-	if not _focus_locked:
-		return
-	if not _is_item_currently_held(item):
-		return
-	var can_receive := _focus_behavior.can_receive_item(item)
-	var applied := can_receive and _focus_behavior.receive_item(item)
-	if not applied:
+	var apply_result = _focus_item_receiver.apply(
+		item,
+		_focus_behavior,
+		_focus_locked,
+		_is_item_currently_held(item)
+	)
+	if apply_result == FocusItemReceiverScript.ApplyResult.REJECTED:
 		_debug_log("Focus-held apply failed for %s" % _describe_interactable(item))
 		_play_focus_target_reject_sfx()
 		return
+	if (
+		apply_result == FocusItemReceiverScript.ApplyResult.NO_TARGET
+		or apply_result == FocusItemReceiverScript.ApplyResult.FOCUS_UNLOCKED
+		or apply_result == FocusItemReceiverScript.ApplyResult.ITEM_NOT_HELD
+	):
+		return
 	_play_focus_target_success_sfx()
-	if not _focus_behavior.should_consume_received_item(item):
+	if apply_result != FocusItemReceiverScript.ApplyResult.APPLIED_CONSUME:
 		return
 	var removed_item = _remove_held_item(item)
 	if removed_item == null:

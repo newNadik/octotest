@@ -23,6 +23,7 @@ enum InteractionType {
 enum ItemKind {
 	NONE,
 	CARD,
+	PHOTO_CAMERA,
 }
 
 enum VisualState {
