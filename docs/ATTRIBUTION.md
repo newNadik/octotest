@@ -141,6 +141,8 @@ Source: [Flaticon](https://www.flaticon.com/)
 - "Table Tennis With Ping Pong Ball" (https://skfb.ly/psTBG) by Rukh3D is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
 - "Yoga Mat" (https://skfb.ly/6QYTC) by Jeremy E. Grayson is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
 - "Nintendo Switch" (https://skfb.ly/onRvD) by Smoggybeard is licensed under CC Attribution-NonCommercial-ShareAlike (http://creativecommons.org/licenses/by-nc-sa/4.0/).
+- "High visibilty vest 1" (https://skfb.ly/o9nsx) by Issa is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+- "Lifejacket" (https://skfb.ly/6SuP8) by BoatUS Foundation is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
 - 
 
 ## Textures

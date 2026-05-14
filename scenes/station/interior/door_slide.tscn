@@ -312,9 +312,6 @@ size = Vector3(1.55, 4.8, 0.2)
 [sub_resource type="BoxShape3D" id="BoxShape3D_close_sensor"]
 size = Vector3(1.62, 4.8, 0.42)
 
-[sub_resource type="BoxOccluder3D" id="BoxOccluder3D_rhdm1"]
-size = Vector3(0.03831028, 1.9182289, 1.4960439)
-
 [node name="door_slide" type="Node3D" unique_id=1376803240]
 script = ExtResource("1_door_slide_script")
 
@@ -432,7 +429,3 @@ monitorable = false
 [node name="CollisionShape3D" type="CollisionShape3D" parent="CloseSensor" unique_id=496892256]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.4, 0)
 shape = SubResource("BoxShape3D_close_sensor")
-
-[node name="OccluderInstance3D5" type="OccluderInstance3D" parent="." unique_id=1667316300]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -0.0023857355, 0.79916, 0.0002799332)
-occluder = SubResource("BoxOccluder3D_rhdm1")

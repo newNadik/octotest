@@ -196,7 +196,7 @@ size = Vector3(0.45675665, 10.364921, 2.0001872)
 size = Vector3(0.45675665, 10.047231, 11.51637)
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_r7q52"]
-size = Vector2(10, 8)
+size = Vector2(10, 10)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_d3chd"]
 albedo_color = Color(0.9, 0.9, 0.9, 1)
@@ -283,7 +283,7 @@ transform = Transform3D(0.70710677, -0.6941152, -0.13492236, 0, -0.19080903, 0.9
 transform = Transform3D(0.70710677, -0.6941152, -0.13492236, 0, -0.19080903, 0.98162717, -0.70710677, -0.6941152, -0.13492236, -20.766197, 7.619459, -13.359323)
 
 [node name="RoofQuarters" type="MeshInstance3D" parent="StaticBody3D" unique_id=2062910619]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.8054073, -7.5464764e-06, 0.006915656)
+transform = Transform3D(1, -2.2204455e-16, 0, 0, 1, 0, 0, 0, 1, -0.8054073, -0.42618594, 0.006915659)
 instance_shader_parameters/offset_xz = Vector2(2, 3.5)
 mesh = SubResource("ArrayMesh_a4y7k")
 surface_material_override/0 = ExtResource("4_44o56")
@@ -337,6 +337,11 @@ transform = Transform3D(-4.038405e-08, -0.9238795, 0.38268346, 1, -4.371139e-08,
 mesh = SubResource("PlaneMesh_r7q52")
 surface_material_override/0 = ExtResource("4_kvu68")
 
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="StaticBody3D" unique_id=1393741408]
+transform = Transform3D(2.0279684e-15, 4.3711392e-08, 1, 1, -4.371139e-08, 0, 4.371138e-08, 1, -4.371139e-08, -16.285921, 4.938217, -21.946169)
+mesh = SubResource("PlaneMesh_r7q52")
+surface_material_override/0 = ExtResource("4_kvu68")
+
 [node name="lights" type="Node3D" parent="." unique_id=1225828476]
 
 [node name="fairy_lights" parent="lights" unique_id=486168498 instance=ExtResource("8_5fr8h")]
@@ -352,21 +357,23 @@ rotation_speed_a_degrees = 3.0
 rotation_speed_b_degrees = -4.0
 
 [node name="OmniLight3D" type="OmniLight3D" parent="lights" unique_id=725256015]
-transform = Transform3D(0.99859184, 0.05305054, 0, -0.05305054, 0.99859184, 0, 0, 0, 1, -15.297527, 4.9199305, -15.525966)
-light_energy = 4.0
+transform = Transform3D(0.99859184, 0.05305054, 0, -0.05305054, 0.99859184, 0, 0, 0, 1, -16.219173, 5.577534, -15.525966)
+light_bake_mode = 1
 shadow_enabled = true
-shadow_blur = 2.0
-omni_range = 13.5
+shadow_opacity = 0.7
+omni_range = 11.091612
+omni_attenuation = 0.0
+omni_shadow_mode = 0
 
 [node name="LightSwitch" parent="lights" unique_id=1802619805 instance=ExtResource("7_hj37j")]
 transform = Transform3D(0.38268343, 0, -0.9238796, 0, 1, 0, 0.9238796, 0, 0.38268343, -7.776346, 0, -13.542364)
 
 [node name="OmniLight3D2" type="OmniLight3D" parent="lights" unique_id=145763959]
 transform = Transform3D(0.99859184, 0.05305054, 0, -0.05305054, 0.99859184, 0, 0, 0, 1, -18.319313, 4.058849, -8.089163)
-light_energy = 5.0
 light_bake_mode = 1
 shadow_blur = 2.0
 omni_range = 5.1230326
+omni_attenuation = 0.0
 omni_shadow_mode = 0
 
 [node name="furniture" type="Node3D" parent="." unique_id=28425833]

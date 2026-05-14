@@ -64,6 +64,7 @@ const ROOM_REGISTRY: Array[Dictionary] = [
 @export var room_load_distance := 80.0
 @export var room_unload_distance := 96.0
 @export var room_names_to_always_keep: PackedStringArray = PackedStringArray(["atrium"])
+@export var ios_render_scale := 0.70
 
 @onready var player: CharacterBody3D = $Player
 @onready var camera_pivot: Node3D = $CameraPivot
@@ -131,6 +132,7 @@ func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	in_game_menu.process_mode = Node.PROCESS_MODE_WHEN_PAUSED
 	player.process_mode = Node.PROCESS_MODE_PAUSABLE
+	_apply_mobile_render_scale_overrides()
 	_apply_platform_visual_overrides()
 	var starting_position := Vector3(5.0, OCTO_START_Y, -26.0)
 	var is_loading_saved_game := _consume_pending_load_request()
@@ -188,6 +190,15 @@ func _apply_platform_visual_overrides() -> void:
 	if not _should_use_mobile_visual_fallbacks():
 		return
 	_apply_mobile_material_fallbacks()
+
+
+func _apply_mobile_render_scale_overrides() -> void:
+	if OS.get_name() != "iOS":
+		return
+	var viewport := get_viewport()
+	if viewport == null:
+		return
+	viewport.set("scaling_3d_scale", clampf(ios_render_scale, 0.5, 1.0))
 
 
 func _should_use_mobile_visual_fallbacks() -> bool:

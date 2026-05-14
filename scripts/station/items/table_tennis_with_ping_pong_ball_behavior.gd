@@ -4,7 +4,7 @@ extends StaticBody3D
 @export var animation_player_path: NodePath
 @export var audio_player_path: NodePath = NodePath("CarrySfx")
 @export var carry_animation_name := ""
-@export_range(1, 10, 1) var carry_animation_loops := 5
+@export_range(1, 10, 1) var carry_animation_loops := 4
 
 var _interactable: Interactable
 var _animation_player: AnimationPlayer

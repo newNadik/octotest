@@ -64,6 +64,25 @@ Data Office → Quarters [steal Neil's card] → [exit staff area] → Atrium/Ki
 - [ ] 📦 Small cactus pot
 - [ ] 📦 Energy drink cans (tower)
 
+## Weekend Departure
+# Characters: Eva, Theo
+
+EVA:
+"Finally Friday! What a week"
+"Нарешті п'ятниця! Оце так тиждень"
+
+THEO:
+"Yeah, total chaos"
+"Егеш, повний хаос"
+
+EVA:
+"Bye, Octo!"
+"Бувай, Окто!"
+
+THEO:
+"Bye, Octo!"
+"Бувай, Окто!"
+
 ---
 
 ### Systems Room *(optional — staff wing)*
@@ -72,7 +91,39 @@ Data Office → Quarters [steal Neil's card] → [exit staff area] → Atrium/Ki
 
 - [ ] 📦 Torch / flashlight
 - [ ] 🔘 Light switch — mechanic says *"Hey, who turned off the light"* and switches on her headband lights
-- [ ] 📦 Bring banana from Kitchen — mechanic says *"Thanks! at least someone cares for mechanics"* (still resets if seen)
+- [ ] 📦 Bring banana from Kitchen — mechanic says 
+"Oh, thank you! Finally, someone appreciates the people keeping this place running."
+"О, дякую! Нарешті хтось цінує людей, що тримають цю станцію на плаву."
+
+# Systems Room catch Dialogue Sequence
+# Character: Rory (mechanic)
+# Trigger: Octopus moving too close to NPC
+
+## Rory is working in the systems room. She notices the octopus on the floor
+
+"Hey buddy, you're not supposed to be here"
+"Хей, друже, тобі тут не місце"
+
+## Rory stands up and reaches toward the octopus
+"Let me just..."
+"Дай-но я..."
+
+## Rory touches the octopus's slimy body
+"Ugh"
+"Ух"
+
+## SCREEN FADES TO BLACK
+[SFX: Doors opening]
+[SFX: Card accepted and doors opening]
+[SFX: if office room light was off - sound of light switching on]
+[SFX: Splash in aquarium]
+
+"There you go"
+"Ось так"
+
+## Rory leaves the room. Light switch clicks off
+"Nighty night"
+"Спатоньки"
 
 ---
 

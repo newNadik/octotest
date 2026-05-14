@@ -63,6 +63,9 @@ const Utils = preload("res://scripts/station/fish_school_utils.gd")
 @export var animation_speed_min := 0.85
 @export var animation_speed_max := 1.25
 
+@export_group("Platform")
+@export var disable_on_mobile := true
+
 @onready var fish_root: Node3D = $FishRoot
 @onready var volume_preview: MeshInstance3D = $VolumePreview
 
@@ -93,6 +96,9 @@ func _ready() -> void:
 		_update_editor_preview()
 		set_process(true)
 		return
+	if _should_disable_for_platform():
+		queue_free()
+		return
 	if volume_preview != null:
 		volume_preview.visible = false
 	if DisplayServer.get_name() == "headless":
@@ -105,6 +111,12 @@ func _ready() -> void:
 	if randomize_models_from_folder:
 		fish_scene_pool = _collect_scene_pool(fish_models_folder)
 	_schedule_next_school(0.2)
+
+
+func _should_disable_for_platform() -> bool:
+	if disable_on_mobile and OS.has_feature("mobile"):
+		return true
+	return false
 
 
 func _process(delta: float) -> void:
