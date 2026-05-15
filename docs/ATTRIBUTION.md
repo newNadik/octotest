@@ -143,6 +143,8 @@ Source: [Flaticon](https://www.flaticon.com/)
 - "Nintendo Switch" (https://skfb.ly/onRvD) by Smoggybeard is licensed under CC Attribution-NonCommercial-ShareAlike (http://creativecommons.org/licenses/by-nc-sa/4.0/).
 - "High visibilty vest 1" (https://skfb.ly/o9nsx) by Issa is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
 - "Lifejacket" (https://skfb.ly/6SuP8) by BoatUS Foundation is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+- "Paper Bag Sack Lunch" (https://skfb.ly/pnwYY) by Laurie Annis is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+- "Pizza Box" (https://skfb.ly/6uGsK) by maypassamon is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
 - 
 
 ## Textures
