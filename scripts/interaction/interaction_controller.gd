@@ -62,7 +62,7 @@ const ARM_SOCKET_ANGLE_BY_NAME := {
 @export var focus_display_bottom_anchor := -0.68
 @export var focus_display_row_spacing := 0.44
 @export var focus_display_column_spacing := 0.62
-@export var focus_display_max_row_width := 2.6
+@export_range(0.1, 1.0, 0.01) var focus_display_safe_area_fraction := 0.82
 @export var focus_item_apply_delay := 0.2
 @export var focus_item_return_duration := 0.16
 
@@ -900,13 +900,28 @@ func _update_held_item_transform(delta: float) -> void:
 		_apply_interpolated_transform_preserving_scale(pickup_root, target_transform, alpha)
 
 
+func _compute_focus_max_half_width() -> float:
+	if _focus_display_camera == null:
+		return focus_display_column_spacing * 4.0
+	var viewport := _focus_display_camera.get_viewport()
+	if viewport == null:
+		return focus_display_column_spacing * 4.0
+	var vp_size := viewport.get_visible_rect().size
+	if vp_size.y <= 0.0:
+		return focus_display_column_spacing * 4.0
+	var aspect := vp_size.x / vp_size.y
+	var fov_v_rad := deg_to_rad(_focus_display_camera.fov)
+	return focus_display_forward_distance * tan(fov_v_rad * 0.5) * aspect * focus_display_safe_area_fraction
+
+
 func _update_focus_display_transforms(delta: float) -> void:
 	var count = _held_interactables.size()
 	var columns = maxi(count, 1)
 	var alpha = 1.0
 	var effective_column_spacing := focus_display_column_spacing
-	if columns > 1 and focus_display_max_row_width > 0.0:
-		var max_spacing = focus_display_max_row_width / float(columns - 1)
+	if columns > 1:
+		var max_half_width := _compute_focus_max_half_width()
+		var max_spacing := max_half_width * 2.0 / float(columns - 1)
 		effective_column_spacing = minf(focus_display_column_spacing, max_spacing)
 
 	for i in range(count):
