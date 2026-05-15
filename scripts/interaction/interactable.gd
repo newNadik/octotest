@@ -46,6 +46,7 @@ enum HighlightMode {
 @export var interaction_range := 2.6
 @export var requires_line_of_sight := true
 @export var focus_offset := Vector3.ZERO
+@export var skip_arm_gesture := false
 
 @export_group("Pickup")
 @export var item_kind: ItemKind = ItemKind.NONE

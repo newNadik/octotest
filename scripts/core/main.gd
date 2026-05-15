@@ -343,6 +343,7 @@ func _load_room_now(room_name: String) -> void:
 	_apply_exit_code_to_scene(instance)
 	room_data["node"] = instance
 	_stream_rooms[room_name] = room_data
+	_connect_autosave_doors()
 	print("[RoomStream] Sync-instantiated (cache hit): ", room_name)
 
 
@@ -384,6 +385,7 @@ func _check_pending_room_loads() -> void:
 		_apply_exit_code_to_scene(instance)
 		room_data["node"] = instance
 		_stream_rooms[room_name] = room_data
+		_connect_autosave_doors()
 		print("[RoomStream] Async-instantiated: ", room_name)
 		_apply_pending_world_state()
 

@@ -406,6 +406,7 @@ script = ExtResource("2_interactable_script")
 display_name = "Door"
 prompt_action = "Open"
 interaction_range = 2.9
+skip_arm_gesture = true
 visual_root_path = NodePath("../StaticBody3D/button")
 highlight_mode = 1
 highlight_visible_paths = Array[NodePath]([NodePath("../StaticBody3D/GlowMesh")])

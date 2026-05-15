@@ -190,7 +190,8 @@ func try_handle_interaction_click(screen_position: Vector2) -> bool:
 		_mark_interactable_clicked(target)
 		_queued_interaction_target = null
 		if target.interaction_type == InteractableScript.InteractionType.CLICK:
-			_play_object_interaction_arm_gesture(target)
+			if not target.get("skip_arm_gesture"):
+				_play_object_interaction_arm_gesture(target)
 			var behavior = _get_behavior(target)
 			if behavior != null:
 				behavior.on_interacted(_player)
