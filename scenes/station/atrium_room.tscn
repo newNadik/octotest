@@ -55,6 +55,16 @@
 [ext_resource type="PackedScene" uid="uid://cd8rc4e3iadac" path="res://scenes/station/items/sketchbook.tscn" id="48_fnwcc"]
 [ext_resource type="PackedScene" uid="uid://b3d8p8ww4xd88" path="res://scenes/station/items/gloves_pack.tscn" id="49_3mkx7"]
 [ext_resource type="PackedScene" uid="uid://vndshl03h2xa" path="res://assets/models/items/uk_automated_external_defibrillator.glb" id="50_r6uhx"]
+[ext_resource type="Texture2D" uid="uid://bi4oqhm4gh7v1" path="res://assets/textures/documents/movie_night.png" id="54_nt25k"]
+[ext_resource type="Texture2D" uid="uid://dqnbi727utug3" path="res://assets/textures/documents/movie_night_ua.png" id="55_mejxt"]
+[ext_resource type="Texture2D" uid="uid://7bq1q7d6i6re" path="res://assets/textures/documents/report_leaks.png" id="56_tlm25"]
+[ext_resource type="Texture2D" uid="uid://b38j1ri7b6ma2" path="res://assets/textures/documents/report_leaks_ua.png" id="57_f5ki3"]
+[ext_resource type="Texture2D" uid="uid://dti2bf3am1xhf" path="res://assets/textures/documents/drill_eng.png" id="58_0prb1"]
+[ext_resource type="Texture2D" uid="uid://3wvodf0qcyl4" path="res://assets/textures/documents/missing_pet.png" id="58_7lava"]
+[ext_resource type="Texture2D" uid="uid://cwta4gwomtle5" path="res://assets/textures/documents/missing_pet_ua.png" id="59_0prb1"]
+[ext_resource type="Texture2D" uid="uid://dp6ow325htonq" path="res://assets/textures/documents/drill_ua.png" id="59_to3ye"]
+[ext_resource type="Texture2D" uid="uid://d2slxkqby801l" path="res://assets/textures/documents/emergency_eng.png" id="60_oekay"]
+[ext_resource type="Texture2D" uid="uid://erit634s7r35" path="res://assets/textures/documents/emergency_UA.png" id="61_vif5o"]
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_cmvkd"]
 resource_name = "atrium_Plane_123"
@@ -1104,6 +1114,7 @@ surface_material_override/0 = ExtResource("5_xg0bo")
 
 [node name="MeshInstance3D2" type="MeshInstance3D" parent="StaticBody3D/Roof" unique_id=1118728090]
 transform = Transform3D(-0.1354113, 0.6966304, 0.7045352, -0.98162717, -0.19080901, -1.4462055e-08, 0.13443163, -0.6915907, 0.709669, 10.62557, 10.136442, -11.248523)
+visible = false
 mesh = SubResource("BoxMesh_srhdw")
 surface_material_override/0 = ExtResource("5_xg0bo")
 
@@ -1377,6 +1388,31 @@ line_spacing = -20.0
 
 [node name="GlovesPack" parent="rooms/attrium" unique_id=1134276401 instance=ExtResource("49_3mkx7")]
 transform = Transform3D(0.56287706, 0, 0.8265406, 0, 1, 0, -0.8265406, 0, 0.56287706, -8.465298, 1.1022824, -9.355844)
+
+[node name="DocumentItem" parent="rooms/attrium" unique_id=1216899249 instance=ExtResource("14_db0oj")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -3.2335792, 3.188486, -10.420912)
+document_texture = ExtResource("54_nt25k")
+document_texture_ua = ExtResource("55_mejxt")
+
+[node name="DocumentItem3" parent="rooms/attrium" unique_id=282351054 instance=ExtResource("14_db0oj")]
+transform = Transform3D(-0.38131234, 0, -0.9244463, 0, 1, 0, 0.9244463, 0, -0.38131234, 3.9052615, 2.4444692, -11.408843)
+document_texture = ExtResource("56_tlm25")
+document_texture_ua = ExtResource("57_f5ki3")
+
+[node name="DocumentItem4" parent="rooms/attrium" unique_id=2013620659 instance=ExtResource("14_db0oj")]
+transform = Transform3D(-0.38131234, 0, -0.9244463, 0, 1, 0, 0.9244463, 0, -0.38131234, 4.369369, 4.0994024, -12.515162)
+document_texture = ExtResource("58_0prb1")
+document_texture_ua = ExtResource("59_to3ye")
+
+[node name="DocumentItem5" parent="rooms/attrium" unique_id=1181985336 instance=ExtResource("14_db0oj")]
+transform = Transform3D(-0.38131234, 0, -0.9244463, 0, 1, 0, 0.9244463, 0, -0.38131234, 4.9861546, 3.188486, -14.020866)
+document_texture = ExtResource("60_oekay")
+document_texture_ua = ExtResource("61_vif5o")
+
+[node name="DocumentItem2" parent="rooms/attrium" unique_id=2066146397 instance=ExtResource("14_db0oj")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -4.575895, 2.9444475, -10.420912)
+document_texture = ExtResource("58_7lava")
+document_texture_ua = ExtResource("59_0prb1")
 
 [node name="giftshop" type="Node3D" parent="rooms" unique_id=1483668541]
 
