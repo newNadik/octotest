@@ -302,6 +302,9 @@ msgstr "WC"
 msgid "Shop"
 msgstr " "
 
+msgid "Hey, who turned out the lights?"
+msgstr "Хей, хто вимкнув світло?"
+
 msgid "Mike, I told you... I have night shift. Please"
 msgstr "Майк, я ж казав... У мене нічна зміна. Будь ласка"
 

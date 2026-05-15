@@ -8,6 +8,8 @@ extends Node3D
 @export var rotation_speed_b_degrees := -13.0
 @export var energy_pulse_speed := 0.75
 @export var energy_pulse_strength := 0.12
+@export_range(0.0, 100.0, 0.5) var fade_begin_distance := 12.0
+@export_range(0.0, 100.0, 0.5) var fade_end_distance := 18.0
 
 var _time := 0.0
 var _lights: Array[SpotLight3D] = []
@@ -17,13 +19,7 @@ var _base_energy: Dictionary = {}
 
 func _ready() -> void:
 	_cache_lights()
-	_make_projectors_runtime_unique()
 	_apply_base_light_energy()
-	var settings := get_node_or_null("/root/GameSettings")
-	if settings == null:
-		return
-	_apply(bool(settings.call("get_god_rays_enabled")))
-	settings.god_rays_enabled_changed.connect(_apply)
 
 
 func _process(delta: float) -> void:
@@ -31,6 +27,7 @@ func _process(delta: float) -> void:
 		return
 
 	_time += delta
+	var distance_scale := _get_distance_scale()
 	var rotation_offsets := PackedFloat32Array([
 		_time * rotation_speed_a_degrees,
 		_time * rotation_speed_b_degrees
@@ -49,7 +46,20 @@ func _process(delta: float) -> void:
 			base_rotation.y,
 			base_rotation.z + rotation_offset
 		)
-		light.light_energy = maxf(0.0, base_energy * pulse)
+		light.light_energy = maxf(0.0, base_energy * pulse * distance_scale)
+
+
+func _get_distance_scale() -> float:
+	if fade_end_distance <= fade_begin_distance:
+		return 1.0
+	var viewport := get_viewport()
+	if viewport == null:
+		return 1.0
+	var camera := viewport.get_camera_3d()
+	if camera == null:
+		return 1.0
+	var dist := global_position.distance_to(camera.global_position)
+	return 1.0 - clampf((dist - fade_begin_distance) / (fade_end_distance - fade_begin_distance), 0.0, 1.0)
 
 
 func _cache_lights() -> void:
@@ -62,16 +72,6 @@ func _cache_lights() -> void:
 			_lights.append(light)
 			_base_rotations[light] = light.rotation_degrees
 			_base_energy[light] = light.light_energy
-
-
-func _make_projectors_runtime_unique() -> void:
-	for light in _lights:
-		if light == null or light.light_projector == null:
-			continue
-		var source_image := light.light_projector.get_image()
-		if source_image == null or source_image.is_empty():
-			continue
-		light.light_projector = ImageTexture.create_from_image(source_image.duplicate())
 
 
 func _apply_base_light_energy() -> void:
@@ -87,7 +87,3 @@ func _apply_base_light_energy() -> void:
 			continue
 		_base_energy[light] = light_energy
 		light.light_energy = light_energy
-
-
-func _apply(enabled: bool) -> void:
-	visible = enabled

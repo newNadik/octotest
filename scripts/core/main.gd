@@ -72,7 +72,6 @@ const ROOM_REGISTRY: Array[Dictionary] = [
 @onready var camera_pitch: Node3D = $CameraPivot/CameraYaw/CameraPitch
 @onready var spring_arm: SpringArm3D = $CameraPivot/CameraYaw/CameraPitch/SpringArm3D
 @onready var camera: Camera3D = $CameraPivot/CameraYaw/CameraPitch/SpringArm3D/Camera3D
-@onready var gameplay_fx: ColorRect = $UI/GameplayFX
 @onready var pause_menu_button: Button = $UI/PauseMenuButton
 @onready var hud_root: Control = $UI/HUD
 @onready var hint_label: Label = $UI/HUD/HintPanel/HintMargin/HintLabel
@@ -821,8 +820,6 @@ func _set_in_game_menu_visible(is_visible: bool) -> void:
 	if is_visible and _focus_mode:
 		_exit_focus_mode()
 	in_game_menu.visible = is_visible
-	if gameplay_fx != null:
-		gameplay_fx.visible = not is_visible
 	get_tree().paused = is_visible
 	_orbiting = false
 	if is_visible:
