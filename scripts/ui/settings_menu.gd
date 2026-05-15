@@ -35,6 +35,10 @@ const COLOR_MID_BLUE := Color(0.007843138, 0.2627451, 0.43137255, 1.0) # 02436e
 @onready var language_prev_button: Button = $TopContainer/MainContainer/SettingsRows/LanguageRow/LanguageSelector/LanguagePrevButton
 @onready var language_value_label: Label = $TopContainer/MainContainer/SettingsRows/LanguageRow/LanguageSelector/LanguageValueLabel
 @onready var language_next_button: Button = $TopContainer/MainContainer/SettingsRows/LanguageRow/LanguageSelector/LanguageNextButton
+@onready var shadows_label: Label = $TopContainer/MainContainer/SettingsRows/ShadowsRow/ShadowsLabel
+@onready var shadows_prev_button: Button = $TopContainer/MainContainer/SettingsRows/ShadowsRow/ShadowsSelector/ShadowsPrevButton
+@onready var shadows_value_label: Label = $TopContainer/MainContainer/SettingsRows/ShadowsRow/ShadowsSelector/ShadowsValueLabel
+@onready var shadows_next_button: Button = $TopContainer/MainContainer/SettingsRows/ShadowsRow/ShadowsSelector/ShadowsNextButton
 
 var _is_updating_ui := false
 
@@ -54,6 +58,8 @@ func _ready() -> void:
 	subtitles_next_button.pressed.connect(_on_subtitles_cycle.bind(1))
 	language_prev_button.pressed.connect(_on_language_cycle.bind(-1))
 	language_next_button.pressed.connect(_on_language_cycle.bind(1))
+	shadows_prev_button.pressed.connect(_on_shadows_cycle.bind(-1))
+	shadows_next_button.pressed.connect(_on_shadows_cycle.bind(1))
 	_apply_slider_grabber_icons()
 	_load_settings_into_ui()
 	_apply_localized_text()
@@ -121,6 +127,17 @@ func _on_voice_changed(value: float) -> void:
 	_update_percent_label(voice_value, value)
 
 
+func _on_shadows_cycle(_direction: int) -> void:
+	var settings := _get_game_settings()
+	var enabled := true
+	if settings != null and settings.has_method("get_shadows_enabled"):
+		enabled = bool(settings.call("get_shadows_enabled"))
+	enabled = not enabled
+	if settings != null and settings.has_method("set_shadows_enabled"):
+		settings.call("set_shadows_enabled", enabled)
+	_update_shadows_value(enabled)
+
+
 func _on_subtitles_cycle(_direction: int) -> void:
 	var settings := _get_game_settings()
 	var enabled := true
@@ -155,6 +172,7 @@ func _load_settings_into_ui() -> void:
 	var ambience := 1.0
 	var voice := 1.0
 	var subtitles_enabled := true
+	var shadows_enabled := true
 	var locale: String = TranslationServer.get_locale()
 	if settings != null:
 		if settings.has_method("get_music_volume"):
@@ -167,6 +185,8 @@ func _load_settings_into_ui() -> void:
 			voice = float(settings.call("get_voice_volume"))
 		if settings.has_method("get_subtitles_enabled"):
 			subtitles_enabled = bool(settings.call("get_subtitles_enabled"))
+		if settings.has_method("get_shadows_enabled"):
+			shadows_enabled = bool(settings.call("get_shadows_enabled"))
 		if settings.has_method("get_locale"):
 			locale = str(settings.call("get_locale"))
 
@@ -179,6 +199,7 @@ func _load_settings_into_ui() -> void:
 	_update_percent_label(ambience_value, ambience)
 	_update_percent_label(voice_value, voice)
 	_update_subtitles_value(subtitles_enabled)
+	_update_shadows_value(shadows_enabled)
 	_update_language_value(locale)
 	_is_updating_ui = false
 
@@ -191,6 +212,7 @@ func _apply_localized_text() -> void:
 	voice_label.text = tr("Voice")
 	subtitles_label.text = tr("Subtitles")
 	language_label.text = tr("Language")
+	shadows_label.text = tr("Shadows")
 	_update_subtitles_value(_get_subtitles_enabled())
 	_update_language_value(_get_active_locale())
 
@@ -201,6 +223,10 @@ func _update_percent_label(label: Label, value: float) -> void:
 
 func _update_subtitles_value(enabled: bool) -> void:
 	subtitles_value_label.text = tr("On") if enabled else tr("Off")
+
+
+func _update_shadows_value(enabled: bool) -> void:
+	shadows_value_label.text = tr("On") if enabled else tr("Off")
 
 
 func _update_language_value(locale: String) -> void:

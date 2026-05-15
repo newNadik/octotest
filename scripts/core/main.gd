@@ -164,6 +164,7 @@ func _ready() -> void:
 	in_game_main_menu_button.pressed.connect(_on_main_menu_pressed)
 	pause_menu_button.pressed.connect(_on_pause_menu_button_pressed)
 	_connect_autosave_doors()
+	_connect_shadow_setting()
 	_initialize_room_streaming()
 	_apply_loaded_world_state()
 	_apply_exit_code_to_scene(self)
@@ -189,6 +190,8 @@ func _apply_platform_visual_overrides() -> void:
 	if not _should_use_mobile_visual_fallbacks():
 		return
 	_apply_mobile_material_fallbacks()
+	if world_environment != null and world_environment.environment != null:
+		world_environment.environment.volumetric_fog_enabled = false
 
 
 func _apply_mobile_render_scale_overrides() -> void:
@@ -911,6 +914,33 @@ func _close_settings_overlay() -> void:
 
 func _has_settings_overlay() -> bool:
 	return _settings_overlay != null and is_instance_valid(_settings_overlay)
+
+
+func _connect_shadow_setting() -> void:
+	var settings := get_node_or_null("/root/GameSettings")
+	if settings == null:
+		return
+	var enabled := true
+	if settings.has_method("get_shadows_enabled"):
+		enabled = bool(settings.call("get_shadows_enabled"))
+	_apply_positional_shadows(enabled)
+	if settings.has_signal("shadows_enabled_changed"):
+		settings.shadows_enabled_changed.connect(_apply_positional_shadows)
+
+
+func _apply_positional_shadows(enabled: bool) -> void:
+	_set_positional_shadows_recursive(self, enabled)
+
+
+func _set_positional_shadows_recursive(node: Node, enabled: bool) -> void:
+	if node is OmniLight3D:
+		(node as Light3D).shadow_enabled = enabled
+	elif node is SpotLight3D:
+		var spot := node as SpotLight3D
+		if spot.light_projector == null:
+			spot.shadow_enabled = enabled
+	for child in node.get_children():
+		_set_positional_shadows_recursive(child, enabled)
 
 
 func _connect_autosave_doors() -> void:

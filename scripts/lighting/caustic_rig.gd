@@ -17,13 +17,27 @@ var _base_rotations: Dictionary = {}
 var _base_energy: Dictionary = {}
 
 
+var _frame_skip := false
+
+
 func _ready() -> void:
+	if OS.has_feature("mobile"):
+		var settings := get_node_or_null("/root/GameSettings")
+		if settings != null:
+			visible = bool(settings.call("get_shadows_enabled"))
+			settings.shadows_enabled_changed.connect(func(enabled: bool) -> void: visible = enabled)
+		else:
+			visible = false
+		return
 	_cache_lights()
 	_apply_base_light_energy()
 
 
 func _process(delta: float) -> void:
 	if not visible or _lights.is_empty():
+		return
+	_frame_skip = not _frame_skip
+	if _frame_skip:
 		return
 
 	_time += delta
