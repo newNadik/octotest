@@ -159,12 +159,17 @@ _surfaces = [{
 blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_dhudk")
 
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_tp4c5"]
+height = 0.15850067
+radius = 0.6
+
 [node name="chair" type="StaticBody3D" unique_id=1222624819]
 collision_layer = 32
 collision_mask = 0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=463550628]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.4924895, 1.2301377, -0.10510032)
+visible = false
 shape = SubResource("ConcavePolygonShape3D_tp4c5")
 
 [node name="RootNode2" type="Node3D" parent="." unique_id=1998347030]
@@ -198,3 +203,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.4924893, -0.1468693, -0.09
 
 [node name="Object2113136416_20 - Default_0" type="MeshInstance3D" parent="RootNode2/Object2113136416/Object_11" unique_id=1492576851]
 mesh = SubResource("ArrayMesh_283tt")
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="." unique_id=867068769]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.024517, 0)
+shape = SubResource("CylinderShape3D_tp4c5")
