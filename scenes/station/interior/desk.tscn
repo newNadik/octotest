@@ -166,7 +166,7 @@ size = Vector3(0.1, 0.5, 2.5)
 size = Vector3(1.6, 0.1, 2.8)
 
 [node name="desk" type="StaticBody3D" unique_id=360776120]
-collision_layer = 35
+collision_layer = 32
 collision_mask = 0
 
 [node name="deskoffice1228A6_StaticMeshComponent0" type="Node3D" parent="." unique_id=1330297665]

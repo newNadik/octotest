@@ -5,6 +5,7 @@ extends CharacterBody3D
 const WALL_COLLISION_MASK := 1 << 0
 const GROUND_COLLISION_MASK := 1 << 1
 const PLAYER_COLLISION_LAYER := 1 << 2
+const FURNITURE_COLLISION_MASK := 1 << 5
 const MovementMath = preload("res://scripts/core/movement_math.gd")
 const CLIMB_PHASE_FIRST_REACH := 0
 const CLIMB_PHASE_SECOND_REACH := 1
@@ -29,7 +30,7 @@ var climb_wall_max_up_dot := 0.3
 var mantle_landing_forward := 0.28
 var mantle_clearance := 0.08
 var min_landing_half_extent := 0.14
-var climb_collision_mask := WALL_COLLISION_MASK | GROUND_COLLISION_MASK
+var climb_collision_mask := WALL_COLLISION_MASK | GROUND_COLLISION_MASK | FURNITURE_COLLISION_MASK
 var use_surface_locomotion := true
 var surface_align_strength := 7.5
 var climb_front_arm_a := "arm_0"
@@ -87,7 +88,7 @@ const POST_MANTLE_TURN_DAMP_TIME := 0.22
 func _ready() -> void:
 	_gravity = float(ProjectSettings.get_setting("physics/3d/default_gravity"))
 	collision_layer = PLAYER_COLLISION_LAYER
-	collision_mask = WALL_COLLISION_MASK | GROUND_COLLISION_MASK
+	collision_mask = WALL_COLLISION_MASK | GROUND_COLLISION_MASK | FURNITURE_COLLISION_MASK
 	var shape_node := get_node_or_null("CollisionShape3D") as CollisionShape3D
 	if shape_node != null and shape_node.shape is BoxShape3D:
 		_half_height = (shape_node.shape as BoxShape3D).size.y * 0.5
