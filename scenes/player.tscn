@@ -16,6 +16,7 @@ script = ExtResource("1_6ujh3")
 path_desired_distance = 0.5
 target_desired_distance = 0.1
 path_max_distance = 10.01
+avoidance_enabled = true
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1046069454]
 shape = SubResource("BoxShape3D_player")

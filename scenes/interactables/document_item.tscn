@@ -23,9 +23,10 @@ emission = Color(1, 1, 1, 1)
 size = Vector3(0.756, 1.069, 0.01)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_cyluy"]
-size = Vector3(0.856, 1.169, 0.3)
+size = Vector3(0.856, 1.169, 0.1105835)
 
 [node name="DocumentItem" type="StaticBody3D" unique_id=-1447463677]
+collision_layer = 0
 collision_mask = 0
 script = ExtResource("1_docitem")
 
@@ -64,4 +65,5 @@ highlight_visible_paths = Array[NodePath]([NodePath("../DocumentMesh/OutlineMesh
 indicator_local_offset = Vector3(0.31752, -0.47402, 0.02)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Interactable" unique_id=-2138228248]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.0031799302)
 shape = SubResource("BoxShape3D_cyluy")

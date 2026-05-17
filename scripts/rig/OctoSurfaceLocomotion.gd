@@ -34,6 +34,7 @@ var ground_probe_height := 0.65
 var ground_probe_depth := 1.25
 var ground_probe_lateral := 0.5
 var min_ground_up_dot := 0.55
+var ground_collision_mask := (1 << 0) | (1 << 1) | (1 << 5)
 
 var workspace_min_radius := 0.45
 var workspace_max_radius := 1.4
@@ -822,6 +823,7 @@ func _sample_ground_contact(
 		var finish: Vector3 = start + Vector3.DOWN * (ground_probe_height + ground_probe_depth)
 		var query := PhysicsRayQueryParameters3D.create(start, finish)
 		query.collide_with_areas = false
+		query.collision_mask = ground_collision_mask
 		var hit: Dictionary = space_state.intersect_ray(query)
 		if hit.is_empty():
 			continue
@@ -869,6 +871,7 @@ func _find_reach_target(
 	var search_end := search_origin + Vector3.DOWN * (ground_probe_height + ground_probe_depth + 0.7)
 	var query := PhysicsRayQueryParameters3D.create(search_origin, search_end)
 	query.collide_with_areas = false
+	query.collision_mask = ground_collision_mask
 	var hit := space_state.intersect_ray(query)
 	if hit.is_empty():
 		var fallback_dir := radial_world
@@ -879,6 +882,7 @@ func _find_reach_target(
 		var fallback_end := fallback_origin + Vector3.DOWN * (ground_probe_height + ground_probe_depth + 0.7)
 		var fallback_query := PhysicsRayQueryParameters3D.create(fallback_origin, fallback_end)
 		fallback_query.collide_with_areas = false
+		fallback_query.collision_mask = ground_collision_mask
 		hit = space_state.intersect_ray(fallback_query)
 		if hit.is_empty():
 			return {}
@@ -906,6 +910,7 @@ func _find_idle_target(
 	var end := origin + Vector3.DOWN * (ground_probe_height + ground_probe_depth + 0.6)
 	var query := PhysicsRayQueryParameters3D.create(origin, end)
 	query.collide_with_areas = false
+	query.collision_mask = ground_collision_mask
 	var hit := space_state.intersect_ray(query)
 	if hit.is_empty():
 		return {}

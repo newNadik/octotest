@@ -102,9 +102,10 @@ func _ready() -> void:
 
 
 func set_move_target(world_target: Vector3) -> void:
-	_target_position = world_target
+	_target_position = _nearest_nav_point(world_target)
 	_has_target = true
 	_has_post_mantle_move_target = false
+	navigation_agent_3d.target_position = _target_position
 
 
 func clear_move_target() -> void:
@@ -112,6 +113,7 @@ func clear_move_target() -> void:
 	_mantling = false
 	_has_post_mantle_move_target = false
 	_cancel_pre_mantle_sequence()
+	navigation_agent_3d.target_position = global_position
 
 
 func trigger_blocked_move_feedback() -> void:
@@ -169,7 +171,7 @@ func _physics_process(delta: float) -> void:
 		)
 
 	if grounded:
-		_align_planar_velocity_to_slope(floor_normal)
+		_align_planar_velocity_to_slope(floor_normal, move_target)
 
 	if not grounded:
 		velocity.y -= _gravity * gravity_scale * delta
@@ -178,10 +180,6 @@ func _physics_process(delta: float) -> void:
 
 	if _has_target and grounded:
 		_try_begin_climb(move_target)
-
-	if interaction_speed_scale < 0.999:
-		velocity.x *= interaction_speed_scale
-		velocity.z *= interaction_speed_scale
 
 	move_and_slide()
 	if use_surface_locomotion and grounded and _octo_rig != null and _octo_rig.has_method("get_surface_support_normal"):
@@ -238,14 +236,14 @@ func _rotate_toward_planar(planar_direction: Vector2, delta: float, speed: float
 	rotation.y = lerp_angle(rotation.y, target_yaw, minf(1.0, speed * delta))
 
 
-func _align_planar_velocity_to_slope(floor_normal: Vector3) -> void:
+func _align_planar_velocity_to_slope(floor_normal: Vector3, move_target: Vector3) -> void:
 	var planar_speed := Vector2(velocity.x, velocity.z).length()
 	if planar_speed <= 0.001:
 		return
 
 	var direction_hint := Vector3(velocity.x, 0.0, velocity.z)
 	if _has_target:
-		direction_hint = _target_position - global_position
+		direction_hint = move_target - global_position
 
 	var slope_direction := MovementMath.project_planar_direction_on_surface(direction_hint, floor_normal)
 	if slope_direction == Vector3.ZERO:
@@ -311,9 +309,14 @@ func _try_begin_climb(drive_target: Vector3) -> void:
 	var wall_hit := _find_wall_hit(planar_direction)
 	var top_hit := Dictionary()
 	if not wall_hit.is_empty():
-		var top_probe_start: Vector3 = wall_hit.position + planar_direction * 0.12 + Vector3.UP * (mantle_height + mantle_clearance)
-		var top_probe_end: Vector3 = top_probe_start + Vector3.DOWN * (mantle_height + step_height + 0.35)
-		top_hit = _cast_ray(top_probe_start, top_probe_end, climb_collision_mask)
+		var to_final := _target_position - global_position
+		var final_planar := Vector3(to_final.x, 0.0, to_final.z)
+		var final_aligned := final_planar.length() <= stop_distance or planar_direction.dot(final_planar.normalized()) >= 0.5
+		var nav_going_up := drive_target.y > global_position.y + step_height * 0.5
+		if final_aligned and nav_going_up:
+			var top_probe_start: Vector3 = wall_hit.position + planar_direction * 0.12 + Vector3.UP * (mantle_height + mantle_clearance)
+			var top_probe_end: Vector3 = top_probe_start + Vector3.DOWN * (mantle_height + step_height + 0.35)
+			top_hit = _cast_ray(top_probe_start, top_probe_end, climb_collision_mask)
 
 	if top_hit.is_empty():
 		top_hit = _find_target_top_hit(drive_target)
@@ -548,8 +551,6 @@ func _update_surface_crawl_pose(delta: float, desired_dir: Vector3) -> void:
 	_octo_rig.call("step_surface_locomotion", delta, global_position, desired_dir, velocity)
 
 
-
-
 func _get_climb_arm_inward_sign(arm_name: String) -> float:
 	match arm_name:
 		"arm_0", "arm_2", "arm_5", "arm_6":
@@ -710,6 +711,7 @@ func _resume_post_mantle_move_target() -> void:
 	_has_post_mantle_move_target = false
 	_target_position = _post_mantle_move_target
 	_has_target = true
+	navigation_agent_3d.target_position = _target_position
 
 
 func _build_mantle_control_point(from: Vector3, to: Vector3) -> Vector3:
@@ -726,9 +728,15 @@ func _quadratic_bezier(a: Vector3, b: Vector3, c: Vector3, t: float) -> Vector3:
 	return ab.lerp(bc, t)
 
 
+func _nearest_nav_point(target: Vector3) -> Vector3:
+	return NavigationServer3D.map_get_closest_point(navigation_agent_3d.get_navigation_map(), target)
+
+
 func _get_drive_target() -> Vector3:
-	return _target_position
+	if navigation_agent_3d.is_navigation_finished():
+		return _target_position
+	return navigation_agent_3d.get_next_path_position()
 
 
 func _is_move_target_reached() -> bool:
-	return MovementMath.arrived_2d(global_position, _target_position, stop_distance)
+	return navigation_agent_3d.is_navigation_finished()
