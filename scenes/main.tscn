@@ -1,55 +1,23 @@
 [gd_scene format=3 uid="uid://ddcirs8kpfb2k"]
 
 [ext_resource type="Script" uid="uid://km7y0f0xluw6" path="res://scripts/core/main.gd" id="1_4f72t"]
-[ext_resource type="PackedScene" uid="uid://tsltkwaxfsas" path="res://scenes/station/items/surroundings.tscn" id="2_muem4"]
 [ext_resource type="PackedScene" uid="uid://63bbsnp8k0ew" path="res://scenes/player.tscn" id="2_vrsh6"]
 [ext_resource type="PackedScene" uid="uid://ojtj5eewvf4n" path="res://scenes/ui/in_game_menu.tscn" id="7_o6xl0"]
+[ext_resource type="PackedScene" uid="uid://rstu8who3xwo" path="res://scenes/effects/surrounding_full.tscn" id="8_tipki"]
 [ext_resource type="AudioStream" uid="uid://djsajf7b1jgf" path="res://assets/sound/underwater-loop-amb.mp3" id="13_dp3eg"]
-[ext_resource type="PackedScene" uid="uid://6qexu3mk541a" path="res://scenes/station/items/fish_school.tscn" id="17_fishschool"]
-[ext_resource type="PackedScene" uid="uid://drkdj8tkrup8" path="res://assets/models/underwater/underwater_terrain_-_agisoftnaturechallenge.glb" id="18_dp3eg"]
-[ext_resource type="PackedScene" uid="uid://c5tv72lyq8d8h" path="res://scenes/effects/caustic_rig.tscn" id="20_caustic"]
 [ext_resource type="Texture2D" uid="uid://kxj121ocl7jm" path="res://assets/ui/save.png" id="21_saveicon"]
 [ext_resource type="Texture2D" uid="uid://45skik4ua1t5" path="res://assets/ui/menu.png" id="22_menuicon"]
 [ext_resource type="Script" uid="uid://crfcyvcgpr161" path="res://scripts/ui/subtitle_display.gd" id="23_subtitle"]
 
-[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_7yl8v"]
-sky_top_color = Color(0.055, 0.135, 0.17, 1)
-sky_horizon_color = Color(0.07058824, 0.10980392, 0.12156863, 1)
-sky_energy_multiplier = 0.8
-sky_cover_modulate = Color(0, 0, 0, 1)
-ground_bottom_color = Color(0.025, 0.04, 0.045, 1)
-ground_horizon_color = Color(0.07, 0.11, 0.12, 1)
-ground_energy_multiplier = 0.8
-energy_multiplier = 0.8
-
-[sub_resource type="Sky" id="Sky_tavjh"]
-sky_material = SubResource("ProceduralSkyMaterial_7yl8v")
-
-[sub_resource type="Environment" id="Environment_1w5qu"]
-background_mode = 2
-background_energy_multiplier = 0.8
-sky = SubResource("Sky_tavjh")
-ambient_light_sky_contribution = 0.5
-ambient_light_energy = 0.8
-fog_enabled = true
-fog_mode = 1
-fog_light_color = Color(0.043782413, 0.074715026, 0.08399359, 1)
-fog_light_energy = 0.5
-fog_density = 1.0
-fog_aerial_perspective = 0.5
-fog_depth_curve = 0.6830214
-fog_depth_begin = 30.0
-fog_depth_end = 35.0
-adjustment_enabled = true
-adjustment_brightness = 0.8
-adjustment_contrast = 0.98
-adjustment_saturation = 0.95
+[sub_resource type="Environment" id="Environment_ocean"]
+background_mode = 1
+background_color = Color(0, 0.008, 0.025, 1)
 
 [node name="Main" type="Node3D" unique_id=1731456763]
 script = ExtResource("1_4f72t")
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1133585732]
-environment = SubResource("Environment_1w5qu")
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=312847200]
+environment = SubResource("Environment_ocean")
 
 [node name="station" type="Node3D" parent="." unique_id=680235138]
 
@@ -200,116 +168,15 @@ bus = &"Ambience"
 
 [node name="lights" type="Node3D" parent="." unique_id=1594734138]
 
-[node name="Caustics" parent="lights" unique_id=118230011 instance=ExtResource("20_caustic")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.805, 10.670206, 0.007)
-light_energy = 10.0
-rotation_speed_a_degrees = 4.2
-rotation_speed_b_degrees = -5.8
-energy_pulse_speed = 0.34
-energy_pulse_strength = 0.06
-
-[node name="Caustics2" parent="lights" unique_id=7604608 instance=ExtResource("20_caustic")]
-transform = Transform3D(0.2668087, -0.66073227, 0.70160246, 0.780207, 0.57544845, 0.2452264, -0.56576496, 0.4819666, 0.66904247, -27.704458, 5.4356356, 11.229486)
-light_energy = 10.0
-rotation_speed_a_degrees = 4.2
-rotation_speed_b_degrees = -5.8
-energy_pulse_speed = 0.34
-energy_pulse_strength = 0.06
-
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="lights" unique_id=210934476]
 transform = Transform3D(0.9902681, -0.13908833, 0.0048570717, 0, 0.0348995, 0.99939084, -0.13917312, -0.98966485, 0.034559857, -0.805, 76.67352, 0.007)
-light_color = Color(0.44635653, 0.5757678, 0.6013973, 1)
+light_color = Color(0.28503484, 0.38763073, 0.4062138, 1)
 light_energy = 0.8
-light_bake_mode = 1
 shadow_enabled = true
-shadow_bias = 0.02
-shadow_normal_bias = 0.2
-shadow_blur = 1.9
+shadow_opacity = 0.8
+shadow_blur = 2.0
 directional_shadow_fade_start = 0.85
 directional_shadow_max_distance = 95.0
+sky_mode = 1
 
-[node name="surrounding" type="Node3D" parent="." unique_id=1316489020]
-
-[node name="surroundings" parent="surrounding" unique_id=1002961838 instance=ExtResource("2_muem4")]
-transform = Transform3D(0.9983359, 0, -0.05766857, 0, 1, 0, 0.05766857, 0, 0.9983359, -28.281834, -3.5834541, 3.4941978)
-
-[node name="Sketchfab_Scene" parent="surrounding" unique_id=1221402596 instance=ExtResource("18_dp3eg")]
-transform = Transform3D(0.97155327, -0.23682119, 0, 0.23682119, 0.97155327, 0, 0, 0, 1, 33.7202, 0.71104646, -9.662016)
-
-[node name="Sketchfab_Scene2" parent="surrounding" unique_id=113517416 instance=ExtResource("18_dp3eg")]
-transform = Transform3D(0.5148214, -0.39364758, -0.7615776, 0.31401354, 0.91319627, -0.259746, 0.7977184, -0.10542284, 0.59374374, 17.803167, 0.676563, 29.596968)
-
-[node name="surroundings2" parent="surrounding" unique_id=2092085712 instance=ExtResource("2_muem4")]
-transform = Transform3D(-0.7428878, 0, 0.6694159, 0, 1, 0, -0.6694159, 0, -0.7428878, 21.034111, -3.5834541, 13.66193)
-
-[node name="FishSchoolSkylight" parent="surrounding" unique_id=1875453523 instance=ExtResource("17_fishschool")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.4184046, 14.344449, 0.90247345)
-fish_count_max = 18
-fish_count = 13
-school_cluster_radius = 5.0
-max_distance_from_cluster = 10.0
-cluster_pull_strength = 2.2
-direction_mode = 1
-flow_direction = Vector3(1, 0, 1)
-speed_min = 0.8
-speed_max = 3.0
-school_speed_scale_min = 0.95
-school_speed_scale_max = 1.75
-school_bounds = Vector3(24, 6, 24)
-stream_spawn_outside_distance = 5.0
-stream_recycle_front_distance = 5.0
-mesh_rotation_offset_degrees = Vector3(0, 90, 0)
-
-[node name="FishSchoolSkylight3" parent="surrounding" unique_id=426942162 instance=ExtResource("17_fishschool")]
-transform = Transform3D(-0.38855964, 0.15088126, 0.90898633, 0.033672146, 0.9881683, -0.14963087, -0.920808, -0.027532995, -0.38904288, -39.850914, 5.507917, 17.429081)
-species_per_school_max = 4
-fish_count_max = 13
-fish_count = 7
-school_cluster_radius = 5.0
-max_distance_from_cluster = 10.0
-cluster_pull_strength = 2.2
-delay_between_schools_min = 0.5
-delay_between_schools_max = 30.0
-flow_direction = Vector3(1, 0, 1)
-speed_min = 0.8
-speed_max = 3.0
-school_speed_scale_min = 0.95
-school_speed_scale_max = 1.75
-stream_spawn_outside_distance = 5.0
-stream_recycle_front_distance = 5.0
-mesh_rotation_offset_degrees = Vector3(0, 90, 0)
-
-[node name="FishSchoolSkylight4" parent="surrounding" unique_id=9479908 instance=ExtResource("17_fishschool")]
-transform = Transform3D(0.035056617, -0.25723398, 0.9657131, 0.009331776, 0.9663491, 0.25706467, -0.9993418, 0, 0.036277384, 41.708145, 7.444499, -0.9388447)
-species_per_school_max = 5
-fish_count_max = 15
-fish_count = 5
-school_cluster_radius = 5.0
-max_distance_from_cluster = 10.0
-cluster_pull_strength = 2.2
-flow_direction = Vector3(1, 0, 1)
-speed_min = 0.8
-speed_max = 3.0
-school_speed_scale_min = 0.95
-school_speed_scale_max = 1.75
-stream_spawn_outside_distance = 5.0
-stream_recycle_front_distance = 5.0
-mesh_rotation_offset_degrees = Vector3(0, 90, 0)
-
-[node name="FishSchoolSkylight2" parent="surrounding" unique_id=726387894 instance=ExtResource("17_fishschool")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.7352066, 15.099921, -22.18111)
-fish_count_max = 22
-fish_count = 10
-school_cluster_radius = 5.0
-max_distance_from_cluster = 10.0
-cluster_pull_strength = 2.2
-direction_mode = 1
-flow_direction = Vector3(1, 0, 1)
-speed_min = 0.8
-speed_max = 3.0
-school_speed_scale_min = 0.95
-school_speed_scale_max = 1.75
-school_bounds = Vector3(50, 6, 15)
-stream_spawn_outside_distance = 5.0
-stream_recycle_front_distance = 5.0
-mesh_rotation_offset_degrees = Vector3(0, 90, 0)
+[node name="surrounding" parent="." unique_id=1036177841 instance=ExtResource("8_tipki")]

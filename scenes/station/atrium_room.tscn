@@ -1237,10 +1237,6 @@ end_position = Vector3(2.9897804, -0.027340889, 2.6215363)
 
 [node name="light" type="Node3D" parent="." unique_id=847088016]
 
-[node name="CausticRig" parent="light" unique_id=7604608 instance=ExtResource("11_fy6p5")]
-transform = Transform3D(0.46584922, 0.7857269, -0.40696132, -0.44409522, 0.6054029, 0.6605047, 0.765352, -0.12696601, 0.63096416, 35.80785, 6.0118256, -0.059587)
-light_energy = 1.0
-
 [node name="PathLights" type="Node3D" parent="light" unique_id=1497399200]
 
 [node name="FloorMarkerLightA" parent="light/PathLights" unique_id=2057411001 instance=ExtResource("11_floorlight")]
@@ -1272,15 +1268,31 @@ transform = Transform3D(0.99859184, 0.05305054, 0, -0.05305054, 0.99859184, 0, 0
 
 [node name="OmniLight3D2" type="OmniLight3D" parent="light" unique_id=26556194]
 process_priority = 1
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.77448106, 4.5737066, -13.437226)
-visible = false
-light_energy = 10.0
-light_indirect_energy = 10.0
-light_volumetric_fog_energy = 0.0
-light_size = 1.0
-shadow_blur = 2.0
-omni_range = 9.5
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.77448106, 8.337993, 6.8433123)
+shadow_enabled = true
+shadow_opacity = 0.7
+omni_range = 30.0
 omni_shadow_mode = 0
+
+[node name="Caustics3" parent="light" unique_id=7604608 instance=ExtResource("11_fy6p5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9, 0.5)
+light_energy = 10.0
+rotation_speed_a_degrees = 4.2
+rotation_speed_b_degrees = -5.8
+energy_pulse_speed = 0.34
+energy_pulse_strength = 0.06
+fade_begin_distance = 25.0
+fade_end_distance = 35.0
+
+[node name="Caustics2" parent="light" unique_id=1959651617 instance=ExtResource("11_fy6p5")]
+transform = Transform3D(0.34202874, -0.7206986, 0.603001, 0.780207, 0.57544845, 0.2452264, -0.52373016, 0.386591, 0.7591137, -29.041042, 4.906003, 12.043914)
+light_energy = 5.0
+rotation_speed_a_degrees = 4.2
+rotation_speed_b_degrees = -5.8
+energy_pulse_speed = 0.34
+energy_pulse_strength = 0.06
+fade_begin_distance = 25.0
+fade_end_distance = 35.0
 
 [node name="StaticBody3D" type="Node3D" parent="." unique_id=1812206601]
 

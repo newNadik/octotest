@@ -1,0 +1,172 @@
+[gd_scene format=3 uid="uid://rstu8who3xwo"]
+
+[ext_resource type="PackedScene" uid="uid://tsltkwaxfsas" path="res://scenes/station/items/surroundings.tscn" id="1_r7y1w"]
+[ext_resource type="PackedScene" uid="uid://drkdj8tkrup8" path="res://assets/models/underwater/underwater_terrain_-_agisoftnaturechallenge.glb" id="2_1bjau"]
+[ext_resource type="PackedScene" uid="uid://6qexu3mk541a" path="res://scenes/station/items/fish_school.tscn" id="3_6ujte"]
+[ext_resource type="Script" uid="uid://tr5edew1shxd" path="res://scripts/effects/surrounding_darken.gd" id="5_darken"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_dfade"]
+radius = 60.0
+height = 110.0
+radial_segments = 32
+rings = 16
+
+[sub_resource type="StandardMaterial3D" id="Mat_sphere"]
+cull_mode = 1
+shading_mode = 2
+albedo_color = Color(1.4439226e-07, 0.12864807, 0.2509212, 1)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_fog0"]
+top_radius = 40.0
+bottom_radius = 40.0
+height = 40.0
+radial_segments = 32
+rings = 8
+
+[sub_resource type="StandardMaterial3D" id="Mat_fog0"]
+transparency = 1
+cull_mode = 1
+depth_draw_mode = 2
+shading_mode = 2
+albedo_color = Color(0, 0.012920001, 0.15170373, 0.8)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_fog1"]
+top_radius = 45.0
+bottom_radius = 45.0
+height = 40.0
+radial_segments = 32
+rings = 8
+
+[sub_resource type="StandardMaterial3D" id="Mat_fog1"]
+transparency = 1
+cull_mode = 1
+depth_draw_mode = 2
+shading_mode = 2
+albedo_color = Color(0, 0.04514651, 0.13101986, 0.8)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_fog2"]
+top_radius = 50.0
+bottom_radius = 50.0
+height = 30.0
+radial_segments = 32
+rings = 8
+
+[sub_resource type="StandardMaterial3D" id="Mat_fog2"]
+transparency = 1
+cull_mode = 1
+depth_draw_mode = 2
+shading_mode = 2
+albedo_color = Color(0, 0.081405796, 0.1983707, 0.8509804)
+
+[node name="surrounding" type="Node3D" unique_id=1036177841]
+script = ExtResource("5_darken")
+
+[node name="surroundings" parent="." unique_id=1002961838 instance=ExtResource("1_r7y1w")]
+transform = Transform3D(0.99427676, 0, 0.10683676, 0, 1, 0, -0.10683676, 0, 0.99427676, -23.969217, -6.5785675, 12.858398)
+
+[node name="Sketchfab_Scene" parent="." unique_id=1221402596 instance=ExtResource("2_1bjau")]
+transform = Transform3D(0.97155327, -0.23682119, 0, 0.23682119, 0.97155327, 0, 0, 0, 1, 33.7202, 0.71104646, -9.662016)
+
+[node name="Sketchfab_Scene3" parent="." unique_id=79938935 instance=ExtResource("2_1bjau")]
+transform = Transform3D(0.86204433, -0.21012782, 0.46122217, 0.23682119, 0.97155327, 0, -0.4481019, 0.10922718, 0.8872847, -23.13655, -1.973892, 22.892199)
+
+[node name="Sketchfab_Scene2" parent="." unique_id=1804803851 instance=ExtResource("2_1bjau")]
+transform = Transform3D(0.5148214, -0.39364758, -0.7615776, 0.31401354, 0.91319627, -0.259746, 0.7977184, -0.10542284, 0.59374374, 17.803167, 0.676563, 29.596968)
+
+[node name="surroundings2" parent="." unique_id=1675928328 instance=ExtResource("1_r7y1w")]
+transform = Transform3D(-0.7428878, 0, 0.6694159, 0, 1, 0, -0.6694159, 0, -0.7428878, 21.034111, -3.5834541, 13.66193)
+
+[node name="FishSchoolSkylight" parent="." unique_id=426942162 instance=ExtResource("3_6ujte")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.4184046, 14.344449, 0.90247345)
+fish_count_max = 18
+fish_count = 13
+school_cluster_radius = 5.0
+max_distance_from_cluster = 10.0
+cluster_pull_strength = 2.2
+direction_mode = 1
+flow_direction = Vector3(1, 0, 1)
+speed_min = 0.8
+speed_max = 3.0
+school_speed_scale_min = 0.95
+school_speed_scale_max = 1.75
+school_bounds = Vector3(24, 6, 24)
+stream_spawn_outside_distance = 5.0
+stream_recycle_front_distance = 5.0
+mesh_rotation_offset_degrees = Vector3(0, 90, 0)
+
+[node name="FishSchoolSkylight3" parent="." unique_id=613659128 instance=ExtResource("3_6ujte")]
+transform = Transform3D(-0.38855964, 0.15088126, 0.90898633, 0.033672146, 0.9881683, -0.14963087, -0.920808, -0.027532995, -0.38904288, -39.850914, 5.507917, 17.429081)
+species_per_school_max = 4
+fish_count_max = 13
+fish_count = 7
+school_cluster_radius = 5.0
+max_distance_from_cluster = 10.0
+cluster_pull_strength = 2.2
+delay_between_schools_min = 0.5
+delay_between_schools_max = 30.0
+flow_direction = Vector3(1, 0, 1)
+speed_min = 0.8
+speed_max = 3.0
+school_speed_scale_min = 0.95
+school_speed_scale_max = 1.75
+stream_spawn_outside_distance = 5.0
+stream_recycle_front_distance = 5.0
+mesh_rotation_offset_degrees = Vector3(0, 90, 0)
+
+[node name="FishSchoolSkylight4" parent="." unique_id=647612737 instance=ExtResource("3_6ujte")]
+transform = Transform3D(0.035056617, -0.25723398, 0.9657131, 0.009331776, 0.9663491, 0.25706467, -0.9993418, 0, 0.036277384, 41.708145, 7.444499, -0.9388447)
+species_per_school_max = 5
+fish_count_max = 15
+fish_count = 5
+school_cluster_radius = 5.0
+max_distance_from_cluster = 10.0
+cluster_pull_strength = 2.2
+flow_direction = Vector3(1, 0, 1)
+speed_min = 0.8
+speed_max = 3.0
+school_speed_scale_min = 0.95
+school_speed_scale_max = 1.75
+stream_spawn_outside_distance = 5.0
+stream_recycle_front_distance = 5.0
+mesh_rotation_offset_degrees = Vector3(0, 90, 0)
+
+[node name="FishSchoolSkylight2" parent="." unique_id=94713880 instance=ExtResource("3_6ujte")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.7352066, 15.099921, -22.18111)
+fish_count_max = 22
+fish_count = 10
+school_cluster_radius = 5.0
+max_distance_from_cluster = 10.0
+cluster_pull_strength = 2.2
+direction_mode = 1
+flow_direction = Vector3(1, 0, 1)
+speed_min = 0.8
+speed_max = 3.0
+school_speed_scale_min = 0.95
+school_speed_scale_max = 1.75
+school_bounds = Vector3(50, 6, 15)
+stream_spawn_outside_distance = 5.0
+stream_recycle_front_distance = 5.0
+mesh_rotation_offset_degrees = Vector3(0, 90, 0)
+
+[node name="DistantFade" type="MeshInstance3D" parent="." unique_id=312847159]
+cast_shadow = 0
+mesh = SubResource("SphereMesh_dfade")
+surface_material_override/0 = SubResource("Mat_sphere")
+
+[node name="FogCylinderNear" type="MeshInstance3D" parent="." unique_id=312847160]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 15, 0)
+cast_shadow = 0
+mesh = SubResource("CylinderMesh_fog0")
+surface_material_override/0 = SubResource("Mat_fog0")
+
+[node name="FogCylinderMid" type="MeshInstance3D" parent="." unique_id=312847161]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 15, 0)
+cast_shadow = 0
+mesh = SubResource("CylinderMesh_fog1")
+surface_material_override/0 = SubResource("Mat_fog1")
+
+[node name="FogCylinderFar" type="MeshInstance3D" parent="." unique_id=312847162]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0)
+cast_shadow = 0
+mesh = SubResource("CylinderMesh_fog2")
+surface_material_override/0 = SubResource("Mat_fog2")

@@ -145,6 +145,13 @@ Source: [Flaticon](https://www.flaticon.com/)
 - "Lifejacket" (https://skfb.ly/6SuP8) by BoatUS Foundation is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
 - "Paper Bag Sack Lunch" (https://skfb.ly/pnwYY) by Laurie Annis is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
 - "Pizza Box" (https://skfb.ly/6uGsK) by maypassamon is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+- "Сhemical laboratory" (https://skfb.ly/ozGWE) by viklia is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+- "Highpoly laboratory assets" (https://skfb.ly/pqPNr) by Anouk Paardekam is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+- "Wave Power Generator" (https://skfb.ly/6WYVO) by themanyone is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+- "Marine energy" (https://skfb.ly/BCtB) by Nereus&Co is licensed under CC Attribution-NonCommercial-ShareAlike (http://creativecommons.org/licenses/by-nc-sa/4.0/).
+- "Marine energy" (https://skfb.ly/BCty) by Nereus&Co is licensed under CC Attribution-NonCommercial-ShareAlike (http://creativecommons.org/licenses/by-nc-sa/4.0/).
+- "3D-printer Model" (https://skfb.ly/pzA6B) by TheCollector is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+- "Filament-Reel-Holder" (https://skfb.ly/6BSDQ) by Erik is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
 - 
 
 ## Textures
