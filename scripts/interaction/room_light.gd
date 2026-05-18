@@ -31,6 +31,7 @@ const LAMP_ON_SOUND_DEFAULT: AudioStream = preload("res://assets/sound/lamp-on.w
 
 @export_group("Random LED Flicker")
 @export var random_led_flicker_enabled := true
+@export var random_led_flicker_on_mobile := false
 @export var random_led_group: StringName = &"led_random"
 @export var random_led_root: NodePath = NodePath("lights/led_random")
 @export var random_led_intensity_min := 1.0
@@ -38,7 +39,7 @@ const LAMP_ON_SOUND_DEFAULT: AudioStream = preload("res://assets/sound/lamp-on.w
 @export var random_led_dip_chance := 0.12
 @export var random_led_dip_intensity_min := 0.15
 @export var random_led_dip_intensity_max := 0.35
-@export var random_led_change_interval_min := 0.01
+@export var random_led_change_interval_min := 0.05
 @export var random_led_change_interval_max := 0.5
 @export var random_led_blend_speed := 7.0
 @export var led_blink_default_interval := 0.35
@@ -56,6 +57,8 @@ var _lamp_base_energies: Dictionary = {}
 
 func _ready() -> void:
 	add_to_group("save_state_provider")
+	if OS.has_feature("mobile") and not random_led_flicker_on_mobile:
+		random_led_flicker_enabled = false
 	_make_ceiling_material_unique()
 	_populate_lamp_lights_if_needed()
 	_setup_random_led_flicker()
@@ -66,11 +69,11 @@ func _ready() -> void:
 	else:
 		_on_switch_toggled(false)
 	_allow_runtime_toggle_fx = true
-	set_process(random_led_flicker_enabled and not _random_led_states.is_empty())
+	set_process(random_led_flicker_enabled and _is_on and not _random_led_states.is_empty())
 
 
 func _process(delta: float) -> void:
-	if not random_led_flicker_enabled:
+	if not random_led_flicker_enabled or not _is_on:
 		return
 	for led_key in _random_led_states.keys():
 		var led := led_key as OmniLight3D
@@ -119,6 +122,7 @@ func _make_ceiling_material_unique() -> void:
 
 func _on_switch_toggled(is_on: bool) -> void:
 	_is_on = is_on
+	set_process(random_led_flicker_enabled and _is_on and not _random_led_states.is_empty())
 	if _allow_runtime_toggle_fx and is_on:
 		_play_lamp_on_sound()
 	if _allow_runtime_toggle_fx and is_on and flicker_on_startup:

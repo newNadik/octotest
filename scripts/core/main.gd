@@ -36,6 +36,17 @@ const ROOM_REGISTRY: Array[Dictionary] = [
 	{"name": "wetroom",    "path": "res://scenes/station/wetroom_room.tscn",    "center": Vector3(9.65,   0.0,  24.85),  "neighbors": []},
 	{"name": "workshop",   "path": "res://scenes/station/workshop_room.tscn",   "center": Vector3(25.78,  0.0,   5.67),  "neighbors": ["atrium"]},
 ]
+const ROOM_LIGHT_ISOLATION_LAYER_BITS := {
+	"atrium": 16,
+	"office": 17,
+	"systems": 18,
+	"quarters": 19,
+}
+const DEFAULT_VISUAL_LAYER_MASK := 1
+const HUB_SEAM_LIGHT_NAME := "HubSeamLight"
+const HUB_SEAM_LIGHT_POSITION := Vector3(0.0, 4.8, -18.5)
+const HUB_SEAM_LIGHT_RANGE := 8.0
+const HUB_SEAM_LIGHT_ENERGY := 0.38
 
 @export var orbit_sensitivity := 0.2
 @export var drag_orbit_threshold_px := 10.0
@@ -158,6 +169,7 @@ func _ready() -> void:
 	_player_visual_root = player.get_node_or_null("PlayerVisual") as Node3D
 	if _player_visual_root == null:
 		_player_visual_root = player.get_node_or_null("MeshInstance3D") as Node3D
+	_apply_player_room_light_layers()
 	in_game_resume_button.pressed.connect(_on_resume_pressed)
 	in_game_save_button.pressed.connect(_on_save_pressed)
 	in_game_settings_button.pressed.connect(_on_settings_pressed)
@@ -343,6 +355,8 @@ func _load_room_now(room_name: String) -> void:
 		return
 	instance.name = StringName(room_name)
 	_stream_station_root.add_child(instance)
+	_apply_room_light_isolation(instance, room_name)
+	_ensure_hub_seam_light()
 	_apply_exit_code_to_scene(instance)
 	room_data["node"] = instance
 	_stream_rooms[room_name] = room_data
@@ -385,12 +399,90 @@ func _check_pending_room_loads() -> void:
 			continue
 		instance.name = StringName(room_name)
 		_stream_station_root.add_child(instance)
+		_apply_room_light_isolation(instance, room_name)
+		_ensure_hub_seam_light()
 		_apply_exit_code_to_scene(instance)
 		room_data["node"] = instance
 		_stream_rooms[room_name] = room_data
 		_connect_autosave_doors()
 		print("[RoomStream] Async-instantiated: ", room_name)
 		_apply_pending_world_state()
+
+
+func _apply_room_light_isolation(room_root: Node3D, room_name: String) -> void:
+	if room_root == null:
+		return
+	if not ROOM_LIGHT_ISOLATION_LAYER_BITS.has(room_name):
+		return
+	var layer_bit := int(ROOM_LIGHT_ISOLATION_LAYER_BITS[room_name])
+	var room_visual_mask := 1 << (layer_bit - 1)
+	var room_light_mask := room_visual_mask
+	_apply_room_visual_layer_recursive(room_root, room_visual_mask)
+	_apply_room_light_cull_mask_recursive(room_root, room_light_mask)
+
+
+func _build_all_room_light_layers_mask() -> int:
+	var mask := DEFAULT_VISUAL_LAYER_MASK
+	for room_name in ROOM_LIGHT_ISOLATION_LAYER_BITS.keys():
+		var bit := int(ROOM_LIGHT_ISOLATION_LAYER_BITS[room_name])
+		mask |= 1 << (bit - 1)
+	return mask
+
+
+func _apply_player_room_light_layers() -> void:
+	if _player_visual_root == null:
+		return
+	var player_mask := _build_all_room_light_layers_mask()
+	_apply_visual_layer_recursive(_player_visual_root, player_mask)
+
+
+func _apply_visual_layer_recursive(node: Node, layer_mask: int) -> void:
+	if node is VisualInstance3D:
+		(node as VisualInstance3D).layers = layer_mask
+	for child in node.get_children():
+		_apply_visual_layer_recursive(child, layer_mask)
+
+
+func _ensure_hub_seam_light() -> void:
+	if _stream_station_root == null:
+		return
+	if _stream_station_root.get_node_or_null(HUB_SEAM_LIGHT_NAME) != null:
+		return
+	if not ROOM_LIGHT_ISOLATION_LAYER_BITS.has("atrium"):
+		return
+	var atrium_layer_bit := int(ROOM_LIGHT_ISOLATION_LAYER_BITS["atrium"])
+	var atrium_layer_mask := 1 << (atrium_layer_bit - 1)
+
+	var seam_light := OmniLight3D.new()
+	seam_light.name = HUB_SEAM_LIGHT_NAME
+	seam_light.position = HUB_SEAM_LIGHT_POSITION
+	seam_light.light_color = Color(0.78, 0.86, 0.98, 1.0)
+	seam_light.light_energy = HUB_SEAM_LIGHT_ENERGY
+	seam_light.light_specular = 0.0
+	seam_light.shadow_enabled = false
+	seam_light.omni_range = HUB_SEAM_LIGHT_RANGE
+	seam_light.omni_attenuation = 1.0
+	seam_light.light_cull_mask = atrium_layer_mask
+	_stream_station_root.add_child(seam_light)
+
+
+func _apply_room_visual_layer_recursive(node: Node, layer_mask: int) -> void:
+	if node is VisualInstance3D:
+		var visual := node as VisualInstance3D
+		# Put room visuals on room-only layer so room lights do not spill into
+		# neighboring room geometry.
+		visual.layers = layer_mask
+	for child in node.get_children():
+		_apply_room_visual_layer_recursive(child, layer_mask)
+
+
+func _apply_room_light_cull_mask_recursive(node: Node, light_mask: int) -> void:
+	if node is Light3D:
+		# Force a narrowed mask: shared/default visuals + allowed room layers.
+		var light := node as Light3D
+		light.light_cull_mask = light_mask
+	for child in node.get_children():
+		_apply_room_light_cull_mask_recursive(child, light_mask)
 
 
 func _apply_room_streaming() -> void:
