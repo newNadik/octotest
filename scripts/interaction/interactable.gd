@@ -685,9 +685,10 @@ func get_save_key() -> String:
 
 func get_save_state() -> Dictionary:
 	var result := {
-		"interaction_enabled": _interaction_enabled,
 		"is_held": _is_currently_held
 	}
+	if not _is_managed_by_door_state():
+		result["interaction_enabled"] = _interaction_enabled
 	if interaction_type == InteractionType.PICKUP and _pickup_root != null:
 		result["pickup_transform"] = _serialize_transform(_pickup_root.global_transform)
 	return result
@@ -696,7 +697,7 @@ func get_save_state() -> Dictionary:
 func apply_save_state(state: Dictionary) -> void:
 	if state.is_empty():
 		return
-	if state.has("interaction_enabled"):
+	if state.has("interaction_enabled") and not _is_managed_by_door_state():
 		set_interaction_enabled(bool(state["interaction_enabled"]))
 	if interaction_type != InteractionType.PICKUP or _pickup_root == null:
 		return
@@ -755,6 +756,11 @@ func _restore_saved_held_item_as_dropped() -> void:
 	var item_width = InteractionGeometry.estimate_drop_horizontal_width(_pickup_root)
 	var desired_position = _find_restore_drop_position(player, forward, item_width)
 	_pickup_root.global_position = desired_position
+
+
+func _is_managed_by_door_state() -> bool:
+	var parent_node := get_parent()
+	return parent_node != null and parent_node.is_in_group("autosave_door")
 
 
 func _find_player_for_restore() -> CharacterBody3D:

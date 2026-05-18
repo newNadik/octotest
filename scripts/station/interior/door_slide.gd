@@ -61,6 +61,10 @@ var _blink_tween: Tween
 func _ready() -> void:
 	add_to_group("save_state_provider")
 	add_to_group("autosave_door")
+	if _interactable != null:
+		# Door interaction state is derived from door state; avoid persisting the child
+		# Interactable independently, which can restore a stale disabled flag.
+		_interactable.remove_from_group("save_state_provider")
 	_rng.randomize()
 	_closed_position = _door_body.position
 	if _close_sensor != null:
@@ -417,8 +421,7 @@ func _apply_title_visual() -> void:
 
 func get_save_state() -> Dictionary:
 	return {
-		"locked": locked,
-		"is_open": _is_open
+		"locked": locked
 	}
 
 
@@ -427,8 +430,7 @@ func apply_save_state(state: Dictionary) -> void:
 		return
 	if state.has("locked"):
 		set_locked(bool(state["locked"]))
-	var should_be_open := bool(state.get("is_open", false))
-	_set_open_state_immediate(should_be_open)
+	_set_open_state_immediate(false)
 
 
 func _set_open_state_immediate(is_open: bool) -> void:

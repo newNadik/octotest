@@ -1281,8 +1281,6 @@ rotation_speed_a_degrees = 4.2
 rotation_speed_b_degrees = -5.8
 energy_pulse_speed = 0.34
 energy_pulse_strength = 0.06
-fade_begin_distance = 25.0
-fade_end_distance = 35.0
 
 [node name="Caustics2" parent="light" unique_id=1959651617 instance=ExtResource("11_fy6p5")]
 transform = Transform3D(0.34202874, -0.7206986, 0.603001, 0.780207, 0.57544845, 0.2452264, -0.52373016, 0.386591, 0.7591137, -29.041042, 4.906003, 12.043914)
