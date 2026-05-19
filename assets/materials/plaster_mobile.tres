@@ -1,8 +1,9 @@
-[gd_resource type="ShaderMaterial" format=3]
+[gd_resource type="ShaderMaterial" format=3 uid="uid://dheq8sqlq1mpt"]
 
-[ext_resource type="Shader" path="res://assets/shaders/plaster_mobile.gdshader" id="1_plaster_mobile_shader"]
+[ext_resource type="Shader" uid="uid://cr7uln08gksx1" path="res://assets/shaders/plaster_mobile.gdshader" id="1_plaster_mobile_shader"]
 
 [resource]
+render_priority = 0
 shader = ExtResource("1_plaster_mobile_shader")
 shader_parameter/upper_color = Color(0.96, 0.97, 0.98, 1)
 shader_parameter/lower_color = Color(0.18144298, 0.3341242, 0.430378, 1)

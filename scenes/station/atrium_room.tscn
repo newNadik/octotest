@@ -1335,10 +1335,11 @@ transform = Transform3D(0.99859184, 0.05305054, 0, -0.05305054, 0.99859184, 0, 0
 [node name="OmniLight3D2" type="OmniLight3D" parent="light" unique_id=26556194]
 process_priority = 1
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.77448106, 8.18562, 0.07252407)
+light_bake_mode = 1
+shadow_enabled = true
 shadow_bias = 0.2
 shadow_opacity = 0.7
 omni_range = 30.0
-omni_shadow_mode = 0
 
 [node name="OmniLight3D3" type="OmniLight3D" parent="light" unique_id=1952518532]
 process_priority = 1
