@@ -718,6 +718,10 @@ func _move_toward_interactable(target) -> void:
 
 func _pick_up_interactable(target) -> void:
 	if target is WearableInteractableScript and _wear_controller != null:
+		var slot: String = target.get_wear_slot_name()
+		var displaced: WearableInteractableScript = _wear_controller.get_worn_in_slot(slot) as WearableInteractableScript
+		if displaced != null:
+			_unwear_and_drop(displaced)
 		var pickup_position: Vector3 = target.get_focus_position() if target.has_method("get_focus_position") else _player.global_position
 		if _wear_controller.try_wear(target):
 			_play_pick_drop_sound(pickup_position)
@@ -791,10 +795,13 @@ func _unwear_and_drop(item: WearableInteractableScript) -> void:
 	var pickup_root := item.get_pickup_root()
 	_wear_controller.try_unwear(item)
 	_apply_pickable_cross_room_visual_layers(pickup_root)
-	var forward := _get_drop_forward_direction(pickup_root)
-	var item_width := InteractionGeometry.estimate_drop_horizontal_width(pickup_root)
-	var drop_distance := maxf(drop_min_forward_distance, item_width * drop_width_distance_multiplier)
-	var desired_drop_position := _player.global_position + forward * drop_distance
+	var forward := -_player.global_basis.z
+	forward.y = 0.0
+	if forward.length_squared() <= 0.0001:
+		forward = Vector3.FORWARD
+	else:
+		forward = forward.normalized()
+	var desired_drop_position: Vector3 = _player.global_position + forward * drop_min_forward_distance
 	var drop_position := _resolve_drop_position(desired_drop_position, item, pickup_root)
 	pickup_root.global_position = drop_position
 	if pickup_root is RigidBody3D:

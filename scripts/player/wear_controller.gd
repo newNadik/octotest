@@ -46,6 +46,10 @@ func process_wear(delta: float) -> void:
 		_glasses_anchor.global_transform = head_xform * _make_local_transform(glasses_position_offset, glasses_rotation_degrees)
 
 
+func get_worn_in_slot(slot_name: String) -> WearableInteractable:
+	return _worn.get(slot_name, null)
+
+
 func try_wear(item: WearableInteractable) -> bool:
 	var slot := item.get_wear_slot_name()
 	if _worn.has(slot):
@@ -79,6 +83,13 @@ func try_unwear(item: WearableInteractable) -> void:
 	_original_rotations.erase(slot)
 	item.set_held(false)
 	item.drop(_player)
+
+
+func set_worn_item_visuals_visible(is_visible: bool) -> void:
+	for item in _worn.values():
+		var root: Node3D = item.get_pickup_root()
+		if root != null:
+			root.visible = is_visible
 
 
 func is_worn(item) -> bool:

@@ -828,7 +828,11 @@ func _start_focus_tween(
 func _set_focus_visuals_enabled(is_enabled: bool) -> void:
 	if _player_visual_root != null:
 		_player_visual_root.visible = is_enabled
-	_interaction_controller.set_held_item_visuals_visible(is_enabled or (_focus_mode and not _hide_held_items_in_focus))
+	var items_visible := is_enabled or (_focus_mode and not _hide_held_items_in_focus)
+	_interaction_controller.set_held_item_visuals_visible(items_visible)
+	var wear_controller := _player_visual_root.get_parent().get_node_or_null("WearController") as WearController if _player_visual_root != null else null
+	if wear_controller != null:
+		wear_controller.set_worn_item_visuals_visible(items_visible)
 
 
 func _compute_focus_angles(target) -> Vector3:

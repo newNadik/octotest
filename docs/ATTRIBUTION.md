@@ -152,6 +152,8 @@ Source: [Flaticon](https://www.flaticon.com/)
 - "Marine energy" (https://skfb.ly/BCty) by Nereus&Co is licensed under CC Attribution-NonCommercial-ShareAlike (http://creativecommons.org/licenses/by-nc-sa/4.0/).
 - "3D-printer Model" (https://skfb.ly/pzA6B) by TheCollector is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
 - "Filament-Reel-Holder" (https://skfb.ly/6BSDQ) by Erik is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+- "Gawr Gura shark hat" (https://skfb.ly/oCUxR) by Mr.Lime is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+- "Zaz 968m" (https://skfb.ly/pDL8t) by taras.yaremenco is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
 - 
 
 ## Textures

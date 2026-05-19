@@ -30,6 +30,7 @@ wear_rotation_degrees = Vector3(0, 180, 0)
 wear_scale = 0.5
 interaction_type = 1
 display_name = "Sunglasses"
+interaction_range = 3.0
 requires_line_of_sight = false
 item_id = "sunglasses"
 hold_offset = Vector3(0, 0, 0.3)
