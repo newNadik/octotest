@@ -569,18 +569,9 @@ shadow_enabled = true
 shadow_opacity = 0.7
 omni_range = 11.67399
 omni_attenuation = 0.0
-omni_shadow_mode = 0
 
 [node name="LightSwitch" parent="lights" unique_id=1802619805 instance=ExtResource("7_hj37j")]
 transform = Transform3D(0.38268343, 0, -0.9238796, 0, 1, 0, 0.9238796, 0, 0.38268343, -7.776346, 0, -13.542364)
-
-[node name="OmniLight3D2" type="OmniLight3D" parent="lights" unique_id=145763959]
-transform = Transform3D(0.99859184, 0.05305054, 0, -0.05305054, 0.99859184, 0, 0, 0, 1, -18.319313, 4.058849, -8.089163)
-light_bake_mode = 1
-shadow_blur = 2.0
-omni_range = 5.1230326
-omni_attenuation = 0.0
-omni_shadow_mode = 0
 
 [node name="OmniLight3D4" type="OmniLight3D" parent="lights" unique_id=1654511063]
 process_priority = 1

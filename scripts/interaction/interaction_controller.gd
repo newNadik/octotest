@@ -738,6 +738,7 @@ func _drop_held_item_by_index(index: int) -> void:
 
 	var pickup_root = item.get_pickup_root()
 	pickup_root.reparent(_world_root, true)
+	_apply_pickable_cross_room_visual_layers(pickup_root)
 	item.set_held(false)
 	item.drop(_player)
 
@@ -756,6 +757,13 @@ func _drop_held_item_by_index(index: int) -> void:
 
 	_play_pick_drop_sound(drop_position)
 	_update_hint_text()
+
+
+func _apply_pickable_cross_room_visual_layers(node: Node) -> void:
+	if node == null:
+		return
+	if _world_root != null and _world_root.has_method("apply_cross_room_visual_layers"):
+		_world_root.call("apply_cross_room_visual_layers", node)
 
 
 func _resolve_drop_position(desired_position: Vector3, item, pickup_root: Node3D) -> Vector3:
@@ -1186,6 +1194,7 @@ func _attach_item_to_hands(item, clear_motion_target: bool) -> bool:
 	var socket = _hand_sockets[socket_index]
 	_held_clearance_by_item_id[item_id] = _estimate_item_clearance(item, pickup_root)
 	pickup_root.reparent(socket, true)
+	_apply_pickable_cross_room_visual_layers(pickup_root)
 	item.set_interaction_enabled(true)
 	item.set_held(true)
 	_apply_hold_transform_preserving_scale(pickup_root, item.get_hold_transform())

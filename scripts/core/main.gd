@@ -436,6 +436,13 @@ func _apply_player_room_light_layers() -> void:
 	_apply_visual_layer_recursive(_player_visual_root, player_mask)
 
 
+func apply_cross_room_visual_layers(node: Node) -> void:
+	if node == null:
+		return
+	var cross_room_mask := _build_all_room_light_layers_mask()
+	_apply_visual_layer_recursive(node, cross_room_mask)
+
+
 func _apply_visual_layer_recursive(node: Node, layer_mask: int) -> void:
 	if node is VisualInstance3D:
 		(node as VisualInstance3D).layers = layer_mask

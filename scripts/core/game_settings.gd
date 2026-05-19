@@ -37,7 +37,7 @@ var _ambience_volume := DEFAULT_AMBIENCE_VOLUME
 var _voice_volume := DEFAULT_VOICE_VOLUME
 var _subtitles_enabled := DEFAULT_SUBTITLES_ENABLED
 var _god_rays_enabled := DEFAULT_GOD_RAYS_ENABLED
-var _shadows_enabled := DEFAULT_SHADOWS_ENABLED
+var _shadows_enabled := _get_default_shadows_enabled()
 var _exit_code := 0
 
 
@@ -169,7 +169,12 @@ func set_shadows_enabled(enabled: bool) -> void:
 	save_settings()
 
 
+func _get_default_shadows_enabled() -> bool:
+	return false if OS.has_feature("mobile") else DEFAULT_SHADOWS_ENABLED
+
+
 func load_settings() -> void:
+	var default_shadows_enabled := _get_default_shadows_enabled()
 	var error := _config.load(SETTINGS_PATH)
 	if error == OK:
 		_locale = str(_config.get_value(SECTION_GENERAL, KEY_LOCALE, DEFAULT_LOCALE))
@@ -180,7 +185,7 @@ func load_settings() -> void:
 		_voice_volume = float(_config.get_value(SECTION_AUDIO, KEY_VOICE_VOLUME, DEFAULT_VOICE_VOLUME))
 		_subtitles_enabled = bool(_config.get_value(SECTION_ACCESSIBILITY, KEY_SUBTITLES_ENABLED, DEFAULT_SUBTITLES_ENABLED))
 		_god_rays_enabled = bool(_config.get_value(SECTION_GRAPHICS, KEY_GOD_RAYS_ENABLED, DEFAULT_GOD_RAYS_ENABLED))
-		_shadows_enabled = bool(_config.get_value(SECTION_GRAPHICS, KEY_SHADOWS_ENABLED, DEFAULT_SHADOWS_ENABLED))
+		_shadows_enabled = bool(_config.get_value(SECTION_GRAPHICS, KEY_SHADOWS_ENABLED, default_shadows_enabled))
 	elif error == ERR_FILE_NOT_FOUND:
 		_locale = DEFAULT_LOCALE
 		_exit_code = 0
@@ -190,6 +195,7 @@ func load_settings() -> void:
 		_voice_volume = DEFAULT_VOICE_VOLUME
 		_subtitles_enabled = DEFAULT_SUBTITLES_ENABLED
 		_god_rays_enabled = DEFAULT_GOD_RAYS_ENABLED
+		_shadows_enabled = default_shadows_enabled
 	else:
 		push_warning("Failed to load settings file: %s" % SETTINGS_PATH)
 		_locale = DEFAULT_LOCALE
@@ -200,6 +206,7 @@ func load_settings() -> void:
 		_voice_volume = DEFAULT_VOICE_VOLUME
 		_subtitles_enabled = DEFAULT_SUBTITLES_ENABLED
 		_god_rays_enabled = DEFAULT_GOD_RAYS_ENABLED
+		_shadows_enabled = default_shadows_enabled
 
 	if _locale.is_empty():
 		_locale = DEFAULT_LOCALE

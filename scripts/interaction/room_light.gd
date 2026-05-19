@@ -14,7 +14,7 @@ const LAMP_ON_SOUND_DEFAULT: AudioStream = preload("res://assets/sound/lamp-on.w
 @export var ceiling_albedo_boost_off := 1.0
 @export var auto_collect_lamp_lights := true
 @export var lamp_lights: Array[Light3D] = []
-@export var lamp_light_energy_off := 0.2
+@export var lamp_light_energy_off := 0.1
 
 @export_group("Flicker")
 @export var flicker_on_startup := true         # flicker when switched on
