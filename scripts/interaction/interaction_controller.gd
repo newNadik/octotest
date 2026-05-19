@@ -15,6 +15,7 @@ const FocusTargetScript = preload("res://scripts/interaction/focus_target.gd")
 const FocusRejectFeedbackScript = preload("res://scripts/interaction/focus_reject_feedback.gd")
 const FocusItemReceiverScript = preload("res://scripts/interaction/focus_item_receiver.gd")
 const InteractableScript = preload("res://scripts/interaction/interactable.gd")
+const WearableInteractableScript = preload("res://scripts/interaction/wearable_interactable.gd")
 const InteractionHintBuilderScript = preload("res://scripts/interaction/interaction_hint_builder.gd")
 const OctoRigScript = preload("res://scripts/rig/OctoRig.gd")
 const FRONT_LEFT_ARM_NAME := "arm_0"
@@ -91,6 +92,7 @@ var _focus_reject_feedback = FocusRejectFeedbackScript.new()
 var _focus_item_receiver = FocusItemReceiverScript.new()
 var _hint_builder = InteractionHintBuilderScript.new()
 var _octo_rig: OctoRigScript
+var _wear_controller: WearController
 var _pick_drop_player: AudioStreamPlayer3D
 var _rng := RandomNumberGenerator.new()
 var _focus_item_apply_ticket := 0
@@ -114,6 +116,9 @@ func initialize(player: CharacterBody3D, camera: Camera3D, hint_label: Label, wo
 	_ensure_pick_drop_audio_player()
 	_ensure_hand_sockets()
 	_resolve_octo_rig()
+	_wear_controller = _player.get_node_or_null("WearController") as WearController
+	if _wear_controller != null:
+		_wear_controller.initialize(_player, _world_root)
 	_configure_hold_arm_slot_mapping()
 	_update_carry_mobility()
 	_update_hint_text()
@@ -133,6 +138,8 @@ func process_interactions(delta: float) -> void:
 	_process_queued_interaction()
 	_update_hovered_interactable()
 	_update_held_item_transform(delta)
+	if _wear_controller != null:
+		_wear_controller.process_wear(delta)
 
 
 func consume_escape() -> bool:
@@ -163,6 +170,12 @@ func try_handle_interaction_click(screen_position: Vector2) -> bool:
 		_debug_log("World click miss")
 		return false
 
+	if _wear_controller != null and _wear_controller.is_worn(target):
+		_queued_interaction_target = null
+		_mark_interactable_clicked(target)
+		_unwear_and_drop(target)
+		return true
+
 	if _is_item_currently_held(target):
 		_queued_interaction_target = null
 		_mark_interactable_clicked(target)
@@ -178,7 +191,8 @@ func try_handle_interaction_click(screen_position: Vector2) -> bool:
 	var blocked := false
 	if target.requires_line_of_sight:
 		blocked = not _has_line_of_sight(target)
-	if target.interaction_type == InteractableScript.InteractionType.PICKUP and _held_interactables.size() >= max_held_items:
+	var hands_full: bool = target.interaction_type == InteractableScript.InteractionType.PICKUP and _held_interactables.size() >= max_held_items
+	if hands_full and not (target is WearableInteractableScript):
 		blocked = true
 		in_range = false
 
@@ -458,7 +472,8 @@ func _process_queued_interaction() -> void:
 		return
 
 	if _queued_interaction_target.interaction_type == InteractableScript.InteractionType.PICKUP:
-		if _held_interactables.size() >= max_held_items:
+		var is_wearable := _queued_interaction_target is WearableInteractableScript
+		if not is_wearable and _held_interactables.size() >= max_held_items:
 			_queued_interaction_target = null
 			return
 		_pick_up_interactable(_queued_interaction_target)
@@ -480,6 +495,10 @@ func _update_hovered_interactable() -> void:
 		_set_hovered_interactable(null, false, false)
 		return
 
+	if _wear_controller != null and _wear_controller.is_worn(target):
+		_set_hovered_interactable(target, true, false)
+		return
+
 	if _is_item_currently_held(target):
 		_set_hovered_interactable(target, true, false)
 		return
@@ -488,7 +507,8 @@ func _update_hovered_interactable() -> void:
 	var blocked := false
 	if target.requires_line_of_sight:
 		blocked = not _has_line_of_sight(target)
-	if target.interaction_type == InteractableScript.InteractionType.PICKUP and _held_interactables.size() >= max_held_items:
+	var hover_hands_full: bool = target.interaction_type == InteractableScript.InteractionType.PICKUP and _held_interactables.size() >= max_held_items
+	if hover_hands_full and not (target is WearableInteractableScript):
 		blocked = true
 		in_range = false
 
@@ -697,6 +717,14 @@ func _move_toward_interactable(target) -> void:
 
 
 func _pick_up_interactable(target) -> void:
+	if target is WearableInteractableScript and _wear_controller != null:
+		var pickup_position: Vector3 = target.get_focus_position() if target.has_method("get_focus_position") else _player.global_position
+		if _wear_controller.try_wear(target):
+			_play_pick_drop_sound(pickup_position)
+			target.interact(_player)
+			_player.clear_move_target()
+			return
+
 	if _held_interactables.size() >= max_held_items or _is_item_currently_held(target):
 		return
 
@@ -755,6 +783,22 @@ func _drop_held_item_by_index(index: int) -> void:
 	if _hovered_interactable == item:
 		_set_hovered_interactable(null, false, false)
 
+	_play_pick_drop_sound(drop_position)
+	_update_hint_text()
+
+
+func _unwear_and_drop(item: WearableInteractableScript) -> void:
+	var pickup_root := item.get_pickup_root()
+	_wear_controller.try_unwear(item)
+	_apply_pickable_cross_room_visual_layers(pickup_root)
+	var forward := _get_drop_forward_direction(pickup_root)
+	var item_width := InteractionGeometry.estimate_drop_horizontal_width(pickup_root)
+	var drop_distance := maxf(drop_min_forward_distance, item_width * drop_width_distance_multiplier)
+	var desired_drop_position := _player.global_position + forward * drop_distance
+	var drop_position := _resolve_drop_position(desired_drop_position, item, pickup_root)
+	pickup_root.global_position = drop_position
+	if pickup_root is RigidBody3D:
+		(pickup_root as RigidBody3D).linear_velocity = _player.velocity * 0.2
 	_play_pick_drop_sound(drop_position)
 	_update_hint_text()
 

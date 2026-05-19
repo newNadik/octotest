@@ -2,9 +2,9 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cn5crs7gpo3dm"
-path.s3tc="res://.godot/imported/dippers_cap_1.png-3c264354af521e2dc03ac99e549cf8dc.s3tc.ctex"
-path.etc2="res://.godot/imported/dippers_cap_1.png-3c264354af521e2dc03ac99e549cf8dc.etc2.ctex"
+uid="uid://q5ibph54dsb5"
+path.s3tc="res://.godot/imported/dippers_cap_Image_1.png-6c66212c29ed68fa87ab6d9abc47b502.s3tc.ctex"
+path.etc2="res://.godot/imported/dippers_cap_Image_1.png-6c66212c29ed68fa87ab6d9abc47b502.etc2.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
@@ -15,8 +15,8 @@ generator_parameters={
 
 [deps]
 
-source_file="res://assets/models/items/quarters/dippers_cap_1.png"
-dest_files=["res://.godot/imported/dippers_cap_1.png-3c264354af521e2dc03ac99e549cf8dc.s3tc.ctex", "res://.godot/imported/dippers_cap_1.png-3c264354af521e2dc03ac99e549cf8dc.etc2.ctex"]
+source_file="res://assets/models/items/quarters/dippers_cap_Image_1.png"
+dest_files=["res://.godot/imported/dippers_cap_Image_1.png-6c66212c29ed68fa87ab6d9abc47b502.s3tc.ctex", "res://.godot/imported/dippers_cap_Image_1.png-6c66212c29ed68fa87ab6d9abc47b502.etc2.ctex"]
 
 [params]
 

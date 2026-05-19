@@ -1,0 +1,38 @@
+[gd_scene format=3 uid="uid://cgpw1pwl0bksn"]
+
+[ext_resource type="PackedScene" uid="uid://cs4ossynlbuha" path="res://assets/models/items/quarters/headphones.glb" id="1_a2bwh"]
+[ext_resource type="Script" uid="uid://ikr24cul744s" path="res://scripts/interaction/wearable_interactable.gd" id="2_wearable"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_hp_body"]
+size = Vector3(0.5617676, 0.55874026, 0.282417)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_hp_area"]
+size = Vector3(0.56, 0.58906007, 0.28)
+
+[node name="headphones" type="StaticBody3D" unique_id=304693008]
+collision_layer = 64
+collision_mask = 99
+
+[node name="Sketchfab_Scene9" parent="." unique_id=1907395841 instance=ExtResource("1_a2bwh")]
+transform = Transform3D(1.5000004, 0, 0, 0, 1.5000001, 0, 0, 0, 1.5000001, 0, 0.28343517, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=304693009]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0018310547, 0.26604003, -0.000881359)
+shape = SubResource("BoxShape3D_hp_body")
+
+[node name="WearableInteractable" type="Area3D" parent="." unique_id=304693010]
+collision_layer = 8
+collision_mask = 0
+script = ExtResource("2_wearable")
+wear_offset = Vector3(0, -0.1, -0.1)
+wear_scale = 0.8
+interaction_type = 1
+display_name = "Headphones"
+interaction_range = 3.0
+requires_line_of_sight = false
+item_id = "headphones"
+hold_offset = Vector3(0, -0.65, -0.25)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="WearableInteractable" unique_id=304693011]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.25905883, 0)
+shape = SubResource("BoxShape3D_hp_area")

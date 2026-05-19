@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://d2xiurclda6aa" path="res://scripts/player/player_controller.gd" id="1_6ujh3"]
 [ext_resource type="PackedScene" uid="uid://b3e53em1mvq8k" path="res://assets/models/octo/octo.glb" id="2_yn3vd"]
 [ext_resource type="Script" uid="uid://55li82r2kp3x" path="res://scripts/rig/OctoRig.gd" id="3_8x4hh"]
+[ext_resource type="Script" path="res://scripts/player/wear_controller.gd" id="4_wearctrl"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_player"]
 size = Vector3(0.5, 0.5, 0.5)
@@ -26,3 +27,6 @@ script = ExtResource("3_8x4hh")
 
 [node name="Octo" parent="PlayerVisual" unique_id=1282528951 instance=ExtResource("2_yn3vd")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.17, 0)
+
+[node name="WearController" type="Node" parent="." unique_id=2839104722]
+script = ExtResource("4_wearctrl")

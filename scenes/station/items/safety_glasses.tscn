@@ -1,6 +1,7 @@
 [gd_scene format=4 uid="uid://4uby11wsvhlx"]
 
 [ext_resource type="Material" uid="uid://bm05hnbasm1cg" path="res://assets/materials/glass.tres" id="1_5ni40"]
+[ext_resource type="Script" uid="uid://ikr24cul744s" path="res://scripts/interaction/wearable_interactable.gd" id="99_wearable"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_hes0k"]
 resource_name = "ai_Glass_plastik_blye"
@@ -361,10 +362,18 @@ _surfaces = [{
 blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_nby6w")
 
-[node name="safety_glasses" type="Node3D" unique_id=672416876]
+[sub_resource type="BoxShape3D" id="BoxShape3D_sg_body"]
+size = Vector3(0.4978296, 0.17917968, 0.001)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_sg_area"]
+size = Vector3(0.5227832, 0.19771484, 0.48496094)
+
+[node name="safety_glasses" type="StaticBody3D" unique_id=672416876]
+collision_layer = 64
+collision_mask = 99
 
 [node name="Glass_GRP" type="Node3D" parent="." unique_id=869999358]
-transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, -0.0261684, -1.0283909, 1.1325299)
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, -0.018, -0.658, 0.74)
 
 [node name="GLASS_LOW_GLAS" type="MeshInstance3D" parent="Glass_GRP" unique_id=1588653748]
 mesh = SubResource("ArrayMesh_rjh3x")
@@ -402,3 +411,25 @@ mesh = SubResource("ArrayMesh_iyonj")
 [node name="GLASS_polySurface1" type="MeshInstance3D" parent="Glass_GRP" unique_id=322293485]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0261684, 0, 0.012031772)
 mesh = SubResource("ArrayMesh_tdxle")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=2012837461]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.001966551, -0.069589846, 0.40390432)
+shape = SubResource("BoxShape3D_sg_body")
+
+[node name="WearableInteractable" type="Area3D" parent="." unique_id=2012837462]
+collision_layer = 8
+collision_mask = 0
+script = ExtResource("99_wearable")
+wear_slot = 1
+wear_offset = Vector3(0, 0.27, -0.15)
+wear_rotation_degrees = Vector3(0, 180, 0)
+wear_scale = Vector3(0.6, 0.6, 0.6)
+interaction_type = 1
+display_name = "Safety Glasses"
+requires_line_of_sight = false
+item_id = "safety_glasses"
+hold_offset = Vector3(0, 0, 0.3)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="WearableInteractable" unique_id=2012837463]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0011376962, -0.058857422, 0.15556641)
+shape = SubResource("BoxShape3D_sg_area")

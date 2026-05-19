@@ -74,7 +74,8 @@ static func estimate_drop_base_offset_from_collision(root: Node3D) -> float:
 				min_y = minf(min_y, cs.global_position.y - world_extents.y)
 				found = true
 		for child in node.get_children():
-			stack.append(child)
+			if not (child is Area3D):
+				stack.append(child)
 	if not found:
 		return -1.0
 	return maxf(0.0, root.global_position.y - min_y)
@@ -100,7 +101,8 @@ static func estimate_drop_horizontal_width_from_collision(root: Node3D) -> float
 				max_z = maxf(max_z, cs.global_position.z + world_extents.z)
 				found = true
 		for child in node.get_children():
-			stack.append(child)
+			if not (child is Area3D):
+				stack.append(child)
 	if not found:
 		return -1.0
 	return maxf(0.2, maxf(max_x - min_x, max_z - min_z))

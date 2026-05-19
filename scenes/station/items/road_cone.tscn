@@ -1,0 +1,36 @@
+[gd_scene format=3 uid="uid://c80jdcsnbv60v"]
+
+[ext_resource type="PackedScene" uid="uid://gcupewbr73pr" path="res://assets/models/items/quarters/orange_traffic_cone.glb" id="1_3xwy0"]
+[ext_resource type="Script" uid="uid://ikr24cul744s" path="res://scripts/interaction/wearable_interactable.gd" id="2_wearable"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_cone_body"]
+size = Vector3(0.9056421, 1.1164477, 0.9053369)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_cone_area"]
+size = Vector3(0.903, 1.0908813, 0.912)
+
+[node name="road_cone" type="StaticBody3D" unique_id=1726703278]
+collision_layer = 64
+collision_mask = 99
+
+[node name="Sketchfab_Scene4" parent="." unique_id=1107240622 instance=ExtResource("1_3xwy0")]
+transform = Transform3D(0.0030000003, 0, 0, 0, 0.0029999998, 0, 0, 0, 0.0030000003, 0, 0, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1726703279]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.003111571, 0.5073279, -0.0033862293)
+shape = SubResource("BoxShape3D_cone_body")
+
+[node name="WearableInteractable" type="Area3D" parent="." unique_id=1726703280]
+collision_layer = 8
+collision_mask = 0
+script = ExtResource("2_wearable")
+wear_scale = 0.8
+interaction_type = 1
+display_name = "Road Cone"
+requires_line_of_sight = false
+item_id = "road_cone"
+hold_offset = Vector3(0, -0.2, -0.3)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="WearableInteractable" unique_id=1726703281]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.008, 0.5074158, 0)
+shape = SubResource("BoxShape3D_cone_area")

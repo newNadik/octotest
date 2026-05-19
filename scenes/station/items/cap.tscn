@@ -1,0 +1,39 @@
+[gd_scene format=3 uid="uid://42bajf1mpd0l"]
+
+[ext_resource type="PackedScene" uid="uid://7bd1yce17yng" path="res://assets/models/items/quarters/dippers_cap.glb" id="1_ybb08"]
+[ext_resource type="Script" uid="uid://ikr24cul744s" path="res://scripts/interaction/wearable_interactable.gd" id="2_wearable"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_cap_body"]
+size = Vector3(0.506416, 0.27560547, 0.2992676)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_cap_area"]
+size = Vector3(0.51177245, 0.26680663, 0.31316894)
+
+[node name="cap" type="StaticBody3D" unique_id=1863066566]
+collision_layer = 64
+collision_mask = 99
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1863066568]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.060336903, 0.12879883, 0.0143798925)
+shape = SubResource("BoxShape3D_cap_body")
+
+[node name="WearableInteractable" type="Area3D" parent="." unique_id=1863066569]
+collision_layer = 8
+collision_mask = 0
+script = ExtResource("2_wearable")
+wear_offset = Vector3(0, 0, -0.1)
+wear_rotation_degrees = Vector3(0, 90, 0)
+interaction_type = 1
+display_name = "Cap"
+requires_line_of_sight = false
+item_id = "cap"
+hold_offset = Vector3(0, -0.25, -0.2)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="WearableInteractable" unique_id=1863066570]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.05759033, 0.12978026, 0.017912596)
+shape = SubResource("BoxShape3D_cap_area")
+
+[node name="Node3D" type="Node3D" parent="." unique_id=1807518564]
+
+[node name="Sketchfab_Scene11" parent="Node3D" unique_id=2073192021 instance=ExtResource("1_ybb08")]
+transform = Transform3D(-0.0003211346, 0, 0.19999973, 0, 0.2, 0, -0.19999973, 0, -0.0003211346, 0.0006082655, 0, 1.192384e-07)

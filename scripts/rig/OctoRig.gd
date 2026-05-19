@@ -446,6 +446,14 @@ func get_hold_arm_priority() -> PackedStringArray:
 	return result
 
 
+func get_head_world_transform() -> Transform3D:
+	if skeleton == null or head == null or head.bone_indices.is_empty():
+		return global_transform
+	var bone_index: int = int(head.bone_indices[0])
+	var bone_pose: Transform3D = skeleton.get_bone_global_pose(bone_index)
+	return skeleton.global_transform * bone_pose
+
+
 func get_arm_world_anchor(arm_name: String, section: String = "tip") -> Vector3:
 	if skeleton == null:
 		return global_position

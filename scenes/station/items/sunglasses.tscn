@@ -1,0 +1,39 @@
+[gd_scene format=3 uid="uid://dok7mfeo76gpb"]
+
+[ext_resource type="PackedScene" uid="uid://b16x5s6xvy0va" path="res://assets/models/items/quarters/sunglasses.glb" id="1_r2pkf"]
+[ext_resource type="Script" uid="uid://ikr24cul744s" path="res://scripts/interaction/wearable_interactable.gd" id="2_wearable"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_sg_body"]
+size = Vector3(0.54037106, 0.20976806, 0.39132813)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_sg_area"]
+size = Vector3(0.5324268, 0.20920898, 0.39810792)
+
+[node name="sunglasses" type="StaticBody3D" unique_id=806971826]
+collision_layer = 64
+collision_mask = 99
+
+[node name="Sketchfab_Scene" parent="." unique_id=895173853 instance=ExtResource("1_r2pkf")]
+transform = Transform3D(-0.25, 0, -3.774895e-08, 0, 0.25, 0, 3.774895e-08, 0, -0.25, 0, 0, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=2012937461]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0022754073, -0.020777587, 0.16566406)
+shape = SubResource("BoxShape3D_sg_body")
+
+[node name="WearableInteractable" type="Area3D" parent="." unique_id=2012937462]
+collision_layer = 8
+collision_mask = 0
+script = ExtResource("2_wearable")
+wear_slot = 1
+wear_offset = Vector3(0, 0.22, -0.1)
+wear_rotation_degrees = Vector3(0, 180, 0)
+wear_scale = 0.5
+interaction_type = 1
+display_name = "Sunglasses"
+requires_line_of_sight = false
+item_id = "sunglasses"
+hold_offset = Vector3(0, 0, 0.3)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="WearableInteractable" unique_id=2012937463]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00010009855, -0.019155279, 0.17020874)
+shape = SubResource("BoxShape3D_sg_area")
