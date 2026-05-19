@@ -151,6 +151,35 @@ _surfaces = [{
 blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_mgnwc")
 
+[sub_resource type="PlaneMesh" id="PlaneMesh_lx4nm"]
+size = Vector2(5, 5)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_xroe6"]
+transparency = 1
+albedo_texture = ExtResource("17_yi2a8")
+metallic_specular = 0.0
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_4tiyp"]
+size = Vector2(5, 5)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_4elsy"]
+transparency = 1
+albedo_texture = ExtResource("18_smysb")
+metallic_specular = 0.0
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_wogao"]
+size = Vector2(13, 10)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_lx4nm"]
+transparency = 1
+albedo_texture = ExtResource("20_yi2a8")
+metallic_specular = 0.0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_wr7m8"]
+transparency = 1
+albedo_texture = ExtResource("19_yi2a8")
+metallic_specular = 0.0
+
 [node name="workshop" type="Node3D" unique_id=407966003 node_paths=PackedStringArray("light_switch", "ceiling_mesh", "lamp_lights")]
 script = ExtResource("1_qtw0n")
 light_switch = NodePath("lights/LightSwitch")
@@ -207,21 +236,25 @@ transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 26.0
 allowed_access_levels = PackedInt32Array(1, 2, 3)
 linked_door_group_path = NodePath("../DoorDouble")
 
-[node name="Sprite3D" type="Sprite3D" parent="StaticBody3D" unique_id=1680259873]
-transform = Transform3D(-1.5303623e-08, 1.142031e-13, 0.35, 0.008618438, 0.34989387, 3.767239e-10, -0.34989387, 0.008618438, -1.5298985e-08, 9.152083, 7.3455577, 0.08696771)
-texture = ExtResource("17_yi2a8")
+[node name="Sprite3D" type="MeshInstance3D" parent="StaticBody3D" unique_id=1117244665]
+transform = Transform3D(-4.371139e-08, -1, 4.371139e-08, 0, -4.371139e-08, -1, 1, -4.371139e-08, 1.9106855e-15, 9.176961, 4.1252756, 0.08696771)
+mesh = SubResource("PlaneMesh_lx4nm")
+surface_material_override/0 = SubResource("StandardMaterial3D_xroe6")
 
-[node name="Sprite3D2" type="Sprite3D" parent="StaticBody3D" unique_id=1992259805]
-transform = Transform3D(0.46193975, 0, -0.19134173, 0, 0.5, 0, 0.19134173, 0, 0.46193975, 13.293844, 5.477845, 4.633915)
-texture = ExtResource("18_smysb")
+[node name="Sprite3D2" type="MeshInstance3D" parent="StaticBody3D" unique_id=948011784]
+transform = Transform3D(0.924526, -0.38111877, -1.6659223e-08, 3.8213705e-15, 4.3711385e-08, -0.99999994, 0.3811187, 0.9245261, 4.0412313e-08, 13.696234, 5.4874654, 4.886114)
+mesh = SubResource("PlaneMesh_4tiyp")
+surface_material_override/0 = SubResource("StandardMaterial3D_4elsy")
 
-[node name="Sprite3D3" type="Sprite3D" parent="StaticBody3D" unique_id=1887426902]
-transform = Transform3D(0.46193975, 0, -0.19134173, 0, 0.5, 0, 0.19134173, 0, 0.46193975, 18.839722, 5.477845, 6.9255433)
-texture = ExtResource("19_yi2a8")
+[node name="Sprite3D4" type="MeshInstance3D" parent="StaticBody3D" unique_id=1971142742]
+transform = Transform3D(-0.91962963, -0.39278647, -1.7169247e-08, 2.9706534e-15, 4.371139e-08, -1, 0.39278647, -0.9196297, -4.0198287e-08, 17.29513, 4.879722, -6.2923617)
+mesh = SubResource("PlaneMesh_wogao")
+surface_material_override/0 = SubResource("StandardMaterial3D_lx4nm")
 
-[node name="Sprite3D4" type="Sprite3D" parent="StaticBody3D" unique_id=57053951]
-transform = Transform3D(0.9198215, 0, 0.3923371, 0, 1, 0, -0.3923371, 0, 0.9198215, 16.999424, 4.879722, -6.16563)
-texture = ExtResource("20_yi2a8")
+[node name="Sprite3D5" type="MeshInstance3D" parent="StaticBody3D" unique_id=1275113478]
+transform = Transform3D(0.924526, -0.38111877, -1.6659223e-08, 3.8213705e-15, 4.3711385e-08, -0.99999994, 0.3811187, 0.9245261, 4.0412313e-08, 20.545116, 4.36599, 7.663436)
+mesh = SubResource("PlaneMesh_4tiyp")
+surface_material_override/0 = SubResource("StandardMaterial3D_wr7m8")
 
 [node name="lights" type="Node3D" parent="." unique_id=1974684578]
 

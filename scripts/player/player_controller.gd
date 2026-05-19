@@ -30,6 +30,7 @@ var climb_wall_max_up_dot := 0.3
 var mantle_landing_forward := 0.28
 var mantle_clearance := 0.08
 var min_landing_half_extent := 0.14
+var mantle_nav_landing_tolerance := 0.25
 var climb_collision_mask := WALL_COLLISION_MASK | GROUND_COLLISION_MASK | FURNITURE_COLLISION_MASK
 var use_surface_locomotion := true
 var surface_align_strength := 7.5
@@ -338,6 +339,8 @@ func _try_begin_climb(drive_target: Vector3) -> void:
 	var desired_click_target := _target_position
 	var landing_point := _find_edge_landing_point(top_hit.position, planar_direction)
 	var target_position := Vector3(landing_point.x, target_center_y, landing_point.z)
+	if not _is_point_on_navigation(target_position, mantle_nav_landing_tolerance):
+		return
 
 	var height_ratio := clampf(climb_delta / maxf(0.01, mantle_height), 0.0, 1.0)
 	var duration_scale := lerpf(0.55, 1.15, height_ratio)
@@ -731,6 +734,11 @@ func _quadratic_bezier(a: Vector3, b: Vector3, c: Vector3, t: float) -> Vector3:
 
 func _nearest_nav_point(target: Vector3) -> Vector3:
 	return NavigationServer3D.map_get_closest_point(navigation_agent_3d.get_navigation_map(), target)
+
+
+func _is_point_on_navigation(point: Vector3, tolerance: float) -> bool:
+	var nav_point := _nearest_nav_point(point)
+	return nav_point.distance_to(point) <= maxf(0.01, tolerance)
 
 
 func _get_drive_target() -> Vector3:
