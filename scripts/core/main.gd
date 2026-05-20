@@ -27,14 +27,15 @@ const EXIT_CODE_MAX := 1900
 # preloaded by the loading screen and can be sync-instantiated from cache.
 const INITIAL_LOAD_RADIUS := 20.0
 const ROOM_REGISTRY: Array[Dictionary] = [
-	{"name": "atrium",     "path": "res://scenes/station/atrium_room.tscn",     "center": Vector3(0.93,   0.0,  28.47), "neighbors": ["workshop", "chem_lab"]},
-	{"name": "chem_lab",   "path": "res://scenes/station/chem_lab_room.tscn",   "center": Vector3(11.72,  0.0,  -7.54),  "neighbors": ["atrium"]},
-	{"name": "energy_lab", "path": "res://scenes/station/energy_lab_room.tscn", "center": Vector3(10.32,  0.0,  14.32),  "neighbors": []},
-	{"name": "office",     "path": "res://scenes/station/office_room.tscn",     "center": Vector3(0.78,   0.0, -17.63),  "neighbors": []},
-	{"name": "quarters",   "path": "res://scenes/station/quarters_room.tscn",   "center": Vector3(0.0,    0.0,   0.0),   "neighbors": []},
-	{"name": "systems",    "path": "res://scenes/station/systems_room.tscn",    "center": Vector3(-4.45,  0.0, -17.0),   "neighbors": []},
-	{"name": "wetroom",    "path": "res://scenes/station/wetroom_room.tscn",    "center": Vector3(9.65,   0.0,  24.85),  "neighbors": []},
-	{"name": "workshop",   "path": "res://scenes/station/workshop_room.tscn",   "center": Vector3(25.78,  0.0,   5.67),  "neighbors": ["atrium"]},
+	{"name": "atrium",      "path": "res://scenes/station/atrium_room.tscn",           "center": Vector3(0.93,   0.0,  28.47), "neighbors": ["workshop", "chem_lab"]},
+	{"name": "chem_lab",    "path": "res://scenes/station/chem_lab_room.tscn",         "center": Vector3(11.72,  0.0,  -7.54),  "neighbors": ["atrium"]},
+	{"name": "energy_lab",  "path": "res://scenes/station/energy_lab_room.tscn",       "center": Vector3(10.32,  0.0,  14.32),  "neighbors": []},
+	{"name": "office",      "path": "res://scenes/station/office_room.tscn",           "center": Vector3(0.78,   0.0, -17.63),  "neighbors": []},
+	{"name": "quarters",    "path": "res://scenes/station/quarters_room.tscn",         "center": Vector3(0.0,    0.0,   0.0),   "neighbors": []},
+	{"name": "systems",     "path": "res://scenes/station/systems_room.tscn",          "center": Vector3(-4.45,  0.0, -17.0),   "neighbors": []},
+	{"name": "wetroom",     "path": "res://scenes/station/wetroom_room.tscn",          "center": Vector3(9.65,   0.0,  24.85),  "neighbors": []},
+	{"name": "workshop",    "path": "res://scenes/station/workshop_room.tscn",         "center": Vector3(25.78,  0.0,   5.67),  "neighbors": ["atrium"]},
+	{"name": "surrounding", "path": "res://scenes/effects/surrounding_full.tscn",      "center": Vector3.ZERO,                  "neighbors": [], "deferred": true},
 ]
 const ROOM_LIGHT_ISOLATION_LAYER_BITS := {
 	"atrium": 16,
@@ -74,7 +75,7 @@ const HUB_SEAM_LIGHT_ENERGY := 0.38
 @export var room_streaming_enabled := true
 @export var room_load_distance := 80.0
 @export var room_unload_distance := 96.0
-@export var room_names_to_always_keep: PackedStringArray = PackedStringArray(["atrium"])
+@export var room_names_to_always_keep: PackedStringArray = PackedStringArray(["atrium", "surrounding"])
 @export var ios_render_scale := 0.70
 
 @onready var player: CharacterBody3D = $Player
@@ -133,7 +134,10 @@ var _save_status_tween: Tween
 var _stream_station_root: Node3D
 var _stream_rooms: Dictionary = {}
 var _stream_pending_loads: Dictionary = {}
+var _stream_load_start_times: Dictionary = {}
 var _stream_update_accum := 0.0
+var _room_nav_regions: Dictionary = {}
+var _player_current_room: String = ""
 var _fps_label_update_accum := 0.0
 var _exit_code := 0
 
@@ -301,6 +305,7 @@ func _initialize_room_streaming() -> void:
 			"scene_path": room_def["path"],
 			"center": room_def["center"] as Vector3,
 			"neighbors": room_def["neighbors"] as Array,
+			"deferred": room_def.get("deferred", false),
 			"node": null
 		}
 
@@ -309,13 +314,16 @@ func _initialize_room_streaming() -> void:
 
 	# Sync-instantiate rooms preloaded by the loading screen (instant cache hits).
 	# Kick off async loads for the remaining rooms so they arrive in the background.
+	# Deferred rooms (e.g. surrounding) are skipped here and loaded after all others finish.
 	var start_pos := player.global_position
-	print("[RoomStream] Init — player pos: ", start_pos, "  radius: ", INITIAL_LOAD_RADIUS)
+
 
 	# Determine which rooms are near (by distance or always-keep), then expand with neighbors.
 	var near_rooms: Array[String] = []
 	for room_name in _stream_rooms.keys():
 		var room_data: Dictionary = _stream_rooms[room_name]
+		if room_data.get("deferred", false):
+			continue
 		var dist := start_pos.distance_to(room_data["center"] as Vector3)
 		if room_names_to_always_keep.has(String(room_name)) or dist <= INITIAL_LOAD_RADIUS:
 			near_rooms.append(String(room_name))
@@ -326,18 +334,25 @@ func _initialize_room_streaming() -> void:
 
 	for room_name in _stream_rooms.keys():
 		var room_data: Dictionary = _stream_rooms[room_name]
+		if room_data.get("deferred", false):
+			continue
 		var center: Vector3 = room_data["center"] as Vector3
 		var dist := start_pos.distance_to(center)
 		if near_rooms.has(String(room_name)):
-			print("[RoomStream] Near (dist=%.1f), sync-loading: " % dist, room_name)
+			var near_reason := "always-keep" if room_names_to_always_keep.has(String(room_name)) else ("neighbor" if dist > INITIAL_LOAD_RADIUS else "dist")
+			print("[RoomStream] Near (dist=%.1f, %s), sync-loading: %s" % [dist, near_reason, room_name])
 			_load_room_now(room_name)
 		else:
-			print("[RoomStream] Far  (dist=%.1f), async-loading: " % dist, room_name)
+			print("[RoomStream] Far  (dist=%.1f), async-loading: %s" % [dist, room_name])
 			var scene_path := String(room_data["scene_path"])
 			if not _stream_pending_loads.has(room_name):
 				var err := ResourceLoader.load_threaded_request(scene_path)
 				if err == OK or err == ERR_BUSY:
 					_stream_pending_loads[room_name] = scene_path
+					_stream_load_start_times[room_name] = Time.get_ticks_msec()
+
+	if _stream_pending_loads.is_empty():
+		_start_deferred_room_loads()
 
 
 func _load_room_now(room_name: String) -> void:
@@ -347,21 +362,25 @@ func _load_room_now(room_name: String) -> void:
 	if is_instance_valid(room_data.get("node") as Node):
 		return
 	var scene_path := String(room_data["scene_path"])
+	var t_load := Time.get_ticks_msec()
 	var packed_scene := load(scene_path) as PackedScene
+	var t_inst := Time.get_ticks_msec()
 	if packed_scene == null:
 		return
 	var instance := packed_scene.instantiate() as Node3D
+	var t_done := Time.get_ticks_msec()
 	if instance == null:
 		return
 	instance.name = StringName(room_name)
-	_stream_station_root.add_child(instance)
+	_get_room_parent(room_name).add_child(instance)
+	_register_room_nav_regions(room_name, instance)
 	_apply_room_light_isolation(instance, room_name)
 	_ensure_hub_seam_light()
 	_apply_exit_code_to_scene(instance)
 	room_data["node"] = instance
 	_stream_rooms[room_name] = room_data
 	_connect_autosave_doors()
-	print("[RoomStream] Sync-instantiated (cache hit): ", room_name)
+	print("[RoomStream] Sync loaded '%s': load=%dms  instantiate=%dms  total=%dms" % [room_name, t_inst - t_load, t_done - t_inst, t_done - t_load])
 
 
 func _update_room_streaming(delta: float) -> void:
@@ -385,8 +404,10 @@ func _check_pending_room_loads() -> void:
 		var status := ResourceLoader.load_threaded_get_status(scene_path)
 		if status != ResourceLoader.THREAD_LOAD_LOADED:
 			continue
+		var thread_ms: int = Time.get_ticks_msec() - int(_stream_load_start_times.get(room_name, Time.get_ticks_msec()))
 		var packed_scene := ResourceLoader.load_threaded_get(scene_path) as PackedScene
 		_stream_pending_loads.erase(room_name)
+		_stream_load_start_times.erase(room_name)
 		if packed_scene == null:
 			continue
 		var room_data: Dictionary = _stream_rooms.get(room_name, {})
@@ -394,19 +415,87 @@ func _check_pending_room_loads() -> void:
 			continue
 		if is_instance_valid(room_data.get("node") as Node):
 			continue
+		var t_inst := Time.get_ticks_msec()
 		var instance := packed_scene.instantiate() as Node3D
+		var t_done := Time.get_ticks_msec()
 		if instance == null:
 			continue
 		instance.name = StringName(room_name)
-		_stream_station_root.add_child(instance)
+		_get_room_parent(room_name).add_child(instance)
+		_register_room_nav_regions(room_name, instance)
 		_apply_room_light_isolation(instance, room_name)
 		_ensure_hub_seam_light()
 		_apply_exit_code_to_scene(instance)
 		room_data["node"] = instance
 		_stream_rooms[room_name] = room_data
 		_connect_autosave_doors()
-		print("[RoomStream] Async-instantiated: ", room_name)
+		print("[RoomStream] Async loaded '%s': thread=%dms  instantiate=%dms" % [room_name, thread_ms, t_done - t_inst])
 		_apply_pending_world_state()
+	if _stream_pending_loads.is_empty():
+		_start_deferred_room_loads()
+
+
+func _start_deferred_room_loads() -> void:
+	for room_name in _stream_rooms.keys():
+		var room_data: Dictionary = _stream_rooms[room_name]
+		if not room_data.get("deferred", false):
+			continue
+		if is_instance_valid(room_data.get("node") as Node):
+			continue
+		if _stream_pending_loads.has(room_name):
+			continue
+		var scene_path := String(room_data["scene_path"])
+		var err := ResourceLoader.load_threaded_request(scene_path)
+		if err == OK or err == ERR_BUSY:
+			_stream_pending_loads[room_name] = scene_path
+			_stream_load_start_times[room_name] = Time.get_ticks_msec()
+			print("[RoomStream] Deferred async-load started: ", room_name)
+
+
+func _register_room_nav_regions(room_name: String, room_node: Node3D) -> void:
+	var regions: Array[NavigationRegion3D] = []
+	_collect_nav_regions(room_node, regions)
+	if not regions.is_empty():
+		_room_nav_regions[room_name] = regions
+
+
+func _collect_nav_regions(node: Node, result: Array[NavigationRegion3D]) -> void:
+	if node is NavigationRegion3D:
+		result.append(node as NavigationRegion3D)
+	for child in node.get_children():
+		_collect_nav_regions(child, result)
+
+
+func _detect_player_room() -> String:
+	var player_pos := player.global_position
+	var nav_agent := player.get_node_or_null("NavigationAgent3D") as NavigationAgent3D
+	if nav_agent != null:
+		var nav_map := nav_agent.get_navigation_map()
+		var owner_rid := NavigationServer3D.map_get_closest_point_owner(nav_map, player_pos)
+		if owner_rid.is_valid():
+			for room_name in _room_nav_regions.keys():
+				for region: NavigationRegion3D in (_room_nav_regions[room_name] as Array[NavigationRegion3D]):
+					if region.get_rid() == owner_rid:
+						return room_name
+	# Fallback: nearest room center (used for rooms with no nav mesh)
+	var best_room := ""
+	var best_dist := INF
+	for room_name in _stream_rooms.keys():
+		var room_data: Dictionary = _stream_rooms[room_name]
+		if room_data.get("deferred", false):
+			continue
+		var dist := player_pos.distance_to(room_data["center"] as Vector3)
+		if dist < best_dist:
+			best_dist = dist
+			best_room = room_name
+	return best_room
+
+
+func _get_room_parent(room_name: String) -> Node3D:
+	var room_data: Dictionary = _stream_rooms.get(room_name, {})
+	if room_data.get("deferred", false):
+		return _stream_station_root.get_parent() as Node3D
+	return _stream_station_root
 
 
 func _apply_room_light_isolation(room_root: Node3D, room_name: String) -> void:
@@ -495,12 +584,24 @@ func _apply_room_light_cull_mask_recursive(node: Node, light_mask: int) -> void:
 func _apply_room_streaming() -> void:
 	if _stream_station_root == null:
 		return
+	var detected_room := _detect_player_room()
+	if detected_room != _player_current_room:
+		print("[RoomStream] Player room: %s → %s" % [_player_current_room if _player_current_room != "" else "none", detected_room])
+		_player_current_room = detected_room
+	var current_room_neighbors: Array = []
+	if _player_current_room != "" and _stream_rooms.has(_player_current_room):
+		current_room_neighbors = _stream_rooms[_player_current_room]["neighbors"] as Array
+
 	var player_pos := player.global_position
 	for room_name in _stream_rooms.keys():
 		var room_data: Dictionary = _stream_rooms[room_name]
+		if room_data.get("deferred", false):
+			continue
 		var distance := player_pos.distance_to(room_data["center"] as Vector3)
 		var is_loaded := is_instance_valid(room_data["node"] as Node)
-		var should_keep := room_names_to_always_keep.has(String(room_name))
+		var should_keep: bool = room_names_to_always_keep.has(String(room_name)) \
+			or room_name == _player_current_room \
+			or current_room_neighbors.has(room_name)
 
 		if (should_keep or distance <= room_load_distance) and not is_loaded:
 			var scene_path := String(room_data["scene_path"])
@@ -508,10 +609,13 @@ func _apply_room_streaming() -> void:
 				var err := ResourceLoader.load_threaded_request(scene_path)
 				if err == OK or err == ERR_BUSY:
 					_stream_pending_loads[room_name] = scene_path
+					_stream_load_start_times[room_name] = Time.get_ticks_msec()
 			continue
 
 		if not should_keep and distance >= room_unload_distance:
 			_stream_pending_loads.erase(room_name)
+			_stream_load_start_times.erase(room_name)
+			_room_nav_regions.erase(room_name)
 			if is_loaded:
 				var instance_node := room_data["node"] as Node
 				if instance_node != null:

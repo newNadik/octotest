@@ -3,7 +3,6 @@
 [ext_resource type="Script" uid="uid://km7y0f0xluw6" path="res://scripts/core/main.gd" id="1_4f72t"]
 [ext_resource type="PackedScene" uid="uid://63bbsnp8k0ew" path="res://scenes/player.tscn" id="2_vrsh6"]
 [ext_resource type="PackedScene" uid="uid://ojtj5eewvf4n" path="res://scenes/ui/in_game_menu.tscn" id="7_o6xl0"]
-[ext_resource type="PackedScene" uid="uid://rstu8who3xwo" path="res://scenes/effects/surrounding_full.tscn" id="8_tipki"]
 [ext_resource type="AudioStream" uid="uid://djsajf7b1jgf" path="res://assets/sound/underwater-loop-amb.mp3" id="13_dp3eg"]
 [ext_resource type="Texture2D" uid="uid://kxj121ocl7jm" path="res://assets/ui/save.png" id="21_saveicon"]
 [ext_resource type="Texture2D" uid="uid://45skik4ua1t5" path="res://assets/ui/menu.png" id="22_menuicon"]
@@ -179,4 +178,3 @@ directional_shadow_fade_start = 0.85
 directional_shadow_max_distance = 95.0
 sky_mode = 1
 
-[node name="surrounding" parent="." unique_id=1036177841 instance=ExtResource("8_tipki")]
