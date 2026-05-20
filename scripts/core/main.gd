@@ -27,15 +27,15 @@ const EXIT_CODE_MAX := 1900
 # preloaded by the loading screen and can be sync-instantiated from cache.
 const INITIAL_LOAD_RADIUS := 20.0
 const ROOM_REGISTRY: Array[Dictionary] = [
-	{"name": "atrium",      "path": "res://scenes/station/atrium/atrium_arch.tscn",         "details_path": "res://scenes/station/atrium/atrium_details.tscn",         "center": Vector3(0.93,   0.0,  28.47), "neighbors": ["workshop", "chem_lab"]},
-	{"name": "chem_lab",    "path": "res://scenes/station/chem_lab/chem_lab_arch.tscn",     "details_path": "res://scenes/station/chem_lab/chem_lab_details.tscn",     "center": Vector3(11.72,  0.0,  -7.54),  "neighbors": ["atrium"]},
-	{"name": "energy_lab",  "path": "res://scenes/station/energy_lab/energy_lab_arch.tscn", "details_path": "res://scenes/station/energy_lab/energy_lab_details.tscn", "center": Vector3(10.32,  0.0,  14.32),  "neighbors": []},
-	{"name": "office",      "path": "res://scenes/station/office/office_arch.tscn",         "details_path": "res://scenes/station/office/office_details.tscn",         "center": Vector3(0.78,   0.0, -17.63),  "neighbors": []},
-	{"name": "quarters",    "path": "res://scenes/station/quarters/quarters_arch.tscn",     "details_path": "res://scenes/station/quarters/quarters_details.tscn",     "center": Vector3(0.0,    0.0,   0.0),   "neighbors": []},
-	{"name": "systems",     "path": "res://scenes/station/systems/systems_arch.tscn",       "details_path": "res://scenes/station/systems/systems_details.tscn",       "center": Vector3(-4.45,  0.0, -17.0),   "neighbors": []},
-	{"name": "wetroom",     "path": "res://scenes/station/wetroom/wetroom_arch.tscn",       "details_path": "res://scenes/station/wetroom/wetroom_details.tscn",       "center": Vector3(9.65,   0.0,  24.85),  "neighbors": []},
-	{"name": "workshop",    "path": "res://scenes/station/workshop/workshop_arch.tscn",     "details_path": "res://scenes/station/workshop/workshop_details.tscn",     "center": Vector3(25.78,  0.0,   5.67),  "neighbors": ["atrium"]},
-	{"name": "surrounding", "path": "res://scenes/effects/surrounding_full.tscn",                                                                                     "center": Vector3.ZERO,                  "neighbors": [], "deferred": true},
+	{"name": "atrium",      "layers": ["res://scenes/station/atrium/atrium_arch.tscn",         "res://scenes/station/atrium/atrium_details.tscn"],         "center": Vector3(0.93,   0.0,  28.47), "neighbors": ["workshop", "chem_lab"]},
+	{"name": "chem_lab",    "layers": ["res://scenes/station/chem_lab/chem_lab_arch.tscn",     "res://scenes/station/chem_lab/chem_lab_details.tscn"],     "center": Vector3(11.72,  0.0,  -7.54),  "neighbors": ["atrium"]},
+	{"name": "energy_lab",  "layers": ["res://scenes/station/energy_lab/energy_lab_arch.tscn", "res://scenes/station/energy_lab/energy_lab_details.tscn"], "center": Vector3(10.32,  0.0,  14.32),  "neighbors": []},
+	{"name": "office",      "layers": ["res://scenes/station/office/office_arch.tscn",         "res://scenes/station/office/office_details.tscn"],         "center": Vector3(0.78,   0.0, -17.63),  "neighbors": []},
+	{"name": "quarters",    "layers": ["res://scenes/station/quarters/quarters_arch.tscn",     "res://scenes/station/quarters/quarters_details.tscn"],     "center": Vector3(0.0,    0.0,   0.0),   "neighbors": []},
+	{"name": "systems",     "layers": ["res://scenes/station/systems/systems_arch.tscn",       "res://scenes/station/systems/systems_details.tscn"],       "center": Vector3(-4.45,  0.0, -17.0),   "neighbors": []},
+	{"name": "wetroom",     "layers": ["res://scenes/station/wetroom/wetroom_arch.tscn",       "res://scenes/station/wetroom/wetroom_details.tscn"],       "center": Vector3(9.65,   0.0,  24.85),  "neighbors": []},
+	{"name": "workshop",    "layers": ["res://scenes/station/workshop/workshop_arch.tscn",     "res://scenes/station/workshop/workshop_details.tscn"],     "center": Vector3(25.78,  0.0,   5.67),  "neighbors": ["atrium"]},
+	{"name": "surrounding", "layers": ["res://scenes/effects/surrounding_full.tscn"],                                                                      "center": Vector3.ZERO,                  "neighbors": [], "deferred": true},
 ]
 const ROOM_LIGHT_ISOLATION_LAYER_BITS := {
 	"atrium": 16,
@@ -133,12 +133,11 @@ var _last_save_unix_time := -1000.0
 var _save_status_tween: Tween
 var _stream_station_root: Node3D
 var _stream_rooms: Dictionary = {}
-var _stream_pending_loads: Dictionary = {}
-var _stream_load_start_times: Dictionary = {}
+# Pending async loads: key = "room_name:layer_idx", value = resource path
+var _stream_pending: Dictionary = {}
+var _stream_start_ms: Dictionary = {}
 var _stream_update_accum := 0.0
-var _stream_detail_nodes: Dictionary = {}
-var _stream_detail_pending: Dictionary = {}
-var _stream_detail_start_times: Dictionary = {}
+var _deferred_started := false
 var _room_nav_regions: Dictionary = {}
 var _player_current_room: String = ""
 var _is_new_game: bool = false
@@ -309,112 +308,118 @@ func _initialize_room_streaming() -> void:
 	_stream_rooms.clear()
 	for room_def in ROOM_REGISTRY:
 		_stream_rooms[room_def["name"]] = {
-			"scene_path": room_def["path"],
-			"details_path": room_def.get("details_path", ""),
+			"layers": (room_def["layers"] as Array).duplicate(),
+			"nodes": [],
 			"center": room_def["center"] as Vector3,
 			"neighbors": room_def["neighbors"] as Array,
 			"deferred": room_def.get("deferred", false),
-			"node": null
 		}
 
 	if room_load_distance <= 0.0:
 		return
 
-	# Sync-instantiate rooms preloaded by the loading screen (instant cache hits).
-	# Kick off async loads for the remaining rooms so they arrive in the background.
-	# Deferred rooms (e.g. surrounding) are skipped here and loaded after all others finish.
 	var start_pos := player.global_position
 
-
-	# Determine which rooms to sync-load.
-	# New game: only the single nearest room (the one the player is standing in).
-	# Continue: all rooms within INITIAL_LOAD_RADIUS, always-keep rooms, and their neighbors.
-	var near_rooms: Array[String] = []
 	if _is_new_game:
-		# Find the nearest room and load it first with exclusive thread access.
-		# All other rooms start only after it finishes (see _apply_room_streaming).
+		# Find the single nearest room. Loading screen preloaded all its layers.
+		# All other rooms wait until this one is ready (see _apply_room_streaming).
 		var nearest_dist := INF
 		for room_name in _stream_rooms.keys():
-			var room_data: Dictionary = _stream_rooms[room_name]
-			if room_data.get("deferred", false):
+			var d: Dictionary = _stream_rooms[room_name]
+			if d.get("deferred", false):
 				continue
-			var dist := start_pos.distance_to(room_data["center"] as Vector3)
+			var dist := start_pos.distance_to(d["center"] as Vector3)
 			if dist < nearest_dist:
 				nearest_dist = dist
 				_new_game_priority_room = room_name
+		# Arch is in loading screen cache — sync-load for instant startup.
+		# All layers queue async; details will be a fast cache hit.
+		_load_room_arch_sync(_new_game_priority_room)
+		_queue_room(_new_game_priority_room)
 	else:
+		# Continue game: sync-load arch of rooms within INITIAL_LOAD_RADIUS
+		# (they were preloaded by the loading screen). Everything else async.
+		# Always-keep rooms that are far (e.g. atrium) load async to avoid blocking.
 		for room_name in _stream_rooms.keys():
-			var room_data: Dictionary = _stream_rooms[room_name]
-			if room_data.get("deferred", false):
+			var d: Dictionary = _stream_rooms[room_name]
+			if d.get("deferred", false):
 				continue
-			var dist := start_pos.distance_to(room_data["center"] as Vector3)
-			if room_names_to_always_keep.has(String(room_name)) or dist <= INITIAL_LOAD_RADIUS:
-				near_rooms.append(String(room_name))
-		for room_name in near_rooms.duplicate():
-			for neighbor in (_stream_rooms[room_name]["neighbors"] as Array):
-				if not near_rooms.has(String(neighbor)):
-					near_rooms.append(String(neighbor))
+			var dist := start_pos.distance_to(d["center"] as Vector3)
+			if dist <= INITIAL_LOAD_RADIUS:
+				print("[RoomStream] Near (dist=%.1f), sync arch + async details: %s" % [dist, room_name])
+				_load_room_arch_sync(room_name)
+				_queue_room(room_name)
+			else:
+				print("[RoomStream] Far  (dist=%.1f), async-loading: %s" % [dist, room_name])
+				_queue_room(room_name)
 
-	for room_name in _stream_rooms.keys():
-		var room_data: Dictionary = _stream_rooms[room_name]
-		if room_data.get("deferred", false):
-			continue
-		var center: Vector3 = room_data["center"] as Vector3
-		var dist := start_pos.distance_to(center)
-		if near_rooms.has(String(room_name)):
-			var near_reason := "always-keep" if room_names_to_always_keep.has(String(room_name)) else ("neighbor" if dist > INITIAL_LOAD_RADIUS else "dist")
-			print("[RoomStream] Near (dist=%.1f, %s), sync-loading: %s" % [dist, near_reason, room_name])
-			_load_room_now(room_name)
-		else:
-			# For new game, only queue the priority room now — others start after it finishes.
-			if _is_new_game and room_name != _new_game_priority_room:
-				continue
-			print("[RoomStream] Far  (dist=%.1f), async-loading: %s" % [dist, room_name])
-			var scene_path := String(room_data["scene_path"])
-			if not _stream_pending_loads.has(room_name):
-				var err := ResourceLoader.load_threaded_request(scene_path)
-				if err == OK or err == ERR_BUSY:
-					_stream_pending_loads[room_name] = scene_path
-					_stream_load_start_times[room_name] = Time.get_ticks_msec()
-			# Queue details alongside arch for the starting room so both are
-			# ready at the same time with no visible pop-in.
-			var details_path := String(room_data.get("details_path", ""))
-			if details_path != "" and not _stream_detail_pending.has(room_name):
-				var derr := ResourceLoader.load_threaded_request(details_path)
-				if derr == OK or derr == ERR_BUSY:
-					_stream_detail_pending[room_name] = details_path
-					_stream_detail_start_times[room_name] = Time.get_ticks_msec()
-
-	if _stream_pending_loads.is_empty():
-		_start_deferred_room_loads()
+	_check_if_should_start_deferred()
 
 
-func _load_room_now(room_name: String) -> void:
-	var room_data: Dictionary = _stream_rooms.get(room_name, {})
-	if room_data.is_empty():
+func _load_room_arch_sync(room_name: String) -> void:
+	var d: Dictionary = _stream_rooms.get(room_name, {})
+	var layers: Array = d.get("layers", [])
+	if layers.is_empty():
 		return
-	if is_instance_valid(room_data.get("node") as Node):
+	var nodes: Array = d.get("nodes", [])
+	while nodes.size() < layers.size():
+		nodes.append(null)
+	if is_instance_valid(nodes[0] as Node):
 		return
-	var scene_path := String(room_data["scene_path"])
+	var path := String(layers[0])
 	var t_load := Time.get_ticks_msec()
-	var packed_scene := load(scene_path) as PackedScene
+	var packed := load(path) as PackedScene
 	var t_inst := Time.get_ticks_msec()
-	if packed_scene == null:
+	if packed == null:
 		return
-	var instance := packed_scene.instantiate() as Node3D
+	var inst := packed.instantiate() as Node3D
 	var t_done := Time.get_ticks_msec()
-	if instance == null:
+	if inst == null:
 		return
-	instance.name = StringName(room_name)
-	_get_room_parent(room_name).add_child(instance)
-	_register_room_nav_regions(room_name, instance)
-	_apply_room_light_isolation(instance, room_name)
-	_ensure_hub_seam_light()
-	_apply_exit_code_to_scene(instance)
-	room_data["node"] = instance
-	_stream_rooms[room_name] = room_data
-	_connect_autosave_doors()
-	print("[RoomStream] Sync loaded '%s': load=%dms  instantiate=%dms  total=%dms" % [room_name, t_inst - t_load, t_done - t_inst, t_done - t_load])
+	_add_layer_node(room_name, 0, inst, path)
+	nodes[0] = inst
+	d["nodes"] = nodes
+	_stream_rooms[room_name] = d
+	print("[RoomStream] Sync loaded '%s' arch: load=%dms  instantiate=%dms  total=%dms" % [room_name, t_inst - t_load, t_done - t_inst, t_done - t_load])
+
+
+func _queue_room(room_name: String) -> void:
+	var d: Dictionary = _stream_rooms.get(room_name, {})
+	var layers: Array = d.get("layers", [])
+	var nodes: Array = d.get("nodes", [])
+	for i in layers.size():
+		if i < nodes.size() and is_instance_valid(nodes[i] as Node):
+			continue
+		var key := _lkey(room_name, i)
+		if _stream_pending.has(key):
+			continue
+		var path := String(layers[i])
+		var err := ResourceLoader.load_threaded_request(path)
+		if err == OK or err == ERR_BUSY:
+			_stream_pending[key] = path
+			_stream_start_ms[key] = Time.get_ticks_msec()
+
+
+func _add_layer_node(room_name: String, layer: int, inst: Node3D, path: String) -> void:
+	inst.name = StringName(room_name if layer == 0 else path.get_file().get_basename())
+	_get_room_parent(room_name).add_child(inst)
+	_apply_room_light_isolation(inst, room_name)
+	if layer == 0:
+		_register_room_nav_regions(room_name, inst)
+		_ensure_hub_seam_light()
+		_apply_exit_code_to_scene(inst)
+		_connect_autosave_doors()
+	_apply_pending_world_state()
+
+
+func _lkey(room_name: String, layer: int) -> String:
+	return room_name + ":" + str(layer)
+
+
+func _is_arch_loaded(room_name: String) -> bool:
+	var d: Dictionary = _stream_rooms.get(room_name, {})
+	var nodes: Array = d.get("nodes", [])
+	return not nodes.is_empty() and is_instance_valid(nodes[0] as Node)
 
 
 func _update_room_streaming(delta: float) -> void:
@@ -422,7 +427,7 @@ func _update_room_streaming(delta: float) -> void:
 		return
 	if _stream_rooms.is_empty():
 		return
-	_check_pending_room_loads()
+	_check_pending_loads()
 	_stream_update_accum += delta
 	if _stream_update_accum < ROOM_STREAM_UPDATE_INTERVAL_SEC:
 		return
@@ -430,88 +435,68 @@ func _update_room_streaming(delta: float) -> void:
 	_apply_room_streaming()
 
 
-func _check_pending_room_loads() -> void:
-	if _stream_pending_loads.is_empty() and _stream_detail_pending.is_empty():
+func _check_pending_loads() -> void:
+	if _stream_pending.is_empty():
 		return
-	for room_name in _stream_pending_loads.keys():
-		var scene_path: String = _stream_pending_loads[room_name]
-		var status := ResourceLoader.load_threaded_get_status(scene_path)
+	for key in _stream_pending.keys():
+		var path: String = _stream_pending[key]
+		var status := ResourceLoader.load_threaded_get_status(path)
 		if status != ResourceLoader.THREAD_LOAD_LOADED:
 			continue
-		var thread_ms: int = Time.get_ticks_msec() - int(_stream_load_start_times.get(room_name, Time.get_ticks_msec()))
-		var packed_scene := ResourceLoader.load_threaded_get(scene_path) as PackedScene
-		_stream_pending_loads.erase(room_name)
-		_stream_load_start_times.erase(room_name)
-		if packed_scene == null:
+		var elapsed_ms: int = Time.get_ticks_msec() - int(_stream_start_ms.get(key, Time.get_ticks_msec()))
+		var packed := ResourceLoader.load_threaded_get(path) as PackedScene
+		_stream_pending.erase(key)
+		_stream_start_ms.erase(key)
+		if packed == null:
 			continue
-		var room_data: Dictionary = _stream_rooms.get(room_name, {})
-		if room_data.is_empty():
+		var sep: int = key.rfind(":")
+		var room_name: String = key.left(sep)
+		var layer := int(key.substr(sep + 1))
+		var d: Dictionary = _stream_rooms.get(room_name, {})
+		if d.is_empty():
 			continue
-		if is_instance_valid(room_data.get("node") as Node):
+		var nodes: Array = d.get("nodes", [])
+		while nodes.size() <= layer:
+			nodes.append(null)
+		if is_instance_valid(nodes[layer] as Node):
 			continue
 		var t_inst := Time.get_ticks_msec()
-		var instance := packed_scene.instantiate() as Node3D
+		var inst := packed.instantiate() as Node3D
 		var t_done := Time.get_ticks_msec()
-		if instance == null:
+		if inst == null:
 			continue
-		instance.name = StringName(room_name)
-		_get_room_parent(room_name).add_child(instance)
-		_register_room_nav_regions(room_name, instance)
-		_apply_room_light_isolation(instance, room_name)
-		_ensure_hub_seam_light()
-		_apply_exit_code_to_scene(instance)
-		room_data["node"] = instance
-		_stream_rooms[room_name] = room_data
-		_connect_autosave_doors()
-		print("[RoomStream] Async loaded '%s': thread=%dms  instantiate=%dms" % [room_name, thread_ms, t_done - t_inst])
-		_apply_pending_world_state()
-	if _stream_pending_loads.is_empty():
-		_start_deferred_room_loads()
+		_add_layer_node(room_name, layer, inst, path)
+		nodes[layer] = inst
+		d["nodes"] = nodes
+		_stream_rooms[room_name] = d
+		print("[RoomStream] Async loaded '%s' L%d: thread=%dms  instantiate=%dms" % [room_name, layer, elapsed_ms, t_done - t_inst])
+	_check_if_should_start_deferred()
 
-	for room_name in _stream_detail_pending.keys():
-		var details_path: String = _stream_detail_pending[room_name]
-		var status := ResourceLoader.load_threaded_get_status(details_path)
-		if status != ResourceLoader.THREAD_LOAD_LOADED:
-			continue
-		var thread_ms: int = Time.get_ticks_msec() - int(_stream_detail_start_times.get(room_name, Time.get_ticks_msec()))
-		var packed_scene := ResourceLoader.load_threaded_get(details_path) as PackedScene
-		_stream_detail_pending.erase(room_name)
-		_stream_detail_start_times.erase(room_name)
-		if packed_scene == null:
-			continue
-		if is_instance_valid(_stream_detail_nodes.get(room_name) as Node):
-			continue
-		var t_inst := Time.get_ticks_msec()
-		var instance := packed_scene.instantiate() as Node3D
-		var t_done := Time.get_ticks_msec()
-		if instance == null:
-			continue
-		instance.name = StringName(room_name + "_details")
-		_get_room_parent(room_name).add_child(instance)
-		_apply_room_light_isolation(instance, room_name)
-		_stream_detail_nodes[room_name] = instance
-		print("[RoomStream] Async loaded '%s' details: thread=%dms  instantiate=%dms" % [room_name, thread_ms, t_done - t_inst])
+
+func _check_if_should_start_deferred() -> void:
+	if _deferred_started or _new_game_priority_room != "":
+		return
+	for key in _stream_pending.keys():
+		var sep: int = key.rfind(":")
+		if int(key.substr(sep + 1)) == 0:
+			var room_name: String = key.left(sep)
+			if not (_stream_rooms.get(room_name, {}) as Dictionary).get("deferred", false):
+				return
+	_start_deferred_room_loads()
 
 
 func _start_deferred_room_loads() -> void:
-	# Don't start deferred rooms until the priority gate clears — otherwise
-	# surrounding would load before atrium and other rooms even start.
-	if _new_game_priority_room != "":
+	if _deferred_started or _new_game_priority_room != "":
 		return
+	_deferred_started = true
 	for room_name in _stream_rooms.keys():
-		var room_data: Dictionary = _stream_rooms[room_name]
-		if not room_data.get("deferred", false):
+		var d: Dictionary = _stream_rooms[room_name]
+		if not d.get("deferred", false):
 			continue
-		if is_instance_valid(room_data.get("node") as Node):
+		if _is_arch_loaded(room_name):
 			continue
-		if _stream_pending_loads.has(room_name):
-			continue
-		var scene_path := String(room_data["scene_path"])
-		var err := ResourceLoader.load_threaded_request(scene_path)
-		if err == OK or err == ERR_BUSY:
-			_stream_pending_loads[room_name] = scene_path
-			_stream_load_start_times[room_name] = Time.get_ticks_msec()
-			print("[RoomStream] Deferred async-load started: ", room_name)
+		_queue_room(room_name)
+		print("[RoomStream] Deferred async-load started: %s" % room_name)
 
 
 func _register_room_nav_regions(room_name: String, room_node: Node3D) -> void:
@@ -647,82 +632,56 @@ func _apply_room_streaming() -> void:
 	if _stream_station_root == null:
 		return
 	if _new_game_priority_room != "":
-		var priority_data: Dictionary = _stream_rooms.get(_new_game_priority_room, {})
-		if not is_instance_valid(priority_data.get("node") as Node):
+		if not _is_arch_loaded(_new_game_priority_room):
 			return
 		print("[RoomStream] Priority room '%s' ready, starting all other rooms" % _new_game_priority_room)
 		_new_game_priority_room = ""
+
 	var detected_room := _detect_player_room()
 	if detected_room != _player_current_room:
 		print("[RoomStream] Player room: %s → %s" % [_player_current_room if _player_current_room != "" else "none", detected_room])
 		_player_current_room = detected_room
-	var current_room_neighbors: Array = []
+	var current_neighbors: Array = []
 	if _player_current_room != "" and _stream_rooms.has(_player_current_room):
-		current_room_neighbors = _stream_rooms[_player_current_room]["neighbors"] as Array
+		current_neighbors = _stream_rooms[_player_current_room]["neighbors"] as Array
 
 	var player_pos := player.global_position
 	for room_name in _stream_rooms.keys():
-		var room_data: Dictionary = _stream_rooms[room_name]
-		if room_data.get("deferred", false):
+		var d: Dictionary = _stream_rooms[room_name]
+		if d.get("deferred", false):
 			continue
-		var distance := player_pos.distance_to(room_data["center"] as Vector3)
-		var is_loaded := is_instance_valid(room_data["node"] as Node)
-		var should_keep: bool = room_names_to_always_keep.has(String(room_name)) \
+		var dist := player_pos.distance_to(d["center"] as Vector3)
+		var in_range: bool = room_names_to_always_keep.has(String(room_name)) \
 			or room_name == _player_current_room \
-			or current_room_neighbors.has(room_name)
+			or current_neighbors.has(room_name) \
+			or dist <= room_load_distance
 
-		if (should_keep or distance <= room_load_distance) and not is_loaded:
-			var scene_path := String(room_data["scene_path"])
-			if not _stream_pending_loads.has(room_name):
-				var err := ResourceLoader.load_threaded_request(scene_path)
-				if err == OK or err == ERR_BUSY:
-					_stream_pending_loads[room_name] = scene_path
-					_stream_load_start_times[room_name] = Time.get_ticks_msec()
-			continue
+		if in_range and not _is_arch_loaded(room_name):
+			_queue_room(room_name)
+		elif not in_range and dist >= room_unload_distance:
+			_unload_room(room_name)
 
-		if not should_keep and distance >= room_unload_distance:
-			_stream_pending_loads.erase(room_name)
-			_stream_load_start_times.erase(room_name)
-			_room_nav_regions.erase(room_name)
-			if is_loaded:
-				var instance_node := room_data["node"] as Node
-				if instance_node != null:
-					instance_node.queue_free()
-				room_data["node"] = null
-				_stream_rooms[room_name] = room_data
-			# Also drop details when arch unloads.
-			var details_node := _stream_detail_nodes.get(room_name) as Node
-			if details_node != null:
-				details_node.queue_free()
-			_stream_detail_nodes.erase(room_name)
-			_stream_detail_pending.erase(room_name)
-			_stream_detail_start_times.erase(room_name)
 
-	# Details layer: load when current/adjacent, unload otherwise.
-	for room_name in _stream_rooms.keys():
-		var room_data: Dictionary = _stream_rooms[room_name]
-		if String(room_data.get("details_path", "")).is_empty():
-			continue
-		var wants_details: bool = room_name == _player_current_room \
-			or current_room_neighbors.has(room_name)
-		var is_details_loaded: bool = is_instance_valid(_stream_detail_nodes.get(room_name) as Node)
-
-		if wants_details and not is_details_loaded and not _stream_detail_pending.has(room_name):
-			var details_path := String(room_data["details_path"])
-			var err := ResourceLoader.load_threaded_request(details_path)
-			if err == OK or err == ERR_BUSY:
-				_stream_detail_pending[room_name] = details_path
-				_stream_detail_start_times[room_name] = Time.get_ticks_msec()
-				print("[RoomStream] Async loading '%s' details" % room_name)
-
-		if not wants_details and is_details_loaded:
-			var details_node := _stream_detail_nodes.get(room_name) as Node
-			if details_node != null:
-				details_node.queue_free()
-			_stream_detail_nodes[room_name] = null
-			_stream_detail_pending.erase(room_name)
-			_stream_detail_start_times.erase(room_name)
-			print("[RoomStream] Unloaded '%s' details" % room_name)
+func _unload_room(room_name: String) -> void:
+	var d: Dictionary = _stream_rooms.get(room_name, {})
+	var nodes: Array = d.get("nodes", [])
+	var any_freed := false
+	for i in nodes.size():
+		if is_instance_valid(nodes[i] as Node):
+			(nodes[i] as Node).queue_free()
+			nodes[i] = null
+			any_freed = true
+	if any_freed:
+		d["nodes"] = nodes
+		_stream_rooms[room_name] = d
+	var layers: Array = d.get("layers", [])
+	for i in layers.size():
+		var key := _lkey(room_name, i)
+		_stream_pending.erase(key)
+		_stream_start_ms.erase(key)
+	_room_nav_regions.erase(room_name)
+	if any_freed:
+		print("[RoomStream] Unloaded '%s'" % room_name)
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -1311,7 +1270,8 @@ func _save_game(is_autosave: bool) -> bool:
 
 	var payload := {
 		"player": {
-			"position": [player.global_position.x, player.global_position.y, player.global_position.z]
+			"position": [player.global_position.x, player.global_position.y, player.global_position.z],
+			"room": _player_current_room,
 		},
 		"world": _capture_world_state(),
 		"game_time": _capture_game_time_state()

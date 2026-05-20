@@ -1,5 +1,36 @@
 # Dev Log
 
+## 2026-05-20
+
+### Step 58 - Room layer splitting and loading system refactor
+
+**Room scene splitting**
+
+All station rooms now split into two scene layers:
+- `_arch.tscn` — walls, floor, ceiling, collision, nav mesh, lights, occluders. Always loaded when a room is in range.
+- `_details.tscn` — furniture and items. Loaded alongside arch; appears shortly after since arch is smaller.
+- `_room.tscn` — kept as an editor-only preview that instances both layers.
+
+Each room now lives in its own subfolder (e.g. `scenes/station/atrium/`). `surrounding_full.tscn` is unchanged (effects only, no details layer).
+
+**Room streaming refactor (`main.gd`)**
+
+`ROOM_REGISTRY` entries now use `layers: Array[String]` instead of `path` + `details_path`. The streaming system was rewritten around this:
+- `_queue_room(room_name)` — starts threaded loads for all pending layers simultaneously.
+- `_load_room_arch_sync(room_name)` — sync-loads layer 0 from cache (instant on startup); used for rooms preloaded by the loading screen.
+- `_add_layer_node(room_name, layer, inst, path)` — shared instantiation path for both sync and async. Layer 0 also registers nav regions, adds hub seam light, applies exit codes, connects autosave doors.
+- Pending loads tracked in a single `_stream_pending` dict keyed `"room_name:layer_idx"` (was five separate dicts).
+- `_check_if_should_start_deferred()` fires `surrounding` only after all non-deferred arch (layer 0) loads finish.
+- Always-keep rooms that are far from the player (e.g. atrium when player is in chem_lab) now load async instead of blocking the main thread for 12+ seconds.
+- `player.room` is now saved in the save payload so the loading screen knows the exact room to preload on continue.
+
+**Loading screen refactor (`loading_screen.gd`)**
+
+Two-phase sequential loading preserved; phase 1 logic unified into a single `_start_phase_1()` that drains `_phase1_paths`:
+- **New game**: all layers of the nearest room (arch + details preloaded so player spawns with no pop-in).
+- **Continue game**: all layers of the saved room (`player.room` from save data) + arch only of other rooms within `INITIAL_LOAD_RADIUS`. Arch-only rooms are sync-loaded from cache at game start; their details queue async immediately after and arrive in the background.
+- `ROOM_PATHS` uses the same `layers` array format as `ROOM_REGISTRY`.
+
 ## 2026-05-05
 
 ### Step 57 - Door access logic, indicator overhaul, and card-reader integration

@@ -295,7 +295,8 @@ func _find_nearest_menu_room_path(from_xz: Vector2) -> String:
 		var dist := from_xz.distance_to(room["center"] as Vector2)
 		if dist < best_dist:
 			best_dist = dist
-			best_path = room["path"] as String
+			var layers: Array = room.get("layers", [])
+			best_path = String(layers[0]) if not layers.is_empty() else ""
 	return best_path
 
 

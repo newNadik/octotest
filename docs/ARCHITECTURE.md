@@ -92,7 +92,7 @@ This document describes the current runtime architecture of Gone Exploring and m
 - Owns in-game pause menu visibility and scene-change actions.
 - Opens `res://scenes/ui/settings_menu.tscn` as an overlay from pause menu and closes it with back/`Esc`.
 - Routes click-to-move and delegates interact/drop input to `InteractionController`.
-- Owns room streaming for station rooms (distance-based load/unload with hysteresis and always-keep list).
+- Owns room streaming for station rooms (distance-based load/unload with hysteresis and always-keep list). Each room is split into two layers: `_arch.tscn` (structure, nav mesh, lights, collision) and `_details.tscn` (furniture, items). Both layers are registered in `ROOM_REGISTRY` as a `layers: Array[String]`. When a room comes into range, all layers are queued simultaneously via `_queue_room()`; arch (layer 0) is smaller and appears first. `_lkey(room, layer)` produces the tracking key `"room_name:layer_idx"` used in `_stream_pending`. The save payload includes `player.room` (current room name) so the loading screen can preload the exact room's details on continue.
 - Owns focus-mode transitions (auto-enter after approach, movement lock, click-based exit rules).
 - Drives underwater directional-light animation/pulse behavior.
 - Initializes and persists `GameTime` state:
@@ -254,7 +254,7 @@ Scripts are grouped by runtime domain to keep ownership boundaries clear:
 - Current files: `main.gd`, `movement_math.gd`, `game_settings.gd`, `game_save.gd`, `game_time.gd`.
 2. `res://scripts/ui/`
 - UI scene controllers.
-- Current files: `main_menu.gd`, `settings_menu.gd`.
+- Current files: `main_menu.gd`, `loading_screen.gd`, `settings_menu.gd`.
 3. `res://scripts/player/`
 - Player locomotion/controller logic.
 - Current files: `player_controller.gd`.
