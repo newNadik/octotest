@@ -1,0 +1,58 @@
+[gd_scene format=3 uid="uid://dq8f3vrk631bb"]
+
+[ext_resource type="Script" uid="uid://b64dlqrrlkl7n" path="res://scripts/interaction/room_light.gd" id="1_iam10"]
+[ext_resource type="PackedScene" uid="uid://bbddoh2wdt2jq" path="res://scenes/station/office/office_arch.tscn" id="2_idmm1"]
+[ext_resource type="PackedScene" uid="uid://bnaelxfhm1kit" path="res://scenes/station/office/office_details.tscn" id="3_hyoc5"]
+[ext_resource type="PackedScene" uid="uid://d188rcj55r6g0" path="res://scenes/station/atrium/atrium_arch.tscn" id="4_kphry"]
+[ext_resource type="PackedScene" uid="uid://cclsy0gkfl7v6" path="res://scenes/station/atrium/atrium_details.tscn" id="5_sc7vk"]
+[ext_resource type="PackedScene" uid="uid://bsq8i8032qepo" path="res://scenes/station/workshop/workshop_arch.tscn" id="6_u7eth"]
+[ext_resource type="PackedScene" uid="uid://dvo5vx3xgg24g" path="res://scenes/station/workshop/workshop_details.tscn" id="7_kbjdy"]
+[ext_resource type="PackedScene" uid="uid://b5wbnkdw8pctg" path="res://scenes/station/wetroom/wetroom_arch.tscn" id="8_dbcib"]
+[ext_resource type="PackedScene" uid="uid://vkgip5b32c08" path="res://scenes/station/wetroom/wetroom_details.tscn" id="9_cehra"]
+[ext_resource type="PackedScene" uid="uid://ceub8e3x43ri7" path="res://scenes/station/systems/systems_arch.tscn" id="10_nj7xb"]
+[ext_resource type="PackedScene" uid="uid://df1y2m21xniwi" path="res://scenes/station/systems/systems_details.tscn" id="11_ljnju"]
+[ext_resource type="PackedScene" uid="uid://c71b0em5lqt7r" path="res://scenes/station/quarters/quarters_arch.tscn" id="12_7v87s"]
+[ext_resource type="PackedScene" uid="uid://bf0dx2mu427qe" path="res://scenes/station/quarters/quarters_details.tscn" id="13_rpprt"]
+[ext_resource type="PackedScene" uid="uid://c2fxhq255lfu6" path="res://scenes/station/energy_lab/energy_lab_arch.tscn" id="14_dbcib"]
+[ext_resource type="PackedScene" uid="uid://b8x8e0udad08i" path="res://scenes/station/energy_lab/energy_lab_details.tscn" id="15_cehra"]
+[ext_resource type="PackedScene" uid="uid://cg7jo6eyp6d2r" path="res://scenes/station/chem_lab/chem_lab_arch.tscn" id="16_nj7xb"]
+[ext_resource type="PackedScene" uid="uid://lbulhruhn62k" path="res://scenes/station/chem_lab/chem_lab_details.tscn" id="17_ljnju"]
+
+[node name="station" type="Node3D" unique_id=1551660067 node_paths=PackedStringArray("lamp_lights")]
+script = ExtResource("1_iam10")
+lamp_lights = [null]
+random_led_flicker_enabled = false
+
+[node name="office" parent="." unique_id=126937169 instance=ExtResource("2_idmm1")]
+
+[node name="OfficeDetails" parent="." unique_id=2056526704 instance=ExtResource("3_hyoc5")]
+
+[node name="atrium" parent="." unique_id=2061005798 instance=ExtResource("4_kphry")]
+
+[node name="AtriumDetails" parent="." unique_id=1963875556 instance=ExtResource("5_sc7vk")]
+
+[node name="workshop" parent="." unique_id=407966003 instance=ExtResource("6_u7eth")]
+
+[node name="WorkshopDetails" parent="." unique_id=1249012600 instance=ExtResource("7_kbjdy")]
+
+[node name="wetroom" parent="." unique_id=2133782979 node_paths=PackedStringArray("lamp_lights") instance=ExtResource("8_dbcib")]
+lamp_lights = [NodePath("lights/OmniLight3D"), NodePath("lights/OmniLight3D2"), null]
+
+[node name="WetroomDetails" parent="." unique_id=218061277 instance=ExtResource("9_cehra")]
+
+[node name="system" parent="." unique_id=1217152142 instance=ExtResource("10_nj7xb")]
+
+[node name="SystemsDetails" parent="." unique_id=1373505699 instance=ExtResource("11_ljnju")]
+
+[node name="quarters" parent="." unique_id=150172973 instance=ExtResource("12_7v87s")]
+
+[node name="QuartersDetails" parent="." unique_id=874993120 instance=ExtResource("13_rpprt")]
+
+[node name="energy_lab" parent="." unique_id=1622891315 instance=ExtResource("14_dbcib")]
+
+[node name="EnergyLabDetails" parent="." unique_id=383683231 instance=ExtResource("15_cehra")]
+
+[node name="chem_lab" parent="." unique_id=918888622 node_paths=PackedStringArray("lamp_lights") instance=ExtResource("16_nj7xb")]
+lamp_lights = [NodePath("lights/OmniLight3D"), null, null, null]
+
+[node name="ChemLabDetails" parent="." unique_id=145407394 instance=ExtResource("17_ljnju")]

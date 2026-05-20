@@ -27,15 +27,15 @@ const EXIT_CODE_MAX := 1900
 # preloaded by the loading screen and can be sync-instantiated from cache.
 const INITIAL_LOAD_RADIUS := 20.0
 const ROOM_REGISTRY: Array[Dictionary] = [
-	{"name": "atrium",      "path": "res://scenes/station/atrium_room.tscn",           "center": Vector3(0.93,   0.0,  28.47), "neighbors": ["workshop", "chem_lab"]},
-	{"name": "chem_lab",    "path": "res://scenes/station/chem_lab_room.tscn",         "center": Vector3(11.72,  0.0,  -7.54),  "neighbors": ["atrium"]},
-	{"name": "energy_lab",  "path": "res://scenes/station/energy_lab_room.tscn",       "center": Vector3(10.32,  0.0,  14.32),  "neighbors": []},
-	{"name": "office",      "path": "res://scenes/station/data_office/office_arch.tscn",    "details_path": "res://scenes/station/data_office/office_details.tscn", "center": Vector3(0.78,   0.0, -17.63),  "neighbors": []},
-	{"name": "quarters",    "path": "res://scenes/station/quarters_room.tscn",         "center": Vector3(0.0,    0.0,   0.0),   "neighbors": []},
-	{"name": "systems",     "path": "res://scenes/station/systems_room.tscn",          "center": Vector3(-4.45,  0.0, -17.0),   "neighbors": []},
-	{"name": "wetroom",     "path": "res://scenes/station/wetroom_room.tscn",          "center": Vector3(9.65,   0.0,  24.85),  "neighbors": []},
-	{"name": "workshop",    "path": "res://scenes/station/workshop_room.tscn",         "center": Vector3(25.78,  0.0,   5.67),  "neighbors": ["atrium"]},
-	{"name": "surrounding", "path": "res://scenes/effects/surrounding_full.tscn",      "center": Vector3.ZERO,                  "neighbors": [], "deferred": true},
+	{"name": "atrium",      "path": "res://scenes/station/atrium/atrium_arch.tscn",         "details_path": "res://scenes/station/atrium/atrium_details.tscn",         "center": Vector3(0.93,   0.0,  28.47), "neighbors": ["workshop", "chem_lab"]},
+	{"name": "chem_lab",    "path": "res://scenes/station/chem_lab/chem_lab_arch.tscn",     "details_path": "res://scenes/station/chem_lab/chem_lab_details.tscn",     "center": Vector3(11.72,  0.0,  -7.54),  "neighbors": ["atrium"]},
+	{"name": "energy_lab",  "path": "res://scenes/station/energy_lab/energy_lab_arch.tscn", "details_path": "res://scenes/station/energy_lab/energy_lab_details.tscn", "center": Vector3(10.32,  0.0,  14.32),  "neighbors": []},
+	{"name": "office",      "path": "res://scenes/station/office/office_arch.tscn",         "details_path": "res://scenes/station/office/office_details.tscn",         "center": Vector3(0.78,   0.0, -17.63),  "neighbors": []},
+	{"name": "quarters",    "path": "res://scenes/station/quarters/quarters_arch.tscn",     "details_path": "res://scenes/station/quarters/quarters_details.tscn",     "center": Vector3(0.0,    0.0,   0.0),   "neighbors": []},
+	{"name": "systems",     "path": "res://scenes/station/systems/systems_arch.tscn",       "details_path": "res://scenes/station/systems/systems_details.tscn",       "center": Vector3(-4.45,  0.0, -17.0),   "neighbors": []},
+	{"name": "wetroom",     "path": "res://scenes/station/wetroom/wetroom_arch.tscn",       "details_path": "res://scenes/station/wetroom/wetroom_details.tscn",       "center": Vector3(9.65,   0.0,  24.85),  "neighbors": []},
+	{"name": "workshop",    "path": "res://scenes/station/workshop/workshop_arch.tscn",     "details_path": "res://scenes/station/workshop/workshop_details.tscn",     "center": Vector3(25.78,  0.0,   5.67),  "neighbors": ["atrium"]},
+	{"name": "surrounding", "path": "res://scenes/effects/surrounding_full.tscn",                                                                                     "center": Vector3.ZERO,                  "neighbors": [], "deferred": true},
 ]
 const ROOM_LIGHT_ISOLATION_LAYER_BITS := {
 	"atrium": 16,
@@ -376,6 +376,14 @@ func _initialize_room_streaming() -> void:
 				if err == OK or err == ERR_BUSY:
 					_stream_pending_loads[room_name] = scene_path
 					_stream_load_start_times[room_name] = Time.get_ticks_msec()
+			# Queue details alongside arch for the starting room so both are
+			# ready at the same time with no visible pop-in.
+			var details_path := String(room_data.get("details_path", ""))
+			if details_path != "" and not _stream_detail_pending.has(room_name):
+				var derr := ResourceLoader.load_threaded_request(details_path)
+				if derr == OK or derr == ERR_BUSY:
+					_stream_detail_pending[room_name] = details_path
+					_stream_detail_start_times[room_name] = Time.get_ticks_msec()
 
 	if _stream_pending_loads.is_empty():
 		_start_deferred_room_loads()
@@ -423,7 +431,7 @@ func _update_room_streaming(delta: float) -> void:
 
 
 func _check_pending_room_loads() -> void:
-	if _stream_pending_loads.is_empty():
+	if _stream_pending_loads.is_empty() and _stream_detail_pending.is_empty():
 		return
 	for room_name in _stream_pending_loads.keys():
 		var scene_path: String = _stream_pending_loads[room_name]
@@ -480,11 +488,16 @@ func _check_pending_room_loads() -> void:
 			continue
 		instance.name = StringName(room_name + "_details")
 		_get_room_parent(room_name).add_child(instance)
+		_apply_room_light_isolation(instance, room_name)
 		_stream_detail_nodes[room_name] = instance
 		print("[RoomStream] Async loaded '%s' details: thread=%dms  instantiate=%dms" % [room_name, thread_ms, t_done - t_inst])
 
 
 func _start_deferred_room_loads() -> void:
+	# Don't start deferred rooms until the priority gate clears — otherwise
+	# surrounding would load before atrium and other rooms even start.
+	if _new_game_priority_room != "":
+		return
 	for room_name in _stream_rooms.keys():
 		var room_data: Dictionary = _stream_rooms[room_name]
 		if not room_data.get("deferred", false):

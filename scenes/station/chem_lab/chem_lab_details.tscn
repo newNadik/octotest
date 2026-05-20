@@ -1,0 +1,141 @@
+[gd_scene format=3 uid="uid://lbulhruhn62k"]
+
+[ext_resource type="PackedScene" uid="uid://id7jvwajmaq4" path="res://scenes/station/interior/chemlab/chem_lab_desk_center.scn" id="1_3skmp"]
+[ext_resource type="PackedScene" uid="uid://8vcajaaad64" path="res://scenes/station/interior/rack.tscn" id="2_dwxtv"]
+[ext_resource type="PackedScene" uid="uid://qs8sh7iux1qk" path="res://scenes/station/interior/chair.tscn" id="3_0nqiy"]
+[ext_resource type="PackedScene" uid="uid://b18qdk7b4q77l" path="res://scenes/station/interior/desk.tscn" id="4_pfbw8"]
+[ext_resource type="PackedScene" uid="uid://b0x31ndvupmht" path="res://scenes/station/interior/chemlab/chem_lab_desk.tscn" id="5_2r18o"]
+[ext_resource type="PackedScene" uid="uid://c6u2h3iksfaya" path="res://scenes/station/interior/cabinet_01.tscn" id="6_nt0p8"]
+[ext_resource type="PackedScene" uid="uid://bswcymbvnmghc" path="res://scenes/station/interior/chemlab/chem_lab_cabinet.tscn" id="7_c1sjs"]
+[ext_resource type="PackedScene" uid="uid://bqa0pial4jruw" path="res://scenes/station/interior/chemlab/chem_lab_cabinet_2.tscn" id="8_uu8up"]
+[ext_resource type="PackedScene" uid="uid://c2k6alugd6hg8" path="res://assets/models/interior/chemlab/free_conical_flask__laboratory__low_poly.glb" id="9_xn7v2"]
+[ext_resource type="PackedScene" uid="uid://4uby11wsvhlx" path="res://scenes/station/items/safety_glasses.tscn" id="10_sog32"]
+[ext_resource type="PackedScene" uid="uid://3qcq4vmexl3s" path="res://scenes/station/items/fire_extinguisher.tscn" id="11_i6kel"]
+[ext_resource type="PackedScene" uid="uid://bp2qgp1sbmraf" path="res://scenes/station/items/clock.tscn" id="12_brx4w"]
+[ext_resource type="PackedScene" uid="uid://b21bahphpnv3o" path="res://scenes/station/items/computer.tscn" id="13_b66i1"]
+[ext_resource type="PackedScene" uid="uid://ccmtakyjiuxeg" path="res://scenes/station/items/printer.tscn" id="14_6wjl7"]
+[ext_resource type="PackedScene" uid="uid://p54diitf0kfi" path="res://scenes/station/items/lab_kit.tscn" id="15_ukwem"]
+[ext_resource type="PackedScene" uid="uid://rrnp5rb53ivh" path="res://scenes/station/items/centrifuge.tscn" id="16_6qtfx"]
+[ext_resource type="PackedScene" uid="uid://cfmn0nyvyf3a5" path="res://scenes/station/items/cardbox_1.tscn" id="17_lmg72"]
+[ext_resource type="PackedScene" uid="uid://uhkppkk7xa8v" path="res://scenes/station/items/cardbox_2.tscn" id="18_fkouq"]
+[ext_resource type="PackedScene" uid="uid://bl8an1v6jcqb3" path="res://scenes/station/items/shelf_papers_1.tscn" id="19_4vdco"]
+[ext_resource type="PackedScene" uid="uid://b4jrm4nkcgbh2" path="res://scenes/station/items/life_jackets.tscn" id="20_eruaw"]
+[ext_resource type="PackedScene" uid="uid://ctlqnv7ainkqs" path="res://scenes/station/items/shelf_papers_3.tscn" id="21_lw8o2"]
+[ext_resource type="PackedScene" uid="uid://q80ss7d03u6" path="res://scenes/station/items/documents_002.tscn" id="22_7jgd1"]
+
+[node name="ChemLabDetails" type="Node3D" unique_id=145407394]
+
+[node name="furniture" type="Node3D" parent="." unique_id=1479965240]
+
+[node name="chem_lab_desk_center" parent="furniture" unique_id=1298122612 instance=ExtResource("1_3skmp")]
+transform = Transform3D(0.70710677, 0, -0.70710677, 0, 1, 0, 0.70710677, 0, 0.70710677, 14.48738, 0, -17.173897)
+
+[node name="rack4" parent="furniture" unique_id=1216544187 instance=ExtResource("2_dwxtv")]
+transform = Transform3D(0.71044344, 0, 0.7037544, 0, 1, 0, -0.7037544, 0, 0.71044344, 16.281994, 0, -24.07658)
+
+[node name="rack5" parent="furniture" unique_id=530825262 instance=ExtResource("2_dwxtv")]
+transform = Transform3D(0.71044344, 0, 0.7037544, 0, 1, 0, -0.7037544, 0, 0.71044344, 13.569126, 0, -26.868462)
+
+[node name="chair3" parent="furniture" unique_id=1222624819 instance=ExtResource("3_0nqiy")]
+transform = Transform3D(0.98608905, 0, 0.16621803, 0, 1, 0, -0.16621803, 0, 0.98608905, 20.624062, 0, -13.497396)
+
+[node name="chair7" parent="furniture" unique_id=1762699263 instance=ExtResource("3_0nqiy")]
+transform = Transform3D(-0.14274989, 0, -0.98975873, 0, 1, 0, 0.98975873, 0, -0.14274989, 14.49707, 0, -15.121258)
+
+[node name="chair8" parent="furniture" unique_id=1330771392 instance=ExtResource("3_0nqiy")]
+transform = Transform3D(0.8246793, 0, 0.56560045, 0, 1, 0, -0.56560045, 0, 0.8246793, 14.875053, 0, -18.666534)
+
+[node name="chair5" parent="furniture" unique_id=2042267716 instance=ExtResource("3_0nqiy")]
+transform = Transform3D(0.90199083, 0, 0.4317551, 0, 1, 0, -0.4317551, 0, 0.90199083, 9.521724, 0, -8.152931)
+
+[node name="chair6" parent="furniture" unique_id=758719665 instance=ExtResource("3_0nqiy")]
+transform = Transform3D(0.97188705, 0, 0.23544738, 0, 1, 0, -0.23544738, 0, 0.97188705, 13.025308, 0, -9.644411)
+
+[node name="chair4" parent="furniture" unique_id=2062499361 instance=ExtResource("3_0nqiy")]
+transform = Transform3D(0.986089, 0, 0.166218, 0, 1, 0, -0.166218, 0, 0.986089, 23.54475, 0, -15.348297)
+
+[node name="desk3" parent="furniture" unique_id=360776120 instance=ExtResource("4_pfbw8")]
+transform = Transform3D(0.3833444, 0, -0.9236055, 0, 1, 0, 0.9236055, 0, 0.3833444, 20.940722, 0, -12.681022)
+
+[node name="desk4" parent="furniture" unique_id=987087841 instance=ExtResource("4_pfbw8")]
+transform = Transform3D(0.38334438, 0, -0.92360544, 0, 1, 0, 0.92360544, 0, 0.38334438, 23.86895, 0, -13.887838)
+
+[node name="chem_lab_desk" parent="furniture" unique_id=790567235 instance=ExtResource("5_2r18o")]
+transform = Transform3D(-0.379989, 0, 0.92499113, 0, 1, 0, -0.92499113, 0, -0.379989, 11.196625, 0, -8.964552)
+
+[node name="Cabinet_01" parent="furniture" unique_id=1376455345 instance=ExtResource("6_nt0p8")]
+transform = Transform3D(-0.7266585, 0, -0.68699884, 0, 1, 0, 0.68699884, 0, -0.7266585, 25.329388, 0, -15.2819)
+
+[node name="chem_lab_cabinet" parent="furniture" unique_id=1983526143 instance=ExtResource("7_c1sjs")]
+transform = Transform3D(0.7019542, 0, -0.7122221, 0, 1, 0, 0.7122221, 0, 0.7019542, 19.206821, 0, -20.953014)
+
+[node name="chem_lab_cabinet2" parent="furniture" unique_id=1221330299 instance=ExtResource("7_c1sjs")]
+transform = Transform3D(0.38102198, 0, 0.9245659, 0, 1, 0, -0.9245659, 0, 0.38102198, 7.047949, 0, -14.855986)
+
+[node name="chem_lab_cabinet_2" parent="furniture" unique_id=1248183982 instance=ExtResource("8_uu8up")]
+transform = Transform3D(-0.3819255, 0, -0.92419314, 0, 1, 0, 0.92419314, 0, -0.3819255, 5.8684154, 0, -12.834065)
+
+[node name="chem_lab_cabinet_3" parent="furniture" unique_id=1124319266 instance=ExtResource("8_uu8up")]
+transform = Transform3D(-0.3819255, 0, -0.92419314, 0, 1, 0, 0.92419314, 0, -0.3819255, 10.968404, 0, -25.028267)
+
+[node name="chem_lab_cabinet3" parent="furniture" unique_id=1991188522 instance=ExtResource("7_c1sjs")]
+transform = Transform3D(0.3804894, 0, 0.9247852, 0, 1, 0, -0.9247852, 0, 0.3804894, 8.700385, 0, -18.81087)
+
+[node name="items" type="Node3D" parent="." unique_id=1907794447]
+
+[node name="Sketchfab_Scene" parent="items" unique_id=478728062 instance=ExtResource("9_xn7v2")]
+transform = Transform3D(-0.5104954, 0, 1.4104589, 0, 1.5, 0, -1.4104589, 0, -0.5104954, 9.507327, 1.575298, -7.586014)
+
+[node name="safety_glasses" parent="items" unique_id=672416876 instance=ExtResource("10_sog32")]
+transform = Transform3D(0.77187985, 0, 0.6357684, 0, 1, 0, -0.6357684, 0, 0.77187985, 14.904729, 2.0526202, -17.252768)
+
+[node name="fire_extinguisher" parent="items" unique_id=1012721613 instance=ExtResource("11_i6kel")]
+transform = Transform3D(0.70710677, 0, -0.70710677, 0, 1, 0, 0.70710677, 0, 0.70710677, 22.454807, 0, -18.405193)
+
+[node name="clock" parent="items" unique_id=605620393 instance=ExtResource("12_brx4w")]
+transform = Transform3D(-0.3819416, 0, 0.9241866, 0, 1, 0, -0.9241866, 0, -0.3819416, 17.374403, 5.5, -10.200755)
+
+[node name="computer" parent="items" unique_id=1576113446 instance=ExtResource("13_b66i1")]
+transform = Transform3D(-0.7522769, 0, -0.6588471, 0, 1, 0, 0.6588471, 0, -0.7522769, 24.60677, 1.482, -13.662461)
+
+[node name="computer2" parent="items" unique_id=1222284902 instance=ExtResource("13_b66i1")]
+transform = Transform3D(-0.9367821, 0, -0.34991312, 0, 1, 0, 0.34991312, 0, -0.9367821, 21.391088, 1.482, -12.114437)
+
+[node name="printer" parent="items" unique_id=1111848469 instance=ExtResource("14_6wjl7")]
+transform = Transform3D(0.7280839, 0, -0.6854881, 0, 1, 0, 0.6854881, 0, 0.7280839, 16.81997, 1.4682801, -23.719334)
+
+[node name="lab_kit" parent="items" unique_id=31218197 instance=ExtResource("15_ukwem")]
+transform = Transform3D(0.3426597, 0, 0.9394596, 0, 1, 0, -0.9394596, 0, 0.3426597, 8.472508, 1.7180458, -16.871582)
+
+[node name="Sketchfab_Scene2" parent="items" unique_id=1468440997 instance=ExtResource("9_xn7v2")]
+transform = Transform3D(-0.5104954, 0, 1.4104589, 0, 1.5, 0, -1.4104589, 0, -0.5104954, 15.504761, 2.47195, -24.803295)
+
+[node name="Sketchfab_Scene3" parent="items" unique_id=1749340037 instance=ExtResource("9_xn7v2")]
+transform = Transform3D(0.2848257, 0, 1.4727099, 0, 1.5, 0, -1.4727099, 0, 0.2848257, 15.923769, 2.47195, -24.245893)
+
+[node name="Sketchfab_Scene4" parent="items" unique_id=1630804312 instance=ExtResource("9_xn7v2")]
+transform = Transform3D(1.1607107, 0, 0.950132, 0, 1.5, 0, -0.950132, 0, 1.1607107, 16.654774, 2.47195, -23.425453)
+
+[node name="centrifuge" parent="items" unique_id=779219593 instance=ExtResource("16_6qtfx")]
+transform = Transform3D(0.685793, 0, 0.7277967, 0, 1, 0, -0.7277967, 0, 0.685793, 13.518232, 1.5543449, -15.207065)
+
+[node name="cardbox_1" parent="items" unique_id=2077639180 instance=ExtResource("17_lmg72")]
+transform = Transform3D(0.6982654, 0, 0.715839, 0, 1, 0, -0.715839, 0, 0.6982654, 13.95961, 1.7426624, -26.465086)
+
+[node name="cardbox_2" parent="items" unique_id=1669699599 instance=ExtResource("18_fkouq")]
+transform = Transform3D(0.72520614, 0, 0.6885318, 0, 1, 0, -0.6885318, 0, 0.72520614, 13.637735, 3.0128026, -26.844738)
+
+[node name="cardbox_3" parent="items" unique_id=201438863 instance=ExtResource("18_fkouq")]
+transform = Transform3D(-0.7067365, 0, -0.7074769, 0, 1, 0, 0.7074769, 0, -0.7067365, 16.307308, 2.9920788, -23.99995)
+
+[node name="shelf_papers_1" parent="items" unique_id=1997937383 instance=ExtResource("19_4vdco")]
+transform = Transform3D(0.69761544, 0, 0.7164724, 0, 1, 0, -0.7164724, 0, 0.69761544, 13.564248, 2.0199564, -26.849113)
+
+[node name="Node3D" parent="items" unique_id=1393197385 instance=ExtResource("20_eruaw")]
+transform = Transform3D(0.7232444, 0, 0.69059217, 0, 1, 0, -0.69059217, 0, 0.7232444, 16.474636, 0.5813222, -24.14557)
+
+[node name="shelf_papers_3" parent="items" unique_id=2000830835 instance=ExtResource("21_lw8o2")]
+transform = Transform3D(0.73583716, 0, 0.67715853, 0, 1, 0, -0.67715853, 0, 0.73583716, 13.577756, 0.021473646, -26.97951)
+
+[node name="documents002" parent="items" unique_id=367064636 instance=ExtResource("22_7jgd1")]
+transform = Transform3D(0.46032375, 0, 0.8877511, 0, 1, 0, -0.8877511, 0, 0.46032375, 15.583164, 1.4738951, -24.876055)

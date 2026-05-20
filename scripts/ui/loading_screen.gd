@@ -14,14 +14,14 @@ const INITIAL_LOAD_RADIUS := 20.0
 # Default XZ for a fresh game. Overridden by save data when continuing.
 const NEW_GAME_START_XZ := Vector2(5.0, -26.0)
 const ROOM_PATHS: Array[Dictionary] = [
-	{"name": "atrium",     "path": "res://scenes/station/atrium_room.tscn",     "center": Vector2(0.93,  28.47), "neighbors": ["workshop", "chem_lab"]},
-	{"name": "chem_lab",   "path": "res://scenes/station/chem_lab_room.tscn",   "center": Vector2(11.72, -7.54),  "neighbors": ["atrium"]},
-	{"name": "energy_lab", "path": "res://scenes/station/energy_lab_room.tscn", "center": Vector2(10.32, 14.32),  "neighbors": []},
-	{"name": "office",     "path": "res://scenes/station/data_office/office_arch.tscn", "center": Vector2(0.78,  -17.63), "neighbors": []},
-	{"name": "quarters",   "path": "res://scenes/station/quarters_room.tscn",   "center": Vector2(0.0,    0.0),   "neighbors": []},
-	{"name": "systems",    "path": "res://scenes/station/systems_room.tscn",    "center": Vector2(-4.45, -17.0),  "neighbors": []},
-	{"name": "wetroom",    "path": "res://scenes/station/wetroom_room.tscn",    "center": Vector2(9.65,  24.85),  "neighbors": []},
-	{"name": "workshop",   "path": "res://scenes/station/workshop_room.tscn",   "center": Vector2(25.78,  5.67),  "neighbors": ["atrium"]},
+	{"name": "atrium",     "path": "res://scenes/station/atrium/atrium_arch.tscn",         "details_path": "res://scenes/station/atrium/atrium_details.tscn",         "center": Vector2(0.93,  28.47), "neighbors": ["workshop", "chem_lab"]},
+	{"name": "chem_lab",   "path": "res://scenes/station/chem_lab/chem_lab_arch.tscn",     "details_path": "res://scenes/station/chem_lab/chem_lab_details.tscn",     "center": Vector2(11.72, -7.54),  "neighbors": ["atrium"]},
+	{"name": "energy_lab", "path": "res://scenes/station/energy_lab/energy_lab_arch.tscn", "details_path": "res://scenes/station/energy_lab/energy_lab_details.tscn", "center": Vector2(10.32, 14.32),  "neighbors": []},
+	{"name": "office",     "path": "res://scenes/station/office/office_arch.tscn",         "details_path": "res://scenes/station/office/office_details.tscn",         "center": Vector2(0.78,  -17.63), "neighbors": []},
+	{"name": "quarters",   "path": "res://scenes/station/quarters/quarters_arch.tscn",     "details_path": "res://scenes/station/quarters/quarters_details.tscn",     "center": Vector2(0.0,    0.0),   "neighbors": []},
+	{"name": "systems",    "path": "res://scenes/station/systems/systems_arch.tscn",       "details_path": "res://scenes/station/systems/systems_details.tscn",       "center": Vector2(-4.45, -17.0),  "neighbors": []},
+	{"name": "wetroom",    "path": "res://scenes/station/wetroom/wetroom_arch.tscn",       "details_path": "res://scenes/station/wetroom/wetroom_details.tscn",       "center": Vector2(9.65,  24.85),  "neighbors": []},
+	{"name": "workshop",   "path": "res://scenes/station/workshop/workshop_arch.tscn",     "details_path": "res://scenes/station/workshop/workshop_details.tscn",     "center": Vector2(25.78,  5.67),  "neighbors": ["atrium"]},
 ]
 
 @onready var progress_bar: ProgressBar = $CenterContainer/VBoxContainer/ProgressBar
@@ -33,10 +33,12 @@ var _target_progress := 0.0
 var _display_progress := 0.0
 var _t0: int = 0
 var _logged_completed: Array[String] = []
-# New game loads in two sequential phases to avoid thread competition:
-# phase 0 = main.tscn, phase 1 = priority room (office), then transition.
+# Loading always uses two sequential phases to avoid thread competition:
+# phase 0 = main.tscn alone, phase 1 = priority/near rooms, then transition.
 var _phase := 0
 var _new_game_priority_path := ""
+var _new_game_priority_details_path := ""
+var _continue_phase1_paths: Array[String] = []
 
 
 func _ms() -> String:
@@ -63,34 +65,22 @@ func _ready() -> void:
 	var is_new_game := _is_new_game()
 
 	if is_new_game:
-		# Phase 0: main.tscn only. Phase 1 will load the priority room after.
+		# Phase 1 will load the priority room + its details after main finishes.
 		_new_game_priority_path = _find_nearest_room_path(player_start_xz)
 		print("[LoadingScreen] %s New game — phase 0: main scene, phase 1: %s" % [_ms(), _new_game_priority_path.get_file()])
 	else:
-		var near_names: Array[String] = []
+		# Only include rooms the player is spatially near — no neighbor expansion,
+		# no background preloads. Distant rooms (e.g. atrium as always-keep) load
+		# fine as in-game background without blocking the loading screen.
 		for room in ROOM_PATHS:
-			if player_start_xz.distance_to(room["center"] as Vector2) <= INITIAL_LOAD_RADIUS:
-				near_names.append(room["name"] as String)
-		for room in ROOM_PATHS:
-			if near_names.has(room["name"] as String):
-				for neighbor in (room["neighbors"] as Array):
-					if not near_names.has(neighbor as String):
-						near_names.append(neighbor as String)
-		for room in ROOM_PATHS:
-			var room_name := room["name"] as String
 			var dist := player_start_xz.distance_to(room["center"] as Vector2)
-			var path: String = room["path"]
-			if near_names.has(room_name):
-				print("[LoadingScreen] %s Preloading room (dist=%.1f): %s" % [_ms(), dist, room_name])
-				var room_err := ResourceLoader.load_threaded_request(path)
-				if room_err == OK or room_err == ERR_BUSY:
-					_pending_loads.append(path)
-					_pending_load_enqueue_ms[path] = Time.get_ticks_msec()
+			if dist <= INITIAL_LOAD_RADIUS:
+				print("[LoadingScreen] %s Continue phase 1 room (dist=%.1f): %s" % [_ms(), dist, room["name"]])
+				_continue_phase1_paths.append(room["path"] as String)
 			else:
-				print("[LoadingScreen] %s Background room (dist=%.1f): %s" % [_ms(), dist, room_name])
-				ResourceLoader.load_threaded_request(path)
+				print("[LoadingScreen] %s Skipping (dist=%.1f, loads in-game): %s" % [_ms(), dist, room["name"]])
 
-	print("[LoadingScreen] %s Phase %d queued, waiting for %d loads" % [_ms(), _phase, _pending_loads.size()])
+	print("[LoadingScreen] %s Phase 0 queued (main.tscn), phase 1 has %d rooms" % [_ms(), _continue_phase1_paths.size()])
 	set_process(true)
 
 
@@ -146,12 +136,29 @@ func _process(delta: float) -> void:
 	if all_done:
 		if _phase == 0 and _new_game_priority_path != "":
 			_start_phase_1()
+		elif _phase == 0 and not _continue_phase1_paths.is_empty():
+			_start_continue_phase_1()
 		else:
 			_target_progress = 100.0
 			_display_progress = 100.0
 			if progress_bar != null:
 				progress_bar.value = 100.0
 			_transition_to_loaded_scene()
+
+
+func _start_continue_phase_1() -> void:
+	_phase = 1
+	_pending_loads.clear()
+	_logged_completed.clear()
+	_pending_load_enqueue_ms.clear()
+	_target_progress = 0.0
+	_display_progress = 0.0
+	print("[LoadingScreen] %s Phase 1: loading %d near rooms" % [_ms(), _continue_phase1_paths.size()])
+	for path in _continue_phase1_paths:
+		var err := ResourceLoader.load_threaded_request(path)
+		if err == OK or err == ERR_BUSY:
+			_pending_loads.append(path)
+			_pending_load_enqueue_ms[path] = Time.get_ticks_msec()
 
 
 func _start_phase_1() -> void:
@@ -161,12 +168,20 @@ func _start_phase_1() -> void:
 	_pending_load_enqueue_ms.clear()
 	_target_progress = 0.0
 	_display_progress = 0.0
-	print("[LoadingScreen] %s Phase 1: loading priority room %s" % [_ms(), _new_game_priority_path.get_file()])
-	var err := ResourceLoader.load_threaded_request(_new_game_priority_path)
-	if err == OK or err == ERR_BUSY:
-		_pending_loads.append(_new_game_priority_path)
-		_pending_load_enqueue_ms[_new_game_priority_path] = Time.get_ticks_msec()
-	else:
+	var label := _new_game_priority_path.get_file()
+	if _new_game_priority_details_path != "":
+		label += " + " + _new_game_priority_details_path.get_file()
+	print("[LoadingScreen] %s Phase 1: loading priority room %s" % [_ms(), label])
+	var queued := false
+	for path in [_new_game_priority_path, _new_game_priority_details_path]:
+		if path == "":
+			continue
+		var err := ResourceLoader.load_threaded_request(path)
+		if err == OK or err == ERR_BUSY:
+			_pending_loads.append(path)
+			_pending_load_enqueue_ms[path] = Time.get_ticks_msec()
+			queued = true
+	if not queued:
 		push_error("Failed to start priority room load: %s" % _new_game_priority_path)
 		_transition_to_loaded_scene()
 
@@ -186,14 +201,15 @@ func _transition_to_loaded_scene() -> void:
 
 
 func _find_nearest_room_path(from_xz: Vector2) -> String:
-	var best_path := ""
+	var best: Dictionary = {}
 	var best_dist := INF
 	for room in ROOM_PATHS:
 		var dist := from_xz.distance_to(room["center"] as Vector2)
 		if dist < best_dist:
 			best_dist = dist
-			best_path = room["path"] as String
-	return best_path
+			best = room
+	_new_game_priority_details_path = best.get("details_path", "") as String
+	return best.get("path", "") as String
 
 
 func _is_new_game() -> bool:
