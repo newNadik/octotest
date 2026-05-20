@@ -21,7 +21,6 @@ environment = SubResource("Environment_ocean")
 [node name="station" type="Node3D" parent="." unique_id=680235138]
 
 [node name="Player" parent="." unique_id=445333378 instance=ExtResource("2_vrsh6")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -34.373524, 7.828123, 21.75817)
 
 [node name="CameraPivot" type="Node3D" parent="." unique_id=161127609]
 
@@ -177,4 +176,3 @@ shadow_blur = 2.0
 directional_shadow_fade_start = 0.85
 directional_shadow_max_distance = 95.0
 sky_mode = 1
-

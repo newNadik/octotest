@@ -24,8 +24,9 @@ const DISPLAY_REFLECTION_MAX_OFFSET := Vector2(0.06, 0.04)
 const DISPLAY_REFLECTION_SMOOTH_SPEED := 10.0
 const STARTUP_BLACK_RECT_DELAY := 0.15
 const STARTUP_BLACK_RECT_DURATION := 0.4
+const PLAYER_SCENE_PATH := "res://scenes/player.tscn"
 const MENU_PRELOAD_INITIAL_RADIUS := 20.0
-const MENU_PRELOAD_NEW_GAME_START_XZ := Vector2(0.0, 16.0)
+const MENU_PRELOAD_NEW_GAME_START_XZ := Vector2(5.0, -26.0)
 const MENU_PRELOAD_ROOM_PATHS: Array[Dictionary] = [
 	{"name": "atrium",     "path": "res://scenes/station/atrium_room.tscn",     "center": Vector2(0.93,  28.47), "neighbors": ["workshop", "chem_lab"]},
 	{"name": "chem_lab",   "path": "res://scenes/station/chem_lab_room.tscn",   "center": Vector2(11.72, -7.54),  "neighbors": ["atrium"]},
@@ -37,6 +38,7 @@ const MENU_PRELOAD_ROOM_PATHS: Array[Dictionary] = [
 	{"name": "workshop",   "path": "res://scenes/station/workshop_room.tscn",   "center": Vector2(25.78,  5.67),  "neighbors": ["atrium"]},
 ]
 static var _startup_black_rect_played_once := false
+var _menu_t0: int = 0
 
 @onready var play_button: Button = $MainVBoxContainer/MainContainer/HBoxContainer/LeftContent/MenuButtons/PlayButton
 @onready var continue_button: Button = $MainVBoxContainer/MainContainer/HBoxContainer/LeftContent/MenuButtons/ContinueButton
@@ -64,7 +66,12 @@ var _popup_layer: CanvasLayer
 var _is_transitioning := false
 
 
+func _ms() -> String:
+	return "[%s +%dms]" % [Time.get_time_string_from_system(), Time.get_ticks_msec() - _menu_t0]
+
+
 func _ready() -> void:
+	_menu_t0 = Time.get_ticks_msec()
 	MusicManager.play_menu()
 	continue_button.pressed.connect(_on_continue_pressed)
 	play_button.pressed.connect(_on_play_pressed)
@@ -257,32 +264,80 @@ func _play_startup_black_rect_drop() -> void:
 	)
 
 
+func _menu_request(path: String, label: String, use_sub_threads: bool = false) -> void:
+	var err := ResourceLoader.load_threaded_request(path, "", use_sub_threads)
+	if err == OK or err == ERR_BUSY:
+		print("[MenuPreload] %s Requesting: %s" % [_ms(), label])
+	else:
+		push_warning("[MenuPreload] %s Failed (err=%d): %s" % [_ms(), err, label])
+
+
 func _start_menu_room_preload() -> void:
-	# Fire-and-forget warmup so menu stays responsive while gameplay rooms load in background.
-	var game_err := ResourceLoader.load_threaded_request(GAME_SCENE_PATH, "", true)
-	if game_err != OK and game_err != ERR_BUSY:
-		push_warning("Menu game preload failed: %s (err=%d)" % [GAME_SCENE_PATH, game_err])
+	print("[MenuPreload] %s Starting background preload" % _ms())
+	var is_new_game: bool = not _has_saved_game()
+
+	# Priority 1: player character (sub-scene of main.tscn, loaded separately)
+	_menu_request(PLAYER_SCENE_PATH, "player.tscn")
+
+	# Priority 2: main game scene
+	_menu_request(GAME_SCENE_PATH, "main.tscn", true)
 
 	var player_start_xz := _get_menu_predicted_player_start_xz()
-	var near_names: Array[String] = []
-	for room in MENU_PRELOAD_ROOM_PATHS:
-		if player_start_xz.distance_to(room["center"] as Vector2) <= MENU_PRELOAD_INITIAL_RADIUS:
-			near_names.append(room["name"] as String)
-	for room in MENU_PRELOAD_ROOM_PATHS:
-		if near_names.has(room["name"] as String):
-			for neighbor in (room["neighbors"] as Array):
-				var neighbor_name := neighbor as String
-				if not near_names.has(neighbor_name):
-					near_names.append(neighbor_name)
 
+	if is_new_game:
+		# Priority 3: starting room (office)
+		var priority_path := _find_nearest_menu_room_path(player_start_xz)
+		if priority_path != "":
+			_menu_request(priority_path, priority_path.get_file())
+
+		# Priority 4: atrium (largest room, player will reach it early)
+		for room in MENU_PRELOAD_ROOM_PATHS:
+			if room["name"] == "atrium":
+				_menu_request(room["path"] as String, "atrium_room.tscn")
+				break
+
+		# Priority 5: remaining rooms
+		for room in MENU_PRELOAD_ROOM_PATHS:
+			var room_name := room["name"] as String
+			if room_name == "atrium":
+				continue
+			var scene_path := room["path"] as String
+			if scene_path == priority_path:
+				continue
+			_menu_request(scene_path, scene_path.get_file())
+	else:
+		# Continue game: load near rooms + neighbors first, rest after
+		var near_names: Array[String] = []
+		for room in MENU_PRELOAD_ROOM_PATHS:
+			if player_start_xz.distance_to(room["center"] as Vector2) <= MENU_PRELOAD_INITIAL_RADIUS:
+				near_names.append(room["name"] as String)
+		for room in MENU_PRELOAD_ROOM_PATHS:
+			if near_names.has(room["name"] as String):
+				for neighbor in (room["neighbors"] as Array):
+					var neighbor_name := neighbor as String
+					if not near_names.has(neighbor_name):
+						near_names.append(neighbor_name)
+
+		# Priority 3+: near rooms first
+		for room in MENU_PRELOAD_ROOM_PATHS:
+			if near_names.has(room["name"] as String):
+				_menu_request(room["path"] as String, room["path"].get_file())
+
+		# Priority last: distant rooms
+		for room in MENU_PRELOAD_ROOM_PATHS:
+			if not near_names.has(room["name"] as String):
+				_menu_request(room["path"] as String, room["path"].get_file())
+
+
+func _find_nearest_menu_room_path(from_xz: Vector2) -> String:
+	var best_path := ""
+	var best_dist := INF
 	for room in MENU_PRELOAD_ROOM_PATHS:
-		var room_name := room["name"] as String
-		if not near_names.has(room_name):
-			continue
-		var scene_path := room["path"] as String
-		var err := ResourceLoader.load_threaded_request(scene_path)
-		if err != OK and err != ERR_BUSY:
-			push_warning("Menu room preload failed: %s (err=%d)" % [scene_path, err])
+		var dist := from_xz.distance_to(room["center"] as Vector2)
+		if dist < best_dist:
+			best_dist = dist
+			best_path = room["path"] as String
+	return best_path
 
 
 func _get_menu_predicted_player_start_xz() -> Vector2:

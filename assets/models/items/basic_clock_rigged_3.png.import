@@ -3,9 +3,11 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://gwdbqw8yasa4"
-path="res://.godot/imported/basic_clock_rigged_3.png-f603cbe552585514c47907dd60b74a12.ctex"
+path.s3tc="res://.godot/imported/basic_clock_rigged_3.png-f603cbe552585514c47907dd60b74a12.s3tc.ctex"
+path.etc2="res://.godot/imported/basic_clock_rigged_3.png-f603cbe552585514c47907dd60b74a12.etc2.ctex"
 metadata={
-"vram_texture": false
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
+"vram_texture": true
 }
 generator_parameters={
 "md5": "312d1371fc1f388ba2903dee4c0c56c4"
@@ -14,11 +16,11 @@ generator_parameters={
 [deps]
 
 source_file="res://assets/models/items/basic_clock_rigged_3.png"
-dest_files=["res://.godot/imported/basic_clock_rigged_3.png-f603cbe552585514c47907dd60b74a12.ctex"]
+dest_files=["res://.godot/imported/basic_clock_rigged_3.png-f603cbe552585514c47907dd60b74a12.s3tc.ctex", "res://.godot/imported/basic_clock_rigged_3.png-f603cbe552585514c47907dd60b74a12.etc2.ctex"]
 
 [params]
 
-compress/mode=0
+compress/mode=2
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/uastc_level=0

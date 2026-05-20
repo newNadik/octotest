@@ -138,11 +138,14 @@ var _stream_load_start_times: Dictionary = {}
 var _stream_update_accum := 0.0
 var _room_nav_regions: Dictionary = {}
 var _player_current_room: String = ""
+var _is_new_game: bool = false
+var _new_game_priority_room: String = ""
 var _fps_label_update_accum := 0.0
 var _exit_code := 0
 
 
 func _ready() -> void:
+	print("[Main] _ready at %s (t=%dms)" % [Time.get_time_string_from_system(), Time.get_ticks_msec()])
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	in_game_menu.process_mode = Node.PROCESS_MODE_WHEN_PAUSED
 	player.process_mode = Node.PROCESS_MODE_PAUSABLE
@@ -150,6 +153,7 @@ func _ready() -> void:
 	_apply_platform_visual_overrides()
 	var starting_position := Vector3(5.0, OCTO_START_Y, -26.0)
 	var is_loading_saved_game := _consume_pending_load_request()
+	_is_new_game = not is_loading_saved_game
 	if is_loading_saved_game:
 		_loaded_save_data = _load_saved_game()
 		starting_position = _extract_player_position(_loaded_save_data, starting_position)
@@ -318,19 +322,34 @@ func _initialize_room_streaming() -> void:
 	var start_pos := player.global_position
 
 
-	# Determine which rooms are near (by distance or always-keep), then expand with neighbors.
+	# Determine which rooms to sync-load.
+	# New game: only the single nearest room (the one the player is standing in).
+	# Continue: all rooms within INITIAL_LOAD_RADIUS, always-keep rooms, and their neighbors.
 	var near_rooms: Array[String] = []
-	for room_name in _stream_rooms.keys():
-		var room_data: Dictionary = _stream_rooms[room_name]
-		if room_data.get("deferred", false):
-			continue
-		var dist := start_pos.distance_to(room_data["center"] as Vector3)
-		if room_names_to_always_keep.has(String(room_name)) or dist <= INITIAL_LOAD_RADIUS:
-			near_rooms.append(String(room_name))
-	for room_name in near_rooms.duplicate():
-		for neighbor in (_stream_rooms[room_name]["neighbors"] as Array):
-			if not near_rooms.has(String(neighbor)):
-				near_rooms.append(String(neighbor))
+	if _is_new_game:
+		# Find the nearest room and load it first with exclusive thread access.
+		# All other rooms start only after it finishes (see _apply_room_streaming).
+		var nearest_dist := INF
+		for room_name in _stream_rooms.keys():
+			var room_data: Dictionary = _stream_rooms[room_name]
+			if room_data.get("deferred", false):
+				continue
+			var dist := start_pos.distance_to(room_data["center"] as Vector3)
+			if dist < nearest_dist:
+				nearest_dist = dist
+				_new_game_priority_room = room_name
+	else:
+		for room_name in _stream_rooms.keys():
+			var room_data: Dictionary = _stream_rooms[room_name]
+			if room_data.get("deferred", false):
+				continue
+			var dist := start_pos.distance_to(room_data["center"] as Vector3)
+			if room_names_to_always_keep.has(String(room_name)) or dist <= INITIAL_LOAD_RADIUS:
+				near_rooms.append(String(room_name))
+		for room_name in near_rooms.duplicate():
+			for neighbor in (_stream_rooms[room_name]["neighbors"] as Array):
+				if not near_rooms.has(String(neighbor)):
+					near_rooms.append(String(neighbor))
 
 	for room_name in _stream_rooms.keys():
 		var room_data: Dictionary = _stream_rooms[room_name]
@@ -343,6 +362,9 @@ func _initialize_room_streaming() -> void:
 			print("[RoomStream] Near (dist=%.1f, %s), sync-loading: %s" % [dist, near_reason, room_name])
 			_load_room_now(room_name)
 		else:
+			# For new game, only queue the priority room now — others start after it finishes.
+			if _is_new_game and room_name != _new_game_priority_room:
+				continue
 			print("[RoomStream] Far  (dist=%.1f), async-loading: %s" % [dist, room_name])
 			var scene_path := String(room_data["scene_path"])
 			if not _stream_pending_loads.has(room_name):
@@ -584,6 +606,12 @@ func _apply_room_light_cull_mask_recursive(node: Node, light_mask: int) -> void:
 func _apply_room_streaming() -> void:
 	if _stream_station_root == null:
 		return
+	if _new_game_priority_room != "":
+		var priority_data: Dictionary = _stream_rooms.get(_new_game_priority_room, {})
+		if not is_instance_valid(priority_data.get("node") as Node):
+			return
+		print("[RoomStream] Priority room '%s' ready, starting all other rooms" % _new_game_priority_room)
+		_new_game_priority_room = ""
 	var detected_room := _detect_player_room()
 	if detected_room != _player_current_room:
 		print("[RoomStream] Player room: %s → %s" % [_player_current_room if _player_current_room != "" else "none", detected_room])

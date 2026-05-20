@@ -3,9 +3,11 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://l4xfvmxg7cke"
-path="res://.godot/imported/experience_the_3d_ar_backpack_3.png-2ab179e09bd931a1161e009b78b5139e.ctex"
+path.s3tc="res://.godot/imported/experience_the_3d_ar_backpack_3.png-2ab179e09bd931a1161e009b78b5139e.s3tc.ctex"
+path.etc2="res://.godot/imported/experience_the_3d_ar_backpack_3.png-2ab179e09bd931a1161e009b78b5139e.etc2.ctex"
 metadata={
-"vram_texture": false
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
+"vram_texture": true
 }
 generator_parameters={
 "md5": "d479fe85533a26f709dfee83d13ed8f1"
@@ -14,11 +16,11 @@ generator_parameters={
 [deps]
 
 source_file="res://assets/models/items/quarters/experience_the_3d_ar_backpack_3.png"
-dest_files=["res://.godot/imported/experience_the_3d_ar_backpack_3.png-2ab179e09bd931a1161e009b78b5139e.ctex"]
+dest_files=["res://.godot/imported/experience_the_3d_ar_backpack_3.png-2ab179e09bd931a1161e009b78b5139e.s3tc.ctex", "res://.godot/imported/experience_the_3d_ar_backpack_3.png-2ab179e09bd931a1161e009b78b5139e.etc2.ctex"]
 
 [params]
 
-compress/mode=0
+compress/mode=2
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/uastc_level=0

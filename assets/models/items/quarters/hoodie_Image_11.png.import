@@ -3,9 +3,11 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://dy7w5q58kvqyr"
-path="res://.godot/imported/hoodie_Image_11.png-049cd6d002b5012caabef215f98d828b.ctex"
+path.s3tc="res://.godot/imported/hoodie_Image_11.png-049cd6d002b5012caabef215f98d828b.s3tc.ctex"
+path.etc2="res://.godot/imported/hoodie_Image_11.png-049cd6d002b5012caabef215f98d828b.etc2.ctex"
 metadata={
-"vram_texture": false
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
+"vram_texture": true
 }
 generator_parameters={
 "md5": "2fdd6851b32ae931637d4845c037b550"
@@ -14,11 +16,11 @@ generator_parameters={
 [deps]
 
 source_file="res://assets/models/items/quarters/hoodie_Image_11.png"
-dest_files=["res://.godot/imported/hoodie_Image_11.png-049cd6d002b5012caabef215f98d828b.ctex"]
+dest_files=["res://.godot/imported/hoodie_Image_11.png-049cd6d002b5012caabef215f98d828b.s3tc.ctex", "res://.godot/imported/hoodie_Image_11.png-049cd6d002b5012caabef215f98d828b.etc2.ctex"]
 
 [params]
 
-compress/mode=0
+compress/mode=2
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/uastc_level=0

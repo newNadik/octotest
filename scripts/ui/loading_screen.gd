@@ -12,7 +12,7 @@ const UI_MAX_DELTA := 0.05
 # value in main.gd. Rooms outside this radius are loaded async at runtime.
 const INITIAL_LOAD_RADIUS := 20.0
 # Default XZ for a fresh game. Overridden by save data when continuing.
-const NEW_GAME_START_XZ := Vector2(0.0, 16.0)
+const NEW_GAME_START_XZ := Vector2(5.0, -26.0)
 const ROOM_PATHS: Array[Dictionary] = [
 	{"name": "atrium",     "path": "res://scenes/station/atrium_room.tscn",     "center": Vector2(0.93,  28.47), "neighbors": ["workshop", "chem_lab"]},
 	{"name": "chem_lab",   "path": "res://scenes/station/chem_lab_room.tscn",   "center": Vector2(11.72, -7.54),  "neighbors": ["atrium"]},
@@ -28,17 +28,29 @@ const ROOM_PATHS: Array[Dictionary] = [
 
 var _transition_started := false
 var _pending_loads: Array[String] = []
+var _pending_load_enqueue_ms: Dictionary = {}
 var _target_progress := 0.0
 var _display_progress := 0.0
+var _t0: int = 0
+var _logged_completed: Array[String] = []
+# New game loads in two sequential phases to avoid thread competition:
+# phase 0 = main.tscn, phase 1 = priority room (office), then transition.
+var _phase := 0
+var _new_game_priority_path := ""
+
+
+func _ms() -> String:
+	return "[%s +%dms]" % [Time.get_time_string_from_system(), Time.get_ticks_msec() - _t0]
 
 
 func _ready() -> void:
+	_t0 = Time.get_ticks_msec()
 	if progress_bar != null:
 		progress_bar.min_value = 0.0
 		progress_bar.max_value = 100.0
 		progress_bar.value = 0.0
 
-	# Main scene loads with sub-threads so its own deps (player, UI, etc.) come in parallel.
+	print("[LoadingScreen] %s Started, requesting main scene" % _ms())
 	var err := ResourceLoader.load_threaded_request(GAME_SCENE_PATH, "", true)
 	if err != OK and err != ERR_BUSY:
 		push_error("Failed to start threaded load for game scene: %s" % GAME_SCENE_PATH)
@@ -46,35 +58,37 @@ func _ready() -> void:
 		return
 	_pending_loads.append(GAME_SCENE_PATH)
 
-	# Kick off threaded loads for rooms near the player start position,
-	# plus any rooms that share geometry with a near room (neighbors).
 	var player_start_xz := _get_player_start_xz()
-	print("[LoadingScreen] Player start XZ: ", player_start_xz)
+	var is_new_game := _is_new_game()
 
-	var near_names: Array[String] = []
-	for room in ROOM_PATHS:
-		if player_start_xz.distance_to(room["center"] as Vector2) <= INITIAL_LOAD_RADIUS:
-			near_names.append(room["name"] as String)
-	for room in ROOM_PATHS:
-		if near_names.has(room["name"] as String):
-			for neighbor in (room["neighbors"] as Array):
-				if not near_names.has(neighbor as String):
-					near_names.append(neighbor as String)
+	if is_new_game:
+		# Phase 0: main.tscn only. Phase 1 will load the priority room after.
+		_new_game_priority_path = _find_nearest_room_path(player_start_xz)
+		print("[LoadingScreen] %s New game — phase 0: main scene, phase 1: %s" % [_ms(), _new_game_priority_path.get_file()])
+	else:
+		var near_names: Array[String] = []
+		for room in ROOM_PATHS:
+			if player_start_xz.distance_to(room["center"] as Vector2) <= INITIAL_LOAD_RADIUS:
+				near_names.append(room["name"] as String)
+		for room in ROOM_PATHS:
+			if near_names.has(room["name"] as String):
+				for neighbor in (room["neighbors"] as Array):
+					if not near_names.has(neighbor as String):
+						near_names.append(neighbor as String)
+		for room in ROOM_PATHS:
+			var room_name := room["name"] as String
+			var dist := player_start_xz.distance_to(room["center"] as Vector2)
+			var path: String = room["path"]
+			if near_names.has(room_name):
+				print("[LoadingScreen] %s Preloading room (dist=%.1f): %s" % [_ms(), dist, room_name])
+				var room_err := ResourceLoader.load_threaded_request(path)
+				if room_err == OK or room_err == ERR_BUSY:
+					_pending_loads.append(path)
+			else:
+				print("[LoadingScreen] %s Background room (dist=%.1f): %s" % [_ms(), dist, room_name])
+				ResourceLoader.load_threaded_request(path)
 
-	for room in ROOM_PATHS:
-		var room_name := room["name"] as String
-		var dist := player_start_xz.distance_to(room["center"] as Vector2)
-		var path: String = room["path"]
-		if near_names.has(room_name):
-			print("[LoadingScreen] Preloading room (dist=%.1f): " % dist, room_name)
-			var room_err := ResourceLoader.load_threaded_request(path)
-			if room_err == OK or room_err == ERR_BUSY:
-				_pending_loads.append(path)
-		else:
-			# Start loading but don't gate transition on it — gives far rooms a head start.
-			print("[LoadingScreen] Background room (dist=%.1f): " % dist, room_name)
-			ResourceLoader.load_threaded_request(path)
-
+	print("[LoadingScreen] %s Phase %d queued, waiting for %d loads" % [_ms(), _phase, _pending_loads.size()])
 	set_process(true)
 
 
@@ -97,6 +111,11 @@ func _process(delta: float) -> void:
 			ResourceLoader.THREAD_LOAD_LOADED:
 				progress_sum += 1.0
 				completed += 1
+				if not _logged_completed.has(path):
+					_logged_completed.append(path)
+					var elapsed_ms: int = Time.get_ticks_msec() - _t0
+					var cache_hint := " (cached)" if elapsed_ms < 500 else ""
+					print("[LoadingScreen] %s Done%s: %s" % [_ms(), cache_hint, path.get_file()])
 			_:
 				any_failed = true
 
@@ -122,15 +141,34 @@ func _process(delta: float) -> void:
 		progress_bar.value = _display_progress
 
 	if all_done:
-		_target_progress = 100.0
-		_display_progress = 100.0
-		if progress_bar != null:
-			progress_bar.value = 100.0
+		if _phase == 0 and _new_game_priority_path != "":
+			_start_phase_1()
+		else:
+			_target_progress = 100.0
+			_display_progress = 100.0
+			if progress_bar != null:
+				progress_bar.value = 100.0
+			_transition_to_loaded_scene()
+
+
+func _start_phase_1() -> void:
+	_phase = 1
+	_pending_loads.clear()
+	_logged_completed.clear()
+	_target_progress = 0.0
+	_display_progress = 0.0
+	print("[LoadingScreen] %s Phase 1: loading priority room %s" % [_ms(), _new_game_priority_path.get_file()])
+	var err := ResourceLoader.load_threaded_request(_new_game_priority_path)
+	if err == OK or err == ERR_BUSY:
+		_pending_loads.append(_new_game_priority_path)
+	else:
+		push_error("Failed to start priority room load: %s" % _new_game_priority_path)
 		_transition_to_loaded_scene()
 
 
 func _transition_to_loaded_scene() -> void:
 	_transition_started = true
+	print("[LoadingScreen] %s All done, transitioning to game scene" % _ms())
 	var packed_scene := ResourceLoader.load_threaded_get(GAME_SCENE_PATH) as PackedScene
 	if packed_scene == null:
 		push_error("Threaded load completed but returned null scene: %s" % GAME_SCENE_PATH)
@@ -140,6 +178,22 @@ func _transition_to_loaded_scene() -> void:
 	if error != OK:
 		push_error("Failed to change to loaded game scene: %s" % GAME_SCENE_PATH)
 		_change_to_game_scene_directly()
+
+
+func _find_nearest_room_path(from_xz: Vector2) -> String:
+	var best_path := ""
+	var best_dist := INF
+	for room in ROOM_PATHS:
+		var dist := from_xz.distance_to(room["center"] as Vector2)
+		if dist < best_dist:
+			best_dist = dist
+			best_path = room["path"] as String
+	return best_path
+
+
+func _is_new_game() -> bool:
+	var game_save := get_node_or_null("/root/GameSave")
+	return game_save == null or not bool(game_save.call("has_save"))
 
 
 func _get_player_start_xz() -> Vector2:

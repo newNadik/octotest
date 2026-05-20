@@ -9,6 +9,7 @@
 [ext_resource type="PackedScene" uid="uid://b18qdk7b4q77l" path="res://scenes/station/interior/desk.tscn" id="7_eujpg"]
 [ext_resource type="Material" uid="uid://bb4hx1vyakkmf" path="res://assets/materials/plaster.tres" id="8_eujpg"]
 [ext_resource type="PackedScene" uid="uid://b21bahphpnv3o" path="res://scenes/station/items/computer.tscn" id="9_t6hbe"]
+[ext_resource type="PackedScene" uid="uid://d0tq5lhvb74vc" path="res://scenes/station/interior/cctv_cam.tscn" id="10_evvo8"]
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_7thus"]
 resource_name = "atrium_Plane_124"
@@ -143,3 +144,6 @@ shape = SubResource("BoxShape3D_eujpg")
 
 [node name="computer" parent="." unique_id=1576113446 instance=ExtResource("9_t6hbe")]
 transform = Transform3D(0.19111733, 0, -0.9815672, 0, 1, 0, 0.9815672, 0, 0.19111733, -16.598724, 1.481719, 20.581816)
+
+[node name="CCTV_cam" parent="." unique_id=888049353 instance=ExtResource("10_evvo8")]
+transform = Transform3D(-1, 0, -1.509958e-07, 0, 1, 0, -1.509958e-07, 0, 1, -16.392525, 5.6876726, 18.80531)

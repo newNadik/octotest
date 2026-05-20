@@ -349,7 +349,7 @@ transform = Transform3D(-0.9225786, -0.049012296, -0.38268346, -0.053050525, 0.9
 light_bake_mode = 1
 shadow_enabled = true
 shadow_opacity = 0.8
-omni_range = 12.237898
+omni_range = 13.0
 omni_attenuation = 0.0
 
 [node name="CausticRig" parent="lights" unique_id=7604608 instance=ExtResource("10_tada6")]
@@ -414,5 +414,5 @@ transform = Transform3D(0.7232444, 0, 0.69059217, 0, 1, 0, -0.69059217, 0, 0.723
 [node name="shelf_papers_3" parent="items" unique_id=2000830835 instance=ExtResource("32_hhyee")]
 transform = Transform3D(0.73583716, 0, 0.67715853, 0, 1, 0, -0.67715853, 0, 0.73583716, 13.577756, 0.021473646, -26.97951)
 
-[node name="documents002" parent="." unique_id=367064636 instance=ExtResource("33_2mi6d")]
+[node name="documents002" parent="items" unique_id=367064636 instance=ExtResource("33_2mi6d")]
 transform = Transform3D(0.46032375, 0, 0.8877511, 0, 1, 0, -0.8877511, 0, 0.46032375, 15.583164, 1.4738951, -24.876055)

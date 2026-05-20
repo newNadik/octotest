@@ -4,6 +4,8 @@
 [ext_resource type="Material" uid="uid://b1a0xbuetfwpo" path="res://assets/materials/concrete.tres" id="1_ijnmb"]
 [ext_resource type="PackedScene" uid="uid://blnrijpl108tk" path="res://scenes/station/interior/window_double.tscn" id="1_vvece"]
 [ext_resource type="PackedScene" uid="uid://crrm51jmovvon" path="res://scenes/station/interior/door_double.tscn" id="2_ecqnk"]
+[ext_resource type="PackedScene" uid="uid://dgmsnuddjuti1" path="res://scenes/station/interior/medbay.tscn" id="2_n6hy7"]
+[ext_resource type="PackedScene" uid="uid://7cj558a18isn" path="res://scenes/station/interior/wc.tscn" id="3_db0oj"]
 [ext_resource type="PackedScene" uid="uid://daxvawcm2f6v1" path="res://scenes/station/interior/door_single.tscn" id="3_wctxe"]
 [ext_resource type="Material" uid="uid://bb4hx1vyakkmf" path="res://assets/materials/plaster.tres" id="5_xg0bo"]
 [ext_resource type="Material" uid="uid://bm05hnbasm1cg" path="res://assets/materials/glass.tres" id="6_hnfiw"]
@@ -17,23 +19,9 @@
 [ext_resource type="PackedScene" uid="uid://c5tv72lyq8d8h" path="res://scenes/effects/caustic_rig.tscn" id="11_fy6p5"]
 [ext_resource type="PackedScene" uid="uid://cxtcm4i75e1pb" path="res://scenes/interactables/cardreader.tscn" id="12_fnwcc"]
 [ext_resource type="PackedScene" uid="uid://bwx4cmp7n3qhv" path="res://scenes/interactables/document_item.tscn" id="14_db0oj"]
-[ext_resource type="PackedScene" uid="uid://b7vnunwlus20w" path="res://scenes/station/interior/toilet.tscn" id="14_hefio"]
-[ext_resource type="PackedScene" uid="uid://b18qdk7b4q77l" path="res://scenes/station/interior/desk.tscn" id="15_mpvso"]
-[ext_resource type="Texture2D" uid="uid://cqn51jxe4ghf7" path="res://assets/textures/documents/ALS-FA-poster-workplace-v3.png" id="15_yjx6n"]
 [ext_resource type="PackedScene" uid="uid://cro6qqaafsit1" path="res://scenes/station/interior/shower.tscn" id="16_2ysy5"]
-[ext_resource type="PackedScene" uid="uid://can7o07havaxf" path="res://scenes/station/interior/wet_floor_sign.tscn" id="16_o6nh8"]
-[ext_resource type="Texture2D" uid="uid://bpr834g84skbc" path="res://assets/textures/documents/ALS-FA-poster-resus-adult-v3.png" id="16_t581r"]
-[ext_resource type="PackedScene" uid="uid://bqfmosbr5347w" path="res://scenes/station/interior/bunk_bed.tscn" id="17_2ysy5"]
 [ext_resource type="PackedScene" uid="uid://bnjtpm8pe61ap" path="res://scenes/station/items/light_sign.tscn" id="17_k4tdq"]
-[ext_resource type="Texture2D" uid="uid://6btwl45px64n" path="res://assets/textures/documents/ALS-FA-poster-aed-cpr-v3.png" id="17_vecpw"]
-[ext_resource type="PackedScene" uid="uid://dru35iaiah18i" path="res://scenes/station/interior/standing_courtains.tscn" id="18_i2ypu"]
-[ext_resource type="Texture2D" uid="uid://b5c5wdqiwtuyx" path="res://assets/models/items/first_aid/WC_sign.png" id="18_jt052"]
-[ext_resource type="PackedScene" uid="uid://cdw2saup0bxdx" path="res://scenes/station/interior/med_monitor.tscn" id="20_46ahj"]
-[ext_resource type="PackedScene" uid="uid://d3h1lk5hh0c60" path="res://scenes/station/interior/cabinet_low.tscn" id="20_h502i"]
-[ext_resource type="PackedScene" uid="uid://vwo7teuwrwl8" path="res://scenes/station/interior/cabinet_low_sink.tscn" id="21_i3dbr"]
 [ext_resource type="PackedScene" uid="uid://dac1j07k7sd70" path="res://scenes/station/interior/bench.tscn" id="23_7do4q"]
-[ext_resource type="PackedScene" uid="uid://b21bahphpnv3o" path="res://scenes/station/items/computer.tscn" id="23_bq35r"]
-[ext_resource type="PackedScene" uid="uid://fp5yhak7qv5v" path="res://scenes/station/items/stethoscope.tscn" id="24_t1a77"]
 [ext_resource type="PackedScene" uid="uid://lnt7a3iskajx" path="res://scenes/station/interior/amphitheater.tscn" id="26_fan24"]
 [ext_resource type="PackedScene" uid="uid://wxpj00rcd3mq" path="res://scenes/station/interior/trash_bin.tscn" id="26_np73v"]
 [ext_resource type="PackedScene" uid="uid://cofo0vasii446" path="res://scenes/station/items/mug.tscn" id="26_wmtnf"]
@@ -54,7 +42,6 @@
 [ext_resource type="FontFile" uid="uid://dtpeeh64d7x6b" path="res://assets/ui/OpenSans-Semibold.ttf" id="47_fnwcc"]
 [ext_resource type="PackedScene" uid="uid://cd8rc4e3iadac" path="res://scenes/station/items/sketchbook.tscn" id="48_fnwcc"]
 [ext_resource type="PackedScene" uid="uid://b3d8p8ww4xd88" path="res://scenes/station/items/gloves_pack.tscn" id="49_3mkx7"]
-[ext_resource type="PackedScene" uid="uid://vndshl03h2xa" path="res://assets/models/items/uk_automated_external_defibrillator.glb" id="50_r6uhx"]
 [ext_resource type="Texture2D" uid="uid://bi4oqhm4gh7v1" path="res://assets/textures/documents/movie_night.png" id="54_nt25k"]
 [ext_resource type="Texture2D" uid="uid://dqnbi727utug3" path="res://assets/textures/documents/movie_night_ua.png" id="55_mejxt"]
 [ext_resource type="Texture2D" uid="uid://7bq1q7d6i6re" path="res://assets/textures/documents/report_leaks.png" id="56_tlm25"]
@@ -65,7 +52,7 @@
 [ext_resource type="Texture2D" uid="uid://dp6ow325htonq" path="res://assets/textures/documents/drill_ua.png" id="59_to3ye"]
 [ext_resource type="Texture2D" uid="uid://d2slxkqby801l" path="res://assets/textures/documents/emergency_eng.png" id="60_oekay"]
 [ext_resource type="Texture2D" uid="uid://erit634s7r35" path="res://assets/textures/documents/emergency_UA.png" id="61_vif5o"]
-[ext_resource type="Material" path="res://assets/materials/plaster_mobile.tres" id="64_0prb1"]
+[ext_resource type="Material" uid="uid://dheq8sqlq1mpt" path="res://assets/materials/plaster_mobile.tres" id="64_0prb1"]
 [ext_resource type="Material" uid="uid://bcdbcoirawpmg" path="res://assets/materials/plain_white.tres" id="64_to3ye"]
 
 [sub_resource type="NavigationMesh" id="NavigationMesh_7lava"]
@@ -865,237 +852,167 @@ shadow_mesh = SubResource("ArrayMesh_qhtaw")
 [node name="NavigationRegion3D" type="NavigationRegion3D" parent="." unique_id=930742099]
 navigation_mesh = SubResource("NavigationMesh_7lava")
 
-[node name="rooms" type="Node3D" parent="NavigationRegion3D" unique_id=1967129213]
+[node name="furniture" type="Node3D" parent="NavigationRegion3D" unique_id=1967129213]
 
-[node name="shower" parent="NavigationRegion3D/rooms" unique_id=1680803147 instance=ExtResource("16_2ysy5")]
+[node name="shower" parent="NavigationRegion3D/furniture" unique_id=1680803147 instance=ExtResource("16_2ysy5")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -17.468838, 0.09971724, -8.133447)
 
-[node name="medbay" type="Node3D" parent="NavigationRegion3D/rooms" unique_id=272159100]
+[node name="medbay" parent="NavigationRegion3D/furniture" unique_id=495759886 instance=ExtResource("2_n6hy7")]
 
-[node name="DocumentItem" parent="NavigationRegion3D/rooms/medbay" unique_id=-1447463677 instance=ExtResource("14_db0oj")]
-transform = Transform3D(-0.9997951, 0, 0.02024432, 0, 1, 0, -0.02024432, 0, -0.9997951, -12.567, 3.5, -4.706)
-document_size = 1
-document_texture = ExtResource("15_yjx6n")
-document_texture_ua = ExtResource("15_yjx6n")
-interactable_enabled = false
+[node name="WC" parent="NavigationRegion3D/furniture" unique_id=1515462083 instance=ExtResource("3_db0oj")]
 
-[node name="DocumentItem2" parent="NavigationRegion3D/rooms/medbay" unique_id=567468882 instance=ExtResource("14_db0oj")]
-transform = Transform3D(-0.70710665, 0, -0.70710665, 0, 1, 0, 0.70710665, 0, -0.70710665, -9.78035, 3.5, -5.7300596)
-document_size = 1
-document_texture = ExtResource("16_t581r")
-document_texture_ua = ExtResource("16_t581r")
-interactable_enabled = false
+[node name="attrium" type="Node3D" parent="NavigationRegion3D/furniture" unique_id=222971945]
 
-[node name="DocumentItem3" parent="NavigationRegion3D/rooms/medbay" unique_id=1416189345 instance=ExtResource("14_db0oj")]
-transform = Transform3D(0.9999997, 0, 0, 0, 1, 0, 0, 0, 0.9999997, -9.371946, 3.5, -9.752626)
-document_size = 1
-document_texture = ExtResource("17_vecpw")
-document_texture_ua = ExtResource("17_vecpw")
-interactable_enabled = false
-
-[node name="Sketchfab_Scene" parent="NavigationRegion3D/rooms/medbay" unique_id=494877261 instance=ExtResource("50_r6uhx")]
-transform = Transform3D(-7.4309364e-10, 0, -0.017, 0, 0.017, 0, 0.017, 0, -7.4309364e-10, -11.526186, 2.0595434, -9.691129)
-
-[node name="clock" parent="NavigationRegion3D/rooms/medbay" unique_id=605620393 instance=ExtResource("27_i5gpl")]
-transform = Transform3D(-0.70710677, 0, 0.70710677, 0, 1, 0, -0.70710677, 0, -0.70710677, -8.163929, 5.5, -7.3273926)
-
-[node name="chair" parent="NavigationRegion3D/rooms/medbay" unique_id=1571566799 instance=ExtResource("8_mpvso")]
-transform = Transform3D(-0.96351373, 0, -0.2676589, 0, 1, 0, 0.2676589, 0, -0.96351373, -11.259848, 9.512901e-05, -5.6018605)
-
-[node name="bunk_bed" parent="NavigationRegion3D/rooms/medbay" unique_id=821623441 instance=ExtResource("17_2ysy5")]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -14.533467, -2, -6.701037)
-
-[node name="desk" parent="NavigationRegion3D/rooms/medbay" unique_id=360776120 instance=ExtResource("15_mpvso")]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -11.112165, 5.1589575e-07, -6.8285265)
-
-[node name="standing_courtains" parent="NavigationRegion3D/rooms/medbay" unique_id=1442172337 instance=ExtResource("18_i2ypu")]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -13.409536, 0, -5.72916)
-
-[node name="standing_courtains2" parent="NavigationRegion3D/rooms/medbay" unique_id=156913537 instance=ExtResource("18_i2ypu")]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -13.482237, 0, -7.69268)
-
-[node name="fire_extinguisher" parent="NavigationRegion3D/rooms/medbay" unique_id=1012721613 instance=ExtResource("8_j5434")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.967724, 0, -9.474988)
-
-[node name="cabinet_low" parent="NavigationRegion3D/rooms/medbay" unique_id=671800329 instance=ExtResource("20_h502i")]
-transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -8.658228, 0.004095316, -9.6991625)
-
-[node name="cabinet_low_sink" parent="NavigationRegion3D/rooms/medbay" unique_id=652285014 instance=ExtResource("21_i3dbr")]
-transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -10.121143, 0.004095316, -9.691511)
-
-[node name="med_monitor" parent="NavigationRegion3D/rooms/medbay" unique_id=72819634 instance=ExtResource("20_46ahj")]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -14.844794, 0.0015605235, -9.098691)
-
-[node name="computer" parent="NavigationRegion3D/rooms/medbay" unique_id=1576113446 instance=ExtResource("23_bq35r")]
-transform = Transform3D(0.95735985, 0, -0.2888981, 0, 1, 0, 0.2888981, 0, 0.95735985, -10.55065, 1.482, -7.5644755)
-
-[node name="stethoscope" parent="NavigationRegion3D/rooms/medbay" unique_id=51356367 instance=ExtResource("24_t1a77")]
-transform = Transform3D(-0.5557878, 0, 0.83132416, 0, 1, 0, -0.83132416, 0, -0.5557878, -11.886675, 1.5916116, -7.387905)
-
-[node name="WC" type="Node3D" parent="NavigationRegion3D/rooms" unique_id=234633914]
-
-[node name="light_sign" parent="NavigationRegion3D/rooms/WC" unique_id=2033543759 instance=ExtResource("17_k4tdq")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.798, 4, 18.817682)
-sign_texture = ExtResource("18_jt052")
-
-[node name="Node3D" parent="NavigationRegion3D/rooms/WC" unique_id=2117090278 instance=ExtResource("14_hefio")]
-transform = Transform3D(-5.2453668e-08, 0, -1.2, 0, 1.2, 0, 1.2, 0, -5.2453668e-08, 7.002975, 0, 10.765328)
-
-[node name="wt_floor_sign" parent="NavigationRegion3D/rooms/WC" unique_id=1207511351 instance=ExtResource("16_o6nh8")]
-transform = Transform3D(0.8835369, 0, -0.46836165, 0, 1, 0, 0.46836165, 0, 0.8835369, 5.5680075, 0.013957152, 15.300981)
-
-[node name="attrium" type="Node3D" parent="NavigationRegion3D/rooms" unique_id=222971945]
-
-[node name="trash_bin3" parent="NavigationRegion3D/rooms/attrium" unique_id=188497815 instance=ExtResource("26_np73v")]
+[node name="trash_bin3" parent="NavigationRegion3D/furniture/attrium" unique_id=188497815 instance=ExtResource("26_np73v")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.259486, 0, 8.667719)
 
-[node name="trash_bin4" parent="NavigationRegion3D/rooms/attrium" unique_id=1277110760 instance=ExtResource("26_np73v")]
+[node name="trash_bin4" parent="NavigationRegion3D/furniture/attrium" unique_id=1277110760 instance=ExtResource("26_np73v")]
 transform = Transform3D(0.68921494, 0, 0.7245569, 0, 1, 0, -0.7245569, 0, 0.68921494, 6.356765, 0, -5.719739)
 
-[node name="bench" parent="NavigationRegion3D/rooms/attrium" unique_id=1550511523 instance=ExtResource("23_7do4q")]
+[node name="bench" parent="NavigationRegion3D/furniture/attrium" unique_id=1550511523 instance=ExtResource("23_7do4q")]
 transform = Transform3D(0.70710677, 0, 0.70710677, 0, 1, 0, -0.70710677, 0, 0.70710677, 4.9358644, 0, 6.996668)
 
-[node name="bench3" parent="NavigationRegion3D/rooms/attrium" unique_id=1058256234 instance=ExtResource("23_7do4q")]
+[node name="bench3" parent="NavigationRegion3D/furniture/attrium" unique_id=1058256234 instance=ExtResource("23_7do4q")]
 transform = Transform3D(0.7071067, 0, -0.7071067, 0, 1, 0, 0.7071067, 0, 0.7071067, 4.9358644, 0, -6.9181004)
 
-[node name="bench2" parent="NavigationRegion3D/rooms/attrium" unique_id=1809215423 instance=ExtResource("23_7do4q")]
+[node name="bench2" parent="NavigationRegion3D/furniture/attrium" unique_id=1809215423 instance=ExtResource("23_7do4q")]
 transform = Transform3D(-4.3711385e-08, 0, 0.99999994, 0, 1, 0, -0.99999994, 0, -4.3711385e-08, 8.285717, 0, -0.0075674057)
 
-[node name="fire_extinguisher" parent="NavigationRegion3D/rooms/attrium" unique_id=461974993 instance=ExtResource("8_j5434")]
+[node name="fire_extinguisher" parent="NavigationRegion3D/furniture/attrium" unique_id=461974993 instance=ExtResource("8_j5434")]
 transform = Transform3D(-0.7071067, 0, -0.7071067, 0, 1, 0, 0.7071067, 0, -0.7071067, 7.903075, 0, 23.351019)
 
-[node name="fire_extinguisher2" parent="NavigationRegion3D/rooms/attrium" unique_id=342596793 instance=ExtResource("8_j5434")]
+[node name="fire_extinguisher2" parent="NavigationRegion3D/furniture/attrium" unique_id=342596793 instance=ExtResource("8_j5434")]
 transform = Transform3D(-0.7071067, 0, -0.7071067, 0, 1, 0, 0.7071067, 0, -0.7071067, -20.528313, 0, 21.365805)
 
-[node name="round_table" parent="NavigationRegion3D/rooms/attrium" unique_id=1429769254 instance=ExtResource("7_3h2sv")]
+[node name="round_table" parent="NavigationRegion3D/furniture/attrium" unique_id=1429769254 instance=ExtResource("7_3h2sv")]
 transform = Transform3D(0.7781555, 0, 0.62807167, 0, 1, 0, -0.62807167, 0, 0.7781555, -28.047573, 0, 0.293719)
 
-[node name="chair" parent="NavigationRegion3D/rooms/attrium" unique_id=1222624819 instance=ExtResource("8_mpvso")]
+[node name="chair" parent="NavigationRegion3D/furniture/attrium" unique_id=1222624819 instance=ExtResource("8_mpvso")]
 transform = Transform3D(0.7781555, 0, 0.62807167, 0, 1, 0, -0.62807167, 0, 0.7781555, -28.927025, 9.512901e-05, -0.6707471)
 
-[node name="chair3" parent="NavigationRegion3D/rooms/attrium" unique_id=1366333274 instance=ExtResource("8_mpvso")]
+[node name="chair3" parent="NavigationRegion3D/furniture/attrium" unique_id=1366333274 instance=ExtResource("8_mpvso")]
 transform = Transform3D(-0.77815545, 0, -0.6280717, 0, 1, 0, 0.6280717, 0, -0.77815545, -27.383793, 9.512901e-05, 1.2412548)
 
-[node name="chair2" parent="NavigationRegion3D/rooms/attrium" unique_id=2117397094 instance=ExtResource("8_mpvso")]
+[node name="chair2" parent="NavigationRegion3D/furniture/attrium" unique_id=2117397094 instance=ExtResource("8_mpvso")]
 transform = Transform3D(0.6280716, 0, -0.7781555, 0, 1, 0, 0.7781555, 0, 0.6280716, -27.011335, 9.512901e-05, -0.48015028)
 
-[node name="round_table2" parent="NavigationRegion3D/rooms/attrium" unique_id=893600434 instance=ExtResource("7_3h2sv")]
+[node name="round_table2" parent="NavigationRegion3D/furniture/attrium" unique_id=893600434 instance=ExtResource("7_3h2sv")]
 transform = Transform3D(0.7370886, 0, 0.6757961, 0, 1, 0, -0.6757961, 0, 0.7370886, -21.810028, 0, -2.00324)
 
-[node name="chair4" parent="NavigationRegion3D/rooms/attrium" unique_id=639150666 instance=ExtResource("8_mpvso")]
+[node name="chair4" parent="NavigationRegion3D/furniture/attrium" unique_id=639150666 instance=ExtResource("8_mpvso")]
 transform = Transform3D(0.7370886, 0, 0.6757961, 0, 1, 0, -0.6757961, 0, 0.7370886, -22.748428, 9.512901e-05, -2.910451)
 
-[node name="chair5" parent="NavigationRegion3D/rooms/attrium" unique_id=885825243 instance=ExtResource("8_mpvso")]
+[node name="chair5" parent="NavigationRegion3D/furniture/attrium" unique_id=885825243 instance=ExtResource("8_mpvso")]
 transform = Transform3D(-0.73708856, 0, -0.67579615, 0, 1, 0, 0.67579615, 0, -0.73708856, -21.087934, 9.512901e-05, -1.0993541)
 
-[node name="chair6" parent="NavigationRegion3D/rooms/attrium" unique_id=1481980175 instance=ExtResource("8_mpvso")]
+[node name="chair6" parent="NavigationRegion3D/furniture/attrium" unique_id=1481980175 instance=ExtResource("8_mpvso")]
 transform = Transform3D(0.67579603, 0, -0.7370886, 0, 1, 0, 0.7370886, 0, 0.67579603, -20.824543, 9.512901e-05, -2.8407857)
 
-[node name="light_sign" parent="NavigationRegion3D/rooms/attrium" unique_id=1790902918 instance=ExtResource("17_k4tdq")]
+[node name="light_sign" parent="NavigationRegion3D/furniture/attrium" unique_id=1790902918 instance=ExtResource("17_k4tdq")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.827, 5.5, 22.404018)
 
-[node name="bench4" parent="NavigationRegion3D/rooms/attrium" unique_id=722592927 instance=ExtResource("23_7do4q")]
+[node name="bench4" parent="NavigationRegion3D/furniture/attrium" unique_id=722592927 instance=ExtResource("23_7do4q")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.359366, 0, -3.2554135)
 
-[node name="bench7" parent="NavigationRegion3D/rooms/attrium" unique_id=763128669 instance=ExtResource("23_7do4q")]
+[node name="bench7" parent="NavigationRegion3D/furniture/attrium" unique_id=763128669 instance=ExtResource("23_7do4q")]
 transform = Transform3D(0.70710677, 0, 0.70710677, 0, 1, 0, -0.70710677, 0, 0.70710677, -8.870218, 0, -4.7948785)
 
-[node name="bench5" parent="NavigationRegion3D/rooms/attrium" unique_id=1661848770 instance=ExtResource("23_7do4q")]
+[node name="bench5" parent="NavigationRegion3D/furniture/attrium" unique_id=1661848770 instance=ExtResource("23_7do4q")]
 transform = Transform3D(0.70710677, 0, -0.70710677, 0, 1, 0, 0.70710677, 0, 0.70710677, -12.856326, 0, 2.6920662)
 
-[node name="bench8" parent="NavigationRegion3D/rooms/attrium" unique_id=1318744111 instance=ExtResource("23_7do4q")]
+[node name="bench8" parent="NavigationRegion3D/furniture/attrium" unique_id=1318744111 instance=ExtResource("23_7do4q")]
 transform = Transform3D(0.70710677, 0, -0.70710677, 0, 1, 0, 0.70710677, 0, 0.70710677, -8.474873, 0, 19.435024)
 
-[node name="clock" parent="NavigationRegion3D/rooms/attrium" unique_id=852658388 instance=ExtResource("27_i5gpl")]
+[node name="clock" parent="NavigationRegion3D/furniture/attrium" unique_id=852658388 instance=ExtResource("27_i5gpl")]
 transform = Transform3D(0.99999976, 0, 0, 0, 1, 0, 0, 0, 0.99999976, -11.868, 5, 7.769)
 
-[node name="trash_bin" parent="NavigationRegion3D/rooms/attrium" unique_id=1256391836 instance=ExtResource("26_np73v")]
+[node name="trash_bin" parent="NavigationRegion3D/furniture/attrium" unique_id=1256391836 instance=ExtResource("26_np73v")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.829338, 0, -3.4754243)
 
-[node name="mug" parent="NavigationRegion3D/rooms/attrium" unique_id=36977870 instance=ExtResource("26_wmtnf")]
+[node name="mug" parent="NavigationRegion3D/furniture/attrium" unique_id=36977870 instance=ExtResource("26_wmtnf")]
 transform = Transform3D(0.9999999, 0, 0, 0, 1, 0, 0, 0, 0.9999999, -18.66425, 0.9640896, 5.0965886)
 
-[node name="mug2" parent="NavigationRegion3D/rooms/attrium" unique_id=1821760355 instance=ExtResource("26_wmtnf")]
+[node name="mug2" parent="NavigationRegion3D/furniture/attrium" unique_id=1821760355 instance=ExtResource("26_wmtnf")]
 transform = Transform3D(0.9999999, 0, 0, 0, 1, 0, 0, 0, 0.9999999, -22.201412, 1.558384, -2.4571445)
 
-[node name="amphitheater" parent="NavigationRegion3D/rooms/attrium" unique_id=1652820508 instance=ExtResource("26_fan24")]
+[node name="amphitheater" parent="NavigationRegion3D/furniture/attrium" unique_id=1652820508 instance=ExtResource("26_fan24")]
 transform = Transform3D(0.99999994, 0, 0, 0, 1, 0, 0, 0, 0.99999994, -14.058354, 0, 5.089758)
 
-[node name="bench6" parent="NavigationRegion3D/rooms/attrium" unique_id=2006705821 instance=ExtResource("23_7do4q")]
+[node name="bench6" parent="NavigationRegion3D/furniture/attrium" unique_id=2006705821 instance=ExtResource("23_7do4q")]
 transform = Transform3D(-4.3711385e-08, 0, 0.99999994, 0, 1, 0, -0.99999994, 0, -4.3711385e-08, -11.120958, 0, 6.9166)
 
-[node name="vanding" parent="NavigationRegion3D/rooms/attrium" unique_id=1134603623 instance=ExtResource("28_arv6u")]
+[node name="vanding" parent="NavigationRegion3D/furniture/attrium" unique_id=1134603623 instance=ExtResource("28_arv6u")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -16.52377, 0, -3.2289684)
 
-[node name="vanding2" parent="NavigationRegion3D/rooms/attrium" unique_id=1142576058 instance=ExtResource("28_arv6u")]
+[node name="vanding2" parent="NavigationRegion3D/furniture/attrium" unique_id=1142576058 instance=ExtResource("28_arv6u")]
 transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -6.1879683, 0, 22.954103)
 
-[node name="CCTV_cam" parent="NavigationRegion3D/rooms/attrium" unique_id=888049353 instance=ExtResource("34_ibub3")]
+[node name="CCTV_cam" parent="NavigationRegion3D/furniture/attrium" unique_id=888049353 instance=ExtResource("34_ibub3")]
 transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 3.1132083, 6.5, 19.055204)
 
-[node name="CCTV_cam2" parent="NavigationRegion3D/rooms/attrium" unique_id=407734395 instance=ExtResource("34_ibub3")]
+[node name="CCTV_cam2" parent="NavigationRegion3D/furniture/attrium" unique_id=407734395 instance=ExtResource("34_ibub3")]
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, 1, 0, 4.371139e-08, -6.9835906, 6, 22.221968)
 
-[node name="Node3D2" parent="NavigationRegion3D/rooms/attrium" unique_id=212926635 instance=ExtResource("31_i2ypu")]
+[node name="Node3D2" parent="NavigationRegion3D/furniture/attrium" unique_id=212926635 instance=ExtResource("31_i2ypu")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.3415089, 7.5711023e-06, 8.718697)
 
-[node name="Node3D6" parent="NavigationRegion3D/rooms/attrium" unique_id=1007198569 instance=ExtResource("31_i2ypu")]
+[node name="Node3D6" parent="NavigationRegion3D/furniture/attrium" unique_id=1007198569 instance=ExtResource("31_i2ypu")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -29.68653, 7.5711023e-06, -3.477569)
 
-[node name="pothos" parent="NavigationRegion3D/rooms/attrium" unique_id=598657276 instance=ExtResource("33_pi2vv")]
+[node name="pothos" parent="NavigationRegion3D/furniture/attrium" unique_id=598657276 instance=ExtResource("33_pi2vv")]
 transform = Transform3D(0.72976863, 0, -0.6836942, 0, 1, 0, 0.6836942, 0, 0.72976863, -17.728733, 1.4058876, 3.6045716)
 
-[node name="Node3D4" parent="NavigationRegion3D/rooms/attrium" unique_id=19005477 instance=ExtResource("34_h502i")]
+[node name="Node3D4" parent="NavigationRegion3D/furniture/attrium" unique_id=19005477 instance=ExtResource("34_h502i")]
 transform = Transform3D(0.83447295, 0, 0.5510489, 0, 1, 0, -0.5510489, 0, 0.83447295, -12.894912, 7.5711023e-06, 10.753297)
 
-[node name="Node3D5" parent="NavigationRegion3D/rooms/attrium" unique_id=682307147 instance=ExtResource("34_h502i")]
+[node name="Node3D5" parent="NavigationRegion3D/furniture/attrium" unique_id=682307147 instance=ExtResource("34_h502i")]
 transform = Transform3D(0.6075976, 0, 0.7942449, 0, 1, 0, -0.7942449, 0, 0.6075976, -4.6235795, 7.5711023e-06, -9.08986)
 
-[node name="trash_bin2" parent="NavigationRegion3D/rooms/attrium" unique_id=953683941 instance=ExtResource("26_np73v")]
+[node name="trash_bin2" parent="NavigationRegion3D/furniture/attrium" unique_id=953683941 instance=ExtResource("26_np73v")]
 transform = Transform3D(-0.7135562, 0, 0.70059806, 0, 1, 0, -0.70059806, 0, -0.7135562, -7.330523, 0, 21.295156)
 
-[node name="CCTV_cam3" parent="NavigationRegion3D/rooms/attrium" unique_id=1784038098 instance=ExtResource("34_ibub3")]
+[node name="CCTV_cam3" parent="NavigationRegion3D/furniture/attrium" unique_id=1784038098 instance=ExtResource("34_ibub3")]
 transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, 1, -10.758007, 8.035594, -3.903729)
 
-[node name="garden" parent="NavigationRegion3D/rooms/attrium" unique_id=679455543 instance=ExtResource("10_vucpf")]
+[node name="garden" parent="NavigationRegion3D/furniture/attrium" unique_id=679455543 instance=ExtResource("10_vucpf")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, -0.11054075, 0)
 
-[node name="Sprite3D4" type="MeshInstance3D" parent="NavigationRegion3D/rooms/attrium" unique_id=1567626379]
+[node name="Sprite3D4" type="MeshInstance3D" parent="NavigationRegion3D/furniture/attrium" unique_id=1567626379]
 transform = Transform3D(1, 0, 4.371139e-08, 4.371139e-08, 1.9106855e-15, -1, 0, 1, 1.9106855e-15, -18.755062, 5.293614, -4.0274987)
 mesh = SubResource("PlaneMesh_vif5o")
 surface_material_override/0 = SubResource("StandardMaterial3D_s6yth")
 
-[node name="Sprite3D" type="MeshInstance3D" parent="NavigationRegion3D/rooms/attrium" unique_id=863653662]
+[node name="Sprite3D" type="MeshInstance3D" parent="NavigationRegion3D/furniture/attrium" unique_id=863653662]
 transform = Transform3D(-0.7071067, 0.7071068, 3.090862e-08, 3.821371e-15, 4.371139e-08, -1, -0.7071068, -0.7071067, -3.090862e-08, -9.227503, 5.044119, 19.950344)
 mesh = SubResource("PlaneMesh_s2486")
 surface_material_override/0 = SubResource("StandardMaterial3D_oucml")
 
-[node name="Sprite3D2" type="MeshInstance3D" parent="NavigationRegion3D/rooms/attrium" unique_id=747851515]
+[node name="Sprite3D2" type="MeshInstance3D" parent="NavigationRegion3D/furniture/attrium" unique_id=747851515]
 transform = Transform3D(-0.7071067, 0.7071067, -3.090862e-08, 0, -4.3711385e-08, -1, -0.7071067, -0.7071067, 3.090862e-08, -13.880108, 5.8208165, 2.7572122)
 mesh = SubResource("PlaneMesh_1l4lo")
 surface_material_override/0 = SubResource("StandardMaterial3D_euauw")
 
-[node name="Sprite3D3" type="MeshInstance3D" parent="NavigationRegion3D/rooms/attrium" unique_id=1442996780]
+[node name="Sprite3D3" type="MeshInstance3D" parent="NavigationRegion3D/furniture/attrium" unique_id=1442996780]
 transform = Transform3D(-4.371139e-08, -1, 4.371139e-08, 0, -4.371139e-08, -1, 1, -4.371139e-08, 1.9106855e-15, 3.2479067, 5.1495705, 14.676611)
 mesh = SubResource("PlaneMesh_s6yth")
 surface_material_override/0 = SubResource("StandardMaterial3D_s2486")
 
-[node name="Sprite3D5" type="MeshInstance3D" parent="NavigationRegion3D/rooms/attrium" unique_id=396927065]
+[node name="Sprite3D5" type="MeshInstance3D" parent="NavigationRegion3D/furniture/attrium" unique_id=396927065]
 transform = Transform3D(-4.371139e-08, 0.99999994, 3.8213705e-15, -4.371139e-08, 1.9106853e-15, -0.99999994, -1, -4.3711385e-08, 4.3711385e-08, -11.877625, 7.451473, 7.374949)
 mesh = SubResource("PlaneMesh_to3ye")
 surface_material_override/0 = SubResource("StandardMaterial3D_oekay")
 
-[node name="sketchbook" parent="NavigationRegion3D/rooms/attrium" unique_id=169987685 instance=ExtResource("48_fnwcc")]
+[node name="sketchbook" parent="NavigationRegion3D/furniture/attrium" unique_id=169987685 instance=ExtResource("48_fnwcc")]
 transform = Transform3D(-0.49972787, 0, -0.86618245, 0, 1, 0, 0.86618245, 0, -0.49972787, -14.869717, 1.9198987, 9.211098)
 
-[node name="Node3D" type="Node3D" parent="NavigationRegion3D/rooms/attrium" unique_id=788589359]
+[node name="Node3D" type="Node3D" parent="NavigationRegion3D/furniture/attrium" unique_id=788589359]
 
-[node name="Sprite3D" type="MeshInstance3D" parent="NavigationRegion3D/rooms/attrium/Node3D" unique_id=1447566051]
+[node name="Sprite3D" type="MeshInstance3D" parent="NavigationRegion3D/furniture/attrium/Node3D" unique_id=1447566051]
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, -0.81679153, 8.222376, -9.776364)
 mesh = SubResource("PlaneMesh_oekay")
 surface_material_override/0 = SubResource("StandardMaterial3D_vif5o")
 
-[node name="Label3D" type="Label3D" parent="NavigationRegion3D/rooms/attrium/Node3D" unique_id=553461021]
+[node name="Label3D" type="Label3D" parent="NavigationRegion3D/furniture/attrium/Node3D" unique_id=553461021]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.7437167, 6.4434285, -9.738382)
 modulate = Color(0.050980393, 0.14117648, 0.23921569, 1)
 outline_modulate = Color(0.050980393, 0.14117648, 0.23921569, 1)
@@ -1106,7 +1023,7 @@ font_size = 100
 outline_size = 8
 line_spacing = -25.0
 
-[node name="Label3D2" type="Label3D" parent="NavigationRegion3D/rooms/attrium/Node3D" unique_id=2109574501]
+[node name="Label3D2" type="Label3D" parent="NavigationRegion3D/furniture/attrium/Node3D" unique_id=2109574501]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.7437167, 5.486403, -9.738382)
 modulate = Color(0.11372549, 0.19607843, 0.28627452, 0.89411765)
 outline_modulate = Color(0.050980393, 0.14117648, 0.23921569, 0)
@@ -1117,42 +1034,37 @@ font_size = 60
 outline_size = 8
 line_spacing = -20.0
 
-[node name="GlovesPack" parent="NavigationRegion3D/rooms/attrium" unique_id=1134276401 instance=ExtResource("49_3mkx7")]
+[node name="GlovesPack" parent="NavigationRegion3D/furniture/attrium" unique_id=1134276401 instance=ExtResource("49_3mkx7")]
 transform = Transform3D(0.56287706, 0, 0.8265406, 0, 1, 0, -0.8265406, 0, 0.56287706, -8.465298, 1.1022824, -9.355844)
 
-[node name="DocumentItem" parent="NavigationRegion3D/rooms/attrium" unique_id=1216899249 instance=ExtResource("14_db0oj")]
+[node name="DocumentItem" parent="NavigationRegion3D/furniture/attrium" unique_id=1216899249 instance=ExtResource("14_db0oj")]
 transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -3.2335792, 3.188486, -10.420912)
 document_texture = ExtResource("54_nt25k")
 document_texture_ua = ExtResource("55_mejxt")
 
-[node name="DocumentItem3" parent="NavigationRegion3D/rooms/attrium" unique_id=282351054 instance=ExtResource("14_db0oj")]
+[node name="DocumentItem3" parent="NavigationRegion3D/furniture/attrium" unique_id=282351054 instance=ExtResource("14_db0oj")]
 transform = Transform3D(-0.38131234, 0, -0.9244463, 0, 1, 0, 0.9244463, 0, -0.38131234, 3.9052615, 2.4444692, -11.408843)
 document_texture = ExtResource("56_tlm25")
 document_texture_ua = ExtResource("57_f5ki3")
 
-[node name="DocumentItem4" parent="NavigationRegion3D/rooms/attrium" unique_id=2013620659 instance=ExtResource("14_db0oj")]
+[node name="DocumentItem4" parent="NavigationRegion3D/furniture/attrium" unique_id=2013620659 instance=ExtResource("14_db0oj")]
 transform = Transform3D(-0.38131234, 0, -0.9244463, 0, 1, 0, 0.9244463, 0, -0.38131234, 4.369369, 4.0994024, -12.515162)
 document_texture = ExtResource("58_0prb1")
 document_texture_ua = ExtResource("59_to3ye")
 
-[node name="DocumentItem5" parent="NavigationRegion3D/rooms/attrium" unique_id=1181985336 instance=ExtResource("14_db0oj")]
+[node name="DocumentItem5" parent="NavigationRegion3D/furniture/attrium" unique_id=1181985336 instance=ExtResource("14_db0oj")]
 transform = Transform3D(-0.38131234, 0, -0.9244463, 0, 1, 0, 0.9244463, 0, -0.38131234, 4.9861546, 3.188486, -14.020866)
 document_texture = ExtResource("60_oekay")
 document_texture_ua = ExtResource("61_vif5o")
 
-[node name="DocumentItem2" parent="NavigationRegion3D/rooms/attrium" unique_id=2066146397 instance=ExtResource("14_db0oj")]
+[node name="DocumentItem2" parent="NavigationRegion3D/furniture/attrium" unique_id=2066146397 instance=ExtResource("14_db0oj")]
 transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -4.575895, 2.9444475, -10.420912)
 document_texture = ExtResource("58_7lava")
 document_texture_ua = ExtResource("59_0prb1")
 
-[node name="giftshop" type="Node3D" parent="NavigationRegion3D/rooms" unique_id=1483668541]
+[node name="giftshop2" parent="NavigationRegion3D/furniture" unique_id=2017872549 instance=ExtResource("37_i3dbr")]
 
-[node name="CCTV_cam" parent="NavigationRegion3D/rooms/giftshop" unique_id=704552698 instance=ExtResource("34_ibub3")]
-transform = Transform3D(-1, 0, -1.509958e-07, 0, 1, 0, -1.509958e-07, 0, 1, -16.392525, 5.6876726, 18.80531)
-
-[node name="giftshop" parent="NavigationRegion3D/rooms/giftshop" unique_id=2017872549 instance=ExtResource("37_i3dbr")]
-
-[node name="kitchen" parent="NavigationRegion3D/rooms" unique_id=655617701 instance=ExtResource("39_i3dbr")]
+[node name="kitchen" parent="NavigationRegion3D/furniture" unique_id=655617701 instance=ExtResource("39_i3dbr")]
 
 [node name="StaticBody3D" type="StaticBody3D" parent="NavigationRegion3D" unique_id=223401529]
 visible = false

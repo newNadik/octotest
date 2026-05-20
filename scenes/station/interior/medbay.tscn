@@ -1,0 +1,80 @@
+[gd_scene format=3 uid="uid://dgmsnuddjuti1"]
+
+[ext_resource type="PackedScene" uid="uid://bwx4cmp7n3qhv" path="res://scenes/interactables/document_item.tscn" id="1_dhpvp"]
+[ext_resource type="Texture2D" uid="uid://cqn51jxe4ghf7" path="res://assets/textures/documents/ALS-FA-poster-workplace-v3.png" id="2_7dkge"]
+[ext_resource type="Texture2D" uid="uid://bpr834g84skbc" path="res://assets/textures/documents/ALS-FA-poster-resus-adult-v3.png" id="3_0tesa"]
+[ext_resource type="Texture2D" uid="uid://6btwl45px64n" path="res://assets/textures/documents/ALS-FA-poster-aed-cpr-v3.png" id="4_eym64"]
+[ext_resource type="PackedScene" uid="uid://vndshl03h2xa" path="res://assets/models/items/uk_automated_external_defibrillator.glb" id="5_g86j3"]
+[ext_resource type="PackedScene" uid="uid://bp2qgp1sbmraf" path="res://scenes/station/items/clock.tscn" id="6_u5vka"]
+[ext_resource type="PackedScene" uid="uid://qs8sh7iux1qk" path="res://scenes/station/interior/chair.tscn" id="7_dc77f"]
+[ext_resource type="PackedScene" uid="uid://bqfmosbr5347w" path="res://scenes/station/interior/bunk_bed.tscn" id="8_l5w4h"]
+[ext_resource type="PackedScene" uid="uid://b18qdk7b4q77l" path="res://scenes/station/interior/desk.tscn" id="9_mfry7"]
+[ext_resource type="PackedScene" uid="uid://dru35iaiah18i" path="res://scenes/station/interior/standing_courtains.tscn" id="10_f8745"]
+[ext_resource type="PackedScene" uid="uid://3qcq4vmexl3s" path="res://scenes/station/items/fire_extinguisher.tscn" id="11_dsp8h"]
+[ext_resource type="PackedScene" uid="uid://d3h1lk5hh0c60" path="res://scenes/station/interior/cabinet_low.tscn" id="12_ykqq2"]
+[ext_resource type="PackedScene" uid="uid://vwo7teuwrwl8" path="res://scenes/station/interior/cabinet_low_sink.tscn" id="13_rfepp"]
+[ext_resource type="PackedScene" uid="uid://cdw2saup0bxdx" path="res://scenes/station/interior/med_monitor.tscn" id="14_w7e25"]
+[ext_resource type="PackedScene" uid="uid://b21bahphpnv3o" path="res://scenes/station/items/computer.tscn" id="15_j1lld"]
+[ext_resource type="PackedScene" uid="uid://fp5yhak7qv5v" path="res://scenes/station/items/stethoscope.tscn" id="16_g6iws"]
+
+[node name="medbay" type="Node3D" unique_id=495759886]
+
+[node name="DocumentItem" parent="." unique_id=-1447463677 instance=ExtResource("1_dhpvp")]
+transform = Transform3D(-0.9997951, 0, 0.02024432, 0, 1, 0, -0.02024432, 0, -0.9997951, -12.567, 3.5, -4.706)
+document_size = 1
+document_texture = ExtResource("2_7dkge")
+document_texture_ua = ExtResource("2_7dkge")
+interactable_enabled = false
+
+[node name="DocumentItem2" parent="." unique_id=1186506592 instance=ExtResource("1_dhpvp")]
+transform = Transform3D(-0.70710665, 0, -0.70710665, 0, 1, 0, 0.70710665, 0, -0.70710665, -9.78035, 3.5, -5.7300596)
+document_size = 1
+document_texture = ExtResource("3_0tesa")
+document_texture_ua = ExtResource("3_0tesa")
+interactable_enabled = false
+
+[node name="DocumentItem3" parent="." unique_id=449591536 instance=ExtResource("1_dhpvp")]
+transform = Transform3D(0.9999997, 0, 0, 0, 1, 0, 0, 0, 0.9999997, -9.371946, 3.5, -9.752626)
+document_size = 1
+document_texture = ExtResource("4_eym64")
+document_texture_ua = ExtResource("4_eym64")
+interactable_enabled = false
+
+[node name="Sketchfab_Scene" parent="." unique_id=494877261 instance=ExtResource("5_g86j3")]
+transform = Transform3D(-7.4309364e-10, 0, -0.017, 0, 0.017, 0, 0.017, 0, -7.4309364e-10, -11.526186, 2.0595434, -9.691129)
+
+[node name="clock" parent="." unique_id=605620393 instance=ExtResource("6_u5vka")]
+transform = Transform3D(-0.70710677, 0, 0.70710677, 0, 1, 0, -0.70710677, 0, -0.70710677, -8.163929, 5.5, -7.3273926)
+
+[node name="chair" parent="." unique_id=1222624819 instance=ExtResource("7_dc77f")]
+transform = Transform3D(-0.96351373, 0, -0.2676589, 0, 1, 0, 0.2676589, 0, -0.96351373, -11.259848, 9.512901e-05, -5.6018605)
+
+[node name="bunk_bed" parent="." unique_id=821623441 instance=ExtResource("8_l5w4h")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -14.533467, -2, -6.701037)
+
+[node name="desk" parent="." unique_id=360776120 instance=ExtResource("9_mfry7")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -11.112165, 5.1589575e-07, -6.8285265)
+
+[node name="standing_courtains" parent="." unique_id=730615104 instance=ExtResource("10_f8745")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -13.409536, 0, -5.72916)
+
+[node name="standing_courtains2" parent="." unique_id=1062337337 instance=ExtResource("10_f8745")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -13.482237, 0, -7.69268)
+
+[node name="fire_extinguisher" parent="." unique_id=1012721613 instance=ExtResource("11_dsp8h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.967724, 0, -9.474988)
+
+[node name="cabinet_low" parent="." unique_id=2141955509 instance=ExtResource("12_ykqq2")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -8.658228, 0.004095316, -9.6991625)
+
+[node name="cabinet_low_sink" parent="." unique_id=298210515 instance=ExtResource("13_rfepp")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -10.121143, 0.004095316, -9.691511)
+
+[node name="med_monitor" parent="." unique_id=72819634 instance=ExtResource("14_w7e25")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -14.844794, 0.0015605235, -9.098691)
+
+[node name="computer" parent="." unique_id=1576113446 instance=ExtResource("15_j1lld")]
+transform = Transform3D(0.95735985, 0, -0.2888981, 0, 1, 0, 0.2888981, 0, 0.95735985, -10.55065, 1.482, -7.5644755)
+
+[node name="stethoscope" parent="." unique_id=933022431 instance=ExtResource("16_g6iws")]
+transform = Transform3D(-0.5557878, 0, 0.83132416, 0, 1, 0, -0.83132416, 0, -0.5557878, -11.886675, 1.5916116, -7.387905)

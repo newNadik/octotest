@@ -1,0 +1,18 @@
+[gd_scene format=3 uid="uid://7cj558a18isn"]
+
+[ext_resource type="PackedScene" uid="uid://bnjtpm8pe61ap" path="res://scenes/station/items/light_sign.tscn" id="1_10bcv"]
+[ext_resource type="Texture2D" uid="uid://b5c5wdqiwtuyx" path="res://assets/models/items/first_aid/WC_sign.png" id="2_saf8c"]
+[ext_resource type="PackedScene" uid="uid://b7vnunwlus20w" path="res://scenes/station/interior/toilet.tscn" id="3_6c8mf"]
+[ext_resource type="PackedScene" uid="uid://can7o07havaxf" path="res://scenes/station/interior/wet_floor_sign.tscn" id="4_2mso4"]
+
+[node name="WC" type="Node3D" unique_id=1515462083]
+
+[node name="light_sign" parent="." unique_id=2033543759 instance=ExtResource("1_10bcv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.798, 4, 18.817682)
+sign_texture = ExtResource("2_saf8c")
+
+[node name="Node3D" parent="." unique_id=2117090278 instance=ExtResource("3_6c8mf")]
+transform = Transform3D(-5.2453668e-08, 0, -1.2, 0, 1.2, 0, 1.2, 0, -5.2453668e-08, 7.002975, 0, 10.765328)
+
+[node name="wt_floor_sign" parent="." unique_id=1207511351 instance=ExtResource("4_2mso4")]
+transform = Transform3D(0.8835369, 0, -0.46836165, 0, 1, 0, 0.46836165, 0, 0.8835369, 5.5680075, 0.013957152, 15.300981)
