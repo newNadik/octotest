@@ -57,6 +57,7 @@ func _ready() -> void:
 		_change_to_game_scene_directly()
 		return
 	_pending_loads.append(GAME_SCENE_PATH)
+	_pending_load_enqueue_ms[GAME_SCENE_PATH] = Time.get_ticks_msec()
 
 	var player_start_xz := _get_player_start_xz()
 	var is_new_game := _is_new_game()
@@ -84,6 +85,7 @@ func _ready() -> void:
 				var room_err := ResourceLoader.load_threaded_request(path)
 				if room_err == OK or room_err == ERR_BUSY:
 					_pending_loads.append(path)
+					_pending_load_enqueue_ms[path] = Time.get_ticks_msec()
 			else:
 				print("[LoadingScreen] %s Background room (dist=%.1f): %s" % [_ms(), dist, room_name])
 				ResourceLoader.load_threaded_request(path)
@@ -113,9 +115,10 @@ func _process(delta: float) -> void:
 				completed += 1
 				if not _logged_completed.has(path):
 					_logged_completed.append(path)
-					var elapsed_ms: int = Time.get_ticks_msec() - _t0
-					var cache_hint := " (cached)" if elapsed_ms < 500 else ""
-					print("[LoadingScreen] %s Done%s: %s" % [_ms(), cache_hint, path.get_file()])
+					var file_ms: int = Time.get_ticks_msec() - int(_pending_load_enqueue_ms.get(path, Time.get_ticks_msec()))
+					var cache_hint := " (cached)" if file_ms < 400 else ""
+					print("[LoadingScreen] %s Done%s (%dms): %s" % [_ms(), cache_hint, file_ms, path.get_file()])
+
 			_:
 				any_failed = true
 
@@ -155,12 +158,14 @@ func _start_phase_1() -> void:
 	_phase = 1
 	_pending_loads.clear()
 	_logged_completed.clear()
+	_pending_load_enqueue_ms.clear()
 	_target_progress = 0.0
 	_display_progress = 0.0
 	print("[LoadingScreen] %s Phase 1: loading priority room %s" % [_ms(), _new_game_priority_path.get_file()])
 	var err := ResourceLoader.load_threaded_request(_new_game_priority_path)
 	if err == OK or err == ERR_BUSY:
 		_pending_loads.append(_new_game_priority_path)
+		_pending_load_enqueue_ms[_new_game_priority_path] = Time.get_ticks_msec()
 	else:
 		push_error("Failed to start priority room load: %s" % _new_game_priority_path)
 		_transition_to_loaded_scene()
