@@ -30,7 +30,7 @@ const ROOM_REGISTRY: Array[Dictionary] = [
 	{"name": "atrium",      "path": "res://scenes/station/atrium_room.tscn",           "center": Vector3(0.93,   0.0,  28.47), "neighbors": ["workshop", "chem_lab"]},
 	{"name": "chem_lab",    "path": "res://scenes/station/chem_lab_room.tscn",         "center": Vector3(11.72,  0.0,  -7.54),  "neighbors": ["atrium"]},
 	{"name": "energy_lab",  "path": "res://scenes/station/energy_lab_room.tscn",       "center": Vector3(10.32,  0.0,  14.32),  "neighbors": []},
-	{"name": "office",      "path": "res://scenes/station/office_room.tscn",           "center": Vector3(0.78,   0.0, -17.63),  "neighbors": []},
+	{"name": "office",      "path": "res://scenes/station/data_office/office_arch.tscn",    "details_path": "res://scenes/station/data_office/office_details.tscn", "center": Vector3(0.78,   0.0, -17.63),  "neighbors": []},
 	{"name": "quarters",    "path": "res://scenes/station/quarters_room.tscn",         "center": Vector3(0.0,    0.0,   0.0),   "neighbors": []},
 	{"name": "systems",     "path": "res://scenes/station/systems_room.tscn",          "center": Vector3(-4.45,  0.0, -17.0),   "neighbors": []},
 	{"name": "wetroom",     "path": "res://scenes/station/wetroom_room.tscn",          "center": Vector3(9.65,   0.0,  24.85),  "neighbors": []},
@@ -136,6 +136,9 @@ var _stream_rooms: Dictionary = {}
 var _stream_pending_loads: Dictionary = {}
 var _stream_load_start_times: Dictionary = {}
 var _stream_update_accum := 0.0
+var _stream_detail_nodes: Dictionary = {}
+var _stream_detail_pending: Dictionary = {}
+var _stream_detail_start_times: Dictionary = {}
 var _room_nav_regions: Dictionary = {}
 var _player_current_room: String = ""
 var _is_new_game: bool = false
@@ -307,6 +310,7 @@ func _initialize_room_streaming() -> void:
 	for room_def in ROOM_REGISTRY:
 		_stream_rooms[room_def["name"]] = {
 			"scene_path": room_def["path"],
+			"details_path": room_def.get("details_path", ""),
 			"center": room_def["center"] as Vector3,
 			"neighbors": room_def["neighbors"] as Array,
 			"deferred": room_def.get("deferred", false),
@@ -455,6 +459,29 @@ func _check_pending_room_loads() -> void:
 		_apply_pending_world_state()
 	if _stream_pending_loads.is_empty():
 		_start_deferred_room_loads()
+
+	for room_name in _stream_detail_pending.keys():
+		var details_path: String = _stream_detail_pending[room_name]
+		var status := ResourceLoader.load_threaded_get_status(details_path)
+		if status != ResourceLoader.THREAD_LOAD_LOADED:
+			continue
+		var thread_ms: int = Time.get_ticks_msec() - int(_stream_detail_start_times.get(room_name, Time.get_ticks_msec()))
+		var packed_scene := ResourceLoader.load_threaded_get(details_path) as PackedScene
+		_stream_detail_pending.erase(room_name)
+		_stream_detail_start_times.erase(room_name)
+		if packed_scene == null:
+			continue
+		if is_instance_valid(_stream_detail_nodes.get(room_name) as Node):
+			continue
+		var t_inst := Time.get_ticks_msec()
+		var instance := packed_scene.instantiate() as Node3D
+		var t_done := Time.get_ticks_msec()
+		if instance == null:
+			continue
+		instance.name = StringName(room_name + "_details")
+		_get_room_parent(room_name).add_child(instance)
+		_stream_detail_nodes[room_name] = instance
+		print("[RoomStream] Async loaded '%s' details: thread=%dms  instantiate=%dms" % [room_name, thread_ms, t_done - t_inst])
 
 
 func _start_deferred_room_loads() -> void:
@@ -650,6 +677,39 @@ func _apply_room_streaming() -> void:
 					instance_node.queue_free()
 				room_data["node"] = null
 				_stream_rooms[room_name] = room_data
+			# Also drop details when arch unloads.
+			var details_node := _stream_detail_nodes.get(room_name) as Node
+			if details_node != null:
+				details_node.queue_free()
+			_stream_detail_nodes.erase(room_name)
+			_stream_detail_pending.erase(room_name)
+			_stream_detail_start_times.erase(room_name)
+
+	# Details layer: load when current/adjacent, unload otherwise.
+	for room_name in _stream_rooms.keys():
+		var room_data: Dictionary = _stream_rooms[room_name]
+		if String(room_data.get("details_path", "")).is_empty():
+			continue
+		var wants_details: bool = room_name == _player_current_room \
+			or current_room_neighbors.has(room_name)
+		var is_details_loaded: bool = is_instance_valid(_stream_detail_nodes.get(room_name) as Node)
+
+		if wants_details and not is_details_loaded and not _stream_detail_pending.has(room_name):
+			var details_path := String(room_data["details_path"])
+			var err := ResourceLoader.load_threaded_request(details_path)
+			if err == OK or err == ERR_BUSY:
+				_stream_detail_pending[room_name] = details_path
+				_stream_detail_start_times[room_name] = Time.get_ticks_msec()
+				print("[RoomStream] Async loading '%s' details" % room_name)
+
+		if not wants_details and is_details_loaded:
+			var details_node := _stream_detail_nodes.get(room_name) as Node
+			if details_node != null:
+				details_node.queue_free()
+			_stream_detail_nodes[room_name] = null
+			_stream_detail_pending.erase(room_name)
+			_stream_detail_start_times.erase(room_name)
+			print("[RoomStream] Unloaded '%s' details" % room_name)
 
 
 func _unhandled_input(event: InputEvent) -> void:

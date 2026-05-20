@@ -29,7 +29,7 @@ const MENU_PRELOAD_ROOM_PATHS: Array[Dictionary] = [
 	{"name": "atrium",     "path": "res://scenes/station/atrium_room.tscn",     "center": Vector2(0.93,  28.47), "neighbors": ["workshop", "chem_lab"]},
 	{"name": "chem_lab",   "path": "res://scenes/station/chem_lab_room.tscn",   "center": Vector2(11.72, -7.54),  "neighbors": ["atrium"]},
 	{"name": "energy_lab", "path": "res://scenes/station/energy_lab_room.tscn", "center": Vector2(10.32, 14.32),  "neighbors": []},
-	{"name": "office",     "path": "res://scenes/station/office_room.tscn",     "center": Vector2(0.78,  -17.63), "neighbors": []},
+	{"name": "office",     "path": "res://scenes/station/data_office/office_arch.tscn", "center": Vector2(0.78,  -17.63), "neighbors": []},
 	{"name": "quarters",   "path": "res://scenes/station/quarters_room.tscn",   "center": Vector2(0.0,    0.0),   "neighbors": []},
 	{"name": "systems",    "path": "res://scenes/station/systems_room.tscn",    "center": Vector2(-4.45, -17.0),  "neighbors": []},
 	{"name": "wetroom",    "path": "res://scenes/station/wetroom_room.tscn",    "center": Vector2(9.65,  24.85),  "neighbors": []},
