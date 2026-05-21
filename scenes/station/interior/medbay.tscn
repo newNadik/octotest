@@ -16,6 +16,7 @@
 [ext_resource type="PackedScene" uid="uid://cdw2saup0bxdx" path="res://scenes/station/interior/med_monitor.tscn" id="14_w7e25"]
 [ext_resource type="PackedScene" uid="uid://b21bahphpnv3o" path="res://scenes/station/items/computer.tscn" id="15_j1lld"]
 [ext_resource type="PackedScene" uid="uid://fp5yhak7qv5v" path="res://scenes/station/items/stethoscope.tscn" id="16_g6iws"]
+[ext_resource type="PackedScene" uid="uid://dmvsub7ov8r4y" path="res://scenes/effects/motion_sensor_light.tscn" id="17_7dkge"]
 
 [node name="medbay" type="Node3D" unique_id=495759886]
 
@@ -78,3 +79,8 @@ transform = Transform3D(0.95735985, 0, -0.2888981, 0, 1, 0, 0.2888981, 0, 0.9573
 
 [node name="stethoscope" parent="." unique_id=933022431 instance=ExtResource("16_g6iws")]
 transform = Transform3D(-0.5557878, 0, 0.83132416, 0, 1, 0, -0.83132416, 0, -0.5557878, -11.886675, 1.5916116, -7.387905)
+
+[node name="MotionSensorLight" parent="." unique_id=831549937 instance=ExtResource("17_7dkge")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.72429, 0, -8.586397)
+area_width = 6.0
+area_length = 2.0

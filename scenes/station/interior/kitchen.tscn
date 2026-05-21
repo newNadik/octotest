@@ -16,12 +16,15 @@
 [ext_resource type="PackedScene" uid="uid://dntmmnjb062jb" path="res://scenes/station/items/kettle.tscn" id="15_0bwtm"]
 [ext_resource type="PackedScene" uid="uid://6s8bdeheoqgc" path="res://assets/models/interior/kitchen/dish_rack.glb" id="16_72xsu"]
 [ext_resource type="PackedScene" uid="uid://b5t7caj035lsd" path="res://scenes/station/items/coffee_machine.tscn" id="17_5edgn"]
-[ext_resource type="PackedScene" uid="uid://bwdnxj30053j8" path="res://assets/models/interior/kitchen/microwave.glb" id="18_0ol15"]
 [ext_resource type="PackedScene" uid="uid://dcwkssdp31n5m" path="res://assets/models/items/lays_classic__hd_textures__free_download.glb" id="19_wcf1j"]
 [ext_resource type="PackedScene" uid="uid://bs5fps0rn7fre" path="res://assets/models/items/paper_towel_roll.glb" id="20_4yc44"]
 [ext_resource type="Texture2D" uid="uid://b3xg32i7g4il7" path="res://assets/models/items/wash_dishes.png" id="22_61snl"]
 [ext_resource type="PackedScene" uid="uid://dc80l3u4to7d5" path="res://assets/models/items/soap.glb" id="22_xyrdf"]
 [ext_resource type="Texture2D" uid="uid://6oewt5aqxxfe" path="res://assets/models/items/keep_mugs.png" id="23_60dk0"]
+[ext_resource type="PackedScene" uid="uid://cfudobng2v307" path="res://assets/models/items/quarters/animated_disco_ball_-_low_poly.glb" id="23_61snl"]
+[ext_resource type="PackedScene" uid="uid://c5etdrsahc6na" path="res://scenes/station/items/microwave.tscn" id="24_5vpod"]
+[ext_resource type="PackedScene" uid="uid://dmvsub7ov8r4y" path="res://scenes/effects/motion_sensor_light.tscn" id="24_60dk0"]
+[ext_resource type="Script" uid="uid://cauu5nx6bjmr7" path="res://scripts/props/disco_ball.gd" id="25_disco"]
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_icobf"]
 _surfaces = [{
@@ -139,7 +142,7 @@ transform = Transform3D(-0.22574264, 0, -1.28025, 0, 1.3, 0, 1.28025, 0, -0.2257
 transform = Transform3D(-0.22574264, 0, -1.28025, 0, 1.3, 0, 1.28025, 0, -0.22574264, -30.174093, 3.3928332, -12.286297)
 
 [node name="trash_bin" parent="." unique_id=188497815 instance=ExtResource("7_1g1ye")]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -28.851173, 0, -4.7988214)
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -28.851173, 0, -4.9302745)
 
 [node name="Node3D" parent="." unique_id=1667817107 instance=ExtResource("8_x8g26")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -29.61065, 1.7613952, -5.207574)
@@ -160,7 +163,7 @@ transform = Transform3D(0.8809441, 0, -1.7955327, 0, 2, 0, 1.7955327, 0, 0.88094
 transform = Transform3D(0.9914061, 0, 0.13082035, 0, 1, 0, -0.13082035, 0, 0.9914061, -30.098969, 1.7693241, -6.3905373)
 
 [node name="pPlane1_lambert7_0" type="MeshInstance3D" parent="." unique_id=341046504]
-transform = Transform3D(0.9926318, 0.0031305114, 0.12113102, -0.0036012987, 0.9999867, 0.0036679225, -0.121117726, -0.0040771137, 0.99263, -28.800688, 1.7413003, -7.1756077)
+transform = Transform3D(0.9954488, 0.0032356074, 0.095244475, -0.003601299, 0.9999867, 0.0036679222, -0.09523115, -0.003994222, 0.9954474, -28.800688, 1.7413003, -7.1756077)
 mesh = SubResource("ArrayMesh_v72q7")
 
 [node name="mug2" parent="." unique_id=2129939341 instance=ExtResource("12_wunaa")]
@@ -183,9 +186,6 @@ transform = Transform3D(-8.742278e-08, 0, 2, 0, 2, 0, -2, 0, -8.742278e-08, -30.
 
 [node name="Node3D2" parent="." unique_id=1336731793 instance=ExtResource("17_5edgn")]
 transform = Transform3D(0.63143414, 0, -0.77542967, 0, 1, 0, 0.77542967, 0, 0.63143414, -23.565113, 1.7706162, -10.741203)
-
-[node name="Sketchfab_Scene2" parent="." unique_id=661158621 instance=ExtResource("18_0ol15")]
-transform = Transform3D(0.3095378, 0, 0.16335958, 0, 0.35, 0, -0.16335958, 0, 0.3095378, -29.561726, 2.1346734, -11.429094)
 
 [node name="Sketchfab_Scene3" parent="." unique_id=126340713 instance=ExtResource("19_wcf1j")]
 transform = Transform3D(0.058191266, 0, 0.99830544, 0, 1, 0, -0.99830544, 0, 0.058191266, -28.871992, 1.9889898, -11.703361)
@@ -217,3 +217,19 @@ surface_material_override/0 = SubResource("StandardMaterial3D_go1bm")
 
 [node name="Sketchfab_Scene9" parent="." unique_id=62302111 instance=ExtResource("22_xyrdf")]
 transform = Transform3D(0.03, 0, 0, 0, 0.03, 0, 0, 0, 0.03, -30.173002, 1.9269783, -8.442935)
+
+[node name="discoball" parent="." unique_id=1550321706 instance=ExtResource("23_61snl")]
+transform = Transform3D(0.05, 0, 0, 0, 0.05, 0, 0, 0, 0.05, -27.445484, 2.6960003, -11.032651)
+script = ExtResource("25_disco")
+
+[node name="MotionSensorLight" parent="." unique_id=1481411747 instance=ExtResource("24_60dk0")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25.98299, -0.089767575, -7.7539487)
+area_width = 8.0
+area_length = 6.5
+
+[node name="microwave" parent="." unique_id=463109441 instance=ExtResource("24_5vpod")]
+transform = Transform3D(0.23472632, 0, -0.25962192, 0, 0.35, 0, 0.25962192, 0, 0.23472632, -29.560663, 2.111171, -11.242377)
+
+[node name="ReflectionProbe" type="ReflectionProbe" parent="." unique_id=287986055]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25.792252, 2.9164429, -8.566436)
+size = Vector3(11.591248, 7.7391357, 9.452106)

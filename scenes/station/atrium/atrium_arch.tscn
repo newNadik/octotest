@@ -7,7 +7,6 @@
 [ext_resource type="PackedScene" uid="uid://daxvawcm2f6v1" path="res://scenes/station/interior/door_single.tscn" id="3_wctxe"]
 [ext_resource type="Material" uid="uid://bb4hx1vyakkmf" path="res://assets/materials/plaster.tres" id="5_xg0bo"]
 [ext_resource type="Material" uid="uid://bm05hnbasm1cg" path="res://assets/materials/glass.tres" id="6_hnfiw"]
-[ext_resource type="Material" uid="uid://biog7mv21velq" path="res://assets/materials/ceiling.tres" id="7_harmc"]
 [ext_resource type="Material" uid="uid://ca2db0a60mj50" path="res://assets/materials/metal.tres" id="8_xp3kh"]
 [ext_resource type="PackedScene" uid="uid://6vcqkboq1fps" path="res://scenes/effects/floor_marker_light.tscn" id="11_floorlight"]
 [ext_resource type="PackedScene" uid="uid://c5tv72lyq8d8h" path="res://scenes/effects/caustic_rig.tscn" id="11_fy6p5"]
@@ -762,6 +761,12 @@ _surfaces = [{
 blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_qhtaw")
 
+[sub_resource type="PlaneMesh" id="PlaneMesh_65e7p"]
+size = Vector2(10, 10)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_vf6pa"]
+size = Vector2(10, 10)
+
 [node name="atrium" type="Node3D" unique_id=2061005798]
 
 [node name="NavigationRegion3D" type="NavigationRegion3D" parent="." unique_id=930742099]
@@ -1176,12 +1181,12 @@ occluder = SubResource("BoxOccluder3D_yjx6n")
 [node name="RoofWC" type="MeshInstance3D" parent="StaticBody3D/Roof" unique_id=1504717261]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.8054073, -7.5464764e-06, 0.006915656)
 mesh = SubResource("ArrayMesh_30fjc")
-surface_material_override/0 = ExtResource("7_harmc")
+surface_material_override/0 = ExtResource("64_to3ye")
 
 [node name="RoofGiftShop" type="MeshInstance3D" parent="StaticBody3D/Roof" unique_id=168745388]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.212445, 4.68464, 19.679483)
 mesh = SubResource("ArrayMesh_btjsq")
-surface_material_override/0 = ExtResource("7_harmc")
+surface_material_override/0 = ExtResource("64_to3ye")
 
 [node name="RoofGlassAtrium_006" type="MeshInstance3D" parent="StaticBody3D/Roof" unique_id=970745404]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.8054073, 10.499993, 0.006915656)
@@ -1200,7 +1205,7 @@ surface_material_override/0 = ExtResource("64_to3ye")
 [node name="RoofAtrium_003" type="MeshInstance3D" parent="StaticBody3D/Roof" unique_id=1341165888]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.612825, 1.588221, -0.49072173)
 mesh = SubResource("ArrayMesh_y3iv4")
-surface_material_override/0 = ExtResource("7_harmc")
+surface_material_override/0 = ExtResource("64_to3ye")
 
 [node name="RoofAtrium_002" type="MeshInstance3D" parent="StaticBody3D/Roof" unique_id=1258238520]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -19.63628, 1.1894163, -0.74422675)
@@ -1210,7 +1215,7 @@ surface_material_override/0 = ExtResource("64_0prb1")
 [node name="RoofAtrium_001" type="MeshInstance3D" parent="StaticBody3D/Roof" unique_id=805035000]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25.313131, 1.2298976, -0.026496444)
 mesh = SubResource("ArrayMesh_wbg5g")
-surface_material_override/0 = ExtResource("7_harmc")
+surface_material_override/0 = ExtResource("64_to3ye")
 
 [node name="RoofAtrium" type="MeshInstance3D" parent="StaticBody3D/Roof" unique_id=1734653679]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.8054073, -7.5464764e-06, 0.006915656)
@@ -1285,3 +1290,13 @@ surface_material_override/0 = ExtResource("8_xp3kh")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.7109455, 0, -9.802208)
 allowed_access_levels = PackedInt32Array(1, 2, 3)
 linked_door_group_path = NodePath("../Walls/doors/DoorStaffDouble")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="StaticBody3D" unique_id=2065000905]
+transform = Transform3D(1, 0, 0, 0, -4.3711385e-08, -0.99999994, 0, 0.99999994, -4.3711385e-08, -10.645765, 4.7674913, -9.785683)
+mesh = SubResource("PlaneMesh_65e7p")
+surface_material_override/0 = ExtResource("64_0prb1")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="StaticBody3D" unique_id=2101444795]
+transform = Transform3D(0.9847319, -0.17407785, 7.609184e-09, 0, -4.371138e-08, -0.9999999, 0.17407785, 0.9847318, -4.3043993e-08, -25.874298, 4.7674913, -11.45844)
+mesh = SubResource("PlaneMesh_vf6pa")
+surface_material_override/0 = ExtResource("64_0prb1")

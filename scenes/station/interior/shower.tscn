@@ -4,6 +4,7 @@
 [ext_resource type="Material" uid="uid://bb4hx1vyakkmf" path="res://assets/materials/plaster.tres" id="2_f0f2p"]
 [ext_resource type="PackedScene" uid="uid://c00b2wj6krsqu" path="res://scenes/station/items/duck.tscn" id="3_u51js"]
 [ext_resource type="PackedScene" uid="uid://ib88jjclimqc" path="res://scenes/station/items/flip_flop.tscn" id="4_gh2ub"]
+[ext_resource type="PackedScene" uid="uid://dmvsub7ov8r4y" path="res://scenes/effects/motion_sensor_light.tscn" id="5_8opx6"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_8j6mu"]
 resource_name = "0131_Silver"
@@ -880,3 +881,6 @@ shape = SubResource("BoxShape3D_u51js")
 [node name="CollisionShape3D3" type="CollisionShape3D" parent="." unique_id=1595213595]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.6466652, 0.25, 1.4321976)
 shape = SubResource("BoxShape3D_gh2ub")
+
+[node name="MotionSensorLight" parent="." unique_id=831549937 instance=ExtResource("5_8opx6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.7643413, 0, -0.23920572)

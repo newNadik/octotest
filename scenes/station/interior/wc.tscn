@@ -4,6 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://b5c5wdqiwtuyx" path="res://assets/models/items/first_aid/WC_sign.png" id="2_saf8c"]
 [ext_resource type="PackedScene" uid="uid://b7vnunwlus20w" path="res://scenes/station/interior/toilet.tscn" id="3_6c8mf"]
 [ext_resource type="PackedScene" uid="uid://can7o07havaxf" path="res://scenes/station/interior/wet_floor_sign.tscn" id="4_2mso4"]
+[ext_resource type="PackedScene" uid="uid://dmvsub7ov8r4y" path="res://scenes/effects/motion_sensor_light.tscn" id="5_saf8c"]
 
 [node name="WC" type="Node3D" unique_id=1515462083]
 
@@ -16,3 +17,7 @@ transform = Transform3D(-5.2453668e-08, 0, -1.2, 0, 1.2, 0, 1.2, 0, -5.2453668e-
 
 [node name="wt_floor_sign" parent="." unique_id=1207511351 instance=ExtResource("4_2mso4")]
 transform = Transform3D(0.8835369, 0, -0.46836165, 0, 1, 0, 0.46836165, 0, 0.8835369, 5.5680075, 0.013957152, 15.300981)
+
+[node name="MotionSensorLight" parent="." unique_id=831549937 instance=ExtResource("5_saf8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.59741, 0, 16.905369)
+area_length = 5.0
