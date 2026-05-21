@@ -411,6 +411,8 @@ func _add_layer_node(room_name: String, layer: int, inst: Node3D, path: String) 
 		_apply_exit_code_to_scene(inst)
 		_connect_autosave_doors()
 	_apply_pending_world_state()
+	if _interaction_controller != null and _interaction_controller.has_method("retry_pending_restores"):
+		_interaction_controller.call("retry_pending_restores")
 
 
 func _lkey(room_name: String, layer: int) -> String:

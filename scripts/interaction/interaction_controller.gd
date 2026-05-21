@@ -101,9 +101,7 @@ var _focus_target_interactable
 var _suppress_focus_target_visuals := false
 var _saved_indicator_visibility_by_item_id: Dictionary = {}
 var _pending_held_restore_keys: Array[String] = []
-var _held_restore_retries_left := 0
 var _pending_worn_restore: Dictionary = {}
-var _worn_restore_retries_left := 0
 
 
 func initialize(player: CharacterBody3D, camera: Camera3D, hint_label: Label, world_root: Node3D) -> void:
@@ -344,9 +342,7 @@ func get_save_state() -> Dictionary:
 
 func apply_save_state(state: Dictionary) -> void:
 	_pending_held_restore_keys.clear()
-	_held_restore_retries_left = 0
 	_pending_worn_restore.clear()
-	_worn_restore_retries_left = 0
 	if state.is_empty():
 		return
 	var keys = state.get("held_item_keys", [])
@@ -356,7 +352,6 @@ func apply_save_state(state: Dictionary) -> void:
 			if not key.is_empty():
 				_pending_held_restore_keys.append(key)
 	if not _pending_held_restore_keys.is_empty():
-		_held_restore_retries_left = 30
 		call_deferred("_restore_held_items_from_pending_keys")
 	if _wear_controller == null:
 		return
@@ -367,10 +362,8 @@ func apply_save_state(state: Dictionary) -> void:
 		var key := str(worn_keys[slot]).strip_edges()
 		if not key.is_empty():
 			_pending_worn_restore[slot] = key
-	if _pending_worn_restore.is_empty():
-		return
-	_worn_restore_retries_left = 30
-	call_deferred("_restore_worn_items_from_pending")
+	if not _pending_worn_restore.is_empty():
+		call_deferred("_restore_worn_items_from_pending")
 
 
 func get_held_item_names() -> PackedStringArray:
@@ -641,10 +634,7 @@ func _restore_held_items_from_pending_keys() -> void:
 	_update_hint_text()
 	if _pending_held_restore_keys.is_empty():
 		return
-	_held_restore_retries_left -= 1
-	if _held_restore_retries_left <= 0:
-		return
-	var retry_timer := get_tree().create_timer(0.2)
+	var retry_timer := get_tree().create_timer(1.0)
 	retry_timer.timeout.connect(_restore_held_items_from_pending_keys)
 
 
@@ -666,11 +656,13 @@ func _restore_worn_items_from_pending() -> void:
 	_pending_worn_restore = unresolved
 	if _pending_worn_restore.is_empty():
 		return
-	_worn_restore_retries_left -= 1
-	if _worn_restore_retries_left <= 0:
-		return
-	var retry_timer := get_tree().create_timer(0.2)
+	var retry_timer := get_tree().create_timer(1.0)
 	retry_timer.timeout.connect(_restore_worn_items_from_pending)
+
+
+func retry_pending_restores() -> void:
+	_restore_held_items_from_pending_keys()
+	_restore_worn_items_from_pending()
 
 
 func _resolve_interactable_from_save_key(path_key: String):

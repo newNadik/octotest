@@ -707,8 +707,10 @@ func apply_save_state(state: Dictionary) -> void:
 		if restored != null:
 			_pickup_root.global_transform = restored as Transform3D
 	if was_held:
-		_restore_saved_held_item_as_dropped()
+		# Keep body frozen; interaction_controller will reattach to hands
 		set_interaction_enabled(true)
+		set_held(true)
+		return
 	if _pickup_root is RigidBody3D:
 		var body := _pickup_root as RigidBody3D
 		body.freeze = false
