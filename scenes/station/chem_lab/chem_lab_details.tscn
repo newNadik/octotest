@@ -87,7 +87,7 @@ transform = Transform3D(0.3804894, 0, 0.9247852, 0, 1, 0, -0.9247852, 0, 0.38048
 transform = Transform3D(-0.5104954, 0, 1.4104589, 0, 1.5, 0, -1.4104589, 0, -0.5104954, 9.507327, 1.575298, -7.586014)
 
 [node name="safety_glasses" parent="items" unique_id=672416876 instance=ExtResource("10_sog32")]
-transform = Transform3D(0.77187985, 0, 0.6357684, 0, 1, 0, -0.6357684, 0, 0.77187985, 14.904729, 2.0526202, -17.252768)
+transform = Transform3D(0.2675411, 0, 0.9635464, 0, 1, 0, -0.9635464, 0, 0.2675411, 14.721682, 1.6753554, -16.761923)
 
 [node name="fire_extinguisher" parent="items" unique_id=1012721613 instance=ExtResource("11_i6kel")]
 transform = Transform3D(0.70710677, 0, -0.70710677, 0, 1, 0, 0.70710677, 0, 0.70710677, 22.454807, 0, -18.405193)

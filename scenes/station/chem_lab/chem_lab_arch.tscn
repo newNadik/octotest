@@ -10,6 +10,10 @@
 [ext_resource type="Material" uid="uid://ca2db0a60mj50" path="res://assets/materials/metal.tres" id="6_cfhbd"]
 [ext_resource type="PackedScene" uid="uid://b7vd8cvq5kxdt" path="res://scenes/station/items/light_switch.tscn" id="8_ldg3l"]
 [ext_resource type="PackedScene" uid="uid://c5tv72lyq8d8h" path="res://scenes/effects/caustic_rig.tscn" id="10_tada6"]
+[ext_resource type="PackedScene" uid="uid://bwx4cmp7n3qhv" path="res://scenes/interactables/document_item.tscn" id="12_c225s"]
+[ext_resource type="Texture2D" uid="uid://cxtornxjq5j3c" path="res://assets/textures/documents/Chemistry-Laboratory-Glassware.png" id="13_43ggg"]
+[ext_resource type="Texture2D" uid="uid://16llnphm2hx" path="res://assets/textures/documents/Chemistry-Laboratory-Glassware_ua.png" id="14_43ggg"]
+[ext_resource type="Texture2D" uid="uid://dmrtwl6yr8ahp" path="res://assets/textures/documents/PeriodicTable.png" id="15_y5kio"]
 [ext_resource type="PackedScene" uid="uid://cxtcm4i75e1pb" path="res://scenes/interactables/cardreader.tscn" id="19_dnitr"]
 
 [sub_resource type="NavigationMesh" id="NavigationMesh_kq4c8"]
@@ -175,10 +179,10 @@ lamp_lights = [NodePath("lights/OmniLight3D"), null, null, null]
 navigation_mesh = SubResource("NavigationMesh_kq4c8")
 
 [node name="StaticBody3D" type="StaticBody3D" parent="NavigationRegion3D" unique_id=1180561026]
-visible = false
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/StaticBody3D" unique_id=348947825]
 transform = Transform3D(0.7071068, 0, -0.7071067, 0, 1, 0, 0.7071067, 0, 0.7071068, 13.78595, -7.5464764e-06, -27.881907)
+visible = false
 shape = SubResource("ConcavePolygonShape3D_4vmjw")
 
 [node name="CollisionShape3D2" type="CollisionShape3D" parent="NavigationRegion3D/StaticBody3D" unique_id=629168570]
@@ -279,3 +283,15 @@ transform = Transform3D(0.6397694, 0.2484194, 0.72731215, -0.34045082, 0.9400143
 light_energy = 4.0
 rotation_speed_a_degrees = 3.0
 rotation_speed_b_degrees = -4.0
+
+[node name="DocumentItem" parent="." unique_id=-1447463677 instance=ExtResource("12_c225s")]
+transform = Transform3D(-0.70782226, 0, 0.70639056, 0, 1, 0, -0.70639056, 0, -0.70782226, 5.949, 3.3, -7.994)
+document_size = 1
+document_texture = ExtResource("13_43ggg")
+document_texture_ua = ExtResource("14_43ggg")
+
+[node name="DocumentItem2" parent="." unique_id=55420668 instance=ExtResource("12_c225s")]
+transform = Transform3D(0.7193397, 0, -0.69465834, 0, 1, 0, 0.69465834, 0, 0.7193397, 24.212667, 3.3, -16.982191)
+document_size = 1
+document_texture = ExtResource("15_y5kio")
+document_texture_ua = ExtResource("15_y5kio")

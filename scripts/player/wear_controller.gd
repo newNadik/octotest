@@ -60,6 +60,7 @@ func try_wear(item: WearableInteractable) -> bool:
 	var pickup_root := item.get_pickup_root()
 	_original_scales[slot] = pickup_root.scale
 	_original_rotations[slot] = pickup_root.rotation
+	item.set_worn(pickup_root.scale, pickup_root.rotation)
 	_worn[slot] = item
 	pickup_root.reparent(anchor, false)
 	pickup_root.position = item.wear_offset
@@ -78,9 +79,10 @@ func try_unwear(item: WearableInteractable) -> void:
 	if _world_root != null:
 		pickup_root.reparent(_world_root, true)
 	pickup_root.scale = _original_scales.get(slot, Vector3.ONE)
-	pickup_root.rotation = _original_rotations.get(slot, Vector3.ZERO)
+	pickup_root.rotation = Vector3.ZERO
 	_original_scales.erase(slot)
 	_original_rotations.erase(slot)
+	item.set_unworn()
 	item.set_held(false)
 	item.drop(_player)
 

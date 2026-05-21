@@ -56,3 +56,4 @@ lamp_lights = [NodePath("lights/OmniLight3D"), NodePath("lights/OmniLight3D2"), 
 lamp_lights = [NodePath("lights/OmniLight3D"), null, null, null]
 
 [node name="ChemLabDetails" parent="." unique_id=145407394 instance=ExtResource("17_ljnju")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0031471252, 4.7683716e-07, 0.026174545)

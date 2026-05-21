@@ -8,44 +8,32 @@
 - [x] Round garden / plants area
 - [x] Benches (atrium + along window)
 - [x] Round table with chairs (2–3 sets)
-- [ ] Wall-mounted info panels
 - [x] Vending machine
-- [ ] Leaflets / brochures rack
-- [ ] Informational leaflets rack (observation side)
-- [ ] Newspaper / magazine on bench
-- [ ] Kids' drawings pinboard
-- [ ] Noticeboard with crew roster / duty rota
-- [ ] Mission / research briefing board
-- [ ] Directional signage / map stand
 - [x] Potted plant (corner, observation side)
-- [ ] Coffee mug (on bench / table)
-- [ ] Coin (on bench / under table)
+- [x] Coffee mug (on bench / table)
 - [x] Wall clock
 - [x] Trash bins
 - [x] Fire extinguisher + cabinet
-- [ ] Evacuation plan (wall-mounted)
+- [x] Evacuation plan (wall-mounted)
 - [x] CCTV cameras (corner mounts, 2–3)
 - [ ] NPC - eating ramen and watching tik-tok
+- [ ] Wall-mounted info panels
+- [ ] Kids' drawings pinboard
 
 #### Character touches
-- [ ] Someone's left a sketchbook open on the bench (ocean drawings)
+- [x] Someone's left a sketchbook open on the bench (ocean drawings)
 
 ### Gift Shop
 - [x] Display shelving units
 - [x] Glass counter with till
+- [x] CCTV camera (corner mount)
+- [x] Books & field guides (spinning rack)
 - [ ] Octopus plushies (rack / basket)
 - [ ] Shark / sea creature plushies
-- [x] Books & field guides (spinning rack)
-- [x] Postcards & prints stand
 - [ ] Tote bags on hooks
 - [ ] Branded mugs / water bottles
-- [ ] Poster prints framed on wall
 - [ ] Plant pot (counter or corner)
 - [ ] Evacuation plan (wall-mounted)
-- [ ] Keychains + fridge magnets (counter display)
-- [ ] Sticker sheets rack
-- [ ] Tissue box (at till)
-- [x] CCTV camera (corner mount)
 
 ### WC
 - [x] Toilet stalls (2–3) with doors
@@ -59,71 +47,45 @@
 
 ### Chemistry Lab
 - [x] Workbench tables (2–3) + stools
-- [ ] Fume hood / extraction cabinet
-- [ ] Shelving with labelled reagent bottles
-- [ ] Microscopes (2–3)
-- [ ] Centrifuge (spinning)
-- [ ] Hot plate / stirrer
-- [ ] Safety goggles + gloves rack
-- [ ] Eyewash station
-- [ ] Whiteboard with formulas
-- [ ] Waste disposal containers
-- [ ] Trash bin (general)
+- [x] Fume hood / extraction cabinet
+- [x] Shelving with labelled reagent bottles
+- [x] Microscopes (2–3)
+- [x] Centrifuge (spinning)
+- [x] Hot plate / stirrer
+- [x] Safety goggles + gloves rack
 - [x] Fire extinguisher
-- [ ] Evacuation plan (wall-mounted)
-- [ ] Beakers + flasks (various sizes)
-- [ ] Pipettes (rack)
-- [ ] Petri dishes (stacked)
-- [ ] Rubber tubing lengths
-- [ ] Lab notebooks + pens
-- [ ] Box of latex gloves
-- [ ] pH test strips
-- [ ] Safety data sheets binder
-- [ ] Permanent marker (for labelling)
-- [ ] Timer (on bench)
+- [x] Evacuation plan (wall-mounted)
+- [x] Beakers + flasks (various sizes)
+- [x] Pipettes (rack)
+- [x] Lab notebooks + pens
 - [x] Wall clock
 - [x] First aid kit (wall-mounted)
-- [ ] Keypad / card reader on door
-- [ ] CCTV camera
-
-#### Storage area
-- [ ] Metal shelving units
-- [ ] Labelled reagent stock boxes (stacked)
-- [ ] Equipment cases (Pelican-style)
-- [ ] Specimen storage boxes
-- [ ] Wall-mounted inventory sheet
-- [ ] Padlocks (on shelving)
-- [ ] Clipboard with stock list
-- [ ] Packing tape + tape gun
+- [x] Keypad / card reader on door
+- [ ] Posters
 
 ### Workshop
+- [x] Soldering station
+- [x] Fire extinguisher
+- [x] Evacuation plan (wall-mounted)
+- [x] Wall clock
+- [x] First aid kit (wall-mounted)
+- [x] Keypad / card reader on door
 - [ ] 3D printers (2–3) on workbenches
 - [ ] Beatle part in 3D printer
 - [ ] Spool rack for filament
 - [ ] Pegboard wall with tools
 - [ ] Screwdriver (on pegboard / bench)
 - [ ] Drill press / bench drill
-- [x] Soldering station
 - [ ] Component bins / parts drawers
 - [ ] Oscilloscope + multimeter
 - [ ] Vice mounted on bench edge
 - [ ] Rollaway tool cart
-- [ ] Trash bin
-- [x] Fire extinguisher
-- [ ] Evacuation plan (wall-mounted)
-- [ ] Loose nuts + bolts (tray on bench)
 - [ ] Wire spools
-- [ ] Sandpaper sheets
 - [ ] Printed schematics / blueprints (pinned)
-- [ ] Cable ties (bag)
-- [ ] Zip-lock bags with small components
-- [ ] Label maker
 - [ ] Safety glasses (spare pair on bench)
 - [ ] Coffee mug (bench prop)
-- [x] Wall clock
-- [ ] First aid kit (wall-mounted)
-- [ ] Keypad / card reader on door
 - [ ] CCTV camera
+- [ ] measuring tape
 - [ ] printed Rocky
 - [ ] 3D printer name tag "Gertrude"
 - [ ] Projector (on shelf — shows station construction photos when light is off)
@@ -131,19 +93,6 @@
 #### Character touches
 - [ ] Stickers all over one toolbox (band logos, nerdy stuff)
 - [ ] Lucky charm / keychain hanging from pegboard
-- [ ] Someone's named their 3D printer with a little label
-
-#### Storage area
-- [x] Metal shelving units
-- [ ] Labelled crates / parts bins
-- [ ] Cardboard boxes (stacked)
-- [ ] Equipment cases (Pelican-style)
-- [ ] Bubble wrap roll
-- [ ] Zip ties (bag)
-- [ ] Packing tape + tape gun
-- [ ] Padlocks (on shelving)
-- [ ] Clipboard with stock list
-- [ ] Wall-mounted inventory sheet
 
 ### Energy Lab
 - [ ] Large equipment consoles / panels
@@ -155,8 +104,7 @@
 - [ ] High-voltage signage
 - [x] Fire extinguisher (CO₂)
 - [ ] Wall-mounted circuit diagrams
-- [ ] Trash bin
-- [ ] Evacuation plan (wall-mounted)
+- [x] Evacuation plan (wall-mounted)
 - [ ] Clipboard with data / maintenance sheets
 - [ ] Safety gloves (pair on bench)
 - [ ] Ear protection (hanging peg)
@@ -165,23 +113,10 @@
 - [ ] Cable ties (bag)
 - [ ] Printed maintenance schedule (pinned)
 - [x] Wall clock
-- [ ] First aid kit (wall-mounted)
-- [ ] Keypad / card reader on door
+- [x] First aid kit (wall-mounted)
+- [x] Keypad / card reader on door
 - [ ] CCTV camera
 - [ ] Beatle robot 
-
-#### Storage area
-- [x] Metal shelving units
-- [ ] Labelled crates / bins
-- [ ] Cardboard boxes (stacked)
-- [ ] Equipment cases (heavy-duty)
-- [ ] Cable reels (spare, on shelf)
-- [ ] Pallet jack
-- [ ] Bubble wrap roll
-- [ ] Zip ties (bag)
-- [ ] Packing tape + tape gun
-- [ ] Padlocks (on shelving)
-- [ ] Wall-mounted inventory sheet
 
 ### Wet Room
 - [ ] Dive suit rack / hangers
@@ -191,23 +126,17 @@
 - [ ] Freshwater rinse shower
 - [ ] Drain grate (floor)
 - [ ] Waterproof lockers
-- [ ] Underwater entry hatch / moon pool edge
 - [ ] Emergency oxygen kit
 - [ ] Log board (dive records)
-- [ ] Trash bin
 - [x] Fire extinguisher
-- [ ] Evacuation plan (wall-mounted)
+- [x] Evacuation plan (wall-mounted)
 - [ ] Dive logbook + pen (on table)
 - [ ] Underwater torch / flashlight
-- [ ] Mesh gear bag (hanging)
 - [ ] Wetsuit hood + gloves (on hook)
-- [ ] Flip flops / water shoes (floor)
 - [ ] Towel stack (shelf)
-- [ ] Waterproof marker
-- [ ] Dive tables / decompression chart (wall poster)
 - [ ] Conditions board (water temp, visibility, current depth)
 - [x] Wall clock
-- [ ] First aid kit (wall-mounted)
+- [x] First aid kit (wall-mounted)
 - [ ] Hatch code pad (separate from door card reader)
 - [ ] Keypad / card reader on door
 - [ ] CCTV camera
@@ -233,7 +162,7 @@
 - [x] desk calendar
 - [x] Printer / scanner (on shelf or side table)
 - [x] Wall clock
-- [ ] Keypad / card reader on door
+- [x] Keypad / card reader on door
 
 #### Character touches
 - [x] Desk A — absolute wall of sticky notes (on monitor, around screen, edge of desk)
@@ -252,44 +181,34 @@
 - [x] Maintenance toolbox
 - [x] Stepladder (fold-out)
 - [x] Fire extinguisher
-- [ ] measuring tape
-- [ ] Evacuation plan (wall-mounted)
-- [ ] Maintenance manuals / binders
-- [ ] Clipboard with checklist (on hook)
-- [ ] Torch / flashlight
-- [ ] Keypad / card reader on door
+- [x] Evacuation plan (wall-mounted)
+- [x] Torch / flashlight
+- [x] Keypad / card reader on door
 - [ ] CCTV camera
-- [ ] NPC - mechanic 
-
-#### Character touches
-- [ ] Handwritten "DO NOT TURN OFF" note taped to one server
+- [x] NPC - mechanic 
 
 ### Quarters
 - [x] Bunk beds (2–3 sets)
 - [x] Personal lockers per bunk
 - [x] Small desk + chair
-- [ ] Shelf with personal items / books
+- [x] Shelf with personal items / books
 - [x] Plant pot (small, personal touch)
-- [ ] Trash bin
 - [ ] Evacuation plan (wall-mounted)
-- [ ] Paperback books (2–3)
-- [ ] board game
-- [ ] Water bottle (bedside)
+- [x] Paperback books (2–3)
+- [x] board game
+- [x] Water bottle (bedside)
 - [x] Slippers / flip flops (under bunk)
-- [ ] Journal / notebook + pen
 - [x] Wall clock
 - [x] darts
 - [x] pull up bar
-- [ ] Researcher card (hanging on bunk)
-- [ ] NPC sleeping
-- [ ] stash of toilet paper on shelf 
+- [x] Researcher card (hanging on bunk)
+- [x] NPC sleeping
+- [x] stash of toilet paper on shelf 
 
 #### Character touches
 - [ ] Bunk 1 — toy shark on pillow
-- [ ] Octopus plushie on shelf
 - [x] Bunk 1 — string of fairy lights around the frame
-- [ ] Bunk 2 — movie poster on wall above bed (sci-fi / action)
-- [ ] Bunk 3 — engineering textbooks stacked on desk
+- [x] Bunk 2 — movie poster on wall above bed (sci-fi / action)
 
 ### Kitchen
 - [x] Galley counter + cabinets
@@ -298,26 +217,21 @@
 - [x] Coffee machine
 - [x] fridge
 - [x] Dish rack
-- [ ] Pinned meal rota / notes
 - [x] Plant pot (herb pot on counter)
 - [x] Trash bin
 - [x] Fire extinguisher
-- [ ] Evacuation plan (wall-mounted)
+- [x] Evacuation plan (wall-mounted)
 - [x] Mugs (on hooks or shelf)
 - [x] Plates + bowls (stacked in cabinet)
-- [ ] Cutlery in utensil holder
 - [x] Kettle
-- [ ] Bags of snacks / crisps
-- [ ] Cereal box
-- [ ] Fruit bowl (bananas, apples)
+- [x] Bags of snacks / crisps
 - [x] Noodles cups
-- [ ] Sugar bowl / coffee pods
-- [ ] Sponge + washing-up liquid (by sink)
+- [x] Sponge + washing-up liquid (by sink)
 - [x] Wall clock
 
 #### Character touches
-- [ ] Passive-aggressive note about dishes on the wall
-- [ ] Note asking people to keep mugs in the kitchen
+- [x] Passive-aggressive note about dishes on the wall
+- [x] Note asking people to keep mugs in the kitchen
 - [ ] Someone's mug that's clearly their "special" mug
 - [x] A single sad banana that's been there too long
 
@@ -334,18 +248,14 @@
 
 ### Medical Bay
 - [x] Examination bed / cot
-- [ ] Medical cabinet with supplies
-- [ ] Defibrillator on wall bracket
-- [ ] Drip stand (IV pole)
+- [x] Medical cabinet with supplies
+- [x] Defibrillator on wall bracket
+- [x] Drip stand (IV pole)
 - [x] Desk + chair (medic station)
 - [x] Vitals monitor on wall
 - [x] Privacy curtain on rail
-- [ ] Biohazard waste bin + sharps bin
-- [ ] Trash bin (general)
 - [x] Fire extinguisher
-- [ ] Evacuation plan (wall-mounted)
-- [ ] Clipboard with patient forms + pen
-- [ ] Stethoscope (on desk or hook)
-- [ ] Box of latex gloves
-- [ ] Blood pressure cuff
+- [x] Evacuation plan (wall-mounted)
+- [x] Stethoscope (on desk or hook)
+- [x] Box of latex gloves
 - [x] Wall clock

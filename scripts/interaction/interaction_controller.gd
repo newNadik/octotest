@@ -102,6 +102,8 @@ var _suppress_focus_target_visuals := false
 var _saved_indicator_visibility_by_item_id: Dictionary = {}
 var _pending_held_restore_keys: Array[String] = []
 var _held_restore_retries_left := 0
+var _pending_worn_restore: Dictionary = {}
+var _worn_restore_retries_left := 0
 
 
 func initialize(player: CharacterBody3D, camera: Camera3D, hint_label: Label, world_root: Node3D) -> void:
@@ -326,27 +328,49 @@ func get_save_state() -> Dictionary:
 			var key = str(held_item.call("get_save_key")).strip_edges()
 			if not key.is_empty():
 				held_item_keys.append(key)
+	var worn_item_keys: Dictionary = {}
+	if _wear_controller != null:
+		for slot in ["hat", "glasses"]:
+			var worn := _wear_controller.get_worn_in_slot(slot)
+			if worn != null and worn.has_method("get_save_key"):
+				var key := str(worn.call("get_save_key")).strip_edges()
+				if not key.is_empty():
+					worn_item_keys[slot] = key
 	return {
-		"held_item_keys": held_item_keys
+		"held_item_keys": held_item_keys,
+		"worn_item_keys": worn_item_keys,
 	}
 
 
 func apply_save_state(state: Dictionary) -> void:
 	_pending_held_restore_keys.clear()
 	_held_restore_retries_left = 0
+	_pending_worn_restore.clear()
+	_worn_restore_retries_left = 0
 	if state.is_empty():
 		return
 	var keys = state.get("held_item_keys", [])
-	if not (keys is Array):
+	if keys is Array:
+		for key_value in keys:
+			var key := str(key_value).strip_edges()
+			if not key.is_empty():
+				_pending_held_restore_keys.append(key)
+	if not _pending_held_restore_keys.is_empty():
+		_held_restore_retries_left = 30
+		call_deferred("_restore_held_items_from_pending_keys")
+	if _wear_controller == null:
 		return
-	for key_value in keys:
-		var key := str(key_value).strip_edges()
+	var worn_keys = state.get("worn_item_keys", {})
+	if not (worn_keys is Dictionary):
+		return
+	for slot in worn_keys:
+		var key := str(worn_keys[slot]).strip_edges()
 		if not key.is_empty():
-			_pending_held_restore_keys.append(key)
-	if _pending_held_restore_keys.is_empty():
+			_pending_worn_restore[slot] = key
+	if _pending_worn_restore.is_empty():
 		return
-	_held_restore_retries_left = 30
-	call_deferred("_restore_held_items_from_pending_keys")
+	_worn_restore_retries_left = 30
+	call_deferred("_restore_worn_items_from_pending")
 
 
 func get_held_item_names() -> PackedStringArray:
@@ -622,6 +646,31 @@ func _restore_held_items_from_pending_keys() -> void:
 		return
 	var retry_timer := get_tree().create_timer(0.2)
 	retry_timer.timeout.connect(_restore_held_items_from_pending_keys)
+
+
+func _restore_worn_items_from_pending() -> void:
+	if _pending_worn_restore.is_empty():
+		return
+	var unresolved: Dictionary = {}
+	for slot in _pending_worn_restore:
+		var key := str(_pending_worn_restore[slot])
+		var item = _resolve_interactable_from_save_key(key)
+		if item == null:
+			unresolved[slot] = key
+			continue
+		if not (item is WearableInteractable):
+			continue
+		if _wear_controller.get_worn_in_slot(slot) != null:
+			continue
+		_wear_controller.try_wear(item as WearableInteractable)
+	_pending_worn_restore = unresolved
+	if _pending_worn_restore.is_empty():
+		return
+	_worn_restore_retries_left -= 1
+	if _worn_restore_retries_left <= 0:
+		return
+	var retry_timer := get_tree().create_timer(0.2)
+	retry_timer.timeout.connect(_restore_worn_items_from_pending)
 
 
 func _resolve_interactable_from_save_key(path_key: String):

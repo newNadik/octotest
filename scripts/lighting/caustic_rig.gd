@@ -21,14 +21,12 @@ var _frame_skip := false
 
 
 func _ready() -> void:
-	if OS.has_feature("mobile"):
-		var settings := get_node_or_null("/root/GameSettings")
-		if settings != null:
-			visible = bool(settings.call("get_shadows_enabled"))
-			settings.shadows_enabled_changed.connect(func(enabled: bool) -> void: visible = enabled)
-		else:
-			visible = false
-		return
+	var settings := get_node_or_null("/root/GameSettings")
+	if settings != null:
+		visible = bool(settings.call("get_shadows_enabled"))
+		settings.shadows_enabled_changed.connect(func(enabled: bool) -> void: visible = enabled)
+	elif OS.has_feature("mobile"):
+		visible = false
 	_cache_lights()
 	_apply_base_light_energy()
 

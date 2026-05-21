@@ -185,6 +185,7 @@ func _ready() -> void:
 	in_game_settings_button.pressed.connect(_on_settings_pressed)
 	in_game_main_menu_button.pressed.connect(_on_main_menu_pressed)
 	pause_menu_button.pressed.connect(_on_pause_menu_button_pressed)
+	pause_menu_button.visible = OS.has_feature("mobile")
 	_connect_autosave_doors()
 	_connect_shadow_setting()
 	_initialize_room_streaming()
@@ -1200,7 +1201,9 @@ func _apply_positional_shadows(enabled: bool) -> void:
 
 
 func _set_positional_shadows_recursive(node: Node, enabled: bool) -> void:
-	if node is OmniLight3D:
+	if node is DirectionalLight3D:
+		(node as Light3D).shadow_enabled = enabled
+	elif node is OmniLight3D:
 		(node as Light3D).shadow_enabled = enabled
 	elif node is SpotLight3D:
 		var spot := node as SpotLight3D

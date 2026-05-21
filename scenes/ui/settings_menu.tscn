@@ -316,46 +316,23 @@ text = "Subtitles"
 [node name="SubtitlesSelector" type="HBoxContainer" parent="TopContainer/MainContainer/SettingsRows/SubtitlesRow" unique_id=1845810029]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_constants/separation = 12
+theme_override_constants/separation = 0
 
-[node name="SubtitlesPrevButton" type="Button" parent="TopContainer/MainContainer/SettingsRows/SubtitlesRow/SubtitlesSelector" unique_id=1071177996]
-custom_minimum_size = Vector2(42, 34)
-layout_mode = 2
-mouse_default_cursor_shape = 2
-theme_override_colors/font_color = Color(0.019607844, 0.06666667, 0.13333334, 1)
-theme_override_colors/font_focus_color = Color(0.019607844, 0.06666667, 0.13333334, 1)
-theme_override_colors/font_pressed_color = Color(0.9497966, 0.9789153, 0.99908715, 1)
-theme_override_colors/font_hover_color = Color(0.9497966, 0.9789153, 0.99908715, 1)
-theme_override_font_sizes/font_size = 24
-theme_override_styles/normal = SubResource("StyleBoxFlat_arrow_normal")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_arrow_pressed")
-theme_override_styles/hover = SubResource("StyleBoxFlat_arrow_hover")
-theme_override_styles/focus = SubResource("StyleBoxFlat_arrow_hover")
-text = "<"
-
-[node name="SubtitlesValueLabel" type="Label" parent="TopContainer/MainContainer/SettingsRows/SubtitlesRow/SubtitlesSelector" unique_id=1914226138]
-custom_minimum_size = Vector2(180, 0)
+[node name="SubtitlesOnButton" type="Button" parent="TopContainer/MainContainer/SettingsRows/SubtitlesRow/SubtitlesSelector" unique_id=1071177996]
+custom_minimum_size = Vector2(0, 34)
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_colors/font_color = Color(0.11372549, 0.19607843, 0.28627452, 1)
+mouse_default_cursor_shape = 2
 theme_override_font_sizes/font_size = 22
 text = "On"
-horizontal_alignment = 1
 
-[node name="SubtitlesNextButton" type="Button" parent="TopContainer/MainContainer/SettingsRows/SubtitlesRow/SubtitlesSelector" unique_id=613321051]
-custom_minimum_size = Vector2(42, 34)
+[node name="SubtitlesOffButton" type="Button" parent="TopContainer/MainContainer/SettingsRows/SubtitlesRow/SubtitlesSelector" unique_id=613321051]
+custom_minimum_size = Vector2(0, 34)
 layout_mode = 2
+size_flags_horizontal = 3
 mouse_default_cursor_shape = 2
-theme_override_colors/font_color = Color(0.019607844, 0.06666667, 0.13333334, 1)
-theme_override_colors/font_focus_color = Color(0.019607844, 0.06666667, 0.13333334, 1)
-theme_override_colors/font_pressed_color = Color(0.9497966, 0.9789153, 0.99908715, 1)
-theme_override_colors/font_hover_color = Color(0.9497966, 0.9789153, 0.99908715, 1)
-theme_override_font_sizes/font_size = 24
-theme_override_styles/normal = SubResource("StyleBoxFlat_arrow_normal")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_arrow_pressed")
-theme_override_styles/hover = SubResource("StyleBoxFlat_arrow_hover")
-theme_override_styles/focus = SubResource("StyleBoxFlat_arrow_hover")
-text = ">"
+theme_override_font_sizes/font_size = 22
+text = "Off"
 
 [node name="LanguageRow" type="HBoxContainer" parent="TopContainer/MainContainer/SettingsRows" unique_id=799668744]
 layout_mode = 2
@@ -371,46 +348,23 @@ text = "Language"
 [node name="LanguageSelector" type="HBoxContainer" parent="TopContainer/MainContainer/SettingsRows/LanguageRow" unique_id=205085421]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_constants/separation = 12
+theme_override_constants/separation = 0
 
-[node name="LanguagePrevButton" type="Button" parent="TopContainer/MainContainer/SettingsRows/LanguageRow/LanguageSelector" unique_id=605584091]
-custom_minimum_size = Vector2(42, 34)
-layout_mode = 2
-mouse_default_cursor_shape = 2
-theme_override_colors/font_color = Color(0.019607844, 0.06666667, 0.13333334, 1)
-theme_override_colors/font_focus_color = Color(0.019607844, 0.06666667, 0.13333334, 1)
-theme_override_colors/font_pressed_color = Color(0.9497966, 0.9789153, 0.99908715, 1)
-theme_override_colors/font_hover_color = Color(0.9497966, 0.9789153, 0.99908715, 1)
-theme_override_font_sizes/font_size = 24
-theme_override_styles/normal = SubResource("StyleBoxFlat_arrow_normal")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_arrow_pressed")
-theme_override_styles/hover = SubResource("StyleBoxFlat_arrow_hover")
-theme_override_styles/focus = SubResource("StyleBoxFlat_arrow_hover")
-text = "<"
-
-[node name="LanguageValueLabel" type="Label" parent="TopContainer/MainContainer/SettingsRows/LanguageRow/LanguageSelector" unique_id=1225211271]
-custom_minimum_size = Vector2(180, 0)
+[node name="LanguageEnButton" type="Button" parent="TopContainer/MainContainer/SettingsRows/LanguageRow/LanguageSelector" unique_id=605584091]
+custom_minimum_size = Vector2(0, 34)
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_colors/font_color = Color(0.11372549, 0.19607843, 0.28627452, 1)
-theme_override_font_sizes/font_size = 22
-text = "English (UK)"
-horizontal_alignment = 1
-
-[node name="LanguageNextButton" type="Button" parent="TopContainer/MainContainer/SettingsRows/LanguageRow/LanguageSelector" unique_id=266301680]
-custom_minimum_size = Vector2(42, 34)
-layout_mode = 2
 mouse_default_cursor_shape = 2
-theme_override_colors/font_color = Color(0.019607844, 0.06666667, 0.13333334, 1)
-theme_override_colors/font_focus_color = Color(0.019607844, 0.06666667, 0.13333334, 1)
-theme_override_colors/font_pressed_color = Color(0.9497966, 0.9789153, 0.99908715, 1)
-theme_override_colors/font_hover_color = Color(0.9497966, 0.9789153, 0.99908715, 1)
-theme_override_font_sizes/font_size = 24
-theme_override_styles/normal = SubResource("StyleBoxFlat_arrow_normal")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_arrow_pressed")
-theme_override_styles/hover = SubResource("StyleBoxFlat_arrow_hover")
-theme_override_styles/focus = SubResource("StyleBoxFlat_arrow_hover")
-text = ">"
+theme_override_font_sizes/font_size = 22
+text = "English"
+
+[node name="LanguageUkButton" type="Button" parent="TopContainer/MainContainer/SettingsRows/LanguageRow/LanguageSelector" unique_id=266301680]
+custom_minimum_size = Vector2(0, 34)
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_default_cursor_shape = 2
+theme_override_font_sizes/font_size = 22
+text = "Українська"
 
 [node name="ShadowsRow" type="HBoxContainer" parent="TopContainer/MainContainer/SettingsRows" unique_id=301884211]
 layout_mode = 2
@@ -426,46 +380,23 @@ text = "Shadows"
 [node name="ShadowsSelector" type="HBoxContainer" parent="TopContainer/MainContainer/SettingsRows/ShadowsRow" unique_id=301884213]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_constants/separation = 12
+theme_override_constants/separation = 0
 
-[node name="ShadowsPrevButton" type="Button" parent="TopContainer/MainContainer/SettingsRows/ShadowsRow/ShadowsSelector" unique_id=301884214]
-custom_minimum_size = Vector2(42, 34)
-layout_mode = 2
-mouse_default_cursor_shape = 2
-theme_override_colors/font_color = Color(0.019607844, 0.06666667, 0.13333334, 1)
-theme_override_colors/font_focus_color = Color(0.019607844, 0.06666667, 0.13333334, 1)
-theme_override_colors/font_pressed_color = Color(0.9497966, 0.9789153, 0.99908715, 1)
-theme_override_colors/font_hover_color = Color(0.9497966, 0.9789153, 0.99908715, 1)
-theme_override_font_sizes/font_size = 24
-theme_override_styles/normal = SubResource("StyleBoxFlat_arrow_normal")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_arrow_pressed")
-theme_override_styles/hover = SubResource("StyleBoxFlat_arrow_hover")
-theme_override_styles/focus = SubResource("StyleBoxFlat_arrow_hover")
-text = "<"
-
-[node name="ShadowsValueLabel" type="Label" parent="TopContainer/MainContainer/SettingsRows/ShadowsRow/ShadowsSelector" unique_id=301884215]
-custom_minimum_size = Vector2(180, 0)
+[node name="ShadowsOnButton" type="Button" parent="TopContainer/MainContainer/SettingsRows/ShadowsRow/ShadowsSelector" unique_id=301884214]
+custom_minimum_size = Vector2(0, 34)
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_colors/font_color = Color(0.11372549, 0.19607843, 0.28627452, 1)
+mouse_default_cursor_shape = 2
 theme_override_font_sizes/font_size = 22
 text = "On"
-horizontal_alignment = 1
 
-[node name="ShadowsNextButton" type="Button" parent="TopContainer/MainContainer/SettingsRows/ShadowsRow/ShadowsSelector" unique_id=301884216]
-custom_minimum_size = Vector2(42, 34)
+[node name="ShadowsOffButton" type="Button" parent="TopContainer/MainContainer/SettingsRows/ShadowsRow/ShadowsSelector" unique_id=301884216]
+custom_minimum_size = Vector2(0, 34)
 layout_mode = 2
+size_flags_horizontal = 3
 mouse_default_cursor_shape = 2
-theme_override_colors/font_color = Color(0.019607844, 0.06666667, 0.13333334, 1)
-theme_override_colors/font_focus_color = Color(0.019607844, 0.06666667, 0.13333334, 1)
-theme_override_colors/font_pressed_color = Color(0.9497966, 0.9789153, 0.99908715, 1)
-theme_override_colors/font_hover_color = Color(0.9497966, 0.9789153, 0.99908715, 1)
-theme_override_font_sizes/font_size = 24
-theme_override_styles/normal = SubResource("StyleBoxFlat_arrow_normal")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_arrow_pressed")
-theme_override_styles/hover = SubResource("StyleBoxFlat_arrow_hover")
-theme_override_styles/focus = SubResource("StyleBoxFlat_arrow_hover")
-text = ">"
+theme_override_font_sizes/font_size = 22
+text = "Off"
 
 [node name="BottomBar" type="ColorRect" parent="TopContainer" unique_id=441497060]
 custom_minimum_size = Vector2(0, 47)

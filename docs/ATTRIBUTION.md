@@ -154,6 +154,18 @@ Source: [Flaticon](https://www.flaticon.com/)
 - "Filament-Reel-Holder" (https://skfb.ly/6BSDQ) by Erik is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
 - "Gawr Gura shark hat" (https://skfb.ly/oCUxR) by Mr.Lime is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
 - "Zaz 968m" (https://skfb.ly/pDL8t) by taras.yaremenco is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+- "Tape Measure" (https://skfb.ly/DRqX) by Billy Jackman is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+- "Work tool table" (https://skfb.ly/oLnYY) by Artiom Catana is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+- "Oscilloscope" (https://skfb.ly/oOrB7) by Neg0Die is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+- "Digital storage oscilloscope Akip 4125/1" (https://skfb.ly/6WPFt) by vfrckkkf is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+- "TOOL CART LOW POLY" (https://skfb.ly/pAASn) by THEAPPXR is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+- "Safety Equipment  pack" (https://skfb.ly/oTuNA) by fatimisbah is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+- "Item Organizer" (https://skfb.ly/oA9uF) by Eric Wallbank is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+- "[CC0] Safety Banana Plug Cable with Test Probe" (https://skfb.ly/6XnnD) by literallylara is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+- "[CC0] Generic Multimeter" (https://skfb.ly/6WOxp) by literallylara is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+- "[CC0] Set of Electronic Components" (https://skfb.ly/6XnzP) by literallylara is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+- "Power Supply Device" (https://skfb.ly/6WTOH) by stella.apparatus is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+- "oscillograph" (https://skfb.ly/6XWtS) by maxdragonn is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
 - 
 
 ## Textures

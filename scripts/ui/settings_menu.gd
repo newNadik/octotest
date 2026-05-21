@@ -28,19 +28,20 @@ const COLOR_MID_BLUE := Color(0.007843138, 0.2627451, 0.43137255, 1.0) # 02436e
 @onready var voice_slider: HSlider = $TopContainer/MainContainer/SettingsRows/VoiceRow/VoiceSlider
 @onready var voice_value: Label = $TopContainer/MainContainer/SettingsRows/VoiceRow/VoiceValue
 @onready var subtitles_label: Label = $TopContainer/MainContainer/SettingsRows/SubtitlesRow/SubtitlesLabel
-@onready var subtitles_prev_button: Button = $TopContainer/MainContainer/SettingsRows/SubtitlesRow/SubtitlesSelector/SubtitlesPrevButton
-@onready var subtitles_value_label: Label = $TopContainer/MainContainer/SettingsRows/SubtitlesRow/SubtitlesSelector/SubtitlesValueLabel
-@onready var subtitles_next_button: Button = $TopContainer/MainContainer/SettingsRows/SubtitlesRow/SubtitlesSelector/SubtitlesNextButton
+@onready var subtitles_on_button: Button = $TopContainer/MainContainer/SettingsRows/SubtitlesRow/SubtitlesSelector/SubtitlesOnButton
+@onready var subtitles_off_button: Button = $TopContainer/MainContainer/SettingsRows/SubtitlesRow/SubtitlesSelector/SubtitlesOffButton
 @onready var language_label: Label = $TopContainer/MainContainer/SettingsRows/LanguageRow/LanguageLabel
-@onready var language_prev_button: Button = $TopContainer/MainContainer/SettingsRows/LanguageRow/LanguageSelector/LanguagePrevButton
-@onready var language_value_label: Label = $TopContainer/MainContainer/SettingsRows/LanguageRow/LanguageSelector/LanguageValueLabel
-@onready var language_next_button: Button = $TopContainer/MainContainer/SettingsRows/LanguageRow/LanguageSelector/LanguageNextButton
+@onready var language_en_button: Button = $TopContainer/MainContainer/SettingsRows/LanguageRow/LanguageSelector/LanguageEnButton
+@onready var language_uk_button: Button = $TopContainer/MainContainer/SettingsRows/LanguageRow/LanguageSelector/LanguageUkButton
 @onready var shadows_label: Label = $TopContainer/MainContainer/SettingsRows/ShadowsRow/ShadowsLabel
-@onready var shadows_prev_button: Button = $TopContainer/MainContainer/SettingsRows/ShadowsRow/ShadowsSelector/ShadowsPrevButton
-@onready var shadows_value_label: Label = $TopContainer/MainContainer/SettingsRows/ShadowsRow/ShadowsSelector/ShadowsValueLabel
-@onready var shadows_next_button: Button = $TopContainer/MainContainer/SettingsRows/ShadowsRow/ShadowsSelector/ShadowsNextButton
+@onready var shadows_on_button: Button = $TopContainer/MainContainer/SettingsRows/ShadowsRow/ShadowsSelector/ShadowsOnButton
+@onready var shadows_off_button: Button = $TopContainer/MainContainer/SettingsRows/ShadowsRow/ShadowsSelector/ShadowsOffButton
 
 var _is_updating_ui := false
+var _seg_style_left_sel: StyleBoxFlat
+var _seg_style_left_unsel: StyleBoxFlat
+var _seg_style_right_sel: StyleBoxFlat
+var _seg_style_right_unsel: StyleBoxFlat
 
 
 func _enter_tree() -> void:
@@ -54,13 +55,14 @@ func _ready() -> void:
 	sounds_slider.value_changed.connect(_on_sounds_changed)
 	ambience_slider.value_changed.connect(_on_ambience_changed)
 	voice_slider.value_changed.connect(_on_voice_changed)
-	subtitles_prev_button.pressed.connect(_on_subtitles_cycle.bind(-1))
-	subtitles_next_button.pressed.connect(_on_subtitles_cycle.bind(1))
-	language_prev_button.pressed.connect(_on_language_cycle.bind(-1))
-	language_next_button.pressed.connect(_on_language_cycle.bind(1))
-	shadows_prev_button.pressed.connect(_on_shadows_cycle.bind(-1))
-	shadows_next_button.pressed.connect(_on_shadows_cycle.bind(1))
+	subtitles_on_button.pressed.connect(_on_subtitles_select.bind(true))
+	subtitles_off_button.pressed.connect(_on_subtitles_select.bind(false))
+	language_en_button.pressed.connect(_on_language_select.bind(LOCALE_EN_GB))
+	language_uk_button.pressed.connect(_on_language_select.bind(LOCALE_UK_UA))
+	shadows_on_button.pressed.connect(_on_shadows_select.bind(true))
+	shadows_off_button.pressed.connect(_on_shadows_select.bind(false))
 	_apply_slider_grabber_icons()
+	_init_seg_styles()
 	_load_settings_into_ui()
 	_apply_localized_text()
 	_grab_initial_focus()
@@ -127,35 +129,21 @@ func _on_voice_changed(value: float) -> void:
 	_update_percent_label(voice_value, value)
 
 
-func _on_shadows_cycle(_direction: int) -> void:
+func _on_shadows_select(enabled: bool) -> void:
 	var settings := _get_game_settings()
-	var enabled := true
-	if settings != null and settings.has_method("get_shadows_enabled"):
-		enabled = bool(settings.call("get_shadows_enabled"))
-	enabled = not enabled
 	if settings != null and settings.has_method("set_shadows_enabled"):
 		settings.call("set_shadows_enabled", enabled)
 	_update_shadows_value(enabled)
 
 
-func _on_subtitles_cycle(_direction: int) -> void:
+func _on_subtitles_select(enabled: bool) -> void:
 	var settings := _get_game_settings()
-	var enabled := true
-	if settings != null and settings.has_method("get_subtitles_enabled"):
-		enabled = bool(settings.call("get_subtitles_enabled"))
-	enabled = not enabled
 	if settings != null and settings.has_method("set_subtitles_enabled"):
 		settings.call("set_subtitles_enabled", enabled)
 	_update_subtitles_value(enabled)
 
 
-func _on_language_cycle(direction: int) -> void:
-	var current_locale := _get_active_locale()
-	var current_index := LOCALES.find(current_locale)
-	if current_index < 0:
-		current_index = 0
-	var next_index := wrapi(current_index + direction, 0, LOCALES.size())
-	var locale: String = str(LOCALES[next_index])
+func _on_language_select(locale: String) -> void:
 	var settings := _get_game_settings()
 	if settings != null and settings.has_method("set_locale"):
 		settings.call("set_locale", locale)
@@ -214,6 +202,7 @@ func _apply_localized_text() -> void:
 	language_label.text = tr("Language")
 	shadows_label.text = tr("Shadows")
 	_update_subtitles_value(_get_subtitles_enabled())
+	_update_shadows_value(_get_shadows_enabled())
 	_update_language_value(_get_active_locale())
 
 
@@ -222,15 +211,19 @@ func _update_percent_label(label: Label, value: float) -> void:
 
 
 func _update_subtitles_value(enabled: bool) -> void:
-	subtitles_value_label.text = tr("On") if enabled else tr("Off")
+	subtitles_on_button.text = tr("On")
+	subtitles_off_button.text = tr("Off")
+	_apply_seg_buttons(subtitles_on_button, subtitles_off_button, enabled)
 
 
 func _update_shadows_value(enabled: bool) -> void:
-	shadows_value_label.text = tr("On") if enabled else tr("Off")
+	shadows_on_button.text = tr("On")
+	shadows_off_button.text = tr("Off")
+	_apply_seg_buttons(shadows_on_button, shadows_off_button, enabled)
 
 
 func _update_language_value(locale: String) -> void:
-	language_value_label.text = tr("Ukrainian") if locale.begins_with("uk") else tr("English")
+	_apply_seg_buttons(language_en_button, language_uk_button, not locale.begins_with("uk"))
 
 
 func _get_active_locale() -> String:
@@ -245,6 +238,60 @@ func _get_subtitles_enabled() -> bool:
 	if settings != null and settings.has_method("get_subtitles_enabled"):
 		return bool(settings.call("get_subtitles_enabled"))
 	return true
+
+
+func _get_shadows_enabled() -> bool:
+	var settings := _get_game_settings()
+	if settings != null and settings.has_method("get_shadows_enabled"):
+		return bool(settings.call("get_shadows_enabled"))
+	return true
+
+
+func _init_seg_styles() -> void:
+	var sel_bg := COLOR_MID_BLUE
+	var unsel_bg := Color(0.42352942, 0.7529412, 1.0)
+	_seg_style_left_sel = _make_seg_style(sel_bg, 4, 0, 0, 4)
+	_seg_style_left_unsel = _make_seg_style(unsel_bg, 4, 0, 0, 4)
+	_seg_style_right_sel = _make_seg_style(sel_bg, 0, 4, 4, 0)
+	_seg_style_right_unsel = _make_seg_style(unsel_bg, 0, 4, 4, 0)
+
+
+func _make_seg_style(bg: Color, tl: int, tr: int, br: int, bl: int) -> StyleBoxFlat:
+	var s := StyleBoxFlat.new()
+	s.bg_color = bg
+	s.border_color = bg
+	s.border_width_left = 2
+	s.border_width_top = 2
+	s.border_width_right = 2
+	s.border_width_bottom = 2
+	s.corner_radius_top_left = tl
+	s.corner_radius_top_right = tr
+	s.corner_radius_bottom_right = br
+	s.corner_radius_bottom_left = bl
+	return s
+
+
+func _apply_seg_buttons(left_btn: Button, right_btn: Button, left_active: bool) -> void:
+	var color_white := Color(0.9497966, 0.9789153, 0.99908715)
+	var color_dark := Color(0.019607844, 0.06666667, 0.13333334)
+	var left_normal := _seg_style_left_sel if left_active else _seg_style_left_unsel
+	var right_normal := _seg_style_right_unsel if left_active else _seg_style_right_sel
+	left_btn.add_theme_stylebox_override("normal", left_normal)
+	left_btn.add_theme_stylebox_override("hover", _seg_style_left_sel)
+	left_btn.add_theme_stylebox_override("pressed", _seg_style_left_sel)
+	left_btn.add_theme_stylebox_override("focus", left_normal)
+	left_btn.add_theme_color_override("font_color", color_white if left_active else color_dark)
+	left_btn.add_theme_color_override("font_hover_color", color_white)
+	left_btn.add_theme_color_override("font_pressed_color", color_white)
+	left_btn.add_theme_color_override("font_focus_color", color_white if left_active else color_dark)
+	right_btn.add_theme_stylebox_override("normal", right_normal)
+	right_btn.add_theme_stylebox_override("hover", _seg_style_right_sel)
+	right_btn.add_theme_stylebox_override("pressed", _seg_style_right_sel)
+	right_btn.add_theme_stylebox_override("focus", right_normal)
+	right_btn.add_theme_color_override("font_color", color_dark if left_active else color_white)
+	right_btn.add_theme_color_override("font_hover_color", color_white)
+	right_btn.add_theme_color_override("font_pressed_color", color_white)
+	right_btn.add_theme_color_override("font_focus_color", color_dark if left_active else color_white)
 
 
 func _get_game_settings() -> Node:
