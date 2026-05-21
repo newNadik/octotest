@@ -15,7 +15,7 @@ static func estimate_drop_base_offset(root: Node3D) -> float:
 		var node: Node = stack.pop_back()
 		if node is MeshInstance3D:
 			var mesh_instance := node as MeshInstance3D
-			if mesh_instance.mesh != null:
+			if mesh_instance.mesh != null and mesh_instance.is_visible_in_tree():
 				var aabb := mesh_instance.mesh.get_aabb()
 				for corner in _aabb_corners(aabb):
 					var world_corner: Vector3 = mesh_instance.global_transform * corner
@@ -44,7 +44,7 @@ static func estimate_drop_horizontal_width(root: Node3D) -> float:
 		var node: Node = stack.pop_back()
 		if node is MeshInstance3D:
 			var mesh_instance := node as MeshInstance3D
-			if mesh_instance.mesh != null:
+			if mesh_instance.mesh != null and mesh_instance.is_visible_in_tree():
 				var aabb := mesh_instance.mesh.get_aabb()
 				for corner in _aabb_corners(aabb):
 					var world_corner: Vector3 = mesh_instance.global_transform * corner
