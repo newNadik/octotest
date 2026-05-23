@@ -2,9 +2,9 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://17j2svm6in4o"
-path.s3tc="res://.godot/imported/history_4.png-fe396855c5d82b85a353cfe42d72caa9.s3tc.ctex"
-path.etc2="res://.godot/imported/history_4.png-fe396855c5d82b85a353cfe42d72caa9.etc2.ctex"
+uid="uid://io88aqsq6tcm"
+path.s3tc="res://.godot/imported/workshop_safety.png-d34e09b4e2e060a0ae30b79f5253573f.s3tc.ctex"
+path.etc2="res://.godot/imported/workshop_safety.png-d34e09b4e2e060a0ae30b79f5253573f.etc2.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
@@ -12,8 +12,8 @@ metadata={
 
 [deps]
 
-source_file="res://assets/textures/historical/history_4.png"
-dest_files=["res://.godot/imported/history_4.png-fe396855c5d82b85a353cfe42d72caa9.s3tc.ctex", "res://.godot/imported/history_4.png-fe396855c5d82b85a353cfe42d72caa9.etc2.ctex"]
+source_file="res://assets/models/interior/workshop/workshop_safety.png"
+dest_files=["res://.godot/imported/workshop_safety.png-d34e09b4e2e060a0ae30b79f5253573f.s3tc.ctex", "res://.godot/imported/workshop_safety.png-d34e09b4e2e060a0ae30b79f5253573f.etc2.ctex"]
 
 [params]
 

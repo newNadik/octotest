@@ -2,18 +2,21 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://17j2svm6in4o"
-path.s3tc="res://.godot/imported/history_4.png-fe396855c5d82b85a353cfe42d72caa9.s3tc.ctex"
-path.etc2="res://.godot/imported/history_4.png-fe396855c5d82b85a353cfe42d72caa9.etc2.ctex"
+uid="uid://duqmv7avmev5j"
+path.s3tc="res://.godot/imported/metal_Image_0.jpg-ce68796aa651cf61562e359fa405ceeb.s3tc.ctex"
+path.etc2="res://.godot/imported/metal_Image_0.jpg-ce68796aa651cf61562e359fa405ceeb.etc2.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
+generator_parameters={
+"md5": "1483d815d14c85061c02b518c15277b2"
+}
 
 [deps]
 
-source_file="res://assets/textures/historical/history_4.png"
-dest_files=["res://.godot/imported/history_4.png-fe396855c5d82b85a353cfe42d72caa9.s3tc.ctex", "res://.godot/imported/history_4.png-fe396855c5d82b85a353cfe42d72caa9.etc2.ctex"]
+source_file="res://assets/models/interior/workshop/metal_Image_0.jpg"
+dest_files=["res://.godot/imported/metal_Image_0.jpg-ce68796aa651cf61562e359fa405ceeb.s3tc.ctex", "res://.godot/imported/metal_Image_0.jpg-ce68796aa651cf61562e359fa405ceeb.etc2.ctex"]
 
 [params]
 

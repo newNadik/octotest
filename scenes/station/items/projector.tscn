@@ -1,0 +1,50 @@
+[gd_scene format=3 uid="uid://0375jeemju0y"]
+
+[ext_resource type="PackedScene" uid="uid://yl5wo25a1p2q" path="res://assets/models/interior/workshop/generic_white_digital_projector.glb" id="1_jhyye"]
+[ext_resource type="Script" uid="uid://7y6qk52duhvw" path="res://scripts/interaction/projector.gd" id="1_proj"]
+[ext_resource type="Script" uid="uid://bt8vvmy3m63u7" path="res://scripts/interaction/interactable.gd" id="2_inter"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_jhyye"]
+radius = 0.01
+height = 0.01
+is_hemisphere = true
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_2jkk2"]
+emission_enabled = true
+emission = Color(0, 0.80784315, 1, 1)
+emission_energy_multiplier = 10.0
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_projector"]
+size = Vector3(0.69220704, 0.29470947, 0.5375537)
+
+[node name="projector" type="StaticBody3D" unique_id=1301903920]
+collision_layer = 8
+collision_mask = 0
+script = ExtResource("1_proj")
+
+[node name="Sketchfab_Scene" parent="." unique_id=2107713435 instance=ExtResource("1_jhyye")]
+transform = Transform3D(0.15, 0, 0, 0, 0.14951684, 0.01202984, 0, -0.01202984, 0.14951684, 0, 0.117, 0)
+
+[node name="indicator_led" type="MeshInstance3D" parent="." unique_id=1173734357]
+transform = Transform3D(1, 0, 0, 0, 0.13052624, -0.9914448, 0, 0.9914448, 0.13052624, -0.0021408945, 0.2049331, 0.23792079)
+visible = false
+mesh = SubResource("SphereMesh_jhyye")
+surface_material_override/0 = SubResource("StandardMaterial3D_2jkk2")
+
+[node name="Interactable" type="Area3D" parent="." unique_id=1293847561]
+collision_layer = 8
+collision_mask = 0
+script = ExtResource("2_inter")
+display_name = "Projector"
+prompt_action = "Press"
+interaction_range = 2.2
+requires_line_of_sight = false
+indicator_local_offset = Vector3(0, 0, 0.3)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Interactable" unique_id=1293847562]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.008388676, 0.10999389, -0.0036840811)
+shape = SubResource("BoxShape3D_projector")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=562689084]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.008388676, 0.10999389, -0.0036840811)
+shape = SubResource("BoxShape3D_projector")
