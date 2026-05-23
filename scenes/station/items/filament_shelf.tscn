@@ -1,0 +1,81 @@
+[gd_scene format=3 uid="uid://g4o4xogg23bp"]
+
+[ext_resource type="Material" uid="uid://bsc2sq4cl7hx5" path="res://assets/materials/cardboard.tres" id="1_dk21d"]
+[ext_resource type="PackedScene" uid="uid://cuam2pg4ul36i" path="res://scenes/station/items/filament.tscn" id="2_gdhum"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_kskiu"]
+size = Vector3(0.006, 0.2, 3.54)
+
+[node name="filament_shelf" type="Node3D" unique_id=1367511490]
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="." unique_id=1292364094]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -0.0038457513, 2.5739832, 0.43515673)
+mesh = SubResource("BoxMesh_kskiu")
+surface_material_override/0 = ExtResource("1_dk21d")
+
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="." unique_id=1326732953]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -0.0038457513, 2.5739832, 0.06605783)
+mesh = SubResource("BoxMesh_kskiu")
+surface_material_override/0 = ExtResource("1_dk21d")
+
+[node name="Node3D" type="Node3D" parent="." unique_id=1339542238]
+
+[node name="filament" parent="Node3D" unique_id=512132931 instance=ExtResource("2_gdhum")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.4606221, 2.582559, 0.2586588)
+
+[node name="filament2" parent="Node3D" unique_id=1429648475 instance=ExtResource("2_gdhum")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.3019699, 2.582559, 0.2586588)
+
+[node name="filament3" parent="Node3D" unique_id=637057555 instance=ExtResource("2_gdhum")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.1541194, 2.582559, 0.2586588)
+
+[node name="filament4" parent="Node3D" unique_id=975436616 instance=ExtResource("2_gdhum")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.9954672, 2.582559, 0.2586588)
+
+[node name="filament5" parent="Node3D" unique_id=448456879 instance=ExtResource("2_gdhum")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.84216106, 2.582559, 0.2586588)
+
+[node name="filament6" parent="Node3D" unique_id=2119414666 instance=ExtResource("2_gdhum")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.6835089, 2.582559, 0.2586588)
+
+[node name="filament7" parent="Node3D" unique_id=504262597 instance=ExtResource("2_gdhum")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.53565836, 2.582559, 0.2586588)
+
+[node name="filament8" parent="Node3D" unique_id=348766242 instance=ExtResource("2_gdhum")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.37700617, 2.582559, 0.2586588)
+
+[node name="filament9" parent="Node3D" unique_id=1054255871 instance=ExtResource("2_gdhum")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.21137464, 2.582559, 0.2586588)
+
+[node name="filament10" parent="Node3D" unique_id=22582024 instance=ExtResource("2_gdhum")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.052722454, 2.582559, 0.2586588)
+
+[node name="filament11" parent="Node3D" unique_id=2001099738 instance=ExtResource("2_gdhum")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.09512806, 2.582559, 0.2586588)
+
+[node name="filament12" parent="Node3D" unique_id=413397011 instance=ExtResource("2_gdhum")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.25378025, 2.582559, 0.2586588)
+
+[node name="filament13" parent="Node3D" unique_id=67053894 instance=ExtResource("2_gdhum")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.40708637, 2.582559, 0.2586588)
+
+[node name="filament14" parent="Node3D" unique_id=999938934 instance=ExtResource("2_gdhum")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.56573856, 2.582559, 0.2586588)
+
+[node name="filament15" parent="Node3D" unique_id=1948531615 instance=ExtResource("2_gdhum")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.7135891, 2.582559, 0.2586588)
+
+[node name="filament16" parent="Node3D" unique_id=592017044 instance=ExtResource("2_gdhum")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.87224126, 2.582559, 0.2586588)
+
+[node name="filament17" parent="Node3D" unique_id=438274987 instance=ExtResource("2_gdhum")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.041592, 2.582559, 0.2586588)
+
+[node name="filament18" parent="Node3D" unique_id=1525014126 instance=ExtResource("2_gdhum")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.2002442, 2.582559, 0.2586588)
+
+[node name="filament19" parent="Node3D" unique_id=1963285817 instance=ExtResource("2_gdhum")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.3480947, 2.582559, 0.2586588)
+
+[node name="filament20" parent="Node3D" unique_id=1530689288 instance=ExtResource("2_gdhum")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5067469, 2.582559, 0.2586588)

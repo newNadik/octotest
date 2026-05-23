@@ -166,6 +166,7 @@ Source: [Flaticon](https://www.flaticon.com/)
 - "[CC0] Set of Electronic Components" (https://skfb.ly/6XnzP) by literallylara is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
 - "Power Supply Device" (https://skfb.ly/6WTOH) by stella.apparatus is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
 - "oscillograph" (https://skfb.ly/6XWtS) by maxdragonn is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+- "Scrap metal (lowpoly)" (https://skfb.ly/ovXPw) by Zuckergelee is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
 - 
 
 ## Textures

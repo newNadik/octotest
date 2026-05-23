@@ -70,17 +70,17 @@
 - [x] Wall clock
 - [x] First aid kit (wall-mounted)
 - [x] Keypad / card reader on door
-- [ ] 3D printers (2–3) on workbenches
+- [x] 3D printers (2–3) on workbenches
 - [ ] Beatle part in 3D printer
-- [ ] Spool rack for filament
-- [ ] Pegboard wall with tools
-- [ ] Screwdriver (on pegboard / bench)
-- [ ] Drill press / bench drill
-- [ ] Component bins / parts drawers
-- [ ] Oscilloscope + multimeter
-- [ ] Vice mounted on bench edge
-- [ ] Rollaway tool cart
-- [ ] Wire spools
+- [x] Spool rack for filament
+- [x] Pegboard wall with tools
+- [x] Screwdriver (on pegboard / bench)
+- [x] Drill press / bench drill
+- [x] Component bins / parts drawers
+- [x] Oscilloscope + multimeter
+- [x] Vice mounted on bench edge
+- [x] Rollaway tool cart
+- [x] Wire spools
 - [ ] Printed schematics / blueprints (pinned)
 - [ ] Safety glasses (spare pair on bench)
 - [ ] Coffee mug (bench prop)

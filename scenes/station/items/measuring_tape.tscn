@@ -243,6 +243,7 @@ mesh = SubResource("ArrayMesh_44iem")
 
 [node name="Armature" type="Node3D" parent="Node3D" unique_id=1518947230]
 transform = Transform3D(0.06999999, 0, 0, 0, 0.06999999, 0, 0, 0, 0.06999999, 0, 0, 0)
+visible = false
 
 [node name="Skeleton3D" type="Skeleton3D" parent="Node3D/Armature" unique_id=660653662]
 bones/0/name = "Bone"
@@ -363,7 +364,7 @@ transform = Transform3D(0.9999998, 0, 0, 0, 0.99999994, 0, 0, 0, 0.99999994, -18
 radius = 3.0
 
 [node name="BoneAttachment3D" type="BoneAttachment3D" parent="Node3D/Armature/Skeleton3D" unique_id=2140491247]
-transform = Transform3D(-0.23926222, 0.97033405, 0.034716345, -0.97091776, -0.2394131, 0.00019520591, 0.008500963, -0.033660013, 0.9993972, 33.477848, -5.757858, -1.0879383)
+transform = Transform3D(-0.39124757, 0.907809, 0.1510236, -0.91907084, -0.39386243, -0.013457134, 0.047266014, -0.1440664, 0.9884385, 20.901638, -9.818365, -1.7738588)
 bone_name = "Bone.008"
 bone_idx = 8
 
