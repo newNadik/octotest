@@ -167,7 +167,8 @@ Source: [Flaticon](https://www.flaticon.com/)
 - "Power Supply Device" (https://skfb.ly/6WTOH) by stella.apparatus is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
 - "oscillograph" (https://skfb.ly/6XWtS) by maxdragonn is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
 - "Scrap metal (lowpoly)" (https://skfb.ly/ovXPw) by Zuckergelee is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
-- 
+- "Aula 23  - Dado virtual com Arduino" (https://sketchfab.com/3d-models/aula-23-dado-virtual-com-arduino-f7ce770203e04392af17de6d2516007e) by Robótica Paraná (https://sketchfab.com/roboticaparana) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+- "Aula 40 - Braço Rob. Radiocontrolado - Kit 2023" (https://sketchfab.com/3d-models/aula-40-braco-rob-radiocontrolado-kit-2023-2bae5fe44a3c45ae93a6c63c6ff96094) by Robótica Paraná (https://sketchfab.com/roboticaparana) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
 
 ## Textures
 
