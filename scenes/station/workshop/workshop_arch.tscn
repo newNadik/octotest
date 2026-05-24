@@ -10,8 +10,6 @@
 [ext_resource type="PackedScene" uid="uid://b7vd8cvq5kxdt" path="res://scenes/station/items/light_switch.tscn" id="7_o720b"]
 [ext_resource type="PackedScene" uid="uid://cxtcm4i75e1pb" path="res://scenes/interactables/cardreader.tscn" id="9_wogao"]
 [ext_resource type="PackedScene" uid="uid://bwx4cmp7n3qhv" path="res://scenes/interactables/document_item.tscn" id="14_7abiy"]
-[ext_resource type="Texture2D" uid="uid://io88aqsq6tcm" path="res://assets/models/interior/workshop/workshop_safety.png" id="15_f0ut7"]
-[ext_resource type="Texture2D" uid="uid://bd8bil207glin" path="res://assets/models/interior/workshop/workshop_safety_ua.png" id="16_78oks"]
 [ext_resource type="Texture2D" uid="uid://b5nm4i77jhjed" path="res://assets/models/interior/workshop/safety-glasses-sign.png" id="17_f0ut7"]
 [ext_resource type="Texture2D" uid="uid://or1cvrweywax" path="res://assets/textures/wall_images/decal_7.png" id="17_yi2a8"]
 [ext_resource type="Texture2D" uid="uid://c06n1fn6c1dhc" path="res://assets/textures/wall_images/decal_10.png" id="18_smysb"]
@@ -203,6 +201,18 @@ size = Vector3(16.735596, 1, 5.432373)
 [sub_resource type="BoxShape3D" id="BoxShape3D_0hljk"]
 size = Vector3(15.52356, 1, 5.432373)
 
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_hk185"]
+load_path = "res://.godot/imported/workshop_safety.png-d34e09b4e2e060a0ae30b79f5253573f.s3tc.ctex"
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_7abiy"]
+load_path = "res://.godot/imported/workshop_safety_ua.png-1d4a9ae692d18baf41b926bc45cea1da.s3tc.ctex"
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_f0ut7"]
+load_path = "res://.godot/imported/3d_printing_rules.png-3f032751777dbeb1b80e1fa78fb346e3.s3tc.ctex"
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_78oks"]
+load_path = "res://.godot/imported/3d_printing_rules_ua.png-6eb9e60814f68b0f58f651fd0d695584.ctex"
+
 [node name="workshop" type="Node3D" unique_id=407966003 node_paths=PackedStringArray("light_switch", "ceiling_mesh", "lamp_lights")]
 script = ExtResource("1_qtw0n")
 light_switch = NodePath("lights/LightSwitch")
@@ -332,13 +342,19 @@ light_bake_mode = 1
 shadow_enabled = true
 shadow_opacity = 0.8
 omni_range = 12.0
-omni_attenuation = 0.0
+omni_attenuation = 0.1
 
 [node name="DocumentItem" parent="." unique_id=-1447463677 instance=ExtResource("14_7abiy")]
 transform = Transform3D(-0.92312974, 0, 0.38448876, 0, 1, 0, -0.38448876, 0, -0.92312974, 22.37783, 3.5, 7.701412)
 document_size = 1
-document_texture = ExtResource("15_f0ut7")
-document_texture_ua = ExtResource("16_78oks")
+document_texture = SubResource("CompressedTexture2D_hk185")
+document_texture_ua = SubResource("CompressedTexture2D_7abiy")
+
+[node name="DocumentItem3" parent="." unique_id=550750644 instance=ExtResource("14_7abiy")]
+transform = Transform3D(0.9238795, 0, 0.38268346, 0, 1, 0, -0.38268346, 0, 0.9238795, 22.122396, 3.5, -7.636401)
+document_size = 1
+document_texture = SubResource("CompressedTexture2D_f0ut7")
+document_texture_ua = SubResource("CompressedTexture2D_78oks")
 
 [node name="DocumentItem2" parent="." unique_id=159652401 instance=ExtResource("14_7abiy")]
 transform = Transform3D(4.03548e-08, 0.9232102, 0.38429528, 1, -4.371139e-08, 0, 1.6798081e-08, 0.38429528, -0.9232102, 20.220627, 3.5, 6.84128)

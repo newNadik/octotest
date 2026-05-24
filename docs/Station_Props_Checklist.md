@@ -61,7 +61,7 @@
 - [x] Wall clock
 - [x] First aid kit (wall-mounted)
 - [x] Keypad / card reader on door
-- [ ] Posters
+- [x] Posters
 
 ### Workshop
 - [x] Soldering station
@@ -81,18 +81,17 @@
 - [x] Vice mounted on bench edge
 - [x] Rollaway tool cart
 - [x] Wire spools
-- [ ] Printed schematics / blueprints (pinned)
-- [ ] Safety glasses (spare pair on bench)
+- [x] Printed schematics / blueprints (pinned)
+- [x] Safety glasses (spare pair on bench)
 - [ ] Coffee mug (bench prop)
 - [ ] CCTV camera
-- [ ] measuring tape
-- [ ] printed Rocky
-- [ ] 3D printer name tag "Gertrude"
-- [ ] Projector (on shelf — shows station construction photos when light is off)
+- [x] measuring tape
+- [x] printed Rocky
+- [x] 3D printer name tag "Gertrude"
+- [x] Projector (on shelf — shows station construction photos when light is off)
 
 #### Character touches
 - [ ] Stickers all over one toolbox (band logos, nerdy stuff)
-- [ ] Lucky charm / keychain hanging from pegboard
 
 ### Energy Lab
 - [ ] Large equipment consoles / panels
