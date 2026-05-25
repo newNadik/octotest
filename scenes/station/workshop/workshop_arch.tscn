@@ -244,7 +244,6 @@ shape = SubResource("ConcavePolygonShape3D_0cctw")
 
 [node name="RoofWorkshop" type="MeshInstance3D" parent="NavigationRegion3D/StaticBody3D" unique_id=1994682011]
 transform = Transform3D(1.05, 0, 0, 0, 1.05, 0, 0, 0, 1.05, 16.885212, -0.4659543, 0.121341705)
-visible = false
 instance_shader_parameters/offset_xz = Vector2(0, 2.5)
 instance_shader_parameters/rotation_deg = 0.0
 mesh = SubResource("ArrayMesh_cadcp")

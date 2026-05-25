@@ -173,6 +173,7 @@ Source: [Flaticon](https://www.flaticon.com/)
 - "Screwdriver Set 1.5 - 0.5 mm" (https://skfb.ly/oJVsn) by yarankepang is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
 - "Gir" (https://skfb.ly/67JCX) by saoticus is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
 - "Sonic Screwdriver (10th Doctor)" (https://skfb.ly/6TYRs) by Samantha Michelson is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+- "Stackable Plastic Boxes" (https://skfb.ly/oXYx9) by AleixoAlonso is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
 - 
 
 ## Textures

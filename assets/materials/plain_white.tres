@@ -1,4 +1,4 @@
 [gd_resource type="StandardMaterial3D" format=3 uid="uid://bcdbcoirawpmg"]
 
 [resource]
-metallic = 0.1
+albedo_color = Color(2.0696223e-06, 0.36722416, 0.50867397, 1)
