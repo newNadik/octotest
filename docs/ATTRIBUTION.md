@@ -63,6 +63,7 @@ Source: [Flaticon](https://www.flaticon.com/)
 - "Vending machine" (https://skfb.ly/ozDWw) by Aysa is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
 - https://www.cgtrader.com/designers/javidan?utm_source=credit&utm_source=credit_item_page
 - "CCTV Camera minimal" (https://skfb.ly/6ZCUy) by Jesse Ragos is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+- "Security Camera" (https://skfb.ly/oywK6) by Vladyslav Holhanov is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
 - "Iron Rack" (https://skfb.ly/pDABD) by jichen66666 is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
 - "wire bookshelf" (https://skfb.ly/o9OLn) by Gian.Luca is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
 - "Hospital Kit_3" (https://skfb.ly/pAGWI) by KotovV.04 is licensed under Creative Commons Attribution-NonCommercial (http://creativecommons.org/licenses/by-nc/4.0/).
