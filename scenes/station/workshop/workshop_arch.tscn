@@ -10,11 +10,17 @@
 [ext_resource type="PackedScene" uid="uid://b7vd8cvq5kxdt" path="res://scenes/station/items/light_switch.tscn" id="7_o720b"]
 [ext_resource type="PackedScene" uid="uid://cxtcm4i75e1pb" path="res://scenes/interactables/cardreader.tscn" id="9_wogao"]
 [ext_resource type="PackedScene" uid="uid://bwx4cmp7n3qhv" path="res://scenes/interactables/document_item.tscn" id="14_7abiy"]
+[ext_resource type="Texture2D" uid="uid://bcg80jpagjput" path="res://assets/models/interior/energy_lab/posters/hydrofoil.png" id="15_u0cmm"]
+[ext_resource type="Texture2D" uid="uid://drujvfhkdnav" path="res://assets/models/interior/energy_lab/posters/hydrofoil_ua.png" id="16_5u5bg"]
 [ext_resource type="Texture2D" uid="uid://b5nm4i77jhjed" path="res://assets/models/interior/workshop/safety-glasses-sign.png" id="17_f0ut7"]
 [ext_resource type="Texture2D" uid="uid://or1cvrweywax" path="res://assets/textures/wall_images/decal_7.png" id="17_yi2a8"]
+[ext_resource type="Texture2D" uid="uid://cpwtck5s86358" path="res://assets/models/interior/energy_lab/posters/tidal_energy.jpg" id="18_5k6gb"]
 [ext_resource type="Texture2D" uid="uid://c06n1fn6c1dhc" path="res://assets/textures/wall_images/decal_10.png" id="18_smysb"]
+[ext_resource type="Texture2D" uid="uid://2x87v6qymcw5" path="res://assets/models/interior/energy_lab/posters/tidal_energy_ua.png" id="19_28ef0"]
 [ext_resource type="Texture2D" uid="uid://6se22xd2u2q8" path="res://assets/textures/wall_images/decal_11.png" id="19_yi2a8"]
+[ext_resource type="Texture2D" uid="uid://bklhpgsr7kbri" path="res://assets/models/interior/energy_lab/posters/wave_energy.png" id="20_spotp"]
 [ext_resource type="Texture2D" uid="uid://csnd0qed7yiaq" path="res://assets/textures/wall_images/decal_9.png" id="20_yi2a8"]
+[ext_resource type="Texture2D" uid="uid://bnxpr7yt31jq3" path="res://assets/models/interior/energy_lab/posters/wave_energy_ua.png" id="21_bxsie"]
 
 [sub_resource type="NavigationMesh" id="NavigationMesh_bxsie"]
 vertices = PackedVector3Array(23.956247, 2, -4.035734, 24.206247, 2, -3.2857342, 24.706247, 2, -3.2857342, 24.706247, 2, -8.035734, 24.206247, 2, -7.785734, 20.456247, 0.5, -5.785734, 19.956247, 0.5, -5.785734, 19.456247, 0.5, -5.535734, 19.706247, 0.5, -4.285734, 20.956247, 0.5, -4.785734, 17.956247, 0.5, -3.7857342, 17.706247, 0.5, -4.785734, 16.956247, 0.5, -4.535734, 16.706247, 0.5, -2.7857342, 23.956247, 0.5, 7.464266, 24.206247, 0.5, 6.464266, 23.206247, 0.5, 6.214266, 22.206247, 0.5, 6.964266, 23.206247, 0.5, -6.285734, 21.706247, 0.5, -6.785734, 21.706247, 0.5, -4.785734, 23.206247, 0.5, -5.035734, 22.206247, 0.5, 5.464266, 23.206247, 0.5, 4.964266, 24.956247, 0.5, -1.2857342, 24.956247, 0.5, -2.0357342, 23.706247, 0.5, -2.0357342, 24.206247, 0.5, -6.535734, 23.956247, 0.5, -7.535734, 23.206247, 0.5, -2.5357342, 22.206247, 0.5, -2.0357342, 23.206247, 0.5, 2.4642658, 24.456247, 0.5, 2.2142658, 24.456247, 0.5, 1.4642658, 22.206247, 0.5, 1.9642658, 23.456247, 0.5, 3.4642658, 18.956247, 0.5, -3.7857342, 18.706247, 0.5, -2.2857342, 19.456247, 0.5, -2.0357342, 20.956247, 0.5, -2.2857342, 25.706247, 0.5, 0.7142658, 25.706247, 0.5, -1.0357342, 23.456247, 0.5, -3.5357342, 24.706247, 0.5, -3.5357342, 24.706247, 0.5, -4.785734, 19.706247, 0.5, -0.7857342, 20.706247, 0.5, -0.7857342, 24.706247, 0.5, 4.714266, 24.706247, 0.5, 3.4642658, 19.206247, 0.5, 2.2142658, 19.206247, 0.5, 3.9642658, 20.456247, 0.5, 4.964266, 20.956247, 0.5, 2.2142658, 20.706247, 0.5, 0.7142658, 19.456247, 0.5, 0.7142658, 16.206247, 2, -4.535734, 16.206247, 2, -3.7857342, 16.706247, 2, -3.7857342, 20.956247, 2, -5.785734, 20.456247, 2, -6.285734, 12.456247, 0.5, 2.7142658, 12.956247, 0.5, 2.9642658, 13.456247, 0.5, 2.9642658, 13.706247, 0.5, 1.9642658, 12.456247, 0.5, 1.2142658, 16.956247, 0.5, -1.5357342, 15.206247, 0.5, -2.7857342, 18.206247, 0.5, 1.9642658, 16.206247, 0.5, 2.7142658, 14.706247, 0.5, 1.9642658, 14.956247, 0.5, 2.7142658, 18.206247, 0.5, 1.2142658, 16.706247, 0.5, 0.9642658, 12.956247, 0.5, -1.5357342, 11.706247, 0.5, -1.7857342, 11.706247, 0.5, 0.9642658, 17.956247, 2, -0.7857342, 17.706247, 2, -0.035734177, 18.956247, 2, 0.21426582, 18.956247, 2, -0.7857342, 19.206247, 2, -1.2857342, 19.206247, 2, 1.2142658, 21.206247, 2, 1.2142658, 21.206247, 2, -1.2857342, 11.956247, 2, 2.7142658, 13.706247, 2, 3.2142658, 13.706247, 2, 2.7142658, 11.956247, 2, 2.2142658, 24.706247, 2, 3.2142658, 24.206247, 2, 3.2142658, 23.956247, 2, 3.9642658, 24.206247, 2, 7.714266, 24.706247, 2, 7.964266, 15.956247, 2.25, 4.464266, 19.706247, 2.25, 5.714266, 19.456247, 2.25, 5.214266, 15.456247, 2.25, 3.7142658)
@@ -275,7 +281,7 @@ mesh = SubResource("PlaneMesh_lx4nm")
 surface_material_override/0 = SubResource("StandardMaterial3D_xroe6")
 
 [node name="Sprite3D2" type="MeshInstance3D" parent="NavigationRegion3D/StaticBody3D" unique_id=948011784]
-transform = Transform3D(0.924526, -0.38111877, -1.6659223e-08, 3.8213705e-15, 4.3711385e-08, -0.99999994, 0.3811187, 0.9245261, 4.0412313e-08, 13.696234, 5.4874654, 4.886114)
+transform = Transform3D(0.924526, -0.38111877, -1.6659223e-08, 3.8213705e-15, 4.3711385e-08, -0.99999994, 0.3811187, 0.9245261, 4.0412313e-08, 13.696234, 5.4874654, 4.7952366)
 mesh = SubResource("PlaneMesh_4tiyp")
 surface_material_override/0 = SubResource("StandardMaterial3D_4elsy")
 
@@ -285,7 +291,7 @@ mesh = SubResource("PlaneMesh_wogao")
 surface_material_override/0 = SubResource("StandardMaterial3D_lx4nm")
 
 [node name="Sprite3D5" type="MeshInstance3D" parent="NavigationRegion3D/StaticBody3D" unique_id=1275113478]
-transform = Transform3D(0.924526, -0.38111877, -1.6659223e-08, 3.8213705e-15, 4.3711385e-08, -0.99999994, 0.3811187, 0.9245261, 4.0412313e-08, 20.545116, 4.36599, 7.663436)
+transform = Transform3D(0.924526, -0.38111877, -1.6659223e-08, 3.8213705e-15, 4.3711385e-08, -0.99999994, 0.3811187, 0.9245261, 4.0412313e-08, 20.545116, 4.36599, 7.638958)
 mesh = SubResource("PlaneMesh_4tiyp")
 surface_material_override/0 = SubResource("StandardMaterial3D_wr7m8")
 
@@ -349,6 +355,12 @@ document_size = 1
 document_texture = SubResource("CompressedTexture2D_hk185")
 document_texture_ua = SubResource("CompressedTexture2D_7abiy")
 
+[node name="DocumentItem4" parent="." unique_id=1439637120 instance=ExtResource("14_7abiy")]
+transform = Transform3D(0.9238795, 0, -0.38268346, 0, 1, 0, 0.38268346, 0, 0.9238795, 22.37783, 3.5, 8.404543)
+document_size = 1
+document_texture = ExtResource("15_u0cmm")
+document_texture_ua = ExtResource("16_5u5bg")
+
 [node name="DocumentItem3" parent="." unique_id=550750644 instance=ExtResource("14_7abiy")]
 transform = Transform3D(0.9238795, 0, 0.38268346, 0, 1, 0, -0.38268346, 0, 0.9238795, 22.122396, 3.5, -7.636401)
 document_size = 1
@@ -360,3 +372,15 @@ transform = Transform3D(4.03548e-08, 0.9232102, 0.38429528, 1, -4.371139e-08, 0,
 document_texture = ExtResource("17_f0ut7")
 document_texture_ua = ExtResource("17_f0ut7")
 interactable_enabled = false
+
+[node name="DocumentItem5" parent="." unique_id=443882718 instance=ExtResource("14_7abiy")]
+transform = Transform3D(0.9238795, 0, -0.38268346, 0, 1, 0, 0.38268346, 0, 0.9238795, 17.412834, 3.5, 6.350275)
+document_size = 1
+document_texture = ExtResource("18_5k6gb")
+document_texture_ua = ExtResource("19_28ef0")
+
+[node name="DocumentItem6" parent="." unique_id=1732560379 instance=ExtResource("14_7abiy")]
+transform = Transform3D(0.9238795, 0, -0.38268346, 0, 1, 0, 0.38268346, 0, 0.9238795, 12.988906, 3.5, 4.5189834)
+document_size = 1
+document_texture = ExtResource("20_spotp")
+document_texture_ua = ExtResource("21_bxsie")
