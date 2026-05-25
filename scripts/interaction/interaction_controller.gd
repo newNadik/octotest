@@ -456,6 +456,10 @@ func _raycast_to_interactable(screen_position: Vector2) :
 func _get_focus_target_for_interactable(target) -> FocusTargetScript:
 	if target == null:
 		return null
+	var behavior = _get_behavior(target)
+	if behavior != null and behavior.has_method("blocks_focus_mode"):
+		if bool(behavior.call("blocks_focus_mode")):
+			return null
 	var parent = target.get_parent()
 	if parent == null:
 		return null

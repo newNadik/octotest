@@ -3,6 +3,6 @@
 [resource]
 resource_name = "wall_panel"
 cull_mode = 2
-albedo_color = Color(0.646029, 0.646029, 0.646029, 1)
+albedo_color = Color(0.89059, 0.89059, 0.8905901, 1)
 metallic = 1.0
 roughness = 0.5
