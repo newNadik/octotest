@@ -4,8 +4,8 @@
 [ext_resource type="Script" uid="uid://b64dlqrrlkl7n" path="res://scripts/interaction/room_light.gd" id="1_uuxde"]
 [ext_resource type="PackedScene" uid="uid://blnrijpl108tk" path="res://scenes/station/interior/window_double.tscn" id="2_uooyi"]
 [ext_resource type="Material" uid="uid://b1a0xbuetfwpo" path="res://assets/materials/concrete.tres" id="3_uooyi"]
-[ext_resource type="Material" uid="uid://biog7mv21velq" path="res://assets/materials/ceiling.tres" id="4_hoakw"]
 [ext_resource type="Material" uid="uid://bb4hx1vyakkmf" path="res://assets/materials/plaster.tres" id="4_tnekd"]
+[ext_resource type="Material" uid="uid://bcdbcoirawpmg" path="res://assets/materials/plain_white.tres" id="5_05nb4"]
 [ext_resource type="PackedScene" uid="uid://b7vd8cvq5kxdt" path="res://scenes/station/items/light_switch.tscn" id="6_328kc"]
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_l5yu4"]
@@ -125,10 +125,8 @@ surface_material_override/0 = ExtResource("3_uooyi")
 
 [node name="RoofWetroom" type="MeshInstance3D" parent="StaticBody3D" unique_id=850791184]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.747784, -8.88325, 20.900995)
-instance_shader_parameters/offset_xz = Vector2(1, 1)
-instance_shader_parameters/rotation_deg = 45.0
 mesh = SubResource("ArrayMesh_5w8w2")
-surface_material_override/0 = ExtResource("4_hoakw")
+surface_material_override/0 = ExtResource("5_05nb4")
 
 [node name="WallWetroom" type="MeshInstance3D" parent="StaticBody3D" unique_id=1324307157]
 transform = Transform3D(0.9238795, 0, 0.38268346, 0, 1, 0, -0.38268346, 0, 0.9238795, 9.943851, -7.5464764e-06, 25.59095)

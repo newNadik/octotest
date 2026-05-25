@@ -20,4 +20,5 @@ transform = Transform3D(0.8835369, 0, -0.46836165, 0, 1, 0, 0.46836165, 0, 0.883
 
 [node name="MotionSensorLight" parent="." unique_id=831549937 instance=ExtResource("5_saf8c")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.59741, 0, 16.905369)
+area_width = 3.5
 area_length = 5.0

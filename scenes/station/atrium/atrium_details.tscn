@@ -1,8 +1,8 @@
 [gd_scene format=3 uid="uid://cclsy0gkfl7v6"]
 
 [ext_resource type="PackedScene" uid="uid://cro6qqaafsit1" path="res://scenes/station/interior/shower.tscn" id="1_f0ju7"]
-[ext_resource type="PackedScene" path="res://scenes/station/interior/medbay.tscn" id="2_m4bbm"]
-[ext_resource type="PackedScene" path="res://scenes/station/interior/wc.tscn" id="3_xb65v"]
+[ext_resource type="PackedScene" uid="uid://dgmsnuddjuti1" path="res://scenes/station/interior/medbay.tscn" id="2_m4bbm"]
+[ext_resource type="PackedScene" uid="uid://7cj558a18isn" path="res://scenes/station/interior/wc.tscn" id="3_xb65v"]
 [ext_resource type="PackedScene" uid="uid://wxpj00rcd3mq" path="res://scenes/station/interior/trash_bin.tscn" id="4_1hqp2"]
 [ext_resource type="PackedScene" uid="uid://dac1j07k7sd70" path="res://scenes/station/interior/bench.tscn" id="5_y2yuj"]
 [ext_resource type="PackedScene" uid="uid://3qcq4vmexl3s" path="res://scenes/station/items/fire_extinguisher.tscn" id="6_igike"]
@@ -40,6 +40,8 @@
 [ext_resource type="Texture2D" uid="uid://cwta4gwomtle5" path="res://assets/textures/documents/missing_pet_ua.png" id="38_lw4b8"]
 [ext_resource type="PackedScene" uid="uid://bc1e233sg7d7l" path="res://scenes/station/interior/giftshop.tscn" id="39_2xb63"]
 [ext_resource type="PackedScene" uid="uid://cvmc4k2rg5tih" path="res://scenes/station/interior/kitchen.tscn" id="40_w45ix"]
+[ext_resource type="PackedScene" uid="uid://bpvnlqkovf34v" path="res://scenes/interactables/id_card.tscn" id="41_xb65v"]
+[ext_resource type="Texture2D" uid="uid://fkkfmc4qp652" path="res://assets/textures/documents/Mike_ID.png" id="42_1hqp2"]
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_a42gf"]
 size = Vector2(7, 7)
@@ -301,3 +303,10 @@ document_texture_ua = ExtResource("38_lw4b8")
 [node name="giftshop2" parent="furniture" unique_id=2017872549 instance=ExtResource("39_2xb63")]
 
 [node name="kitchen" parent="furniture" unique_id=655617701 instance=ExtResource("40_w45ix")]
+
+[node name="id_card_mike" parent="." unique_id=429126612 instance=ExtResource("41_xb65v")]
+transform = Transform3D(0.9752691, 0, -0.22102086, 0, 1, 0, 0.22102086, 0, 0.9752691, -28.309464, 1.5742306, 1.1371678)
+card_display_name = "Mike ID Card"
+card_item_id = "card_mike_l1"
+access_level = 2
+card_face_texture = ExtResource("42_1hqp2")
