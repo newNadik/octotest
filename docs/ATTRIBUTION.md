@@ -170,6 +170,10 @@ Source: [Flaticon](https://www.flaticon.com/)
 - "Scrap metal (lowpoly)" (https://skfb.ly/ovXPw) by Zuckergelee is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
 - "Aula 23  - Dado virtual com Arduino" (https://sketchfab.com/3d-models/aula-23-dado-virtual-com-arduino-f7ce770203e04392af17de6d2516007e) by Robótica Paraná (https://sketchfab.com/roboticaparana) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
 - "Aula 40 - Braço Rob. Radiocontrolado - Kit 2023" (https://sketchfab.com/3d-models/aula-40-braco-rob-radiocontrolado-kit-2023-2bae5fe44a3c45ae93a6c63c6ff96094) by Robótica Paraná (https://sketchfab.com/roboticaparana) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+- "Screwdriver Set 1.5 - 0.5 mm" (https://skfb.ly/oJVsn) by yarankepang is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+- "Gir" (https://skfb.ly/67JCX) by saoticus is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+- "Sonic Screwdriver (10th Doctor)" (https://skfb.ly/6TYRs) by Samantha Michelson is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+- 
 
 ## Textures
 
