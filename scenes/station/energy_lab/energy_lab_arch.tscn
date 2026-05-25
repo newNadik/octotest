@@ -266,7 +266,7 @@ transform = Transform3D(0.9987454, 0.04823518, -0.013456084, -0.048239548, 0.998
 light_bake_mode = 1
 shadow_enabled = true
 shadow_opacity = 0.8
-omni_range = 11.0
+omni_range = 12.0
 omni_attenuation = 0.0
 
 [node name="OccluderInstance3D" type="OccluderInstance3D" parent="." unique_id=316934488]
