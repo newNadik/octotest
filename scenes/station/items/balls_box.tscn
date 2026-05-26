@@ -1,0 +1,70 @@
+[gd_scene format=3 uid="uid://m0h1uqogcm1x"]
+
+[ext_resource type="Material" uid="uid://bsc2sq4cl7hx5" path="res://assets/materials/cardboard.tres" id="1_hfcs7"]
+[ext_resource type="PackedScene" uid="uid://dny6hphe0bh4v" path="res://scenes/station/items/the_ball.tscn" id="2_f5t8h"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_f5t8h"]
+size = Vector2(0.5, 0.37)
+
+[sub_resource type="BoxMesh" id="BoxMesh_ki5u6"]
+size = Vector3(0.006, 0.09, 0.37)
+
+[sub_resource type="BoxMesh" id="BoxMesh_olydj"]
+size = Vector3(0.5, 0.09, 0.006)
+
+[node name="balls_box" type="Node3D" unique_id=1198885468]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=587152956]
+mesh = SubResource("PlaneMesh_f5t8h")
+surface_material_override/0 = ExtResource("1_hfcs7")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="." unique_id=1282741630]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.25, 0.045, 0)
+mesh = SubResource("BoxMesh_ki5u6")
+surface_material_override/0 = ExtResource("1_hfcs7")
+
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="." unique_id=985919058]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.25, 0.045, 0)
+mesh = SubResource("BoxMesh_ki5u6")
+surface_material_override/0 = ExtResource("1_hfcs7")
+
+[node name="MeshInstance3D4" type="MeshInstance3D" parent="." unique_id=284075570]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.045, 0.185)
+mesh = SubResource("BoxMesh_olydj")
+surface_material_override/0 = ExtResource("1_hfcs7")
+
+[node name="MeshInstance3D5" type="MeshInstance3D" parent="." unique_id=26755264]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.045, -0.185)
+mesh = SubResource("BoxMesh_olydj")
+surface_material_override/0 = ExtResource("1_hfcs7")
+
+[node name="the_ball" parent="." unique_id=1824952557 instance=ExtResource("2_f5t8h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.18130493, 0, -0.108062744)
+
+[node name="the_ball2" parent="." unique_id=96825651 instance=ExtResource("2_f5t8h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.045609623, 0, -0.108062744)
+ball_color = 1
+
+[node name="the_ball3" parent="." unique_id=1017744259 instance=ExtResource("2_f5t8h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0912455, 0, -0.108062744)
+ball_color = 2
+
+[node name="the_ball4" parent="." unique_id=57701211 instance=ExtResource("2_f5t8h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.11287746, 0, 0.0021172166)
+ball_color = 3
+
+[node name="the_ball5" parent="." unique_id=1943881246 instance=ExtResource("2_f5t8h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.02281794, 0, 0.0021172166)
+ball_color = 4
+
+[node name="the_ball6" parent="." unique_id=1782820094 instance=ExtResource("2_f5t8h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.1805493, 0, 0.0021172166)
+ball_color = 5
+
+[node name="the_ball7" parent="." unique_id=949608130 instance=ExtResource("2_f5t8h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.098204285, 0, 0.108817756)
+ball_color = 6
+
+[node name="the_ball8" parent="." unique_id=1210122734 instance=ExtResource("2_f5t8h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.04329005, 0, 0.108817756)
+ball_color = 7
