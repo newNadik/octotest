@@ -18,6 +18,7 @@ const InteractableScript = preload("res://scripts/interaction/interactable.gd")
 const WearableInteractableScript = preload("res://scripts/interaction/wearable_interactable.gd")
 const InteractionHintBuilderScript = preload("res://scripts/interaction/interaction_hint_builder.gd")
 const OctoRigScript = preload("res://scripts/rig/OctoRig.gd")
+const JuggleControllerScript = preload("res://scripts/player/juggle_controller.gd")
 const FRONT_LEFT_ARM_NAME := "arm_0"
 const FRONT_RIGHT_ARM_NAME := "arm_1"
 const FOCUS_HELD_CLICK_RADIUS := 170.0
@@ -102,6 +103,7 @@ var _suppress_focus_target_visuals := false
 var _saved_indicator_visibility_by_item_id: Dictionary = {}
 var _pending_held_restore_keys: Array[String] = []
 var _pending_worn_restore: Dictionary = {}
+var _juggle_controller: JuggleControllerScript
 
 
 func initialize(player: CharacterBody3D, camera: Camera3D, hint_label: Label, world_root: Node3D) -> void:
@@ -116,6 +118,10 @@ func initialize(player: CharacterBody3D, camera: Camera3D, hint_label: Label, wo
 	_ensure_pick_drop_audio_player()
 	_ensure_hand_sockets()
 	_resolve_octo_rig()
+	_juggle_controller = JuggleControllerScript.new()
+	_juggle_controller.name = "JuggleController"
+	_player.add_child(_juggle_controller)
+	_juggle_controller.initialize(_player, _octo_rig)
 	_wear_controller = _player.get_node_or_null("WearController") as WearController
 	if _wear_controller != null:
 		_wear_controller.initialize(_player, _world_root)
@@ -140,6 +146,8 @@ func process_interactions(delta: float) -> void:
 	_update_held_item_transform(delta)
 	if _wear_controller != null:
 		_wear_controller.process_wear(delta)
+	if _juggle_controller != null:
+		_juggle_controller.process_juggle(delta)
 
 
 func consume_escape() -> bool:
@@ -784,6 +792,14 @@ func _pick_up_interactable(target) -> void:
 	_play_pick_drop_sound(pickup_position)
 	target.interact(_player)
 	_player.clear_move_target()
+	if _juggle_controller != null:
+		var arm_name := _get_arm_name_for_item(target)
+		if not arm_name.is_empty():
+			var socket_idx: int = int(_socket_index_by_arm_name.get(arm_name, -1))
+			var juggle_socket: Node3D = null
+			if socket_idx >= 0 and socket_idx < _hand_sockets.size():
+				juggle_socket = _hand_sockets[socket_idx]
+			_juggle_controller.on_ball_picked_up(target, arm_name, juggle_socket)
 
 
 func _drop_last_held_item() -> void:
@@ -995,6 +1011,8 @@ func _update_held_item_transform(delta: float) -> void:
 
 	var alpha = minf(1.0, held_item_follow_speed * delta)
 	for held_item in _held_interactables:
+		if _juggle_controller != null and _juggle_controller.is_juggling_ball(held_item):
+			continue
 		var socket_index = int(_held_socket_by_item_id.get(held_item.get_instance_id(), -1))
 		if socket_index < 0 or socket_index >= _hand_sockets.size():
 			continue
@@ -1030,6 +1048,8 @@ func _update_focus_display_transforms(delta: float) -> void:
 
 	for i in range(count):
 		var held_item = _held_interactables[i]
+		if _juggle_controller != null and _juggle_controller.is_juggling_ball(held_item):
+			continue
 		var pickup_root = held_item.get_pickup_root()
 		var col = i % columns
 		var row = 0
@@ -1258,6 +1278,8 @@ func _remove_held_item(item) :
 	var index = _held_interactables.find(item)
 	if index == -1:
 		return null
+	if _juggle_controller != null:
+		_juggle_controller.on_ball_dropped(item)
 	var item_id = item.get_instance_id()
 	var socket_index = int(_held_socket_by_item_id.get(item_id, -1))
 	_held_socket_by_item_id.erase(item_id)
@@ -1389,6 +1411,18 @@ func _update_hand_sockets_from_rig() -> void:
 		var socket = _hand_sockets[socket_index]
 		socket.global_position = world_pos
 		_align_socket_basis(socket, radial)
+
+
+func _get_arm_name_for_item(item) -> String:
+	if item == null:
+		return ""
+	var item_id: int = item.get_instance_id()
+	var socket_index: int = int(_held_socket_by_item_id.get(item_id, -1))
+	if socket_index < 0:
+		return ""
+	if not _arm_name_by_socket_index.has(socket_index):
+		return ""
+	return str(_arm_name_by_socket_index[socket_index])
 
 
 func _get_item_id_for_socket(socket_index: int) -> int:

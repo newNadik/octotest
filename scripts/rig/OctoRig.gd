@@ -107,6 +107,11 @@ var hold_tip_bend_angle = 0.2
 var hold_animate_bend_angles = true
 var hold_bend_angle_min = 0.0
 var hold_bend_angle_max = 0.5
+
+## Per-arm additive tip-bend driven by juggling logic.
+## Key: arm_name (String), Value: tip_bend_additive (float).
+## Mixed into _apply_hold_target so only the tip moves.
+var _juggle_tip_bend: Dictionary = {}
 var hold_bend_angle_hz = 0.2
 var enable_head_look = true
 var head_look_follow_mouse = true
@@ -425,6 +430,24 @@ func set_arm_hold_enabled(arm_name: String, enabled: bool) -> void:
 		_runtime_hold_arms[arm_name] = true
 	else:
 		_runtime_hold_arms.erase(arm_name)
+
+
+## Set an additive tip-bend offset for one arm (used by juggling).
+## Value is added on top of hold_tip_bend each frame in _apply_hold_target.
+## Call with 0.0 to return to normal hold pose.
+func set_juggle_tip_bend(arm_name: String, additive: float) -> void:
+	if is_zero_approx(additive):
+		_juggle_tip_bend.erase(arm_name)
+	else:
+		_juggle_tip_bend[arm_name] = additive
+
+
+func clear_juggle_tip_bend(arm_name: String) -> void:
+	_juggle_tip_bend.erase(arm_name)
+
+
+func clear_all_juggle_tip_bends() -> void:
+	_juggle_tip_bend.clear()
 
 
 func get_hold_arm_priority() -> PackedStringArray:
@@ -919,12 +942,13 @@ func _apply_hold_target(arm) -> void:
 		base_angle = shared_angle
 		mid_angle = shared_angle
 		tip_angle = shared_angle
+	var tip_bend_add: float = float(_juggle_tip_bend.get(str(arm.arm_name), 0.0))
 	arm.set_target_section_bend(
 		hold_base_bend,
 		base_angle,
 		hold_mid_bend,
 		mid_angle,
-		hold_tip_bend,
+		hold_tip_bend + tip_bend_add,
 		tip_angle
 	)
 
