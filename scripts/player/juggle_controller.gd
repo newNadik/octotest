@@ -267,6 +267,7 @@ func _restart_pattern_from_start() -> void:
 			ball_state["retire_on_catch"] = false
 			ball_state["retired"] = false
 			ball_state["retired_arm"] = ""
+			ball_state["retire_seen_beat"] = -1
 
 
 # ---------------------------------------------------------------------------
@@ -467,6 +468,7 @@ func _make_ball_state(item: Node, arm_name: String = "", socket: Node3D = null, 
 		"retire_on_catch": false,
 		"retired": false,
 		"retired_arm": "",
+		"retire_seen_beat": -1,
 	}
 
 
@@ -643,10 +645,18 @@ func _try_retire_non_cycle_ball(active_time: float, ball_state: Dictionary, lane
 	var from_a := start_from_a if even_beat else not start_from_a
 	var catch_arm := str(lane["arm_b"]) if from_a else str(lane["arm_a"])
 	var other_arm := str(lane["arm_a"]) if from_a else str(lane["arm_b"])
-	if t >= 0.98:
+	var seen_beat := int(ball_state.get("retire_seen_beat", -1))
+	if seen_beat < 0:
+		ball_state["retire_seen_beat"] = beat_index
+		seen_beat = beat_index
+	# Retire on catch robustly: either near arc end, or we crossed beat boundary
+	# between frames and missed t>=0.98.
+	if t >= 0.98 or beat_index > seen_beat:
 		ball_state["retired"] = true
 		ball_state["retired_arm"] = _resolve_retire_arm([assigned_arm, catch_arm, other_arm], item)
 		_record_ball_arm_assignment(item, str(ball_state["retired_arm"]))
+		return
+	ball_state["retire_seen_beat"] = beat_index
 
 
 func _try_retire_cycle_ball(active_time: float, ball_state: Dictionary, lane: Dictionary) -> void:
@@ -676,7 +686,11 @@ func _try_retire_cycle_ball(active_time: float, ball_state: Dictionary, lane: Di
 	var t := fmod(phase, 1.0)
 	var from_idx := (start_idx + beat_index) % arm_count
 	var to_idx := (from_idx + 1) % arm_count
-	if t >= 0.98:
+	var seen_beat := int(ball_state.get("retire_seen_beat", -1))
+	if seen_beat < 0:
+		ball_state["retire_seen_beat"] = beat_index
+		seen_beat = beat_index
+	if t >= 0.98 or beat_index > seen_beat:
 		ball_state["retired"] = true
 		var cycle_pref: Array[String] = []
 		if not assigned_arm.is_empty():
@@ -685,6 +699,8 @@ func _try_retire_cycle_ball(active_time: float, ball_state: Dictionary, lane: Di
 			cycle_pref.append(str(arm_cycle[(to_idx + k) % arm_count]))
 		ball_state["retired_arm"] = _resolve_retire_arm(cycle_pref, item)
 		_record_ball_arm_assignment(item, str(ball_state["retired_arm"]))
+		return
+	ball_state["retire_seen_beat"] = beat_index
 
 
 func _resolve_retire_arm(preferred_arms: Array[String], item: Node) -> String:

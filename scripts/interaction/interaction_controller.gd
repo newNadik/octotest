@@ -19,6 +19,8 @@ const WearableInteractableScript = preload("res://scripts/interaction/wearable_i
 const InteractionHintBuilderScript = preload("res://scripts/interaction/interaction_hint_builder.gd")
 const OctoRigScript = preload("res://scripts/rig/OctoRig.gd")
 const JuggleControllerScript = preload("res://scripts/player/juggle_controller.gd")
+const CLOWN_WIG_ITEM_ID := "clown_wig"
+const CLOWN_WIG_SCENE: PackedScene = preload("res://scenes/station/items/clown_wig.tscn")
 const FRONT_LEFT_ARM_NAME := "arm_0"
 const FRONT_RIGHT_ARM_NAME := "arm_1"
 const FOCUS_HELD_CLICK_RADIUS := 170.0
@@ -104,6 +106,7 @@ var _saved_indicator_visibility_by_item_id: Dictionary = {}
 var _pending_held_restore_keys: Array[String] = []
 var _pending_worn_restore: Dictionary = {}
 var _juggle_controller: JuggleControllerScript
+var _clown_wig_milestone_awarded := false
 
 
 func initialize(player: CharacterBody3D, camera: Camera3D, hint_label: Label, world_root: Node3D) -> void:
@@ -346,6 +349,7 @@ func get_save_state() -> Dictionary:
 	return {
 		"held_item_keys": held_item_keys,
 		"worn_item_keys": worn_item_keys,
+		"clown_wig_milestone_awarded": _clown_wig_milestone_awarded,
 	}
 
 
@@ -354,6 +358,7 @@ func apply_save_state(state: Dictionary) -> void:
 	_pending_worn_restore.clear()
 	if state.is_empty():
 		return
+	_clown_wig_milestone_awarded = bool(state.get("clown_wig_milestone_awarded", false))
 	var keys = state.get("held_item_keys", [])
 	if keys is Array:
 		for key_value in keys:
@@ -800,6 +805,7 @@ func _pick_up_interactable(target) -> void:
 			_hand_sockets,
 			_arm_name_by_socket_index
 		)
+	_try_award_clown_wig_for_full_ball_hold()
 
 
 func _drop_last_held_item() -> void:
@@ -1378,6 +1384,75 @@ func _sync_ball_assignments_from_juggle_hold() -> void:
 			_set_hold_state_for_socket(int(socket_index_variant), false)
 		for item_socket_idx in _held_socket_by_item_id.values():
 			_set_hold_state_for_socket(int(item_socket_idx), true)
+
+
+func _try_award_clown_wig_for_full_ball_hold() -> void:
+	if _clown_wig_milestone_awarded:
+		return
+	if _wear_controller == null:
+		return
+	if _count_held_balls() < 8:
+		return
+
+	var clown_wig := _get_or_spawn_clown_wig_interactable()
+	if clown_wig == null:
+		return
+
+	var slot := clown_wig.get_wear_slot_name()
+	var displaced: WearableInteractableScript = _wear_controller.get_worn_in_slot(slot) as WearableInteractableScript
+	if displaced != null:
+		_unwear_and_drop(displaced)
+
+	if _is_item_currently_held(clown_wig):
+		_remove_held_item(clown_wig)
+
+	if _wear_controller.try_wear(clown_wig):
+		_clown_wig_milestone_awarded = true
+
+
+func _count_held_balls() -> int:
+	if _juggle_controller == null:
+		return 0
+	var total := 0
+	for held_item in _held_interactables:
+		if held_item == null or not is_instance_valid(held_item):
+			continue
+		if _juggle_controller.is_ball_item(held_item):
+			total += 1
+	return total
+
+
+func _find_clown_wig_interactable() -> WearableInteractableScript:
+	var tree := get_tree()
+	if tree == null:
+		return null
+	for node in tree.get_nodes_in_group("save_state_provider"):
+		if not (node is WearableInteractableScript):
+			continue
+		var wearable := node as WearableInteractableScript
+		if wearable.item_id == CLOWN_WIG_ITEM_ID:
+			return wearable
+	return null
+
+
+func _get_or_spawn_clown_wig_interactable() -> WearableInteractableScript:
+	var existing := _find_clown_wig_interactable()
+	if existing != null:
+		_apply_pickable_cross_room_visual_layers(existing.get_pickup_root())
+		return existing
+	if CLOWN_WIG_SCENE == null or _world_root == null:
+		return null
+	var wig_root := CLOWN_WIG_SCENE.instantiate() as Node3D
+	if wig_root == null:
+		return null
+	_world_root.add_child(wig_root)
+	_apply_pickable_cross_room_visual_layers(wig_root)
+	var wearable := wig_root.get_node_or_null("WearableInteractable") as WearableInteractableScript
+	if wearable != null and wearable.item_id.is_empty():
+		wearable.item_id = CLOWN_WIG_ITEM_ID
+	if wearable != null:
+		_apply_pickable_cross_room_visual_layers(wearable.get_pickup_root())
+	return wearable
 
 
 func _resolve_octo_rig() -> void:
