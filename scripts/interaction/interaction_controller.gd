@@ -792,7 +792,7 @@ func _pick_up_interactable(target) -> void:
 	_play_pick_drop_sound(pickup_position)
 	target.interact(_player)
 	_player.clear_move_target()
-	if _juggle_controller != null:
+	if _juggle_controller != null and _juggle_controller.is_ball_item(target):
 		_juggle_controller.rebuild_from_held_items(
 			_held_interactables,
 			_held_socket_by_item_id,
@@ -1284,13 +1284,8 @@ func _remove_held_item(item) :
 		_set_hold_state_for_socket(socket_index, false)
 	_held_interactables.remove_at(index)
 	_held_clearance_by_item_id.erase(item_id)
-	if _juggle_controller != null:
-		_juggle_controller.rebuild_from_held_items(
-			_held_interactables,
-			_held_socket_by_item_id,
-			_hand_sockets,
-			_arm_name_by_socket_index
-		)
+	if _juggle_controller != null and _juggle_controller.is_ball_item(item):
+		_juggle_controller.on_ball_dropped(item)
 	_update_carry_mobility()
 	return item
 
