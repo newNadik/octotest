@@ -30,6 +30,7 @@ const TheBallScript = preload("res://scripts/station/items/the_ball.gd")
 
 var active: bool = false
 var total_time: float = 0.0
+var _stop_requested: bool = false
 var _juggled_ball_ids: Dictionary = {}
 
 var _player: CharacterBody3D
@@ -97,6 +98,7 @@ func rebuild_from_held_items(
 	hand_sockets: Array,
 	arm_name_by_socket_index: Dictionary
 ) -> void:
+	var was_active := active
 	var ball_entries: Array = []
 	var new_ball_ids: Dictionary = {}
 	for held_item in held_items:
@@ -142,7 +144,7 @@ func rebuild_from_held_items(
 		_build_cycle_lane_from_ball_entries(ball_entries)
 	else:
 		_build_lanes_from_ball_entries(ball_entries)
-	if balls_added:
+	if balls_added and not was_active:
 		_tip_state.clear()
 		_restart_pattern_from_start()
 
@@ -177,9 +179,9 @@ func process_juggle(delta: float) -> void:
 	if not active:
 		return
 	total_time += delta
-	if total_time >= float(beat_count) * beat_duration:
-		_end()
-		return
+	if not _stop_requested and total_time >= float(beat_count) * beat_duration:
+		_stop_requested = true
+		_request_all_balls_retire_on_catch()
 	if total_time < 0.0:
 		_refresh_lane_rest_anchors_from_held_items()
 	_update_tip_pulses(delta)
@@ -187,6 +189,8 @@ func process_juggle(delta: float) -> void:
 		for ball_state in lane["balls"]:
 			_update_ball_position(ball_state, lane)
 			_check_gestures(ball_state, lane)
+	if _stop_requested and _all_balls_retired():
+		_end()
 
 
 # ---------------------------------------------------------------------------
@@ -196,6 +200,7 @@ func process_juggle(delta: float) -> void:
 func _start() -> void:
 	active = true
 	total_time = -pre_toss_delay  # negative → ball stays at rest until t reaches 0
+	_stop_requested = false
 	_lanes.clear()
 	_tip_state.clear()
 
@@ -211,12 +216,16 @@ func _end() -> void:
 
 func _restart_pattern_from_start() -> void:
 	total_time = -pre_toss_delay
+	_stop_requested = false
 	_tip_state.clear()
 	for lane in _lanes:
 		for ball_state in lane["balls"]:
 			ball_state["toss_fired"] = false
 			ball_state["catch_fired"] = false
 			ball_state["last_beat"] = -1
+			ball_state["retire_on_catch"] = false
+			ball_state["retired"] = false
+			ball_state["retired_arm"] = ""
 	_snap_all_balls_to_pattern_start()
 
 
@@ -308,6 +317,9 @@ func _make_ball_state(item: Node, arm_name: String = "", socket: Node3D = null, 
 		"toss_fired": false,
 		"catch_fired": false,
 		"last_beat": -1,
+		"retire_on_catch": false,
+		"retired": false,
+		"retired_arm": "",
 	}
 
 
@@ -436,8 +448,88 @@ func _update_ball_position(ball_state: Dictionary, lane: Dictionary) -> void:
 		return
 	if total_time < 0.0:
 		return
+
+	if bool(ball_state.get("retired", false)):
+		pickup_root.global_position = _get_retired_ball_hold_position(ball_state, lane)
+		return
+
 	var active_time := maxf(total_time, 0.0)
+	if _stop_requested and bool(ball_state.get("retire_on_catch", false)):
+		if lane.has("arm_cycle"):
+			_try_retire_cycle_ball(active_time, ball_state, lane)
+		else:
+			_try_retire_non_cycle_ball(active_time, ball_state, lane)
+		if bool(ball_state.get("retired", false)):
+			pickup_root.global_position = _get_retired_ball_hold_position(ball_state, lane)
+			return
 	pickup_root.global_position = _compute_ball_position(active_time, ball_state, lane)
+
+
+func _request_all_balls_retire_on_catch() -> void:
+	for lane in _lanes:
+		for ball_state in lane["balls"]:
+			ball_state["retire_on_catch"] = true
+
+
+func _all_balls_retired() -> bool:
+	for lane in _lanes:
+		for ball_state in lane["balls"]:
+			if not bool(ball_state.get("retired", false)):
+				return false
+	return true
+
+
+func _try_retire_non_cycle_ball(active_time: float, ball_state: Dictionary, lane: Dictionary) -> void:
+	var start_delay := float(ball_state.get("start_delay", 0.0))
+	var start_from_a := bool(ball_state.get("start_from_a", true))
+	if active_time < start_delay:
+		var hold_arm := str(lane["arm_a"]) if start_from_a else str(lane["arm_b"])
+		ball_state["retired"] = true
+		ball_state["retired_arm"] = hold_arm
+		return
+	var phase := (active_time - start_delay) / maxf(0.001, beat_duration)
+	var beat_index := int(floor(phase))
+	var t := fmod(phase, 1.0)
+	var even_beat := (beat_index % 2) == 0
+	var from_a := start_from_a if even_beat else not start_from_a
+	var catch_arm := str(lane["arm_b"]) if from_a else str(lane["arm_a"])
+	if t >= 0.98:
+		ball_state["retired"] = true
+		ball_state["retired_arm"] = catch_arm
+
+
+func _try_retire_cycle_ball(active_time: float, ball_state: Dictionary, lane: Dictionary) -> void:
+	var arm_cycle: Array = lane.get("arm_cycle", [])
+	var arm_count := arm_cycle.size()
+	if arm_count < 2:
+		ball_state["retired"] = true
+		ball_state["retired_arm"] = str(ball_state.get("arm_name", ""))
+		return
+	var start_delay := float(ball_state.get("start_delay", 0.0))
+	var start_idx := int(ball_state.get("cycle_start_idx", 0)) % arm_count
+	if active_time < start_delay:
+		ball_state["retired"] = true
+		ball_state["retired_arm"] = str(arm_cycle[start_idx])
+		return
+	var phase := (active_time - start_delay) / maxf(0.001, beat_duration)
+	var beat_index := int(floor(phase))
+	var t := fmod(phase, 1.0)
+	var from_idx := (start_idx + beat_index) % arm_count
+	var to_idx := (from_idx + 1) % arm_count
+	if t >= 0.98:
+		ball_state["retired"] = true
+		ball_state["retired_arm"] = str(arm_cycle[to_idx])
+
+
+func _get_retired_ball_hold_position(ball_state: Dictionary, lane: Dictionary) -> Vector3:
+	var arm_name := str(ball_state.get("retired_arm", ""))
+	if arm_name.is_empty():
+		arm_name = str(ball_state.get("arm_name", ""))
+	if lane.has("arm_cycle"):
+		return _get_cycle_arm_anchor_world(lane, arm_name, ball_state)
+	if arm_name == str(lane["arm_b"]):
+		return _get_lane_anchor_world(lane, "b")
+	return _get_lane_anchor_world(lane, "a")
 
 
 func _refresh_lane_rest_anchors_from_held_items() -> void:
@@ -577,6 +669,8 @@ const _TOSS_PHASE  := 0.05
 const _CATCH_PHASE := 0.80
 
 func _check_gestures(ball_state: Dictionary, lane: Dictionary) -> void:
+	if bool(ball_state.get("retired", false)):
+		return
 	if lane.has("arm_cycle"):
 		_check_cycle_gestures(ball_state, lane)
 		return
