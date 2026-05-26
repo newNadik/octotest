@@ -3,10 +3,9 @@ class_name JuggleController
 
 ## Drives juggling for all ball-type held items.
 ##
-## Anchor: socket.global_position is snapshotted into player-local space at
-## pickup, then re-derived via to_global each frame — follows Octo body/yaw
-## but ignores arm animation.  Socket IS the holding position, so arc bottom
-## == normal held position.
+## Anchor: live socket + interactable hold transform each frame (when socket
+## exists), so arc bottom tracks actual held position including hold offsets.
+## Falls back to snapshotted player-local anchor if socket is unavailable.
 ##
 ## Tip gesture: a smooth sin pulse on OctoRig._juggle_tip_bend_additive,
 ## only the arm tip bends — no whole-arm gesture animation.
@@ -68,18 +67,19 @@ func on_ball_picked_up(item: Node, arm_name: String, socket: Node3D = null) -> v
 	if not active:
 		_start()
 
-	# Snapshot the true held-item world position → player-local.
-	# Normal hold places the item at socket.global_transform * item.get_hold_transform(),
-	# so we must apply the hold_offset (e.g. y -0.17 on the ball) to match exactly.
+	# Snapshot from the ACTUAL held item position.
+	# This guarantees juggle starts from the same point as visual hold, including
+	# Interactable hold_offset/hold_rotation adjustments already applied on attach.
 	var rest_local := Vector3.ZERO
-	if socket != null and _player != null:
-		var hold_world_pos: Vector3 = socket.global_position
-		if item.has_method("get_hold_transform"):
-			var hold_tf: Transform3D = item.get_hold_transform()
-			hold_world_pos = (socket.global_transform * hold_tf).origin
-		rest_local = _player.to_local(hold_world_pos)
+	if _player != null and item.has_method("get_pickup_root"):
+		var pickup_root: Node3D = item.get_pickup_root()
+		if pickup_root != null:
+			rest_local = _player.to_local(pickup_root.global_position)
+		elif socket != null:
+			# Fallback only if pickup_root is missing.
+			rest_local = _player.to_local(socket.global_position)
 
-	_add_ball(item, arm_name, rest_local)
+	_add_ball(item, arm_name, rest_local, socket)
 
 	# Snap ball to arc start immediately — prevents one-frame position jump.
 	var pickup_root: Node3D = item.get_pickup_root()
@@ -114,6 +114,8 @@ func process_juggle(delta: float) -> void:
 	if total_time >= float(beat_count) * beat_duration:
 		_end()
 		return
+	if total_time < 0.0:
+		_refresh_lane_rest_anchors_from_held_items()
 	_update_tip_pulses(delta)
 	for lane in _lanes:
 		for ball_state in lane["balls"]:
@@ -144,12 +146,14 @@ func _end() -> void:
 # Lane management
 # ---------------------------------------------------------------------------
 
-func _add_ball(item: Node, arm_name: String, rest_local: Vector3) -> void:
+func _add_ball(item: Node, arm_name: String, rest_local: Vector3, socket: Node3D = null) -> void:
 	_lanes.append({
 		"arm_a": arm_name,
 		"arm_b": arm_name,
 		"rest_local_a": rest_local,
 		"rest_local_b": rest_local,
+		"socket_a": socket,
+		"socket_b": socket,
 		"balls": [_make_ball_state(item)],
 	})
 
@@ -207,16 +211,36 @@ func _update_ball_position(ball_state: Dictionary, lane: Dictionary) -> void:
 	var pickup_root: Node3D = item.get_pickup_root()
 	if pickup_root == null:
 		return
+	if total_time < 0.0:
+		return
 	var active_time := maxf(total_time, 0.0)
 	var t := fmod(active_time / beat_duration + float(ball_state["phase_offset"]), 1.0)
 	pickup_root.global_position = _compute_arc_position(t, lane)
 
 
+func _refresh_lane_rest_anchors_from_held_items() -> void:
+	if _player == null:
+		return
+	for lane in _lanes:
+		var balls: Array = lane["balls"]
+		for ball_state in balls:
+			var item: Node = ball_state["item"]
+			if item == null or not is_instance_valid(item):
+				continue
+			var pickup_root: Node3D = item.get_pickup_root()
+			if pickup_root == null:
+				continue
+			var rest_local := _player.to_local(pickup_root.global_position)
+			lane["rest_local_a"] = rest_local
+			lane["rest_local_b"] = rest_local
+			break
+
+
 func _compute_arc_position(t: float, lane: Dictionary) -> Vector3:
 	var is_self_toss: bool = (str(lane["arm_a"]) == str(lane["arm_b"]))
 
-	var pos_a: Vector3 = _player.to_global(lane["rest_local_a"] as Vector3)
-	var pos_b: Vector3 = pos_a if is_self_toss else _player.to_global(lane["rest_local_b"] as Vector3)
+	var pos_a: Vector3 = _get_lane_anchor_world(lane, "a")
+	var pos_b: Vector3 = pos_a if is_self_toss else _get_lane_anchor_world(lane, "b")
 
 	var base_pos := pos_a.lerp(pos_b, smoothstep(0.0, 1.0, t))
 
@@ -230,6 +254,33 @@ func _compute_arc_position(t: float, lane: Dictionary) -> Vector3:
 		forward = forward.normalized()
 
 	return base_pos + Vector3(0.0, arc_y, 0.0) + forward * (sin(PI * t) * fwd_amount)
+
+
+func _get_lane_anchor_world(lane: Dictionary, side: String) -> Vector3:
+	var rest_key := "rest_local_a" if side == "a" else "rest_local_b"
+	var socket_key := "socket_a" if side == "a" else "socket_b"
+	var fallback := _player.to_global(lane[rest_key] as Vector3)
+	if not lane.has(socket_key):
+		return fallback
+	var socket := lane[socket_key] as Node3D
+	if socket == null or not is_instance_valid(socket):
+		return fallback
+	var item := _first_valid_lane_item(lane)
+	if item == null:
+		return socket.global_position
+	if item.has_method("get_hold_transform"):
+		var hold_tf: Transform3D = item.get_hold_transform()
+		return (socket.global_transform * hold_tf).origin
+	return socket.global_position
+
+
+func _first_valid_lane_item(lane: Dictionary) -> Node:
+	var balls: Array = lane.get("balls", [])
+	for ball_state in balls:
+		var item: Node = ball_state.get("item", null)
+		if item != null and is_instance_valid(item):
+			return item
+	return null
 
 
 # ---------------------------------------------------------------------------
