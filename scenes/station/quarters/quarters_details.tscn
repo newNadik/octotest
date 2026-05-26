@@ -62,6 +62,7 @@
 [ext_resource type="PackedScene" uid="uid://djrymxdm74faq" path="res://assets/models/items/quarters/hoodie.glb" id="60_ff5qj"]
 [ext_resource type="PackedScene" uid="uid://b41wu76t0h4q6" path="res://assets/models/items/quarters/tartan.glb" id="61_ncemj"]
 [ext_resource type="PackedScene" uid="uid://bwlk053batgci" path="res://assets/models/items/quarters/sleeping.glb" id="62_eyccl"]
+[ext_resource type="PackedScene" uid="uid://dny6hphe0bh4v" path="res://scenes/station/items/the_ball.tscn" id="63_ncemj"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_d3chd"]
 albedo_color = Color(0.9, 0.9, 0.9, 1)
@@ -487,3 +488,7 @@ transform = Transform3D(1.4, -3.5527137e-15, 0, 0, 1.5, 1.41561e-08, 0, -1.11758
 
 [node name="sleeping" parent="items" unique_id=1359651824 instance=ExtResource("62_eyccl")]
 transform = Transform3D(1.6, 1.0658141e-14, 0, 0, 1.3, 1.3411029e-08, 0, -9.68574e-09, 1.8, -19.954035, 0.42794383, -19.687126)
+
+[node name="the_ball" parent="." unique_id=1824952557 instance=ExtResource("63_ncemj")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22.65404, 1.5555167, -12.257219)
+ball_color = 5

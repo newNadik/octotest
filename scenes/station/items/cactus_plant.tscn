@@ -1,6 +1,5 @@
 [gd_scene format=4 uid="uid://bu4rpvaec4jla"]
 
-[ext_resource type="Script" uid="uid://bt8vvmy3m63u7" path="res://scripts/interaction/interactable.gd" id="1_ps8pt"]
 [ext_resource type="Texture2D" uid="uid://tgcj0r7i5bo2" path="res://assets/models/interior/plants/pots/cactus_plant_Image_18.png" id="2_0wnn3"]
 [ext_resource type="Texture2D" uid="uid://ddrbvgphyl2j2" path="res://assets/models/interior/plants/pots/cactus_plant_Image_19.png" id="3_p0p0n"]
 [ext_resource type="Texture2D" uid="uid://b4iylqix7peh4" path="res://assets/models/interior/plants/pots/cactus_plant_Image_20.png" id="4_h3i2o"]
@@ -101,9 +100,6 @@ shadow_mesh = SubResource("ArrayMesh_6hwfy")
 [sub_resource type="BoxShape3D" id="BoxShape3D_sxcua"]
 size = Vector3(0.3, 0.5, 0.3)
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_y5noi"]
-size = Vector3(0.3, 0.5, 0.3)
-
 [node name="cactus" type="StaticBody3D" unique_id=589026095]
 collision_layer = 64
 collision_mask = 99
@@ -119,20 +115,3 @@ mesh = SubResource("ArrayMesh_i00r3")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1028704820]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.25, 0)
 shape = SubResource("BoxShape3D_sxcua")
-
-[node name="Interactable" type="Area3D" parent="." unique_id=943718201]
-collision_layer = 8
-collision_mask = 0
-script = ExtResource("1_ps8pt")
-interaction_type = 1
-display_name = "Cactus"
-prompt_action = "Pick up"
-requires_line_of_sight = false
-focus_offset = Vector3(0, 0.22, 0)
-hold_offset = Vector3(0, -0.17, 0)
-hold_rotation_degrees = Vector3(8, 0, 0)
-highlight_mesh_paths = Array[NodePath]([NodePath("../Object_34"), NodePath("../Object_26")])
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Interactable" unique_id=984512337]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.25, 0)
-shape = SubResource("BoxShape3D_y5noi")

@@ -22,6 +22,7 @@
 [ext_resource type="PackedScene" uid="uid://b4jrm4nkcgbh2" path="res://scenes/station/items/life_jackets.tscn" id="20_eruaw"]
 [ext_resource type="PackedScene" uid="uid://ctlqnv7ainkqs" path="res://scenes/station/items/shelf_papers_3.tscn" id="21_lw8o2"]
 [ext_resource type="PackedScene" uid="uid://q80ss7d03u6" path="res://scenes/station/items/documents_002.tscn" id="22_7jgd1"]
+[ext_resource type="PackedScene" uid="uid://dny6hphe0bh4v" path="res://scenes/station/items/the_ball.tscn" id="23_dwxtv"]
 
 [node name="ChemLabDetails" type="Node3D" unique_id=145407394]
 
@@ -139,3 +140,7 @@ transform = Transform3D(0.73583716, 0, 0.67715853, 0, 1, 0, -0.67715853, 0, 0.73
 
 [node name="documents002" parent="items" unique_id=367064636 instance=ExtResource("22_7jgd1")]
 transform = Transform3D(0.46032375, 0, 0.8877511, 0, 1, 0, -0.8877511, 0, 0.46032375, 15.583164, 1.4738951, -24.876055)
+
+[node name="the_ball" parent="." unique_id=1824952557 instance=ExtResource("23_dwxtv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 21.694056, 1.5705353, -12.684317)
+ball_color = 3

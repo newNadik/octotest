@@ -38,6 +38,7 @@
 [ext_resource type="Texture2D" uid="uid://erit634s7r35" path="res://assets/textures/documents/emergency_UA.png" id="36_67lsj"]
 [ext_resource type="Texture2D" uid="uid://3wvodf0qcyl4" path="res://assets/textures/documents/missing_pet.png" id="37_l04sd"]
 [ext_resource type="Texture2D" uid="uid://cwta4gwomtle5" path="res://assets/textures/documents/missing_pet_ua.png" id="38_lw4b8"]
+[ext_resource type="PackedScene" uid="uid://dny6hphe0bh4v" path="res://scenes/station/items/the_ball.tscn" id="39_1hqp2"]
 [ext_resource type="PackedScene" uid="uid://bc1e233sg7d7l" path="res://scenes/station/interior/giftshop.tscn" id="39_2xb63"]
 [ext_resource type="PackedScene" uid="uid://cvmc4k2rg5tih" path="res://scenes/station/interior/kitchen.tscn" id="40_w45ix"]
 [ext_resource type="PackedScene" uid="uid://bpvnlqkovf34v" path="res://scenes/interactables/id_card.tscn" id="41_xb65v"]
@@ -299,6 +300,10 @@ document_texture_ua = ExtResource("36_67lsj")
 transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -4.575895, 2.9444475, -10.420912)
 document_texture = ExtResource("37_l04sd")
 document_texture_ua = ExtResource("38_lw4b8")
+
+[node name="the_ball" parent="furniture/attrium" unique_id=1824952557 instance=ExtResource("39_1hqp2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.002131, 0.97513586, 1.1677487)
+ball_color = 2
 
 [node name="giftshop2" parent="furniture" unique_id=2017872549 instance=ExtResource("39_2xb63")]
 
