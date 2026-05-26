@@ -148,6 +148,7 @@ func process_interactions(delta: float) -> void:
 		_wear_controller.process_wear(delta)
 	if _juggle_controller != null:
 		_juggle_controller.process_juggle(delta)
+		_sync_ball_assignments_from_juggle_hold()
 
 
 func consume_escape() -> bool:
@@ -1321,6 +1322,62 @@ func _attach_item_to_hands(item, clear_motion_target: bool) -> bool:
 
 	_update_carry_mobility()
 	return true
+
+
+func _sync_ball_assignments_from_juggle_hold() -> void:
+	# Contract with JuggleController:
+	# when juggle reaches hold mode, it is the source of truth for final
+	# ball->arm ownership. We mirror that back into held socket ownership so
+	# drops/selects operate on what the player sees on screen.
+	if _juggle_controller == null:
+		return
+	if not _juggle_controller.has_method("is_in_hold_mode"):
+		return
+	if not bool(_juggle_controller.is_in_hold_mode()):
+		return
+
+	var desired_socket_by_item_id: Dictionary = {}
+	for held_item in _held_interactables:
+		if held_item == null or not is_instance_valid(held_item):
+			continue
+		if not _juggle_controller.is_ball_item(held_item):
+			continue
+		var desired_arm := str(_juggle_controller.get_ball_assigned_arm(held_item))
+		if desired_arm.is_empty():
+			continue
+		var desired_socket_idx := int(_socket_index_by_arm_name.get(desired_arm, -1))
+		if desired_socket_idx < 0 or desired_socket_idx >= _hand_sockets.size():
+			continue
+		desired_socket_by_item_id[held_item.get_instance_id()] = desired_socket_idx
+
+	if desired_socket_by_item_id.is_empty():
+		return
+
+	# Apply reassignment in one pass to allow swaps.
+	for item_id in desired_socket_by_item_id.keys():
+		_held_socket_by_item_id[item_id] = int(desired_socket_by_item_id[item_id])
+
+	for held_item in _held_interactables:
+		if held_item == null or not is_instance_valid(held_item):
+			continue
+		var item_id: int = held_item.get_instance_id()
+		if not desired_socket_by_item_id.has(item_id):
+			continue
+		var socket_idx := int(desired_socket_by_item_id[item_id])
+		if socket_idx < 0 or socket_idx >= _hand_sockets.size():
+			continue
+		var pickup_root = held_item.get_pickup_root()
+		var socket = _hand_sockets[socket_idx]
+		if pickup_root.get_parent() != socket:
+			pickup_root.reparent(socket, true)
+		_apply_hold_transform_preserving_scale(pickup_root, held_item.get_hold_transform())
+
+	# Recompute hold arm flags from current socket map.
+	if _octo_rig != null:
+		for socket_index_variant in _arm_name_by_socket_index.keys():
+			_set_hold_state_for_socket(int(socket_index_variant), false)
+		for item_socket_idx in _held_socket_by_item_id.values():
+			_set_hold_state_for_socket(int(item_socket_idx), true)
 
 
 func _resolve_octo_rig() -> void:

@@ -1,0 +1,36 @@
+[gd_scene format=3 uid="uid://3htpy4k2o365"]
+
+[ext_resource type="PackedScene" uid="uid://cvl8e87h450ot" path="res://assets/models/items/clown_wig.glb" id="1_qt3c4"]
+[ext_resource type="Script" uid="uid://ikr24cul744s" path="res://scripts/interaction/wearable_interactable.gd" id="2_umnax"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_6k61o"]
+size = Vector3(0.6227783, 0.52608645, 0.61206055)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_xem4v"]
+size = Vector3(0.6265576, 0.51665527, 0.6271924)
+
+[node name="clown_wig" type="StaticBody3D" unique_id=1941914804]
+
+[node name="clown_wig" parent="." unique_id=1249766247 instance=ExtResource("1_qt3c4")]
+transform = Transform3D(0.35, 0, 0, 0, 0.35, 0, 0, 0, 0.35, 0, 0, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=931877461]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.011389136, 0.25348508, -0.00012207031)
+shape = SubResource("BoxShape3D_6k61o")
+
+[node name="WearableInteractable" type="Area3D" parent="." unique_id=1014577637]
+collision_layer = 8
+collision_mask = 0
+script = ExtResource("2_umnax")
+wear_offset = Vector3(0, -0.13, -0.15)
+wear_scale = 0.7
+interaction_type = 1
+display_name = "Clown Wig"
+requires_line_of_sight = false
+item_id = "clown_wig"
+hold_offset = Vector3(0, -0.25, -0.2)
+indicator_local_offset = Vector3(0.2, 0, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="WearableInteractable" unique_id=945714311]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.003278792, 0.25352782, -0.004763186)
+shape = SubResource("BoxShape3D_xem4v")

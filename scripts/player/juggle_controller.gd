@@ -27,11 +27,15 @@ const TheBallScript = preload("res://scripts/station/items/the_ball.gd")
 @export var juggle_tip_hold_time:   float = 0.06   # seconds the tip holds at peak
 @export var juggle_tip_rise_speed:  float = 30.0   # lerp speed (1/s) rising to peak
 @export var juggle_tip_fall_speed:  float = 7.0    # lerp speed (1/s) falling to rest
+@export var debug_ball_arm_mapping: bool = false
 
 var active: bool = false
 var total_time: float = 0.0
 var _stop_requested: bool = false
+var _hold_mode: bool = false
 var _juggled_ball_ids: Dictionary = {}
+var _ball_arm_assignment: Dictionary = {}
+var _blocked_arms: Dictionary = {}  # arm_name -> true (occupied by non-ball held items)
 
 var _player: CharacterBody3D
 var _octo_rig: Node
@@ -98,9 +102,10 @@ func rebuild_from_held_items(
 	hand_sockets: Array,
 	arm_name_by_socket_index: Dictionary
 ) -> void:
-	var was_active := active
-	var ball_entries: Array = []
+	var was_motion_active := active and not _hold_mode
+	var raw_ball_entries: Array = []
 	var new_ball_ids: Dictionary = {}
+	_blocked_arms = _collect_blocked_arms_from_held_items(held_items, held_socket_by_item_id, arm_name_by_socket_index)
 	for held_item in held_items:
 		if not _is_ball(held_item):
 			continue
@@ -111,18 +116,21 @@ func rebuild_from_held_items(
 			continue
 		var item_id: int = held_item.get_instance_id()
 		new_ball_ids[item_id] = true
-		var socket_idx := int(held_socket_by_item_id.get(item_id, -1))
-		var socket: Node3D = null
-		if socket_idx >= 0 and socket_idx < hand_sockets.size():
-			socket = hand_sockets[socket_idx]
-		var arm_name := str(arm_name_by_socket_index.get(socket_idx, ""))
 		var rest_local := _player.to_local(pickup_root.global_position) if _player != null else Vector3.ZERO
-		ball_entries.append({
+		raw_ball_entries.append({
 			"item": held_item,
-			"arm_name": arm_name,
-			"socket": socket,
+			"item_id": item_id,
+			"world_pos": pickup_root.global_position,
 			"rest_local": rest_local,
 		})
+
+	var ball_entries := _assign_sockets_to_ball_entries(
+		raw_ball_entries,
+		hand_sockets,
+		arm_name_by_socket_index,
+		held_socket_by_item_id,
+		not _hold_mode
+	)
 
 	if ball_entries.is_empty():
 		_end()
@@ -137,16 +145,18 @@ func rebuild_from_held_items(
 	if ids_unchanged:
 		return
 
-	if not active:
+	if not active or _hold_mode:
 		_start()
 	_juggled_ball_ids = new_ball_ids.duplicate()
 	if ball_entries.size() >= 3:
 		_build_cycle_lane_from_ball_entries(ball_entries)
 	else:
 		_build_lanes_from_ball_entries(ball_entries)
-	if balls_added and not was_active:
+	if balls_added and not was_motion_active:
 		_tip_state.clear()
 		_restart_pattern_from_start()
+	_prune_ball_arm_assignments(new_ball_ids)
+	_debug_log_mapping("rebuild")
 
 
 func on_ball_dropped(item: Node) -> void:
@@ -156,6 +166,7 @@ func on_ball_dropped(item: Node) -> void:
 		return
 	if item != null and is_instance_valid(item):
 		_juggled_ball_ids.erase(item.get_instance_id())
+		_ball_arm_assignment.erase(item.get_instance_id())
 	_remove_ball(item)
 	if _count_balls() == 0:
 		_end()
@@ -175,8 +186,31 @@ func is_ball_item(item: Node) -> bool:
 	return _is_ball(item)
 
 
+func is_in_hold_mode() -> bool:
+	return active and _hold_mode
+
+
+func get_ball_assigned_arm(item: Node) -> String:
+	if item == null or not is_instance_valid(item):
+		return ""
+	for lane in _lanes:
+		for ball_state in lane["balls"]:
+			if ball_state.get("item", null) != item:
+				continue
+			if bool(ball_state.get("retired", false)):
+				return str(ball_state.get("retired_arm", ""))
+			return str(ball_state.get("arm_name", ""))
+	return ""
+
+
 func process_juggle(delta: float) -> void:
 	if not active:
+		return
+	if _hold_mode:
+		for lane in _lanes:
+			for ball_state in lane["balls"]:
+				_update_ball_position(ball_state, lane)
+		_update_tip_pulses(delta)
 		return
 	total_time += delta
 	if not _stop_requested and total_time >= float(beat_count) * beat_duration:
@@ -190,7 +224,9 @@ func process_juggle(delta: float) -> void:
 			_update_ball_position(ball_state, lane)
 			_check_gestures(ball_state, lane)
 	if _stop_requested and _all_balls_retired():
-		_end()
+		_stop_requested = false
+		_hold_mode = true
+		_tip_state.clear()
 
 
 # ---------------------------------------------------------------------------
@@ -201,6 +237,7 @@ func _start() -> void:
 	active = true
 	total_time = -pre_toss_delay  # negative → ball stays at rest until t reaches 0
 	_stop_requested = false
+	_hold_mode = false
 	_lanes.clear()
 	_tip_state.clear()
 
@@ -209,7 +246,10 @@ func _end() -> void:
 	active = false
 	_lanes.clear()
 	_tip_state.clear()
+	_hold_mode = false
 	_juggled_ball_ids.clear()
+	_ball_arm_assignment.clear()
+	_blocked_arms.clear()
 	if _octo_rig != null and _octo_rig.has_method("clear_all_juggle_tip_bends"):
 		_octo_rig.clear_all_juggle_tip_bends()
 
@@ -217,6 +257,7 @@ func _end() -> void:
 func _restart_pattern_from_start() -> void:
 	total_time = -pre_toss_delay
 	_stop_requested = false
+	_hold_mode = false
 	_tip_state.clear()
 	for lane in _lanes:
 		for ball_state in lane["balls"]:
@@ -226,19 +267,6 @@ func _restart_pattern_from_start() -> void:
 			ball_state["retire_on_catch"] = false
 			ball_state["retired"] = false
 			ball_state["retired_arm"] = ""
-	_snap_all_balls_to_pattern_start()
-
-
-func _snap_all_balls_to_pattern_start() -> void:
-	for lane in _lanes:
-		for ball_state in lane["balls"]:
-			var item: Node = ball_state["item"]
-			if item == null or not is_instance_valid(item):
-				continue
-			var pickup_root: Node3D = item.get_pickup_root()
-			if pickup_root == null:
-				continue
-			pickup_root.global_position = _compute_ball_position(0.0, ball_state, lane)
 
 
 # ---------------------------------------------------------------------------
@@ -300,6 +328,125 @@ func _ball_id_sets_equal(a: Dictionary, b: Dictionary) -> bool:
 		if not b.has(id_key):
 			return false
 	return true
+
+
+func _prune_ball_arm_assignments(valid_ids: Dictionary) -> void:
+	var to_erase: Array = []
+	for id_key in _ball_arm_assignment.keys():
+		if not valid_ids.has(id_key):
+			to_erase.append(id_key)
+	for id_key in to_erase:
+		_ball_arm_assignment.erase(id_key)
+
+
+func _record_ball_arm_assignment(item: Node, arm_name: String) -> void:
+	if item == null or not is_instance_valid(item):
+		return
+	if arm_name.is_empty():
+		return
+	_ball_arm_assignment[item.get_instance_id()] = arm_name
+
+
+func _assign_sockets_to_ball_entries(
+	raw_entries: Array,
+	hand_sockets: Array,
+	arm_name_by_socket_index: Dictionary,
+	held_socket_by_item_id: Dictionary,
+	use_cached_assignment: bool
+) -> Array:
+	var result: Array = []
+	if raw_entries.is_empty():
+		return result
+
+	var socket_index_by_arm_name: Dictionary = {}
+	for socket_index_variant in arm_name_by_socket_index.keys():
+		var socket_index := int(socket_index_variant)
+		var mapped_arm_name := str(arm_name_by_socket_index[socket_index_variant])
+		if not mapped_arm_name.is_empty():
+			if _blocked_arms.has(mapped_arm_name):
+				continue
+			socket_index_by_arm_name[mapped_arm_name] = socket_index
+
+	var pairs: Array = []
+	for e_idx in range(raw_entries.size()):
+		var item_id := int(raw_entries[e_idx]["item_id"])
+		if use_cached_assignment and _ball_arm_assignment.has(item_id):
+			var preferred_arm := str(_ball_arm_assignment[item_id])
+			if socket_index_by_arm_name.has(preferred_arm):
+				var preferred_socket_idx := int(socket_index_by_arm_name[preferred_arm])
+				var preferred_socket := hand_sockets[preferred_socket_idx] as Node3D
+				if preferred_socket != null and is_instance_valid(preferred_socket):
+					# Negative weight guarantees persistent visual assignment wins.
+					pairs.append({"e": e_idx, "s": preferred_socket_idx, "d2": -1.0})
+		var world_pos: Vector3 = raw_entries[e_idx]["world_pos"]
+		for s_idx in range(hand_sockets.size()):
+			var socket := hand_sockets[s_idx] as Node3D
+			if socket == null or not is_instance_valid(socket):
+				continue
+			var d2 := socket.global_position.distance_squared_to(world_pos)
+			pairs.append({"e": e_idx, "s": s_idx, "d2": d2})
+	pairs.sort_custom(func(a: Dictionary, b: Dictionary) -> bool:
+		return float(a["d2"]) < float(b["d2"])
+	)
+
+	var entry_to_socket: Dictionary = {}
+	var used_sockets: Dictionary = {}
+	for p in pairs:
+		var e_idx := int(p["e"])
+		var s_idx := int(p["s"])
+		if entry_to_socket.has(e_idx):
+			continue
+		if used_sockets.has(s_idx):
+			continue
+		entry_to_socket[e_idx] = s_idx
+		used_sockets[s_idx] = true
+
+	# Fill any unmatched entries from previous held mapping.
+		for fallback_entry_idx in range(raw_entries.size()):
+			if entry_to_socket.has(fallback_entry_idx):
+				continue
+			var item_id := int(raw_entries[fallback_entry_idx]["item_id"])
+			var fallback_idx := int(held_socket_by_item_id.get(item_id, -1))
+			if fallback_idx >= 0 and fallback_idx < hand_sockets.size() and not used_sockets.has(fallback_idx):
+				var fallback_arm := str(arm_name_by_socket_index.get(fallback_idx, ""))
+				if fallback_arm.is_empty() or _blocked_arms.has(fallback_arm):
+					continue
+				entry_to_socket[fallback_entry_idx] = fallback_idx
+				used_sockets[fallback_idx] = true
+
+	for e_idx in range(raw_entries.size()):
+		var raw: Dictionary = raw_entries[e_idx]
+		var socket_idx := int(entry_to_socket.get(e_idx, -1))
+		var socket: Node3D = null
+		if socket_idx >= 0 and socket_idx < hand_sockets.size():
+			socket = hand_sockets[socket_idx]
+		var arm_name := str(arm_name_by_socket_index.get(socket_idx, ""))
+		var item_id := int(raw["item_id"])
+		if not arm_name.is_empty():
+			_ball_arm_assignment[item_id] = arm_name
+		result.append({
+			"item": raw["item"],
+			"item_id": item_id,
+			"arm_name": arm_name,
+			"socket": socket,
+			"rest_local": raw["rest_local"],
+		})
+	return result
+
+
+func _debug_log_mapping(reason: String) -> void:
+	if not debug_ball_arm_mapping:
+		return
+	var parts: Array[String] = []
+	for lane in _lanes:
+		for ball_state in lane["balls"]:
+			var item: Node = ball_state.get("item", null)
+			if item == null or not is_instance_valid(item):
+				continue
+			var item_id: int = item.get_instance_id()
+			var arm_name := str(ball_state.get("retired_arm", "")) if bool(ball_state.get("retired", false)) else str(ball_state.get("arm_name", ""))
+			parts.append("%s->%s" % [str(item_id), arm_name])
+	print("[JuggleController] %s %s" % [reason, ", ".join(parts)])
 
 
 # ---------------------------------------------------------------------------
@@ -482,10 +629,12 @@ func _all_balls_retired() -> bool:
 func _try_retire_non_cycle_ball(active_time: float, ball_state: Dictionary, lane: Dictionary) -> void:
 	var start_delay := float(ball_state.get("start_delay", 0.0))
 	var start_from_a := bool(ball_state.get("start_from_a", true))
+	var item: Node = ball_state.get("item", null)
+	var assigned_arm := str(ball_state.get("arm_name", ""))
 	if active_time < start_delay:
-		var hold_arm := str(lane["arm_a"]) if start_from_a else str(lane["arm_b"])
 		ball_state["retired"] = true
-		ball_state["retired_arm"] = hold_arm
+		ball_state["retired_arm"] = _resolve_retire_arm([assigned_arm, str(lane["arm_a"]), str(lane["arm_b"])], item)
+		_record_ball_arm_assignment(item, str(ball_state["retired_arm"]))
 		return
 	var phase := (active_time - start_delay) / maxf(0.001, beat_duration)
 	var beat_index := int(floor(phase))
@@ -493,23 +642,34 @@ func _try_retire_non_cycle_ball(active_time: float, ball_state: Dictionary, lane
 	var even_beat := (beat_index % 2) == 0
 	var from_a := start_from_a if even_beat else not start_from_a
 	var catch_arm := str(lane["arm_b"]) if from_a else str(lane["arm_a"])
+	var other_arm := str(lane["arm_a"]) if from_a else str(lane["arm_b"])
 	if t >= 0.98:
 		ball_state["retired"] = true
-		ball_state["retired_arm"] = catch_arm
+		ball_state["retired_arm"] = _resolve_retire_arm([assigned_arm, catch_arm, other_arm], item)
+		_record_ball_arm_assignment(item, str(ball_state["retired_arm"]))
 
 
 func _try_retire_cycle_ball(active_time: float, ball_state: Dictionary, lane: Dictionary) -> void:
 	var arm_cycle: Array = lane.get("arm_cycle", [])
 	var arm_count := arm_cycle.size()
+	var item: Node = ball_state.get("item", null)
+	var assigned_arm := str(ball_state.get("arm_name", ""))
 	if arm_count < 2:
 		ball_state["retired"] = true
-		ball_state["retired_arm"] = str(ball_state.get("arm_name", ""))
+		ball_state["retired_arm"] = _resolve_retire_arm([assigned_arm], item)
+		_record_ball_arm_assignment(item, str(ball_state["retired_arm"]))
 		return
 	var start_delay := float(ball_state.get("start_delay", 0.0))
 	var start_idx := int(ball_state.get("cycle_start_idx", 0)) % arm_count
 	if active_time < start_delay:
 		ball_state["retired"] = true
-		ball_state["retired_arm"] = str(arm_cycle[start_idx])
+		var cycle_pref: Array[String] = []
+		if not assigned_arm.is_empty():
+			cycle_pref.append(assigned_arm)
+		for k in range(arm_count):
+			cycle_pref.append(str(arm_cycle[(start_idx + k) % arm_count]))
+		ball_state["retired_arm"] = _resolve_retire_arm(cycle_pref, item)
+		_record_ball_arm_assignment(item, str(ball_state["retired_arm"]))
 		return
 	var phase := (active_time - start_delay) / maxf(0.001, beat_duration)
 	var beat_index := int(floor(phase))
@@ -518,7 +678,63 @@ func _try_retire_cycle_ball(active_time: float, ball_state: Dictionary, lane: Di
 	var to_idx := (from_idx + 1) % arm_count
 	if t >= 0.98:
 		ball_state["retired"] = true
-		ball_state["retired_arm"] = str(arm_cycle[to_idx])
+		var cycle_pref: Array[String] = []
+		if not assigned_arm.is_empty():
+			cycle_pref.append(assigned_arm)
+		for k in range(arm_count):
+			cycle_pref.append(str(arm_cycle[(to_idx + k) % arm_count]))
+		ball_state["retired_arm"] = _resolve_retire_arm(cycle_pref, item)
+		_record_ball_arm_assignment(item, str(ball_state["retired_arm"]))
+
+
+func _resolve_retire_arm(preferred_arms: Array[String], item: Node) -> String:
+	var occupied := _collect_retired_arms(item)
+	for arm_name in preferred_arms:
+		if arm_name.is_empty():
+			continue
+		if _blocked_arms.has(arm_name):
+			continue
+		if not occupied.has(arm_name):
+			return arm_name
+	for arm_name in preferred_arms:
+		if not arm_name.is_empty() and not _blocked_arms.has(arm_name):
+			return arm_name
+	return ""
+
+
+func _collect_blocked_arms_from_held_items(
+	held_items: Array,
+	held_socket_by_item_id: Dictionary,
+	arm_name_by_socket_index: Dictionary
+) -> Dictionary:
+	var blocked: Dictionary = {}
+	for held_item in held_items:
+		if held_item == null or not is_instance_valid(held_item):
+			continue
+		if _is_ball(held_item):
+			continue
+		var item_id: int = held_item.get_instance_id()
+		var socket_idx := int(held_socket_by_item_id.get(item_id, -1))
+		var arm_name := str(arm_name_by_socket_index.get(socket_idx, ""))
+		if not arm_name.is_empty():
+			blocked[arm_name] = true
+	return blocked
+
+
+func _collect_retired_arms(exclude_item: Node) -> Dictionary:
+	var occupied: Dictionary = {}
+	for lane in _lanes:
+		for bs in lane["balls"]:
+			if not bool(bs.get("retired", false)):
+				continue
+			var bs_item: Node = bs.get("item", null)
+			if bs_item == exclude_item:
+				continue
+			var arm_name := str(bs.get("retired_arm", ""))
+			if arm_name.is_empty():
+				continue
+			occupied[arm_name] = true
+	return occupied
 
 
 func _get_retired_ball_hold_position(ball_state: Dictionary, lane: Dictionary) -> Vector3:
