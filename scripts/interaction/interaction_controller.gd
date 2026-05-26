@@ -3,6 +3,8 @@ class_name InteractionController
 
 
 const PICK_SOUND_DEFAULT: AudioStream = preload("res://assets/sound/pick.wav")
+const APPEAR_SOUND_DEFAULT: AudioStream = preload("res://assets/sound/poof.mp3")
+const WHITE_GLOW_MATERIAL: Material = preload("res://assets/materials/white_glow.tres")
 const WALL_COLLISION_MASK := 1 << 0
 const GROUND_COLLISION_MASK := 1 << 1
 const FURNITURE_COLLISION_MASK := 1 << 5
@@ -57,11 +59,16 @@ const ARM_SOCKET_ANGLE_BY_NAME := {
 @export var debug_interaction_logs = false
 @export var focus_reject_feedback_duration = 0.32
 @export var pick_drop_sound: AudioStream = PICK_SOUND_DEFAULT
+@export var appearance_sound: AudioStream = APPEAR_SOUND_DEFAULT
 @export var pick_drop_sound_volume_db := -9.0
 @export var pick_drop_sound_volume_jitter_db := 2.5
 @export var pick_drop_sound_pitch_min := 0.82
 @export var pick_drop_sound_pitch_max := 1.22
 @export var pick_drop_sound_max_distance := 22.0
+@export var appearance_delay := 0.1
+@export var appearance_fade_duration := 1.6
+@export var appearance_reveal_offset := Vector3(0.0, 0.0, 0.0)
+@export var debug_clown_wig_award := true
 @export var focus_display_forward_distance := 1.15
 @export var focus_display_bottom_anchor := -0.68
 @export var focus_display_row_spacing := 0.44
@@ -107,6 +114,7 @@ var _pending_held_restore_keys: Array[String] = []
 var _pending_worn_restore: Dictionary = {}
 var _juggle_controller: JuggleControllerScript
 var _clown_wig_milestone_awarded := false
+var _clown_wig_award_pending := false
 
 
 func initialize(player: CharacterBody3D, camera: Camera3D, hint_label: Label, world_root: Node3D) -> void:
@@ -149,7 +157,11 @@ func process_interactions(delta: float) -> void:
 	_update_held_item_transform(delta)
 	if _wear_controller != null:
 		_wear_controller.process_wear(delta)
-	if _juggle_controller != null:
+	# In focus display we want one transform authority for all held items.
+	# If juggle keeps updating balls in the same frame, they drift away from
+	# the focus row. So we pause juggle position updates while focus display
+	# is active and resume automatically on exit.
+	if _juggle_controller != null and not _focus_display_enabled:
 		_juggle_controller.process_juggle(delta)
 		_sync_ball_assignments_from_juggle_hold()
 
@@ -1054,8 +1066,6 @@ func _update_focus_display_transforms(delta: float) -> void:
 
 	for i in range(count):
 		var held_item = _held_interactables[i]
-		if _juggle_controller != null and _juggle_controller.is_juggling_ball(held_item):
-			continue
 		var pickup_root = held_item.get_pickup_root()
 		var col = i % columns
 		var row = 0
@@ -1389,25 +1399,15 @@ func _sync_ball_assignments_from_juggle_hold() -> void:
 func _try_award_clown_wig_for_full_ball_hold() -> void:
 	if _clown_wig_milestone_awarded:
 		return
+	if _clown_wig_award_pending:
+		return
 	if _wear_controller == null:
 		return
 	if _count_held_balls() < 8:
 		return
-
-	var clown_wig := _get_or_spawn_clown_wig_interactable()
-	if clown_wig == null:
-		return
-
-	var slot := clown_wig.get_wear_slot_name()
-	var displaced: WearableInteractableScript = _wear_controller.get_worn_in_slot(slot) as WearableInteractableScript
-	if displaced != null:
-		_unwear_and_drop(displaced)
-
-	if _is_item_currently_held(clown_wig):
-		_remove_held_item(clown_wig)
-
-	if _wear_controller.try_wear(clown_wig):
-		_clown_wig_milestone_awarded = true
+	_debug_wig("milestone reached; scheduling sequence")
+	_clown_wig_award_pending = true
+	call_deferred("_run_clown_wig_award_sequence")
 
 
 func _count_held_balls() -> int:
@@ -1446,6 +1446,8 @@ func _get_or_spawn_clown_wig_interactable() -> WearableInteractableScript:
 	if wig_root == null:
 		return null
 	_world_root.add_child(wig_root)
+	if _player != null:
+		wig_root.global_position = _player.global_position + appearance_reveal_offset
 	_apply_pickable_cross_room_visual_layers(wig_root)
 	var wearable := wig_root.get_node_or_null("WearableInteractable") as WearableInteractableScript
 	if wearable != null and wearable.item_id.is_empty():
@@ -1453,6 +1455,155 @@ func _get_or_spawn_clown_wig_interactable() -> WearableInteractableScript:
 	if wearable != null:
 		_apply_pickable_cross_room_visual_layers(wearable.get_pickup_root())
 	return wearable
+
+
+func _play_appearance_sound(world_position: Vector3) -> void:
+	if appearance_sound == null:
+		_debug_wig("appearance_sound is null")
+		return
+	_ensure_pick_drop_audio_player()
+	if _pick_drop_player == null:
+		_debug_wig("_pick_drop_player missing")
+		return
+	_pick_drop_player.global_position = world_position
+	_pick_drop_player.stream = appearance_sound
+	_pick_drop_player.volume_db = pick_drop_sound_volume_db
+	_pick_drop_player.max_distance = pick_drop_sound_max_distance
+	_pick_drop_player.pitch_scale = 1.0
+	if _pick_drop_player.playing:
+		_pick_drop_player.stop()
+	_pick_drop_player.play()
+	_debug_wig("played poof at %s" % str(world_position))
+
+
+func _run_clown_wig_award_sequence() -> void:
+	_debug_wig("sequence start")
+	if _clown_wig_milestone_awarded:
+		_debug_wig("abort: already awarded")
+		_clown_wig_award_pending = false
+		return
+	if _wear_controller == null:
+		_debug_wig("abort: wear controller missing")
+		_clown_wig_award_pending = false
+		return
+	if _count_held_balls() < 8:
+		_debug_wig("abort: held balls < 8")
+		_clown_wig_award_pending = false
+		return
+
+	if appearance_delay > 0.0:
+		_debug_wig("delay %.2fs" % appearance_delay)
+		await get_tree().create_timer(appearance_delay).timeout
+		if _count_held_balls() < 8:
+			_debug_wig("abort after delay: held balls < 8")
+			_clown_wig_award_pending = false
+			return
+
+	var clown_wig := _get_or_spawn_clown_wig_interactable()
+	if clown_wig == null:
+		_debug_wig("abort: wig missing")
+		_clown_wig_award_pending = false
+		return
+	_debug_wig("wig ready: %s" % str(clown_wig.get_path()))
+
+	var slot := clown_wig.get_wear_slot_name()
+	var displaced: WearableInteractableScript = _wear_controller.get_worn_in_slot(slot) as WearableInteractableScript
+	if displaced != null:
+		_unwear_and_drop(displaced)
+
+	if _is_item_currently_held(clown_wig):
+		_remove_held_item(clown_wig)
+
+	if not _wear_controller.try_wear(clown_wig):
+		_debug_wig("try_wear returned false")
+		_clown_wig_award_pending = false
+		return
+
+	_clown_wig_milestone_awarded = true
+	_debug_wig("wig equipped")
+
+	var pickup_root := clown_wig.get_pickup_root()
+	if pickup_root != null:
+		_debug_wig("start reveal")
+		await _play_spawn_reveal(pickup_root)
+		_debug_wig("reveal done")
+	_clown_wig_award_pending = false
+
+
+func _play_spawn_reveal(root: Node3D) -> void:
+	if root == null:
+		_debug_wig("reveal skipped: root null")
+		return
+	_apply_pickable_cross_room_visual_layers(root)
+	var meshes := _collect_mesh_instances(root)
+	_debug_wig("reveal meshes: %d" % meshes.size())
+	var original_overlays: Dictionary = {}
+	var original_transparency: Dictionary = {}
+	var reveal_material_by_mesh_id: Dictionary = {}
+	for mesh in meshes:
+		original_overlays[mesh.get_instance_id()] = mesh.material_overlay
+		original_transparency[mesh.get_instance_id()] = mesh.transparency
+		if WHITE_GLOW_MATERIAL == null:
+			continue
+		var reveal_material := WHITE_GLOW_MATERIAL.duplicate()
+		if reveal_material is BaseMaterial3D:
+			var base := reveal_material as BaseMaterial3D
+			base.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+			base.albedo_color = Color(1.0, 1.0, 1.0, 0.0)
+		mesh.material_overlay = reveal_material
+		mesh.transparency = 1.0
+		reveal_material_by_mesh_id[mesh.get_instance_id()] = reveal_material
+	var duration := maxf(0.01, appearance_fade_duration)
+	var fade_in := maxf(0.01, duration * 0.65)
+	var fade_out := maxf(0.01, duration * 0.35)
+	_set_reveal_overlay_alpha(meshes, reveal_material_by_mesh_id, 0.0)
+	var tween := create_tween()
+	tween.tween_method(func(a: float) -> void:
+		_set_reveal_overlay_alpha(meshes, reveal_material_by_mesh_id, a)
+		for mesh in meshes:
+			mesh.transparency = 1.0 - a
+	, 0.0, 1.0, fade_in)
+	tween.tween_callback(func() -> void:
+		_play_appearance_sound(root.global_position)
+	)
+	tween.tween_interval(0.03)
+	tween.tween_method(func(a: float) -> void:
+		_set_reveal_overlay_alpha(meshes, reveal_material_by_mesh_id, a)
+		for mesh in meshes:
+			mesh.transparency = 0.0
+	, 1.0, 0.0, fade_out)
+	await tween.finished
+	for mesh in meshes:
+		var mesh_id := mesh.get_instance_id()
+		mesh.material_overlay = original_overlays.get(mesh_id, null)
+		mesh.transparency = float(original_transparency.get(mesh_id, 0.0))
+
+
+func _set_reveal_overlay_alpha(meshes: Array[MeshInstance3D], reveal_material_by_mesh_id: Dictionary, alpha: float) -> void:
+	var a := clampf(alpha, 0.0, 1.0)
+	for mesh in meshes:
+		var mesh_id := mesh.get_instance_id()
+		if not reveal_material_by_mesh_id.has(mesh_id):
+			continue
+		var mat = reveal_material_by_mesh_id[mesh_id]
+		if mat is BaseMaterial3D:
+			var base := mat as BaseMaterial3D
+			base.albedo_color = Color(1.0, 1.0, 1.0, a)
+
+
+func _debug_wig(message: String) -> void:
+	if not debug_clown_wig_award:
+		return
+	print("[ClownWigAward] %s" % message)
+
+
+func _collect_mesh_instances(root: Node) -> Array[MeshInstance3D]:
+	var meshes: Array[MeshInstance3D] = []
+	if root is MeshInstance3D:
+		meshes.append(root as MeshInstance3D)
+	for child in root.get_children():
+		meshes.append_array(_collect_mesh_instances(child))
+	return meshes
 
 
 func _resolve_octo_rig() -> void:

@@ -999,7 +999,8 @@ func _set_focus_visuals_enabled(is_enabled: bool) -> void:
 	_interaction_controller.set_held_item_visuals_visible(items_visible)
 	var wear_controller := _player_visual_root.get_parent().get_node_or_null("WearController") as WearController if _player_visual_root != null else null
 	if wear_controller != null:
-		wear_controller.set_worn_item_visuals_visible(items_visible)
+		# Worn items should follow octo visibility, not held-item focus visibility.
+		wear_controller.set_worn_item_visuals_visible(is_enabled)
 
 
 func _compute_focus_angles(target) -> Vector3:
