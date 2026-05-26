@@ -64,6 +64,7 @@ func initialize(player: CharacterBody3D, octo_rig: Node) -> void:
 func on_ball_picked_up(item: Node, arm_name: String, socket: Node3D = null) -> void:
 	if not _is_ball(item):
 		return
+	var had_existing_balls := _count_balls() > 0
 	if not active:
 		_start()
 
@@ -80,11 +81,108 @@ func on_ball_picked_up(item: Node, arm_name: String, socket: Node3D = null) -> v
 			rest_local = _player.to_local(socket.global_position)
 
 	_add_ball(item, arm_name, rest_local, socket)
+	if had_existing_balls:
+		_restart_pattern_from_start()
 
 	# Snap ball to arc start immediately — prevents one-frame position jump.
 	var pickup_root: Node3D = item.get_pickup_root()
 	if pickup_root != null and _player != null and rest_local != Vector3.ZERO:
 		pickup_root.global_position = _player.to_global(rest_local)
+
+
+func rebuild_from_held_items(
+	held_items: Array,
+	held_socket_by_item_id: Dictionary,
+	hand_sockets: Array,
+	arm_name_by_socket_index: Dictionary
+) -> void:
+	var ball_entries: Array = []
+	for held_item in held_items:
+		if not _is_ball(held_item):
+			continue
+		if not held_item.has_method("get_pickup_root"):
+			continue
+		var pickup_root: Node3D = held_item.get_pickup_root()
+		if pickup_root == null:
+			continue
+		var item_id: int = held_item.get_instance_id()
+		var socket_idx := int(held_socket_by_item_id.get(item_id, -1))
+		var socket: Node3D = null
+		if socket_idx >= 0 and socket_idx < hand_sockets.size():
+			socket = hand_sockets[socket_idx]
+		var arm_name := str(arm_name_by_socket_index.get(socket_idx, ""))
+		var rest_local := _player.to_local(pickup_root.global_position) if _player != null else Vector3.ZERO
+		ball_entries.append({
+			"item": held_item,
+			"arm_name": arm_name,
+			"socket": socket,
+			"rest_local": rest_local,
+		})
+
+	if ball_entries.is_empty():
+		_end()
+		return
+
+	if not active:
+		_start()
+	_lanes.clear()
+	_tip_state.clear()
+
+	# Build as many cross-hand pairs as possible.
+	var remaining: Array = ball_entries.duplicate()
+	while true:
+		var first_idx := -1
+		var second_idx := -1
+		for i in range(remaining.size()):
+			for j in range(i + 1, remaining.size()):
+				var arm_i := str(remaining[i]["arm_name"])
+				var arm_j := str(remaining[j]["arm_name"])
+				if not arm_i.is_empty() and not arm_j.is_empty() and arm_i != arm_j:
+					first_idx = i
+					second_idx = j
+					break
+			if first_idx >= 0:
+				break
+		if first_idx < 0 or second_idx < 0:
+			break
+
+		var a: Dictionary = remaining[first_idx]
+		var b: Dictionary = remaining[second_idx]
+		var cross_lane := {
+			"arm_a": str(a["arm_name"]),
+			"arm_b": str(b["arm_name"]),
+			"rest_local_a": a["rest_local"],
+			"rest_local_b": b["rest_local"],
+			"socket_a": a["socket"],
+			"socket_b": b["socket"],
+			"balls": [_make_ball_state(a["item"]), _make_ball_state(b["item"])],
+		}
+		_lanes.append(cross_lane)
+		_configure_lane_ball_timing(cross_lane)
+
+		# Remove larger index first to keep indices valid.
+		if second_idx > first_idx:
+			remaining.remove_at(second_idx)
+			remaining.remove_at(first_idx)
+		else:
+			remaining.remove_at(first_idx)
+			remaining.remove_at(second_idx)
+
+	# Remaining balls juggle as self lanes on their own arms.
+	for e in remaining:
+		var lane := {
+			"arm_a": str(e["arm_name"]),
+			"arm_b": str(e["arm_name"]),
+			"rest_local_a": e["rest_local"],
+			"rest_local_b": e["rest_local"],
+			"socket_a": e["socket"],
+			"socket_b": e["socket"],
+			"balls": [_make_ball_state(e["item"])],
+		}
+		_lanes.append(lane)
+		_configure_lane_ball_timing(lane)
+
+	_restart_pattern_from_start()
 
 
 func on_ball_dropped(item: Node) -> void:
@@ -142,11 +240,48 @@ func _end() -> void:
 		_octo_rig.clear_all_juggle_tip_bends()
 
 
+func _restart_pattern_from_start() -> void:
+	total_time = -pre_toss_delay
+	_tip_state.clear()
+	for lane in _lanes:
+		for ball_state in lane["balls"]:
+			ball_state["toss_fired"] = false
+			ball_state["catch_fired"] = false
+			ball_state["last_beat"] = -1
+	_snap_all_balls_to_pattern_start()
+
+
+func _snap_all_balls_to_pattern_start() -> void:
+	for lane in _lanes:
+		for ball_state in lane["balls"]:
+			var item: Node = ball_state["item"]
+			if item == null or not is_instance_valid(item):
+				continue
+			var pickup_root: Node3D = item.get_pickup_root()
+			if pickup_root == null:
+				continue
+			pickup_root.global_position = _compute_ball_position(0.0, ball_state, lane)
+
+
 # ---------------------------------------------------------------------------
 # Lane management
 # ---------------------------------------------------------------------------
 
 func _add_ball(item: Node, arm_name: String, rest_local: Vector3, socket: Node3D = null) -> void:
+	# If we already have a single-ball self lane on another arm, promote it to
+	# a 2-ball cross lane so balls can switch hands.
+	for lane in _lanes:
+		var lane_arm_a := str(lane["arm_a"])
+		var lane_arm_b := str(lane["arm_b"])
+		var balls: Array = lane["balls"]
+		if balls.size() == 1 and lane_arm_a == lane_arm_b and lane_arm_a != arm_name:
+			lane["arm_b"] = arm_name
+			lane["rest_local_b"] = rest_local
+			lane["socket_b"] = socket
+			balls.append(_make_ball_state(item))
+			_configure_lane_ball_timing(lane)
+			return
+
 	_lanes.append({
 		"arm_a": arm_name,
 		"arm_b": arm_name,
@@ -156,6 +291,7 @@ func _add_ball(item: Node, arm_name: String, rest_local: Vector3, socket: Node3D
 		"socket_b": socket,
 		"balls": [_make_ball_state(item)],
 	})
+	_configure_lane_ball_timing(_lanes[_lanes.size() - 1])
 
 
 func _remove_ball(item: Node) -> void:
@@ -168,7 +304,7 @@ func _remove_ball(item: Node) -> void:
 				if balls.is_empty():
 					_lanes.remove_at(lane_idx)
 				else:
-					_recalculate_phase_offsets(lane)
+					_configure_lane_ball_timing(lane)
 				return
 
 
@@ -186,18 +322,36 @@ func _count_balls() -> int:
 func _make_ball_state(item: Node) -> Dictionary:
 	return {
 		"item": item,
-		"phase_offset": 0.0,
+		"start_delay": 0.0,  # seconds before first toss
+		"start_from_a": true,
 		"toss_fired": false,
 		"catch_fired": false,
 		"last_beat": -1,
 	}
 
 
-func _recalculate_phase_offsets(lane: Dictionary) -> void:
+func _configure_lane_ball_timing(lane: Dictionary) -> void:
 	var balls: Array = lane["balls"]
 	var count := balls.size()
-	for i in count:
-		balls[i]["phase_offset"] = float(i) / float(count)
+	if count <= 0:
+		return
+	var is_self_toss: bool = (str(lane["arm_a"]) == str(lane["arm_b"]))
+	if is_self_toss:
+		for b in balls:
+			b["start_delay"] = 0.0
+			b["start_from_a"] = true
+		return
+
+	# 2-ball cross pattern:
+	# ball 0 tosses A->B immediately, ball 1 tosses B->A at apex (half beat).
+	for i in range(count):
+		var b: Dictionary = balls[i]
+		if i == 0:
+			b["start_delay"] = 0.0
+			b["start_from_a"] = true
+		else:
+			b["start_delay"] = beat_duration * 0.5
+			b["start_from_a"] = false
 
 
 # ---------------------------------------------------------------------------
@@ -214,8 +368,7 @@ func _update_ball_position(ball_state: Dictionary, lane: Dictionary) -> void:
 	if total_time < 0.0:
 		return
 	var active_time := maxf(total_time, 0.0)
-	var t := fmod(active_time / beat_duration + float(ball_state["phase_offset"]), 1.0)
-	pickup_root.global_position = _compute_arc_position(t, lane)
+	pickup_root.global_position = _compute_ball_position(active_time, ball_state, lane)
 
 
 func _refresh_lane_rest_anchors_from_held_items() -> void:
@@ -236,13 +389,27 @@ func _refresh_lane_rest_anchors_from_held_items() -> void:
 			break
 
 
-func _compute_arc_position(t: float, lane: Dictionary) -> Vector3:
+func _compute_ball_position(active_time: float, ball_state: Dictionary, lane: Dictionary) -> Vector3:
 	var is_self_toss: bool = (str(lane["arm_a"]) == str(lane["arm_b"]))
-
 	var pos_a: Vector3 = _get_lane_anchor_world(lane, "a")
 	var pos_b: Vector3 = pos_a if is_self_toss else _get_lane_anchor_world(lane, "b")
 
-	var base_pos := pos_a.lerp(pos_b, smoothstep(0.0, 1.0, t))
+	var start_delay := float(ball_state.get("start_delay", 0.0))
+	var start_from_a := bool(ball_state.get("start_from_a", true))
+
+	if active_time < start_delay:
+		return pos_a if start_from_a else pos_b
+
+	var phase := (active_time - start_delay) / maxf(0.001, beat_duration)
+	var beat_index := int(floor(phase))
+	var t := fmod(phase, 1.0)
+
+	var even_beat := (beat_index % 2) == 0
+	var from_a := start_from_a if even_beat else not start_from_a
+
+	var from_pos := pos_a if from_a else pos_b
+	var to_pos := pos_b if from_a else pos_a
+	var base_pos := from_pos.lerp(to_pos, smoothstep(0.0, 1.0, t))
 
 	var height := lane_arc_height if not is_self_toss else arc_height
 	var arc_y := height * sin(PI * t)
@@ -291,9 +458,19 @@ const _TOSS_PHASE  := 0.05
 const _CATCH_PHASE := 0.80
 
 func _check_gestures(ball_state: Dictionary, lane: Dictionary) -> void:
-	var raw_phase := maxf(total_time, 0.0) / beat_duration + float(ball_state["phase_offset"])
-	var beat_index := int(raw_phase)
-	var t := fmod(raw_phase, 1.0)
+	var active_time := maxf(total_time, 0.0)
+	var start_delay := float(ball_state.get("start_delay", 0.0))
+	if active_time < start_delay:
+		return
+
+	var phase := (active_time - start_delay) / maxf(0.001, beat_duration)
+	var beat_index := int(floor(phase))
+	var t := fmod(phase, 1.0)
+	var start_from_a := bool(ball_state.get("start_from_a", true))
+	var even_beat := (beat_index % 2) == 0
+	var from_a := start_from_a if even_beat else not start_from_a
+	var toss_arm := str(lane["arm_a"]) if from_a else str(lane["arm_b"])
+	var catch_arm := str(lane["arm_b"]) if from_a else str(lane["arm_a"])
 
 	if beat_index > int(ball_state["last_beat"]):
 		ball_state["last_beat"] = beat_index
@@ -302,11 +479,11 @@ func _check_gestures(ball_state: Dictionary, lane: Dictionary) -> void:
 
 	if t < _TOSS_PHASE and not bool(ball_state["toss_fired"]):
 		ball_state["toss_fired"] = true
-		_start_tip_pulse(str(lane["arm_a"]))
+		_start_tip_pulse(toss_arm)
 
 	if t > _CATCH_PHASE and not bool(ball_state["catch_fired"]):
 		ball_state["catch_fired"] = true
-		_start_tip_pulse(str(lane["arm_b"]))
+		_start_tip_pulse(catch_arm)
 
 
 func _start_tip_pulse(arm_name: String) -> void:

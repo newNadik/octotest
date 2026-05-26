@@ -793,13 +793,12 @@ func _pick_up_interactable(target) -> void:
 	target.interact(_player)
 	_player.clear_move_target()
 	if _juggle_controller != null:
-		var arm_name := _get_arm_name_for_item(target)
-		if not arm_name.is_empty():
-			var socket_idx: int = int(_socket_index_by_arm_name.get(arm_name, -1))
-			var juggle_socket: Node3D = null
-			if socket_idx >= 0 and socket_idx < _hand_sockets.size():
-				juggle_socket = _hand_sockets[socket_idx]
-			_juggle_controller.on_ball_picked_up(target, arm_name, juggle_socket)
+		_juggle_controller.rebuild_from_held_items(
+			_held_interactables,
+			_held_socket_by_item_id,
+			_hand_sockets,
+			_arm_name_by_socket_index
+		)
 
 
 func _drop_last_held_item() -> void:
@@ -1278,8 +1277,6 @@ func _remove_held_item(item) :
 	var index = _held_interactables.find(item)
 	if index == -1:
 		return null
-	if _juggle_controller != null:
-		_juggle_controller.on_ball_dropped(item)
 	var item_id = item.get_instance_id()
 	var socket_index = int(_held_socket_by_item_id.get(item_id, -1))
 	_held_socket_by_item_id.erase(item_id)
@@ -1287,6 +1284,13 @@ func _remove_held_item(item) :
 		_set_hold_state_for_socket(socket_index, false)
 	_held_interactables.remove_at(index)
 	_held_clearance_by_item_id.erase(item_id)
+	if _juggle_controller != null:
+		_juggle_controller.rebuild_from_held_items(
+			_held_interactables,
+			_held_socket_by_item_id,
+			_hand_sockets,
+			_arm_name_by_socket_index
+		)
 	_update_carry_mobility()
 	return item
 
