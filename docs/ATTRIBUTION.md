@@ -174,7 +174,14 @@ Source: [Flaticon](https://www.flaticon.com/)
 - "Gir" (https://skfb.ly/67JCX) by saoticus is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
 - "Sonic Screwdriver (10th Doctor)" (https://skfb.ly/6TYRs) by Samantha Michelson is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
 - "Stackable Plastic Boxes" (https://skfb.ly/oXYx9) by AleixoAlonso is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
-- 
+- "Strawberry Chocolate Cake" (https://skfb.ly/o6rwp) by mizuhi is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+- "House Plant" (https://skfb.ly/6Ww9t) by raeofsunlight is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+- "Potted Plant" (https://skfb.ly/oKLQA) by caridorka is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+- "Magic flower LP" (https://skfb.ly/oQonq) by caridorka is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+- "pot of native violets" (https://skfb.ly/oBrVQ) by Teja Mae Godson is licensed under Creative Commons Attribution-NonCommercial (http://creativecommons.org/licenses/by-nc/4.0/).
+- "Dried House Plant" (https://skfb.ly/6uuJn) by Christian Rehm is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+- "House plants" (https://skfb.ly/o7r98) by Yana Melnyk is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+- "Low Poly Office Desk Set | 12 Models | Game Read" (https://skfb.ly/pEMFV) by santradragon is licensed under Creative Commons Attribution-NonCommercial (http://creativecommons.org/licenses/by-nc/4.0/).
 
 ## Textures
 

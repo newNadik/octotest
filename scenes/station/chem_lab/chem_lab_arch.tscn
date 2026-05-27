@@ -14,6 +14,7 @@
 [ext_resource type="Texture2D" uid="uid://cxtornxjq5j3c" path="res://assets/textures/documents/Chemistry-Laboratory-Glassware.png" id="13_43ggg"]
 [ext_resource type="Texture2D" uid="uid://16llnphm2hx" path="res://assets/textures/documents/Chemistry-Laboratory-Glassware_ua.png" id="14_43ggg"]
 [ext_resource type="Texture2D" uid="uid://dmrtwl6yr8ahp" path="res://assets/textures/documents/PeriodicTable.png" id="15_y5kio"]
+[ext_resource type="PackedScene" uid="uid://d0tq5lhvb74vc" path="res://scenes/station/interior/cctv_cam.tscn" id="16_viabj"]
 [ext_resource type="PackedScene" uid="uid://cxtcm4i75e1pb" path="res://scenes/interactables/cardreader.tscn" id="19_dnitr"]
 
 [sub_resource type="NavigationMesh" id="NavigationMesh_kq4c8"]
@@ -295,3 +296,6 @@ transform = Transform3D(0.7193397, 0, -0.69465834, 0, 1, 0, 0.69465834, 0, 0.719
 document_size = 1
 document_texture = ExtResource("15_y5kio")
 document_texture_ua = ExtResource("15_y5kio")
+
+[node name="CCTV_cam" parent="." unique_id=888049353 instance=ExtResource("16_viabj")]
+transform = Transform3D(-0.37502727, 0, 0.9270138, 0, 1, 0, 0.9270138, 0, 0.37502727, 4.5076985, 8.708317, -10.797239)

@@ -4,6 +4,8 @@
 [ext_resource type="Texture2D" uid="uid://cvxiom44a6vwk" path="res://assets/models/interior/plants/pots/aloe_plant_Image_10.png" id="2_e452s"]
 [ext_resource type="Texture2D" uid="uid://s4c572c35mqo" path="res://assets/models/interior/plants/pots/aloe_plant_Image_11.png" id="3_5ihr5"]
 [ext_resource type="Texture2D" uid="uid://eyky6ii8a2yx" path="res://assets/models/interior/plants/pots/cactus_plant_Image_6.png" id="4_75pe1"]
+[ext_resource type="Material" uid="uid://oqd0o16rrcgb" path="res://assets/materials/terracotta.tres" id="5_86hq4"]
+[ext_resource type="Material" uid="uid://dnrool01x7tw0" path="res://assets/materials/ground.tres" id="6_awowq"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_3rjkt"]
 resource_name = "Aloe_Vera_A"
@@ -96,6 +98,11 @@ shadow_mesh = SubResource("ArrayMesh_7floy")
 [sub_resource type="BoxShape3D" id="BoxShape3D_75pe1"]
 size = Vector3(0.3, 0.5, 0.3)
 
+[sub_resource type="CylinderMesh" id="CylinderMesh_ct1g1"]
+top_radius = 0.12
+bottom_radius = 0.12
+height = 0.001
+
 [node name="Node3D" type="StaticBody3D" unique_id=1667817107]
 collision_layer = 35
 collision_mask = 0
@@ -109,7 +116,13 @@ mesh = SubResource("ArrayMesh_jdh64")
 [node name="Object_26" type="MeshInstance3D" parent="." unique_id=1713843059]
 transform = Transform3D(1.3, 0, 0, 0, 1.3, 0, 0, 0, 1.3, 0, 0, -0.05182289)
 mesh = SubResource("ArrayMesh_idk3t")
+surface_material_override/0 = ExtResource("5_86hq4")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=2137762376]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.25, 0)
 shape = SubResource("BoxShape3D_75pe1")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=2082931008]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.19722232, -0.054207947)
+mesh = SubResource("CylinderMesh_ct1g1")
+surface_material_override/0 = ExtResource("6_awowq")

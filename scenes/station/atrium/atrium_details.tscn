@@ -103,10 +103,13 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -17.468838, 0.09971724, -8.13
 [node name="attrium" type="Node3D" parent="furniture" unique_id=970327323]
 
 [node name="trash_bin3" parent="furniture/attrium" unique_id=188497815 instance=ExtResource("4_1hqp2")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.259486, 0, 8.667719)
+transform = Transform3D(-0.4227765, 0, 0.90623397, 0, 1, 0, -0.90623397, 0, -0.4227765, -11.597984, 0, 4.565748)
 
 [node name="trash_bin4" parent="furniture/attrium" unique_id=1757956939 instance=ExtResource("4_1hqp2")]
 transform = Transform3D(0.68921494, 0, 0.7245569, 0, 1, 0, -0.7245569, 0, 0.68921494, 6.356765, 0, -5.719739)
+
+[node name="trash_bin5" parent="furniture/attrium" unique_id=870721124 instance=ExtResource("4_1hqp2")]
+transform = Transform3D(-0.6990521, 0, 0.7150707, 0, 1, 0, -0.7150707, 0, -0.6990521, 6.2242975, 0, 5.7950573)
 
 [node name="bench" parent="furniture/attrium" unique_id=1550511523 instance=ExtResource("5_y2yuj")]
 transform = Transform3D(0.70710677, 0, 0.70710677, 0, 1, 0, -0.70710677, 0, 0.70710677, 4.9358644, 0, 6.996668)
@@ -197,6 +200,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.3415089, 7.5711023e-06, 8.7
 
 [node name="Node3D6" parent="furniture/attrium" unique_id=2044692468 instance=ExtResource("15_y7yla")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -29.68653, 7.5711023e-06, -3.477569)
+
+[node name="Node3D7" parent="furniture/attrium" unique_id=515915316 instance=ExtResource("15_y7yla")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.543417, 7.5711023e-06, 17.952085)
 
 [node name="pothos" parent="furniture/attrium" unique_id=598657276 instance=ExtResource("16_j8s5m")]
 transform = Transform3D(0.72976863, 0, -0.6836942, 0, 1, 0, 0.6836942, 0, 0.72976863, -17.728733, 1.4058876, 3.6045716)

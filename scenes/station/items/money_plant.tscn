@@ -1,9 +1,11 @@
 [gd_scene format=4 uid="uid://d0abd2ne6qpp8"]
 
 [ext_resource type="Texture2D" uid="uid://bl0o5emq11x4q" path="res://assets/models/interior/plants/pots/money_plant_Image_0.jpg" id="1_bysld"]
+[ext_resource type="Material" uid="uid://oqd0o16rrcgb" path="res://assets/materials/terracotta.tres" id="2_wl5ex"]
 [ext_resource type="Texture2D" uid="uid://b1jlnktso1ohk" path="res://assets/models/interior/plants/pots/money_plant_Image_12.png" id="2_xl075"]
 [ext_resource type="Texture2D" uid="uid://i3igr8vf2fiy" path="res://assets/models/interior/plants/pots/money_plant_Image_13.png" id="3_gwfvc"]
 [ext_resource type="Texture2D" uid="uid://hw5xfiypb63s" path="res://assets/models/interior/plants/pots/money_plant_Image_14.png" id="4_642t1"]
+[ext_resource type="Material" uid="uid://dnrool01x7tw0" path="res://assets/materials/ground.tres" id="6_qatax"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_qmavt"]
 resource_name = "lambert3.001"
@@ -99,6 +101,11 @@ shadow_mesh = SubResource("ArrayMesh_3ay6i")
 [sub_resource type="BoxShape3D" id="BoxShape3D_bysld"]
 size = Vector3(0.8, 4.059082, 0.8)
 
+[sub_resource type="CylinderMesh" id="CylinderMesh_3sbvg"]
+top_radius = 0.3
+bottom_radius = 0.3
+height = 0.001
+
 [node name="Node3D" type="StaticBody3D" unique_id=212926635]
 collision_layer = 35
 collision_mask = 0
@@ -106,6 +113,7 @@ collision_mask = 0
 [node name="concrete_pot_lambert3_0" type="MeshInstance3D" parent="." unique_id=1076888816]
 transform = Transform3D(1.8, 0, 0, 0, 1.8, 0, 0, 0, 1.8, 0, 0, 0.0065541267)
 mesh = SubResource("ArrayMesh_0ywrj")
+surface_material_override/0 = ExtResource("2_wl5ex")
 
 [node name="Object_30" type="MeshInstance3D" parent="." unique_id=741719667]
 transform = Transform3D(1.8, 0, 0, 0, 1.8, 0, 0, 0, 1.8, -0.021041393, 0.4597245, 0)
@@ -114,3 +122,8 @@ mesh = SubResource("ArrayMesh_qgpkm")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=942910129]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.029541, 0)
 shape = SubResource("BoxShape3D_bysld")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1578165445]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.84335077, 0.024851527)
+mesh = SubResource("CylinderMesh_3sbvg")
+surface_material_override/0 = ExtResource("6_qatax")

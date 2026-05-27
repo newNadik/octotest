@@ -7,6 +7,7 @@
 [ext_resource type="Material" uid="uid://bb4hx1vyakkmf" path="res://assets/materials/plaster.tres" id="4_tnekd"]
 [ext_resource type="Material" uid="uid://bcdbcoirawpmg" path="res://assets/materials/plain_white.tres" id="5_05nb4"]
 [ext_resource type="PackedScene" uid="uid://b7vd8cvq5kxdt" path="res://scenes/station/items/light_switch.tscn" id="6_328kc"]
+[ext_resource type="PackedScene" uid="uid://d0tq5lhvb74vc" path="res://scenes/station/interior/cctv_cam.tscn" id="7_jo6uv"]
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_l5yu4"]
 resource_name = "wetroom_Plane_121"
@@ -136,6 +137,9 @@ surface_material_override/0 = ExtResource("4_tnekd")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D" unique_id=1494034184]
 transform = Transform3D(0.9238795, 0, 0.38268346, 0, 1, 0, -0.38268346, 0, 0.9238795, 9.943851, -7.5464764e-06, 25.59095)
 shape = SubResource("ConcavePolygonShape3D_62ma4")
+
+[node name="CCTV_cam" parent="StaticBody3D" unique_id=888049353 instance=ExtResource("7_jo6uv")]
+transform = Transform3D(0.71202606, 0, -0.70215297, 0, 1, 0, -0.70215297, 0, -0.71202606, 20.90327, 5.433079, 20.160275)
 
 [node name="lights" type="Node3D" parent="." unique_id=1699587579]
 

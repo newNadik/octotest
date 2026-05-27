@@ -4,6 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://drva1onfgopcf" path="res://assets/models/interior/plants/pots/orchid_plant_Image_16.png" id="2_dgokd"]
 [ext_resource type="Texture2D" uid="uid://ceb3rl0uh50i3" path="res://assets/models/interior/plants/pots/orchid_plant_Image_17.png" id="3_y1w3k"]
 [ext_resource type="Texture2D" uid="uid://dxqhhqij3ug1d" path="res://assets/models/interior/plants/pots/orchid_plant_Image_5.png" id="4_04bj1"]
+[ext_resource type="Material" uid="uid://oqd0o16rrcgb" path="res://assets/materials/terracotta.tres" id="4_c80gq"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_b82gk"]
 resource_name = "Orchid_A"
@@ -145,6 +146,7 @@ mesh = SubResource("ArrayMesh_qrs5x")
 [node name="Object_6" type="MeshInstance3D" parent="." unique_id=757619136]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.016764667)
 mesh = SubResource("ArrayMesh_h52cv")
+surface_material_override/0 = ExtResource("4_c80gq")
 
 [node name="Object_38" type="MeshInstance3D" parent="." unique_id=951130061]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.016764667)

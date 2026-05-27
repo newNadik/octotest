@@ -4,6 +4,8 @@
 [ext_resource type="Texture2D" uid="uid://ddrbvgphyl2j2" path="res://assets/models/interior/plants/pots/cactus_plant_Image_19.png" id="3_p0p0n"]
 [ext_resource type="Texture2D" uid="uid://b4iylqix7peh4" path="res://assets/models/interior/plants/pots/cactus_plant_Image_20.png" id="4_h3i2o"]
 [ext_resource type="Texture2D" uid="uid://eyky6ii8a2yx" path="res://assets/models/interior/plants/pots/cactus_plant_Image_6.png" id="5_27wxj"]
+[ext_resource type="Material" uid="uid://oqd0o16rrcgb" path="res://assets/materials/terracotta.tres" id="5_srs45"]
+[ext_resource type="Material" uid="uid://dnrool01x7tw0" path="res://assets/materials/ground.tres" id="6_p3kpr"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_cp4ws"]
 resource_name = "Cactus_A"
@@ -100,6 +102,11 @@ shadow_mesh = SubResource("ArrayMesh_6hwfy")
 [sub_resource type="BoxShape3D" id="BoxShape3D_sxcua"]
 size = Vector3(0.3, 0.5, 0.3)
 
+[sub_resource type="CylinderMesh" id="CylinderMesh_gudh8"]
+top_radius = 0.12
+bottom_radius = 0.12
+height = 0.001
+
 [node name="cactus" type="StaticBody3D" unique_id=589026095]
 collision_layer = 64
 collision_mask = 99
@@ -111,7 +118,13 @@ mesh = SubResource("ArrayMesh_1krbi")
 [node name="Object_26" type="MeshInstance3D" parent="." unique_id=289453641]
 transform = Transform3D(1.3, 0, 0, 0, 1.3000003, 0, 0, 0, 1.3000003, 0, 0, 0)
 mesh = SubResource("ArrayMesh_i00r3")
+surface_material_override/0 = ExtResource("5_srs45")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1028704820]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.25, 0)
 shape = SubResource("BoxShape3D_sxcua")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=668897055]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.19943163, 0.0045462362)
+mesh = SubResource("CylinderMesh_gudh8")
+surface_material_override/0 = ExtResource("6_p3kpr")

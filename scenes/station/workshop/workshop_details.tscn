@@ -42,6 +42,9 @@
 [ext_resource type="PackedScene" uid="uid://lqgvdxtxx0wl" path="res://scenes/station/items/propeller.tscn" id="40_kf7ml"]
 [ext_resource type="PackedScene" uid="uid://dny6hphe0bh4v" path="res://scenes/station/items/the_ball.tscn" id="41_xdh51"]
 [ext_resource type="PackedScene" uid="uid://cg2a1shelh30x" path="res://assets/models/items/gir.glb" id="42_unkgj"]
+[ext_resource type="PackedScene" uid="uid://bvm2yhaf5t477" path="res://scenes/station/items/pothos_plant.tscn" id="43_unkgj"]
+[ext_resource type="PackedScene" uid="uid://c8dsyfrwargh3" path="res://assets/models/interior/energy_lab/cc0_generic_multimeter.glb" id="44_es5dx"]
+[ext_resource type="PackedScene" uid="uid://sgig7qme152k" path="res://scenes/station/items/notepad.tscn" id="45_gmvwm"]
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_cw2ta"]
 size = Vector2(0.35, 0.25)
@@ -432,6 +435,10 @@ shadow_mesh = SubResource("ArrayMesh_bobsf")
 albedo_color = Color(0.10000005, 0.6, 0, 1)
 roughness = 0.5
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gmvwm"]
+albedo_color = Color(0.9999997, 0.1860193, 0.20730609, 1)
+roughness = 0.5
+
 [node name="WorkshopDetails" type="Node3D" unique_id=1249012600]
 
 [node name="furniture" type="Node3D" parent="." unique_id=818025645]
@@ -673,14 +680,48 @@ surface_material_override/0 = SubResource("StandardMaterial3D_cwpjk")
 [node name="propeller" parent="items" unique_id=1361745911 instance=ExtResource("40_kf7ml")]
 transform = Transform3D(0.87895864, 0.47689798, 0, -0.47689798, 0.87895864, 0, 0, 0, 1, 17.85336, 1.7959756, -4.5027494)
 
+[node name="the_ball" parent="items" unique_id=1824952557 instance=ExtResource("41_xdh51")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 24.435385, 1.5703336, 4.1273613)
+ball_color = 1
+
+[node name="Sketchfab_Scene" parent="items" unique_id=1971341230 instance=ExtResource("42_unkgj")]
+transform = Transform3D(-0.0053977026, 0, -0.008418123, 0, 0.01, 0, 0.008418123, 0, -0.0053977026, 24.906136, 1.8321486, 7.197378)
+
+[node name="pothos" parent="items" unique_id=598657276 instance=ExtResource("43_unkgj")]
+transform = Transform3D(0.7, 0, 0, 0, 0.7, 0, 0, 0, 0.7, 25.049326, 1.5128641, 5.298647)
+
+[node name="Sketchfab_Scene6" parent="items" unique_id=738167105 instance=ExtResource("44_es5dx")]
+transform = Transform3D(2.5, 0, 0, 0, 2.5, 0, 0, 0, 2.5, 10.743151, 2.4777663, 0.4018442)
+
 [node name="stackable_box_green_stackable_box_001_0" type="MeshInstance3D" parent="items" unique_id=917347767]
 transform = Transform3D(3.2401776, -1.3233477, -5.7845366e-08, 0, -1.5298986e-07, 3.5, -1.3233477, -3.2401776, -1.4163265e-07, 17.819307, 1.5667973, -4.602213)
 mesh = SubResource("ArrayMesh_cwpjk")
 surface_material_override/0 = SubResource("StandardMaterial3D_unkgj")
 
-[node name="the_ball" parent="." unique_id=1824952557 instance=ExtResource("41_xdh51")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 24.435385, 1.5703336, 4.1273613)
-ball_color = 1
+[node name="stackable_box_green_stackable_box_001_2" type="MeshInstance3D" parent="items" unique_id=1491776235]
+transform = Transform3D(3.2401776, -1.3233477, -5.7845366e-08, 0, -1.5298986e-07, 3.5, -1.3233477, -3.2401776, -1.4163265e-07, 17.938082, 0, -4.7405224)
+mesh = SubResource("ArrayMesh_cwpjk")
+surface_material_override/0 = SubResource("StandardMaterial3D_gmvwm")
 
-[node name="Sketchfab_Scene" parent="." unique_id=1971341230 instance=ExtResource("42_unkgj")]
-transform = Transform3D(-0.0053977026, 0, -0.008418123, 0, 0.01, 0, 0.008418123, 0, -0.0053977026, 24.768064, 1.8321486, 7.296929)
+[node name="stackable_box_green_stackable_box_001_1" type="MeshInstance3D" parent="items" unique_id=56053683]
+transform = Transform3D(3.2401776, -1.3233477, -5.7845366e-08, 0, -1.5298986e-07, 3.5, -1.3233477, -3.2401776, -1.4163265e-07, 20.627916, 1.5708447, -5.827786)
+mesh = SubResource("ArrayMesh_cwpjk")
+surface_material_override/0 = SubResource("StandardMaterial3D_unkgj")
+
+[node name="notepad" parent="." unique_id=538125834 instance=ExtResource("45_gmvwm")]
+transform = Transform3D(-0.9918611, 0, 0.12732436, 0, 1, 0, -0.12732436, 0, -0.9918611, 24.77696, 1.5786055, 8.001433)
+
+[node name="notepad2" parent="." unique_id=2065442501 instance=ExtResource("45_gmvwm")]
+transform = Transform3D(-0.02762495, 0, 0.99961835, 0, 1, 0, -0.99961835, 0, -0.02762495, 25.116663, 1.5786055, 4.5177097)
+
+[node name="notepad3" parent="." unique_id=1117883476 instance=ExtResource("45_gmvwm")]
+transform = Transform3D(-0.9994653, 0, -0.032701593, 0, 1, 0, 0.032701593, 0, -0.9994653, 25.05281, 1.5786055, -5.315816)
+
+[node name="notepad4" parent="." unique_id=374388542 instance=ExtResource("45_gmvwm")]
+transform = Transform3D(-0.31012896, 0, 0.9506946, 0, 1, 0, -0.9506946, 0, -0.31012896, 25.091324, 1.5786055, -6.961511)
+
+[node name="Sketchfab_Scene" parent="." unique_id=1687160344 instance=ExtResource("7_8kmbt")]
+transform = Transform3D(-0.0013085051, 0, 0.0015125525, 0, 0.002, 0, -0.0015125525, 0, -0.0013085051, 25.160131, 1.5538269, 7.6980095)
+
+[node name="Sketchfab_Scene2" parent="." unique_id=53322631 instance=ExtResource("7_8kmbt")]
+transform = Transform3D(0.002, 0, 0, 0, 0.002, 0, 0, 0, 0.002, 25.169767, 1.5596781, -4.983065)

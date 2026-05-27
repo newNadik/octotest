@@ -8,6 +8,7 @@
 [ext_resource type="Material" uid="uid://biog7mv21velq" path="res://assets/materials/ceiling.tres" id="2_jcl15"]
 [ext_resource type="Material" uid="uid://ca2db0a60mj50" path="res://assets/materials/metal.tres" id="3_sqwx8"]
 [ext_resource type="PackedScene" uid="uid://b7vd8cvq5kxdt" path="res://scenes/station/items/light_switch.tscn" id="6_3ek07"]
+[ext_resource type="PackedScene" uid="uid://d0tq5lhvb74vc" path="res://scenes/station/interior/cctv_cam.tscn" id="10_vuaio"]
 [ext_resource type="PackedScene" uid="uid://cxtcm4i75e1pb" path="res://scenes/interactables/cardreader.tscn" id="16_go3fr"]
 
 [sub_resource type="NavigationMesh" id="NavigationMesh_pe3mt"]
@@ -268,6 +269,9 @@ shadow_enabled = true
 shadow_opacity = 0.8
 omni_range = 12.0
 omni_attenuation = 0.0
+
+[node name="CCTV_cam" parent="lights" unique_id=888049353 instance=ExtResource("10_vuaio")]
+transform = Transform3D(-0.92868024, 0, -0.37088168, 0, 1, 0, -0.37088168, 0, 0.92868024, 8.448747, 8.7541, 6.6896863)
 
 [node name="OccluderInstance3D" type="OccluderInstance3D" parent="." unique_id=316934488]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.3672953, 4.2824507, 12.426617)

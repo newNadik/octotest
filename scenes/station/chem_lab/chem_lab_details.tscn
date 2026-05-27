@@ -23,6 +23,12 @@
 [ext_resource type="PackedScene" uid="uid://ctlqnv7ainkqs" path="res://scenes/station/items/shelf_papers_3.tscn" id="21_lw8o2"]
 [ext_resource type="PackedScene" uid="uid://q80ss7d03u6" path="res://scenes/station/items/documents_002.tscn" id="22_7jgd1"]
 [ext_resource type="PackedScene" uid="uid://dny6hphe0bh4v" path="res://scenes/station/items/the_ball.tscn" id="23_dwxtv"]
+[ext_resource type="PackedScene" uid="uid://cfep37o081wiu" path="res://scenes/station/items/flowers_plant.tscn" id="24_nt0p8"]
+[ext_resource type="PackedScene" uid="uid://bvm2yhaf5t477" path="res://scenes/station/items/pothos_plant.tscn" id="25_c1sjs"]
+[ext_resource type="PackedScene" uid="uid://diaxif30qiw1p" path="res://scenes/station/items/potted_plant.tscn" id="26_uu8up"]
+[ext_resource type="PackedScene" uid="uid://wo8dpvu58cav" path="res://scenes/station/items/aloe_plant.tscn" id="27_xn7v2"]
+[ext_resource type="PackedScene" uid="uid://sgig7qme152k" path="res://scenes/station/items/notepad.tscn" id="28_uu8up"]
+[ext_resource type="PackedScene" uid="uid://fsb7v5nb71ac" path="res://assets/models/items/pen_holder.glb" id="29_xn7v2"]
 
 [node name="ChemLabDetails" type="Node3D" unique_id=145407394]
 
@@ -144,3 +150,24 @@ transform = Transform3D(0.46032375, 0, 0.8877511, 0, 1, 0, -0.8877511, 0, 0.4603
 [node name="the_ball" parent="." unique_id=1824952557 instance=ExtResource("23_dwxtv")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 21.694056, 1.5705353, -12.684317)
 ball_color = 3
+
+[node name="flowers_plant" parent="." unique_id=925335384 instance=ExtResource("24_nt0p8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 23.086622, 1.5653992, -12.939868)
+
+[node name="pothos" parent="." unique_id=598657276 instance=ExtResource("25_c1sjs")]
+transform = Transform3D(0.29582477, 0, 0.9552422, 0, 1, 0, -0.9552422, 0, 0.29582477, 7.8642426, 3.4978614, -16.144012)
+
+[node name="potted_plant" parent="." unique_id=709036591 instance=ExtResource("26_uu8up")]
+transform = Transform3D(0.9937739, 0, -0.111416906, 0, 1, 0, 0.111416906, 0, 0.9937739, 21.075912, 3.6592124, -18.751177)
+
+[node name="Node3D" parent="." unique_id=1667817107 instance=ExtResource("27_xn7v2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.876541, 3.636519, -19.74771)
+
+[node name="notepad" parent="." unique_id=538125834 instance=ExtResource("28_uu8up")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 23.656242, 1.5814884, -13.28308)
+
+[node name="notepad2" parent="." unique_id=662393196 instance=ExtResource("28_uu8up")]
+transform = Transform3D(-0.66006726, 0, 0.75120646, 0, 1, 0, -0.75120646, 0, -0.66006726, 22.255175, 1.5814884, -12.646147)
+
+[node name="Sketchfab_Scene" parent="." unique_id=1486896194 instance=ExtResource("29_xn7v2")]
+transform = Transform3D(-0.001166062, 0, -0.0016248999, 0, 0.002, 0, 0.0016248999, 0, -0.001166062, 20.604187, 1.5525134, -11.913594)

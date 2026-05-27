@@ -2,9 +2,11 @@
 
 [ext_resource type="Texture2D" uid="uid://12xpxxw6jgi2" path="res://assets/models/interior/plants/pots/free_pothos_potted_plant_-_money_plant_0.png" id="1_u13s5"]
 [ext_resource type="Texture2D" uid="uid://qpyf5e46colv" path="res://assets/models/interior/plants/pots/free_pothos_potted_plant_-_money_plant_1.png" id="2_7ncdn"]
+[ext_resource type="Material" uid="uid://oqd0o16rrcgb" path="res://assets/materials/terracotta.tres" id="3_7d4lo"]
 [ext_resource type="Texture2D" uid="uid://d11vs7p0ql3t8" path="res://assets/models/interior/plants/pots/free_pothos_potted_plant_-_money_plant_2.png" id="3_7ec1y"]
 [ext_resource type="Texture2D" uid="uid://dx3bhat7yca7c" path="res://assets/models/interior/plants/pots/free_pothos_potted_plant_-_money_plant_3.png" id="4_7trfl"]
 [ext_resource type="Texture2D" uid="uid://mg51avyvt5fo" path="res://assets/models/interior/plants/pots/free_pothos_potted_plant_-_money_plant_4.jpg" id="5_rvgce"]
+[ext_resource type="Material" uid="uid://dnrool01x7tw0" path="res://assets/materials/ground.tres" id="7_hqsh7"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_qa71q"]
 resource_name = "WOODEN_LEGS_POT"
@@ -98,6 +100,11 @@ shadow_mesh = SubResource("ArrayMesh_8wr3r")
 [sub_resource type="BoxShape3D" id="BoxShape3D_u13s5"]
 size = Vector3(0.5, 0.7, 0.5)
 
+[sub_resource type="CylinderMesh" id="CylinderMesh_ce6mc"]
+top_radius = 0.2
+bottom_radius = 0.2
+height = 0.001
+
 [node name="pothos" type="StaticBody3D" unique_id=598657276]
 collision_layer = 35
 collision_mask = 0
@@ -112,6 +119,7 @@ transform = Transform3D(100, 0, 0, 0, -1.6292068e-05, 100, 0, -100, -1.6292068e-
 
 [node name="POT_WOOD_LEGS_WOODEN_LEGS_POT_0" type="MeshInstance3D" parent="ce6de248fdee413fae242a30c4473ab8_fbx/RootNode/POT_WOOD_LEGS" unique_id=2010635436]
 mesh = SubResource("ArrayMesh_qrf2m")
+surface_material_override/0 = ExtResource("3_7d4lo")
 
 [node name="POTHOS" type="Node3D" parent="ce6de248fdee413fae242a30c4473ab8_fbx/RootNode" unique_id=701680119]
 transform = Transform3D(51.956905, 0, 0, 0, 51.956905, -2.2711085e-06, 0, 2.2711085e-06, 51.956905, 0.52836806, 48.985424, 2.8820112)
@@ -122,3 +130,8 @@ mesh = SubResource("ArrayMesh_s4138")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1582919]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.35, 0)
 shape = SubResource("BoxShape3D_u13s5")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=651079974]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.49899322, -0.0027858578)
+mesh = SubResource("CylinderMesh_ce6mc")
+surface_material_override/0 = ExtResource("7_hqsh7")

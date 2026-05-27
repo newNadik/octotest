@@ -2,6 +2,8 @@
 
 [ext_resource type="Texture2D" uid="uid://bl0o5emq11x4q" path="res://assets/models/interior/plants/pots/money_plant_Image_0.jpg" id="1_xad8b"]
 [ext_resource type="Texture2D" uid="uid://dyavv3shgx8th" path="res://assets/models/interior/plants/pots/rhyzome_plant_1.jpg" id="2_4t8qx"]
+[ext_resource type="Material" uid="uid://oqd0o16rrcgb" path="res://assets/materials/terracotta.tres" id="2_oj7co"]
+[ext_resource type="Material" uid="uid://dnrool01x7tw0" path="res://assets/materials/ground.tres" id="4_5ahtp"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_sruxd"]
 resource_name = "lambert3"
@@ -87,6 +89,11 @@ shadow_mesh = SubResource("ArrayMesh_u13qf")
 [sub_resource type="BoxShape3D" id="BoxShape3D_xad8b"]
 size = Vector3(0.5, 2, 0.5)
 
+[sub_resource type="CylinderMesh" id="CylinderMesh_1wrof"]
+top_radius = 0.24
+bottom_radius = 0.24
+height = 0.001
+
 [node name="Node3D" type="StaticBody3D" unique_id=19005477]
 collision_layer = 3
 collision_mask = 0
@@ -100,6 +107,7 @@ transform = Transform3D(0.015, 0, 0, 0, 0.015, 0, 0, 0, 0.015, 0, 0, 0)
 
 [node name="concrete_pot_lambert3_0" type="MeshInstance3D" parent="RootNode/group1/concrete_pot" unique_id=886701268]
 mesh = SubResource("ArrayMesh_am43k")
+surface_material_override/0 = ExtResource("2_oj7co")
 
 [node name="plant" type="Node3D" parent="RootNode/group1" unique_id=285472745]
 
@@ -109,3 +117,8 @@ mesh = SubResource("ArrayMesh_7sxd2")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1927062875]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 shape = SubResource("BoxShape3D_xad8b")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1037012463]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0035684854, 0.70971507, 0.0016553514)
+mesh = SubResource("CylinderMesh_1wrof")
+surface_material_override/0 = ExtResource("4_5ahtp")
