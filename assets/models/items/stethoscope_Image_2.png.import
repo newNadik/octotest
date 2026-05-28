@@ -2,7 +2,7 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c3eprjdoovr8r"
+uid="uid://m2pulnkq4ksl"
 path.s3tc="res://.godot/imported/stethoscope_Image_2.png-e538b450165e879dec9de8c010f30cc5.s3tc.ctex"
 path.etc2="res://.godot/imported/stethoscope_Image_2.png-e538b450165e879dec9de8c010f30cc5.etc2.ctex"
 metadata={
@@ -30,8 +30,8 @@ compress/normal_map=1
 compress/channel_pack=0
 mipmaps/generate=true
 mipmaps/limit=-1
-roughness/mode=1
-roughness/src_normal="res://assets/models/items/stethoscope_Image_2.png"
+roughness/mode=0
+roughness/src_normal=""
 process/channel_remap/red=0
 process/channel_remap/green=1
 process/channel_remap/blue=2
