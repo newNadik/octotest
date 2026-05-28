@@ -685,7 +685,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 24.435385, 1.5703336, 4.12736
 ball_color = 1
 
 [node name="Sketchfab_Scene" parent="items" unique_id=1971341230 instance=ExtResource("42_unkgj")]
-transform = Transform3D(-0.0053977026, 0, -0.008418123, 0, 0.01, 0, 0.008418123, 0, -0.0053977026, 24.906136, 1.8321486, 7.197378)
+transform = Transform3D(-0.0057895393, 0.003907579, -0.018740652, 7.975605e-06, 0.019579414, 0.004080003, 0.019143699, 0.0011735938, -0.005669349, 25.154724, 2.0772562, 6.0947537)
 
 [node name="pothos" parent="items" unique_id=598657276 instance=ExtResource("43_unkgj")]
 transform = Transform3D(0.7, 0, 0, 0, 0.7, 0, 0, 0, 0.7, 25.049326, 1.5128641, 5.298647)
@@ -699,7 +699,7 @@ mesh = SubResource("ArrayMesh_cwpjk")
 surface_material_override/0 = SubResource("StandardMaterial3D_unkgj")
 
 [node name="stackable_box_green_stackable_box_001_2" type="MeshInstance3D" parent="items" unique_id=1491776235]
-transform = Transform3D(3.2401776, -1.3233477, -5.7845366e-08, 0, -1.5298986e-07, 3.5, -1.3233477, -3.2401776, -1.4163265e-07, 17.938082, 0, -4.7405224)
+transform = Transform3D(3.2401776, -1.3233477, -5.7845366e-08, 0, -1.5298986e-07, 3.5, -1.3233477, -3.2401776, -1.4163265e-07, 17.938, 0.02, -4.741)
 mesh = SubResource("ArrayMesh_cwpjk")
 surface_material_override/0 = SubResource("StandardMaterial3D_gmvwm")
 

@@ -32,6 +32,7 @@ display_name = "Road Cone"
 requires_line_of_sight = false
 item_id = "road_cone"
 hold_offset = Vector3(0, -0.2, -0.3)
+indicator_local_offset = Vector3(0.1, 0, -0.05)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="WearableInteractable" unique_id=1726703281]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.008, 0.5074158, 0)
