@@ -1,8 +1,11 @@
 [gd_scene format=4 uid="uid://47jmk2dummek"]
 
 [ext_resource type="PackedScene" uid="uid://dn7nhelx2g7qd" path="res://assets/models/items/wetroom/wetsuit.glb" id="2_tkrck"]
+[ext_resource type="PackedScene" uid="uid://dias55awyjuqh" path="res://assets/models/items/wetroom/flippers.glb" id="3_8bbg7"]
 [ext_resource type="PackedScene" uid="uid://xes07qy0cl1c" path="res://assets/models/items/wetroom/hanger.glb" id="3_e3m65"]
 [ext_resource type="Material" uid="uid://c5vqiags15sna" path="res://assets/materials/shelves_metal.tres" id="3_tkrck"]
+[ext_resource type="PackedScene" uid="uid://cv7pt258w6r46" path="res://assets/models/items/wetroom/scuba_mask.glb" id="5_0511p"]
+[ext_resource type="PackedScene" uid="uid://dpn3r7hpau3iy" path="res://scenes/station/items/crate.tscn" id="6_0511p"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_tkrck"]
 size = Vector3(1.1, 4, 3.7)
@@ -123,6 +126,18 @@ transform = Transform3D(-8.742278e-09, 0, 0.2, 0, 0.2, 0, -0.2, 0, -8.742278e-09
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
 shape = SubResource("BoxShape3D_tkrck")
 
+[node name="flippers" parent="." unique_id=711677145 instance=ExtResource("3_8bbg7")]
+transform = Transform3D(-0.29964158, 0, 0.01466015, 0, 0.29999995, 0, -0.01466015, 0, -0.29964158, -0.33698058, 0.48670232, -0.9719411)
+
+[node name="flippers2" parent="." unique_id=1045775697 instance=ExtResource("3_8bbg7")]
+transform = Transform3D(-0.29964158, 0, 0.01466015, 0, 0.29999995, 0, -0.01466015, 0, -0.29964158, -0.14716256, 0.57488894, -0.9719411)
+
+[node name="flippers3" parent="." unique_id=1356715690 instance=ExtResource("3_8bbg7")]
+transform = Transform3D(-0.28880894, 0, 0.08117508, 0, 0.29999995, 0, -0.08117508, 0, -0.28880894, -0.2457828, 0.6544925, -0.9719411)
+
+[node name="flippers4" parent="." unique_id=1596389789 instance=ExtResource("3_8bbg7")]
+transform = Transform3D(0.29999968, -1.6693515e-14, 0.00046603382, 7.430127e-05, 0.29616258, -0.047829915, -0.00046007265, 0.047829963, 0.2961623, 0.23587912, 0.49887866, -0.36404637)
+
 [node name="Node3D" type="Node3D" parent="." unique_id=2003354815]
 transform = Transform3D(-8.392586e-08, 0, 1.92, 0, 1.92, 0, -1.92, 0, -8.392586e-08, 0, 0, 1.86)
 
@@ -133,3 +148,18 @@ surface_material_override/0 = ExtResource("3_tkrck")
 [node name="Cylinder" type="MeshInstance3D" parent="Node3D" unique_id=1700101293]
 mesh = SubResource("ArrayMesh_e3m65")
 surface_material_override/0 = ExtResource("3_tkrck")
+
+[node name="Sketchfab_Scene" parent="." unique_id=1955847386 instance=ExtResource("5_0511p")]
+transform = Transform3D(0.0062558944, -0.0034141326, 0.0070148036, 0.000535959, 0.009158418, 0.003979463, -0.007783091, -0.0021135455, 0.0059123933, 0.296216, 3.5047324, 1.6158113)
+
+[node name="Sketchfab_Scene2" parent="." unique_id=1044498124 instance=ExtResource("5_0511p")]
+transform = Transform3D(-0.009850645, 0.0011379526, -0.0012922129, 0.0005359589, 0.0091584185, 0.0039794636, 0.0016363058, 0.0038507709, -0.009082623, -0.021035016, 3.5047324, 0.7828646)
+
+[node name="Sketchfab_Scene3" parent="." unique_id=2097465630 instance=ExtResource("5_0511p")]
+transform = Transform3D(-0.0075340318, 0.0029864123, -0.0058583007, 0.0005359591, 0.009158419, 0.0039794636, 0.0065537076, 0.0026841606, -0.00706004, 0.037913978, 3.5047324, 0.2645496)
+
+[node name="crate" parent="." unique_id=1676126179 instance=ExtResource("6_0511p")]
+transform = Transform3D(0.44948116, 0, -0.21901299, 0, 0.5, 0, 0.21901299, 0, 0.44948116, -0.035418034, 3.463088, -1.2732706)
+
+[node name="crate2" parent="." unique_id=1145814860 instance=ExtResource("6_0511p")]
+transform = Transform3D(-0.005759448, 0, -0.49996683, 0, 0.5, 0, 0.49996683, 0, -0.005759448, 0.025288105, 0.4440428, -1.3706698)

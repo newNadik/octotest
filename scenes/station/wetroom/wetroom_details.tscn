@@ -7,13 +7,20 @@
 [ext_resource type="PackedScene" uid="uid://sirfpn0alg6n" path="res://scenes/station/interior/tall_bench.tscn" id="4_x0m8q"]
 [ext_resource type="PackedScene" uid="uid://b18qdk7b4q77l" path="res://scenes/station/interior/desk.tscn" id="5_vjmdh"]
 [ext_resource type="PackedScene" uid="uid://dpn3r7hpau3iy" path="res://scenes/station/items/crate.tscn" id="7_ss1lh"]
+[ext_resource type="PackedScene" uid="uid://dn3477d4k60gv" path="res://assets/models/items/wetroom/low_poly_ocean_buoy.glb" id="8_nsqx0"]
+[ext_resource type="PackedScene" uid="uid://c2clt6874gfg1" path="res://assets/models/items/wetroom/episode_66_-_diver.glb" id="8_x0m8q"]
+[ext_resource type="PackedScene" uid="uid://fbnaaqmp1kp6" path="res://assets/models/items/wetroom/diving_tank.glb" id="9_vjmdh"]
+[ext_resource type="PackedScene" uid="uid://uhkppkk7xa8v" path="res://scenes/station/items/cardbox_2.tscn" id="10_ss1lh"]
+[ext_resource type="PackedScene" uid="uid://b4d5fa7pr0nik" path="res://assets/models/items/quarters/towel.glb" id="11_uc0j2"]
+[ext_resource type="PackedScene" uid="uid://c3kjoa2asdyyh" path="res://scenes/station/items/blue_tape.tscn" id="12_f5yol"]
+[ext_resource type="PackedScene" uid="uid://fsb7v5nb71ac" path="res://assets/models/items/pen_holder.glb" id="13_aod0c"]
 
 [node name="WetroomDetails" type="Node3D" unique_id=218061277]
 
 [node name="items" type="Node3D" parent="." unique_id=1762037397]
 
 [node name="the_ball" parent="items" unique_id=1824952557 instance=ExtResource("3_ywqun")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.18115, 1.4715774, 19.698622)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.584223, 1.5693777, 25.828403)
 ball_color = 7
 
 [node name="furniture" type="Node3D" parent="." unique_id=1283563172]
@@ -44,3 +51,84 @@ transform = Transform3D(0.7000748, 0, -0.71406955, 0, 1, 0, 0.71406955, 0, 0.700
 
 [node name="tall_bench2" parent="furniture" unique_id=963266706 instance=ExtResource("4_x0m8q")]
 transform = Transform3D(-3.934025e-08, 0, 0.9, 0, 0.9, 0, -0.9, 0, -3.934025e-08, 6.1904182, 0, 28.082642)
+
+[node name="Sketchfab_Scene" parent="furniture" unique_id=2089960945 instance=ExtResource("8_nsqx0")]
+transform = Transform3D(1.784967, 0, 0.9021601, 0, 2, 0, -0.9021601, 0, 1.784967, 11.348, -1.5, 27.748)
+
+[node name="Sketchfab_Scene2" parent="furniture" unique_id=1402587770 instance=ExtResource("8_nsqx0")]
+transform = Transform3D(1.784967, 0, 0.9021601, 0, 2, 0, -0.9021601, 0, 1.784967, 11.348, -1.5, 27.748)
+
+[node name="Sketchfab_Scene" parent="." unique_id=907843206 instance=ExtResource("8_x0m8q")]
+transform = Transform3D(0.19254333, 0, 0.23005882, 0, 0.29999995, 0, -0.23005882, 0, 0.19254333, 8.794307, 2.461998, 20.71104)
+
+[node name="diving_tank" parent="." unique_id=548866760 instance=ExtResource("9_vjmdh")]
+transform = Transform3D(0.2, 0, 8.742278e-09, 8.742278e-09, 3.821371e-16, -0.2, 0, 0.2, 3.821371e-16, 20.258408, 0.64673424, 19.656078)
+
+[node name="diving_tank2" parent="." unique_id=1116852542 instance=ExtResource("9_vjmdh")]
+transform = Transform3D(0.2, 0, 8.742278e-09, 8.742278e-09, 3.821371e-16, -0.2, 0, 0.2, 3.821371e-16, 19.883, 0.64673424, 19.656078)
+
+[node name="diving_tank3" parent="." unique_id=532421186 instance=ExtResource("9_vjmdh")]
+transform = Transform3D(0.2, 0, 8.742278e-09, 8.742278e-09, 3.821371e-16, -0.2, 0, 0.2, 3.821371e-16, 19.52624, 0.64673424, 19.656078)
+
+[node name="diving_tank4" parent="." unique_id=374911188 instance=ExtResource("9_vjmdh")]
+transform = Transform3D(0.2, 0, 8.742278e-09, 8.742278e-09, 3.821371e-16, -0.2, 0, 0.2, 3.821371e-16, 19.157057, 0.64673424, 19.656078)
+
+[node name="diving_tank5" parent="." unique_id=202943606 instance=ExtResource("9_vjmdh")]
+transform = Transform3D(0.2, 0, 8.742278e-09, 8.742278e-09, 3.821371e-16, -0.2, 0, 0.2, 3.821371e-16, 20.073145, 0.95044506, 19.656078)
+
+[node name="diving_tank6" parent="." unique_id=1192942610 instance=ExtResource("9_vjmdh")]
+transform = Transform3D(0.2, 0, 8.742278e-09, 8.742278e-09, 3.821371e-16, -0.2, 0, 0.2, 3.821371e-16, 19.716385, 0.95044506, 19.656078)
+
+[node name="diving_tank7" parent="." unique_id=1582011513 instance=ExtResource("9_vjmdh")]
+transform = Transform3D(0.2, 0, 8.742278e-09, 8.742278e-09, 3.821371e-16, -0.2, 0, 0.2, 3.821371e-16, 19.347202, 0.95044506, 19.656078)
+
+[node name="cardbox_2" parent="." unique_id=1669699599 instance=ExtResource("10_ss1lh")]
+transform = Transform3D(0.017539632, 0, 0.99984616, 0, 1, 0, -0.99984616, 0, 0.017539632, 18.75344, 2.9496834, 19.93984)
+
+[node name="towel" parent="." unique_id=334195585 instance=ExtResource("11_uc0j2")]
+transform = Transform3D(0.18912023, 0, -1.9910383, 0, 2, 0, 1.9910383, 0, 0.18912023, 18.014437, 2.474138, 19.880543)
+
+[node name="towel2" parent="." unique_id=45506357 instance=ExtResource("11_uc0j2")]
+transform = Transform3D(0.18912023, 0, -1.9910383, 0, 2, 0, 1.9910383, 0, 0.18912023, 18.014437, 2.7070723, 19.880543)
+
+[node name="towel13" parent="." unique_id=346043002 instance=ExtResource("11_uc0j2")]
+transform = Transform3D(0.18912023, 0, -1.9910383, 0, 2, 0, 1.9910383, 0, 0.18912023, 17.391727, 2.474138, 19.880543)
+
+[node name="towel14" parent="." unique_id=1962741296 instance=ExtResource("11_uc0j2")]
+transform = Transform3D(0.18912023, 0, -1.9910383, 0, 2, 0, 1.9910383, 0, 0.18912023, 17.391727, 2.7070723, 19.880543)
+
+[node name="towel3" parent="." unique_id=904405193 instance=ExtResource("11_uc0j2")]
+transform = Transform3D(0.18912023, 0, -1.9910383, 0, 2, 0, 1.9910383, 0, 0.18912023, 18.014437, 2.9366307, 19.880543)
+
+[node name="towel4" parent="." unique_id=1744873483 instance=ExtResource("11_uc0j2")]
+transform = Transform3D(0.18912023, 0, -1.9910383, 0, 2, 0, 1.9910383, 0, 0.18912023, 18.652475, 2.474138, 19.880543)
+
+[node name="towel5" parent="." unique_id=1000648532 instance=ExtResource("11_uc0j2")]
+transform = Transform3D(0.18912023, 0, -1.9910383, 0, 2, 0, 1.9910383, 0, 0.18912023, 18.652475, 2.7070723, 19.880543)
+
+[node name="towel6" parent="." unique_id=31096019 instance=ExtResource("11_uc0j2")]
+transform = Transform3D(0.18912023, 0, -1.9910383, 0, 2, 0, 1.9910383, 0, 0.18912023, 18.652475, 2.9366307, 19.880543)
+
+[node name="towel7" parent="." unique_id=1059766125 instance=ExtResource("11_uc0j2")]
+transform = Transform3D(-0.10244114, 0, 1.9973747, 0, 2, 0, -1.9973747, 0, -0.10244114, 20.039097, 2.474138, 20.42706)
+
+[node name="towel8" parent="." unique_id=27860459 instance=ExtResource("11_uc0j2")]
+transform = Transform3D(-0.10244114, 0, 1.9973747, 0, 2, 0, -1.9973747, 0, -0.10244114, 20.039097, 2.7070723, 20.42706)
+
+[node name="towel9" parent="." unique_id=1531271953 instance=ExtResource("11_uc0j2")]
+transform = Transform3D(-0.10244114, 0, 1.9973747, 0, 2, 0, -1.9973747, 0, -0.10244114, 20.039097, 2.9366307, 20.42706)
+
+[node name="towel10" parent="." unique_id=1995669434 instance=ExtResource("11_uc0j2")]
+transform = Transform3D(-0.10244114, 0, 1.9973747, 0, 2, 0, -1.9973747, 0, -0.10244114, 19.40166, 2.474138, 20.399338)
+
+[node name="towel11" parent="." unique_id=19272783 instance=ExtResource("11_uc0j2")]
+transform = Transform3D(-0.10244114, 0, 1.9973747, 0, 2, 0, -1.9973747, 0, -0.10244114, 19.40166, 2.7070723, 20.399338)
+
+[node name="towel12" parent="." unique_id=1483115029 instance=ExtResource("11_uc0j2")]
+transform = Transform3D(-0.10244114, 0, 1.9973747, 0, 2, 0, -1.9973747, 0, -0.10244114, 19.40166, 2.9366307, 20.399338)
+
+[node name="blue_tape" parent="." unique_id=882091345 instance=ExtResource("12_f5yol")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16.899338, 1.1272725, 23.671602)
+
+[node name="Sketchfab_Scene2" parent="." unique_id=1486896194 instance=ExtResource("13_aod0c")]
+transform = Transform3D(0.002, 0, 0, 0, 0.002, 0, 0, 0, 0.002, 14.71003, 1.5718603, 26.038631)
