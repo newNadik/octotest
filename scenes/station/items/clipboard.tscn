@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://bm68uh0hdgple"]
+
+[ext_resource type="PackedScene" uid="uid://mp5w7exprmva" path="res://assets/models/items/regular_ole_clipboard.glb" id="1_wpgqn"]
+
+[node name="clipboard" type="Node3D" unique_id=1325148448]
+
+[node name="Sketchfab_Scene" parent="." unique_id=1487714502 instance=ExtResource("1_wpgqn")]
+transform = Transform3D(0.16, 0, 0, 0, 0.16, 0, 0, 0, 0.16, 0, 0, 0)

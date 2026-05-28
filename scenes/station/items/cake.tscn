@@ -1,0 +1,48 @@
+[gd_scene format=3 uid="uid://bsre2307g2co7"]
+
+[ext_resource type="Script" uid="uid://bsne0qrxa3tk8" path="res://scripts/interaction/localized_material_texture.gd" id="1_localized"]
+[ext_resource type="PackedScene" uid="uid://b7i7gs0v8yies" path="res://assets/models/items/cake.glb" id="1_qpupt"]
+[ext_resource type="Texture2D" uid="uid://bb1513u76nns8" path="res://assets/textures/documents/cake_en.png" id="3_cakeen"]
+[ext_resource type="Texture2D" uid="uid://dnumhtxa76cbc" path="res://assets/textures/documents/cake_ua.png" id="4_cakeua"]
+[ext_resource type="Script" uid="uid://bt8vvmy3m63u7" path="res://scripts/interaction/interactable.gd" id="5_ciyvn"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_qpupt"]
+size = Vector2(0.3, 0.2)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_bs7us"]
+albedo_texture = ExtResource("3_cakeen")
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_yfpl5"]
+height = 0.2972168
+radius = 0.3491211
+
+[node name="cake" type="StaticBody3D" unique_id=1936077422]
+
+[node name="cake" parent="." unique_id=2127593752 instance=ExtResource("1_qpupt")]
+transform = Transform3D(0.07, 0, 0, 0, 0.07, 0, 0, 0, 0.07, 0, 0, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=898705883]
+transform = Transform3D(0.49999997, 0.75000006, 0.4330127, 0, 0.49999997, -0.86602545, -0.86602545, 0.4330127, 0.24999997, 0.16313076, 0.12598789, 0.077776134)
+mesh = SubResource("PlaneMesh_qpupt")
+surface_material_override/0 = SubResource("StandardMaterial3D_bs7us")
+script = ExtResource("1_localized")
+texture_en = ExtResource("3_cakeen")
+texture_ua = ExtResource("4_cakeua")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1985186803]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.013995886, 0.15559137, -0.008747488)
+shape = SubResource("CylinderShape3D_yfpl5")
+
+[node name="Interactable" type="Area3D" parent="." unique_id=681831725]
+collision_layer = 8
+collision_mask = 0
+script = ExtResource("5_ciyvn")
+interaction_type = 1
+display_name = "cake"
+requires_line_of_sight = false
+hold_offset = Vector3(0, -0.17, -0.2)
+hold_rotation_degrees = Vector3(0, 180, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Interactable" unique_id=1239992983]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.013995886, 0.15559137, -0.008747488)
+shape = SubResource("CylinderShape3D_yfpl5")
