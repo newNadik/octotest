@@ -183,6 +183,8 @@ Source: [Flaticon](https://www.flaticon.com/)
 - "House plants" (https://skfb.ly/o7r98) by Yana Melnyk is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
 - "Low Poly Office Desk Set | 12 Models | Game Read" (https://skfb.ly/pEMFV) by santradragon is licensed under Creative Commons Attribution-NonCommercial (http://creativecommons.org/licenses/by-nc/4.0/).
 - "Regular ole Clipboard" (https://skfb.ly/orZJz) by Maggatron is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+- "Metal space crate" (https://skfb.ly/o7yNU) by Bryan Okafor - Ogu is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+- "Hanger" (https://skfb.ly/UXVK) by stevenearnest is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
 - 
 
 ## Textures

@@ -841,7 +841,7 @@ _data = {
 }
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_7xsbv"]
-size = Vector2(14, 10)
+size = Vector2(13.5, 10)
 
 [node name="lift" type="Node3D" unique_id=1302660007]
 
