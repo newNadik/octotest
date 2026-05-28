@@ -89,7 +89,11 @@ func _apply_texture() -> void:
 	mat.roughness = paper_roughness
 	mat.specular = paper_specular
 	mat.metallic = 0.0
-	mat.emission_enabled = false
+	#mat.emission_enabled = false
+	mat.emission_enabled = true
+	mat.emission = Color.BLACK
+	mat.emission_energy_multiplier = 0.05
+	mat.emission_texture = texture_to_use
 	_mesh.material_override = mat
 
 

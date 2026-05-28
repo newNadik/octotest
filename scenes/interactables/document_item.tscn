@@ -23,7 +23,7 @@ emission = Color(1, 1, 1, 1)
 size = Vector3(0.756, 1.069, 0.01)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_cyluy"]
-size = Vector3(0.856, 1.169, 0.1105835)
+size = Vector3(0.856, 1.169, 0.3)
 
 [node name="DocumentItem" type="StaticBody3D" unique_id=-1447463677]
 collision_layer = 0

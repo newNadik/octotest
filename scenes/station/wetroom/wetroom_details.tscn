@@ -2,21 +2,45 @@
 
 [ext_resource type="PackedScene" uid="uid://3qcq4vmexl3s" path="res://scenes/station/items/fire_extinguisher.tscn" id="1_r13j0"]
 [ext_resource type="PackedScene" uid="uid://8vcajaaad64" path="res://scenes/station/interior/rack.tscn" id="2_ywqun"]
+[ext_resource type="PackedScene" uid="uid://47jmk2dummek" path="res://scenes/station/interior/wetroom_rack.tscn" id="3_ihek6"]
 [ext_resource type="PackedScene" uid="uid://dny6hphe0bh4v" path="res://scenes/station/items/the_ball.tscn" id="3_ywqun"]
+[ext_resource type="PackedScene" uid="uid://sirfpn0alg6n" path="res://scenes/station/interior/tall_bench.tscn" id="4_x0m8q"]
+[ext_resource type="PackedScene" uid="uid://b18qdk7b4q77l" path="res://scenes/station/interior/desk.tscn" id="5_vjmdh"]
+[ext_resource type="PackedScene" uid="uid://dpn3r7hpau3iy" path="res://scenes/station/items/crate.tscn" id="7_ss1lh"]
 
 [node name="WetroomDetails" type="Node3D" unique_id=218061277]
 
-[node name="furniture" type="Node3D" parent="." unique_id=940836360]
+[node name="items" type="Node3D" parent="." unique_id=1762037397]
 
-[node name="fire_extinguisher" parent="furniture" unique_id=1012721613 instance=ExtResource("1_r13j0")]
-transform = Transform3D(-0.37580383, 0, 0.9266992, 0, 1, 0, -0.9266992, 0, -0.37580383, 8.714731, 0, 21.126614)
-
-[node name="rack" parent="furniture" unique_id=1216544187 instance=ExtResource("2_ywqun")]
-transform = Transform3D(0.9135454, 0, 0.40673664, 0, 1, 0, -0.40673664, 0, 0.9135454, 11.555163, 0, 26.966839)
-
-[node name="rack2" parent="furniture" unique_id=407627516 instance=ExtResource("2_ywqun")]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 18.782068, 0, 19.973156)
-
-[node name="the_ball" parent="." unique_id=1824952557 instance=ExtResource("3_ywqun")]
+[node name="the_ball" parent="items" unique_id=1824952557 instance=ExtResource("3_ywqun")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.18115, 1.4715774, 19.698622)
 ball_color = 7
+
+[node name="furniture" type="Node3D" parent="." unique_id=1283563172]
+
+[node name="fire_extinguisher" parent="furniture" unique_id=1012721613 instance=ExtResource("1_r13j0")]
+transform = Transform3D(-0.37580383, 0, 0.9266992, 0, 1, 0, -0.9266992, 0, -0.37580383, 10.910993, 0, 26.104542)
+
+[node name="wetroom_rack" parent="furniture" unique_id=1325542905 instance=ExtResource("3_ihek6")]
+transform = Transform3D(0.9238795, 0, 0.38268346, 0, 1, 0, -0.38268346, 0, 0.9238795, 9.225547, -2.3841858e-07, 21.56866)
+
+[node name="tall_bench" parent="furniture" unique_id=1822527519 instance=ExtResource("4_x0m8q")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.121456, 0, 19.364124)
+
+[node name="desk2" parent="furniture" unique_id=360776120 instance=ExtResource("5_vjmdh")]
+transform = Transform3D(0.70411384, 0, -0.71008706, 0, 1, 0, 0.71008706, 0, 0.70411384, 14.861519, 0, 25.078102)
+
+[node name="rack" parent="furniture" unique_id=1216544187 instance=ExtResource("2_ywqun")]
+transform = Transform3D(-4.3711374e-08, 0, 0.99999964, 0, 1, 0, -0.99999964, 0, -4.3711374e-08, 18.725983, 0, 20.026295)
+
+[node name="crate" parent="furniture" unique_id=1676126179 instance=ExtResource("7_ss1lh")]
+transform = Transform3D(0.7000748, 0, -0.71406955, 0, 1, 0, 0.71406955, 0, 0.7000748, 13.0411625, 0, 27.24509)
+
+[node name="crate3" parent="furniture" unique_id=1646803769 instance=ExtResource("7_ss1lh")]
+transform = Transform3D(0.7000748, 0, -0.71406955, 0, 1, 0, 0.71406955, 0, 0.7000748, 17.192822, 0, 23.101997)
+
+[node name="crate2" parent="furniture" unique_id=1788998688 instance=ExtResource("7_ss1lh")]
+transform = Transform3D(0.7000748, 0, -0.71406955, 0, 1, 0, 0.71406955, 0, 0.7000748, 13.0411625, 1.0455793, 27.24509)
+
+[node name="tall_bench2" parent="furniture" unique_id=963266706 instance=ExtResource("4_x0m8q")]
+transform = Transform3D(-3.934025e-08, 0, 0.9, 0, 0.9, 0, -0.9, 0, -3.934025e-08, 6.1904182, 0, 28.082642)

@@ -181,7 +181,7 @@ lamp_lights = [NodePath("lights/OmniLight3D")]
 navigation_mesh = SubResource("NavigationMesh_pe3mt")
 
 [node name="StaticBody3D" type="StaticBody3D" parent="NavigationRegion3D" unique_id=1093410393]
-collision_layer = 3
+collision_layer = 19
 collision_mask = 0
 
 [node name="FloorEnergyLab" type="MeshInstance3D" parent="NavigationRegion3D/StaticBody3D" unique_id=1813596186]
@@ -246,8 +246,8 @@ title_side = 1
 [node name="DoorDouble2" parent="NavigationRegion3D/StaticBody3D" unique_id=683268443 instance=ExtResource("1_1hvab")]
 transform = Transform3D(-0.9238795, 0, 0.3826835, 0, 1, 0, -0.3826835, 0, -0.9238795, 17.40911, 0, 9.889815)
 access_mode = 2
-door_title = "Lab"
-door_title_secondary = "Energy"
+door_title = "Energy"
+door_title_secondary = "Lab"
 
 [node name="NavigationLink3D" type="NavigationLink3D" parent="NavigationRegion3D" unique_id=1128424102]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.088806, 0.49736702, 10.776171)
