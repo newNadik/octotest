@@ -793,9 +793,9 @@ func _pick_up_interactable(target) -> void:
 		var displaced: WearableInteractableScript = _wear_controller.get_worn_in_slot(slot) as WearableInteractableScript
 		if displaced != null:
 			_unwear_and_drop(displaced)
-		var pickup_position: Vector3 = target.get_focus_position() if target.has_method("get_focus_position") else _player.global_position
+		var wear_pickup_position: Vector3 = target.get_focus_position() if target.has_method("get_focus_position") else _player.global_position
 		if _wear_controller.try_wear(target):
-			_play_pick_drop_sound(pickup_position)
+			_play_pick_drop_sound(wear_pickup_position)
 			target.interact(_player)
 			_player.clear_move_target()
 			return
@@ -1054,7 +1054,7 @@ func _compute_focus_max_half_width() -> float:
 	return focus_display_forward_distance * tan(fov_v_rad * 0.5) * aspect * focus_display_safe_area_fraction
 
 
-func _update_focus_display_transforms(delta: float) -> void:
+func _update_focus_display_transforms(_delta: float) -> void:
 	var count = _held_interactables.size()
 	var columns = maxi(count, 1)
 	var alpha = 1.0
@@ -1757,7 +1757,7 @@ func _is_mirrored_basis(basis: Basis) -> bool:
 	return basis.determinant() < 0.0
 
 
-func _estimate_item_clearance(item, root: Node3D) -> float:
+func _estimate_item_clearance(_item, root: Node3D) -> float:
 	if root == null:
 		return 0.0
 	var max_extent = _estimate_mesh_max_extent(root)

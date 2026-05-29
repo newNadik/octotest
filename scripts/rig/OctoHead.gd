@@ -24,7 +24,7 @@ var middle_bone: int:
 	get:
 		if bone_indices.is_empty():
 			return -1
-		return bone_indices[bone_indices.size() / 2]
+		return bone_indices[int(bone_indices.size() / 2.0)]
 
 var tip_bone: int:
 	get:
@@ -94,9 +94,9 @@ func _split_chain_into_parts() -> void:
 	if total <= 0:
 		return
 
-	var base_count := total / 3
-	var mid_count := total / 3
-	var tip_count := total / 3
+	var base_count := int(total / 3.0)
+	var mid_count := int(total / 3.0)
+	var tip_count := int(total / 3.0)
 
 	match total % 3:
 		1:

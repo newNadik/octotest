@@ -518,8 +518,8 @@ func _apply_branch_transform(
 	if rotation_axis.is_zero_approx():
 		return adjusted
 
-	var rotation_degrees := branch_rotation_degrees + _get_branch_rotation_offset(branch_group)
-	var rotation_basis := Basis(rotation_axis.normalized(), deg_to_rad(rotation_degrees))
+	var branch_rot_degrees := branch_rotation_degrees + _get_branch_rotation_offset(branch_group)
+	var rotation_basis := Basis(rotation_axis.normalized(), deg_to_rad(branch_rot_degrees))
 	var original_pivot := original_transform * pivot_local
 	var moved_origin := original_transform.origin.lerp(Vector3.ZERO, clampf(to_center, 0.0, 1.0))
 	var moved_pivot := original_pivot.lerp(Vector3.ZERO, clampf(to_center, 0.0, 1.0))

@@ -36,7 +36,7 @@ func initialize(player: CharacterBody3D, world_root: Node3D) -> void:
 	player.add_child(_glasses_anchor)
 
 
-func process_wear(delta: float) -> void:
+func process_wear(_delta: float) -> void:
 	if _rig == null:
 		return
 	var head_xform := _rig.get_head_world_transform()

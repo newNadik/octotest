@@ -8,13 +8,13 @@ extends StaticBody3D
 @export var interactable_path: NodePath = NodePath("Interactable")
 
 @onready var sim = $LanyardSkeleton/SpringBoneSimulator3D
-@onready var floor = $LanyardSkeleton/SpringBoneSimulator3D/FloorCollision
+@onready var _floor_collision = $LanyardSkeleton/SpringBoneSimulator3D/FloorCollision
 @onready var _main_scene := get_tree().current_scene
 
 const FLOOR_DISABLED_LOCAL_POSITION := Vector3(0.0, -1000.0, 0.0)
 const FLOOR_ACTIVE_HELD_POSITION := Vector3(0.0, 0.02, 0.0)
 const FLOOR_ACTIVE_DROPPED_POSITION := Vector3(0.0, -0.01, 0.0)
-var floor_drop_delay := 0.0
+var _floor_collision_drop_delay := 0.0
 var _interactable
 var _is_held := false
 var _drop_delay_left := 0.0
@@ -52,7 +52,7 @@ func _process(delta: float) -> void:
 
 
 func _update_floor_collision_state() -> void:
-	if floor == null:
+	if _floor_collision == null:
 		return
 
 	var focus_active := false
@@ -60,12 +60,12 @@ func _update_floor_collision_state() -> void:
 		focus_active = bool(_main_scene.call("is_focus_mode_active"))
 
 	if focus_active:
-		floor.global_position = FLOOR_DISABLED_LOCAL_POSITION
+		_floor_collision.global_position = FLOOR_DISABLED_LOCAL_POSITION
 	elif _is_card_held() or _drop_delay_left > 0.0:
-		floor.global_position = FLOOR_ACTIVE_HELD_POSITION
+		_floor_collision.global_position = FLOOR_ACTIVE_HELD_POSITION
 	else:
-		floor.global_position = FLOOR_ACTIVE_DROPPED_POSITION
-		#print("ready card=", global_position, " floor_local=", floor.position, " floor_global=", floor.global_position)
+		_floor_collision.global_position = FLOOR_ACTIVE_DROPPED_POSITION
+		#print("ready card=", global_position, " _floor_collision_local=", _floor_collision.position, " _floor_collision_global=", _floor_collision.global_position)
 
 
 
@@ -80,4 +80,4 @@ func _on_interactable_picked_up(_interactable_ref, _actor) -> void:
 
 func _on_interactable_dropped(_interactable_ref, _actor) -> void:
 	_is_held = false
-	_drop_delay_left = floor_drop_delay
+	_drop_delay_left = _floor_collision_drop_delay

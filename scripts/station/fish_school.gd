@@ -347,8 +347,8 @@ func _step_school(delta: float) -> void:
 
 		var bob := sin(_time * bob_speed + _phases[i]) * bob_amplitude
 		var draw_pos := pos + Vector3(0.0, bob, 0.0)
-		var basis := Basis.looking_at(_dirs[i], Vector3.UP) * _mesh_offset_basis
-		_fish_nodes[i].transform = Transform3D(basis, draw_pos)
+		var fish_basis := Basis.looking_at(_dirs[i], Vector3.UP) * _mesh_offset_basis
+		_fish_nodes[i].transform = Transform3D(fish_basis, draw_pos)
 
 
 func _is_school_finished() -> bool:
@@ -453,7 +453,7 @@ func _collect_scene_pool(folder_path: String) -> Array[PackedScene]:
 
 func _set_shadow_recursive(node: Node, shadow_setting: int) -> void:
 	if node is GeometryInstance3D:
-		(node as GeometryInstance3D).cast_shadow = shadow_setting
+		(node as GeometryInstance3D).cast_shadow = shadow_setting as GeometryInstance3D.ShadowCastingSetting
 	for child in node.get_children():
 		_set_shadow_recursive(child, shadow_setting)
 

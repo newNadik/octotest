@@ -805,10 +805,10 @@ func _apply_focus_pan(relative: Vector2) -> void:
 		return
 	if _focus_tween != null:
 		_focus_tween.kill()
-	var scale := focus_pan_sensitivity * maxf(0.2, spring_arm.spring_length)
+	var pan_scale := focus_pan_sensitivity * maxf(0.2, spring_arm.spring_length)
 	var right := camera.global_basis.x
 	var up := camera.global_basis.y
-	var delta := (-right * relative.x + up * relative.y) * scale
+	var delta := (-right * relative.x + up * relative.y) * pan_scale
 	_focus_pan_offset += delta
 	if _focus_pan_offset.length() > focus_pan_max_distance:
 		_focus_pan_offset = _focus_pan_offset.normalized() * focus_pan_max_distance
@@ -974,7 +974,7 @@ func _start_focus_tween(
 	target_zoom: float,
 	duration: float = focus_tween_duration,
 	trans: Tween.TransitionType = Tween.TRANS_CUBIC,
-	ease: Tween.EaseType = Tween.EASE_OUT
+	ease_type: Tween.EaseType = Tween.EASE_OUT
 ) -> void:
 	if _focus_tween != null:
 		_focus_tween.kill()
@@ -984,7 +984,7 @@ func _start_focus_tween(
 	var tween_yaw := _shortest_angle_target_degrees(current_yaw, _yaw)
 	var tween_pitch := _shortest_angle_target_degrees(current_pitch, _pitch)
 	var tween_roll := _shortest_angle_target_degrees(current_roll, _roll)
-	_focus_tween = create_tween().set_ease(ease).set_trans(trans)
+	_focus_tween = create_tween().set_ease(ease_type).set_trans(trans)
 	_focus_tween.tween_property(camera_pivot, "global_position", target_pivot_position, duration)
 	_focus_tween.parallel().tween_property(spring_arm, "spring_length", target_zoom, duration)
 	_focus_tween.parallel().tween_property(camera_yaw, "rotation_degrees:y", tween_yaw, duration)
@@ -1092,15 +1092,15 @@ func _is_escape_press(event: InputEvent) -> bool:
 	return false
 
 
-func _set_in_game_menu_visible(is_visible: bool) -> void:
-	if is_visible and _focus_mode:
+func _set_in_game_menu_visible(visible_flag: bool) -> void:
+	if visible_flag and _focus_mode:
 		_exit_focus_mode()
-	in_game_menu.visible = is_visible
-	get_tree().paused = is_visible
+	in_game_menu.visible = visible_flag
+	get_tree().paused = visible_flag
 	_orbiting = false
-	if is_visible:
+	if visible_flag:
 		_interaction_controller.set_interaction_enabled(false)
-	if is_visible:
+	if visible_flag:
 		in_game_resume_button.grab_focus()
 
 

@@ -19,7 +19,7 @@ func _on_body_entered(_body: Node3D) -> void:
 func _on_screensaver_timeout() -> void:
 	_set_black_screen(true)
 
-func _set_black_screen(is_visible: bool) -> void:
+func _set_black_screen(visible_flag: bool) -> void:
 	var screen := get_parent().get_node_or_null("Node3D/Monitor_2/black_screen") as Node3D
 	if screen:
-		screen.visible = is_visible
+		screen.visible = visible_flag

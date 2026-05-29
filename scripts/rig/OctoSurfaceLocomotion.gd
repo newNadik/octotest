@@ -44,7 +44,7 @@ var reach_side_bias := 0.34
 
 var reach_speed := 7.0
 var reach_timeout := 0.42
-var release_duration := 0.2
+var release_t_duration := 0.2
 var grip_duration := 0.1
 var push_duration := 2.3
 var grab_distance := 0.4
@@ -130,7 +130,7 @@ func step(
 	body_position: Vector3,
 	body_basis: Basis,
 	desired_direction: Vector3,
-	current_velocity: Vector3,
+	_current_velocity: Vector3,
 	space_state: PhysicsDirectSpaceState3D
 ) -> void:
 	if not enabled or _rig == null:
@@ -280,7 +280,7 @@ func get_arm_targets() -> Dictionary:
 
 func _update_arm_state(
 	runtime: Dictionary,
-	arm,
+	_arm,
 	body_position: Vector3,
 	body_basis: Basis,
 	desired_planar: Vector3,
@@ -425,12 +425,12 @@ func _update_arm_state(
 
 	if state == ArmStepState.RELEASE:
 		runtime["tip_target"] = tip_now.lerp(base_now, minf(1.0, delta * (reach_speed * 0.7)))
-		if state_time >= release_duration:
+		if state_time >= release_t_duration:
 			_set_state(runtime, ArmStepState.SEARCH)
 			return
 
 
-func _apply_arm_pose(runtime: Dictionary, arm, body_position: Vector3, body_basis: Basis, has_command: bool) -> void:
+func _apply_arm_pose(runtime: Dictionary, arm, _body_position: Vector3, body_basis: Basis, has_command: bool) -> void:
 	var arm_name := str(runtime["name"])
 	var base_pos: Vector3 = _rig.get_arm_world_anchor(arm_name, "base")
 	var tip_target: Vector3 = runtime["tip_target"]
@@ -676,7 +676,7 @@ func _phase_progress_for_state(state: int, state_time: float) -> float:
 		ArmStepState.REACH:
 			return clampf(state_time / maxf(0.001, reach_timeout), 0.0, 1.0)
 		ArmStepState.RELEASE:
-			return clampf(state_time / maxf(0.001, release_duration), 0.0, 1.0)
+			return clampf(state_time / maxf(0.001, release_t_duration), 0.0, 1.0)
 		ArmStepState.GRAB:
 			return clampf(state_time / maxf(0.001, grip_duration), 0.0, 1.0)
 		ArmStepState.PUSH_PULL:
@@ -695,14 +695,14 @@ func _build_role_pose_for_phase(
 ) -> Dictionary:
 	var ground_plane_angle := arm_side_sign * 0.0
 	var t := clampf(phase_t, 0.0, 1.0)
-	var ease := t * t * (3.0 - 2.0 * t)
+	var ease_t := t * t * (3.0 - 2.0 * t)
 	var vg := 1.25
 	var sg := 1.15
 	match phase_name:
 		"plant":
 			# Base role: place and spread on floor. Mid/tip roles: light contact only.
 			return {
-				"base_bend": lerpf(0.78, 0.44, stretch) * (1.0 - ease * 0.2) * (1.0 + (vg - 1.0) * 0.25),
+				"base_bend": lerpf(0.78, 0.44, stretch) * (1.0 - ease_t * 0.2) * (1.0 + (vg - 1.0) * 0.25),
 				"mid_bend": lerpf(0.16, 0.06, stretch) * (1.0 + (vg - 1.0) * 0.2),
 				"tip_bend": lerpf(0.06, 0.0, stretch) * (1.0 + (vg - 1.0) * 0.18),
 				"base_angle": ground_plane_angle + clampf(role_swing * 1.24, -1.12, 1.12),
@@ -713,15 +713,15 @@ func _build_role_pose_for_phase(
 			# Mid role: build load for propulsion while base stays planted.
 			return {
 				"base_bend": lerpf(0.42, 0.24, stretch) * (1.0 + (vg - 1.0) * 0.25),
-				"mid_bend": (lerpf(0.54, 0.3, stretch) + ease * 0.24) * (1.0 + (vg - 1.0) * 0.55),
-				"tip_bend": (lerpf(0.22, 0.12, stretch) + ease * 0.12) * (1.0 + (vg - 1.0) * 0.45),
+				"mid_bend": (lerpf(0.54, 0.3, stretch) + ease_t * 0.24) * (1.0 + (vg - 1.0) * 0.55),
+				"tip_bend": (lerpf(0.22, 0.12, stretch) + ease_t * 0.12) * (1.0 + (vg - 1.0) * 0.45),
 				"base_angle": ground_plane_angle + clampf(role_swing * 1.28, -1.16, 1.16),
 				"mid_angle": ground_plane_angle + clampf(role_swing * 0.74 + pole_x * 0.05, -0.66, 0.66),
 				"tip_angle": ground_plane_angle + clampf(role_swing * 0.42, -0.38, 0.38),
 			}
 		"push":
 			# Push role: mid dominates propulsion, base guides sweep, tip maintains grip.
-			var push_drive := sin(ease * PI)
+			var push_drive := sin(ease_t * PI)
 			return {
 				"base_bend": (lerpf(0.34, 0.18, stretch) + push_drive * 0.1 * sg) * (1.0 + (vg - 1.0) * 0.28),
 				"mid_bend": (lerpf(0.8, 0.44, stretch) + push_drive * 0.34 * sg) * (1.0 + (vg - 1.0) * 0.7),
@@ -733,15 +733,15 @@ func _build_role_pose_for_phase(
 		"stabilize":
 			# Stabilize role: unload while preserving floor contact.
 			return {
-				"base_bend": lerpf(0.42, 0.22, stretch) * (1.0 - ease * 0.25),
-				"mid_bend": lerpf(0.42, 0.18, stretch) * (1.0 - ease * 0.45),
-				"tip_bend": lerpf(0.2, 0.08, stretch) * (1.0 - ease * 0.5),
+				"base_bend": lerpf(0.42, 0.22, stretch) * (1.0 - ease_t * 0.25),
+				"mid_bend": lerpf(0.42, 0.18, stretch) * (1.0 - ease_t * 0.45),
+				"tip_bend": lerpf(0.2, 0.08, stretch) * (1.0 - ease_t * 0.5),
 				"base_angle": ground_plane_angle + clampf(role_swing * 0.4, -0.36, 0.36),
 				"mid_angle": ground_plane_angle + clampf(role_swing * 0.3 + pole_x * 0.03, -0.26, 0.26),
 				"tip_angle": ground_plane_angle + clampf(role_swing * 0.18, -0.16, 0.16),
 			}
 		"recover":
-			# Recover role: release support and prepare swing.
+			# Recover role: release_t support and prepare swing.
 			return {
 				"base_bend": lerpf(0.5, 0.24, stretch),
 				"mid_bend": lerpf(0.32, 0.12, stretch),
@@ -752,7 +752,7 @@ func _build_role_pose_for_phase(
 			}
 		"swing":
 			# Swing role: base leads stride; mid/tip tuck then extend toward plant.
-			var swing_lift := sin(ease * PI)
+			var swing_lift := sin(ease_t * PI)
 			return {
 				"base_bend": (lerpf(0.92, 0.52, stretch) + swing_lift * 0.72 * vg) * (1.0 + (vg - 1.0) * 0.35),
 				"mid_bend": (lerpf(0.26, 0.08, stretch) + swing_lift * 0.12 * vg) * (1.0 + (vg - 1.0) * 0.35),

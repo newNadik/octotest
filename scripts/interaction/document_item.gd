@@ -87,7 +87,7 @@ func _apply_texture() -> void:
 	mat.albedo_texture = texture_to_use
 	mat.albedo_color = Color(paper_brightness, paper_brightness, paper_brightness, 1.0)
 	mat.roughness = paper_roughness
-	mat.specular = paper_specular
+	mat.metallic_specular = paper_specular
 	mat.metallic = 0.0
 	#mat.emission_enabled = false
 	mat.emission_enabled = true
@@ -232,15 +232,15 @@ func _enforce_non_interactable_visuals() -> void:
 		_outline_mesh.visible = false
 
 
-func _set_interactable_indicator_visible(is_visible: bool) -> void:
+func _set_interactable_indicator_visible(visible_flag: bool) -> void:
 	if _interactable == null:
 		return
 	if Engine.is_editor_hint():
 		return
 	if _interactable.has_method("set_indicator_visible"):
-		_interactable.call("set_indicator_visible", is_visible)
+		_interactable.call("set_indicator_visible", visible_flag)
 	elif "show_indicator" in _interactable:
-		_interactable.set("show_indicator", is_visible)
+		_interactable.set("show_indicator", visible_flag)
 
 
 func _set_interactable_enabled(is_enabled: bool) -> void:

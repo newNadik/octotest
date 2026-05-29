@@ -841,7 +841,7 @@ func _get_arm_anim_mode(arm, speed: float) -> ArmAnimMode:
 		var mode_value = int(_arm_mode_overrides[arm.arm_name])
 		if mode_value < ArmAnimMode.STATIC or mode_value > ArmAnimMode.HOLD:
 			return ArmAnimMode.CRAWL
-		return mode_value
+		return mode_value as ArmAnimMode
 	if use_idle_when_stationary and speed <= idle_stationary_speed_threshold:
 		return ArmAnimMode.IDLE
 	return ArmAnimMode.CRAWL

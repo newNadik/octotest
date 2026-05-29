@@ -79,9 +79,9 @@ func on_ball_picked_up(item: Node, arm_name: String, socket: Node3D = null) -> v
 	# Interactable hold_offset/hold_rotation adjustments already applied on attach.
 	var rest_local := Vector3.ZERO
 	if _player != null and item.has_method("get_pickup_root"):
-		var pickup_root: Node3D = item.get_pickup_root()
-		if pickup_root != null:
-			rest_local = _player.to_local(pickup_root.global_position)
+		var item_root: Node3D = item.get_pickup_root()
+		if item_root != null:
+			rest_local = _player.to_local(item_root.global_position)
 		elif socket != null:
 			# Fallback only if pickup_root is missing.
 			rest_local = _player.to_local(socket.global_position)

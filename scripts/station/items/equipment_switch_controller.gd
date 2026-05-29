@@ -50,9 +50,9 @@ func set_on(next_is_on: bool) -> void:
 
 func _apply_state() -> void:
 	if _switch_button != null:
-		var rotation := _switch_button.rotation_degrees
-		rotation.x = on_button_x_degrees if _is_on else off_button_x_degrees
-		_switch_button.rotation_degrees = rotation
+		var btn_rotation := _switch_button.rotation_degrees
+		btn_rotation.x = on_button_x_degrees if _is_on else off_button_x_degrees
+		_switch_button.rotation_degrees = btn_rotation
 
 	if _animation_player != null:
 		if _is_on:

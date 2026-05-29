@@ -72,11 +72,11 @@ func _set_documents_interaction_enabled(is_enabled: bool) -> void:
 		interactable.set_interaction_enabled(is_enabled)
 
 
-func _set_documents_indicators_visible(is_visible: bool) -> void:
+func _set_documents_indicators_visible(visible_flag: bool) -> void:
 	for interactable in _document_interactables:
 		if interactable == null:
 			continue
-		interactable.set_indicator_visible(is_visible)
+		interactable.set_indicator_visible(visible_flag)
 
 
 func _open_folder_stage() -> void:
@@ -137,10 +137,10 @@ func _reset_and_close_stage() -> void:
 	_busy = false
 
 
-func _get_animation_length(name: String) -> float:
+func _get_animation_length(anim_name: String) -> float:
 	if _animation_player == null:
 		return 0.0
-	var animation := _animation_player.get_animation(name)
+	var animation := _animation_player.get_animation(anim_name)
 	if animation == null:
 		return 0.0
 	return animation.length / maxf(0.001, absf(FOLDER_ANIMATION_SPEED))

@@ -12,7 +12,6 @@ const DUCK_DB := -10.0
 const DUCK_FADE := 0.35
 
 var _player: AudioStreamPlayer3D
-var _hide_timer: SceneTreeTimer
 var _duck_tween: Tween
 var _is_talking := false
 
