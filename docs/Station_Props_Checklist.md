@@ -71,7 +71,7 @@
 - [x] First aid kit (wall-mounted)
 - [x] Keypad / card reader on door
 - [x] 3D printers (2–3) on workbenches
-- [ ] Beatle part in 3D printer
+- [x] Beatle part in 3D printer
 - [x] Spool rack for filament
 - [x] Pegboard wall with tools
 - [x] Screwdriver (on pegboard / bench)
@@ -84,7 +84,7 @@
 - [x] Printed schematics / blueprints (pinned)
 - [x] Safety glasses (spare pair on bench)
 - [ ] Coffee mug (bench prop)
-- [ ] CCTV camera
+- [x] CCTV camera
 - [x] measuring tape
 - [x] printed Rocky
 - [x] 3D printer name tag "Gertrude"
@@ -94,34 +94,26 @@
 - [ ] Stickers all over one toolbox (band logos, nerdy stuff)
 
 ### Energy Lab
-- [ ] Large equipment consoles / panels
-- [ ] Power distribution boards
-- [ ] Turbine model / display unit
-- [ ] Cable reels
-- [ ] Workbench with instruments
-- [ ] Warning tape on floor
-- [ ] High-voltage signage
+- [x] Large equipment consoles / panels
+- [x] Power distribution boards
+- [x] Turbine model / display unit
+- [x] Cable reels
+- [x] Workbench with instruments
 - [x] Fire extinguisher (CO₂)
-- [ ] Wall-mounted circuit diagrams
 - [x] Evacuation plan (wall-mounted)
-- [ ] Clipboard with data / maintenance sheets
-- [ ] Safety gloves (pair on bench)
-- [ ] Ear protection (hanging peg)
-- [ ] Hard hat (hook on wall)
-- [ ] Measuring tape
-- [ ] Cable ties (bag)
-- [ ] Printed maintenance schedule (pinned)
+- [x] Ear protection (hanging peg)
+- [x] Hard hat (hook on wall)
 - [x] Wall clock
 - [x] First aid kit (wall-mounted)
 - [x] Keypad / card reader on door
-- [ ] CCTV camera
-- [ ] Beatle robot 
+- [x] CCTV camera
+- [x] Beatle robot 
 
 ### Wet Room
-- [ ] Dive suit rack / hangers
-- [ ] SCUBA tanks on wall rack
+- [x] Dive suit rack / hangers
+- [x] SCUBA tanks on wall rack
 - [ ] Weight belts + BCD storage
-- [ ] Dive gear table (fins, masks)
+- [x] Dive gear table (fins, masks)
 - [ ] Freshwater rinse shower
 - [ ] Drain grate (floor)
 - [ ] Waterproof lockers
@@ -132,14 +124,13 @@
 - [ ] Dive logbook + pen (on table)
 - [ ] Underwater torch / flashlight
 - [ ] Wetsuit hood + gloves (on hook)
-- [ ] Towel stack (shelf)
+- [x] Towel stack (shelf)
 - [ ] Conditions board (water temp, visibility, current depth)
 - [x] Wall clock
 - [x] First aid kit (wall-mounted)
 - [ ] Hatch code pad (separate from door card reader)
 - [ ] Keypad / card reader on door
-- [ ] CCTV camera
-- [ ] Wall-mounted PA speaker
+- [x] CCTV camera
 
 ---
 

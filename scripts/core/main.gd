@@ -624,9 +624,11 @@ func _apply_room_visual_layer_recursive(node: Node, layer_mask: int) -> void:
 
 func _apply_room_light_cull_mask_recursive(node: Node, light_mask: int) -> void:
 	if node is Light3D:
-		# Force a narrowed mask: shared/default visuals + allowed room layers.
 		var light := node as Light3D
-		light.light_cull_mask = light_mask
+		var mask := light_mask
+		if light.is_in_group("shared_room_light"):
+			mask |= DEFAULT_VISUAL_LAYER_MASK
+		light.light_cull_mask = mask
 	for child in node.get_children():
 		_apply_room_light_cull_mask_recursive(child, light_mask)
 

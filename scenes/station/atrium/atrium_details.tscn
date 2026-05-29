@@ -173,13 +173,13 @@ transform = Transform3D(0.99999976, 0, 0, 0, 1, 0, 0, 0, 0.99999976, -11.868, 5,
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.829338, 0, -3.4754243)
 
 [node name="mug" parent="furniture/attrium" unique_id=36977870 instance=ExtResource("11_hn06o")]
-transform = Transform3D(0.9999999, 0, 0, 0, 1, 0, 0, 0, 0.9999999, -18.66425, 0.9640896, 5.0965886)
+transform = Transform3D(0.9999999, 0, 0, 0, 1, 0, 0, 0, 0.9999999, -18.66425, 0.88103884, 5.0965886)
 
 [node name="mug2" parent="furniture/attrium" unique_id=843443156 instance=ExtResource("11_hn06o")]
 transform = Transform3D(0.9999999, 0, 0, 0, 1, 0, 0, 0, 0.9999999, -22.201412, 1.558384, -2.4571445)
 
 [node name="amphitheater" parent="furniture/attrium" unique_id=123859396 instance=ExtResource("12_ugtci")]
-transform = Transform3D(0.99999994, 0, 0, 0, 1, 0, 0, 0, 0.99999994, -14.058354, 0, 5.089758)
+transform = Transform3D(0.99999994, 0, 0, 0, 1, 0, 0, 0, 0.99999994, -14.058354, -0.08305073, 5.089758)
 
 [node name="bench6" parent="furniture/attrium" unique_id=1945126894 instance=ExtResource("5_y2yuj")]
 transform = Transform3D(-4.3711385e-08, 0, 0.99999994, 0, 1, 0, -0.99999994, 0, -4.3711385e-08, -11.120958, 0, 6.9166)
@@ -206,7 +206,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -29.68653, 7.5711023e-06, -3.
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.543417, 7.5711023e-06, 17.952085)
 
 [node name="pothos" parent="furniture/attrium" unique_id=598657276 instance=ExtResource("16_j8s5m")]
-transform = Transform3D(0.72976863, 0, -0.6836942, 0, 1, 0, 0.6836942, 0, 0.72976863, -17.728733, 1.4058876, 3.6045716)
+transform = Transform3D(0.72976863, 0, -0.6836942, 0, 1, 0, 0.6836942, 0, 0.72976863, -17.728733, 1.3228369, 3.6045716)
 
 [node name="Node3D4" parent="furniture/attrium" unique_id=19005477 instance=ExtResource("17_v1yd2")]
 transform = Transform3D(0.83447295, 0, 0.5510489, 0, 1, 0, -0.5510489, 0, 0.83447295, -12.894912, 7.5711023e-06, 10.753297)
@@ -249,7 +249,7 @@ mesh = SubResource("PlaneMesh_1inii")
 surface_material_override/0 = SubResource("StandardMaterial3D_o3qdw")
 
 [node name="sketchbook" parent="furniture/attrium" unique_id=169987685 instance=ExtResource("24_oqhw3")]
-transform = Transform3D(-0.49972787, 0, -0.86618245, 0, 1, 0, 0.86618245, 0, -0.49972787, -14.869717, 1.9198987, 9.211098)
+transform = Transform3D(-0.49972787, 0, -0.86618245, 0, 1, 0, 0.86618245, 0, -0.49972787, -14.869717, 1.836848, 9.211098)
 
 [node name="Node3D" type="Node3D" parent="furniture/attrium" unique_id=248760399]
 
@@ -316,11 +316,11 @@ ball_color = 2
 
 [node name="kitchen" parent="furniture" unique_id=655617701 instance=ExtResource("40_w45ix")]
 
+[node name="lift" parent="furniture" unique_id=1302660007 instance=ExtResource("44_y2yuj")]
+
 [node name="id_card_mike" parent="." unique_id=429126612 instance=ExtResource("41_xb65v")]
 transform = Transform3D(0.9752691, 0, -0.22102086, 0, 1, 0, 0.22102086, 0, 0.9752691, -28.309464, 1.5742306, 1.1371678)
 card_display_name = "Mike ID Card"
 card_item_id = "card_mike_l1"
 access_level = 2
 card_face_texture = ExtResource("42_1hqp2")
-
-[node name="lift" parent="." unique_id=1302660007 instance=ExtResource("44_y2yuj")]
