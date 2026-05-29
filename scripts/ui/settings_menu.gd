@@ -256,7 +256,7 @@ func _init_seg_styles() -> void:
 	_seg_style_right_unsel = _make_seg_style(unsel_bg, 0, 4, 4, 0)
 
 
-func _make_seg_style(bg: Color, tl: int, tr: int, br: int, bl: int) -> StyleBoxFlat:
+func _make_seg_style(bg: Color, tl: int, top_right: int, br: int, bl: int) -> StyleBoxFlat:
 	var s := StyleBoxFlat.new()
 	s.bg_color = bg
 	s.border_color = bg
@@ -265,7 +265,7 @@ func _make_seg_style(bg: Color, tl: int, tr: int, br: int, bl: int) -> StyleBoxF
 	s.border_width_right = 2
 	s.border_width_bottom = 2
 	s.corner_radius_top_left = tl
-	s.corner_radius_top_right = tr
+	s.corner_radius_top_right = top_right
 	s.corner_radius_bottom_right = br
 	s.corner_radius_bottom_left = bl
 	return s

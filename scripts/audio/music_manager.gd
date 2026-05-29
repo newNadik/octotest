@@ -181,9 +181,9 @@ func _resolve_fade(fade_seconds: float, fallback: float) -> float:
 	return fallback if fade_seconds < 0.0 else maxf(0.0, fade_seconds)
 
 
-func _new_player(name: String) -> AudioStreamPlayer:
+func _new_player(player_name: String) -> AudioStreamPlayer:
 	var player := AudioStreamPlayer.new()
-	player.name = name
+	player.name = player_name
 	player.bus = _resolve_music_bus_name()
 	player.volume_db = volume_db
 	add_child(player)

@@ -208,10 +208,10 @@ func _close_settings_overlay() -> void:
 	settings_button.grab_focus()
 
 
-func _set_base_menu_visible(visible: bool) -> void:
-	main_vbox.visible = visible
-	display_fx.visible = visible
-	sticker_container.visible = visible
+func _set_base_menu_visible(visible_flag: bool) -> void:
+	main_vbox.visible = visible_flag
+	display_fx.visible = visible_flag
+	sticker_container.visible = visible_flag
 
 
 func _collect_slides() -> void:
@@ -272,7 +272,7 @@ func _menu_request(path: String, label: String, use_sub_threads: bool = false) -
 
 func _start_menu_room_preload() -> void:
 	print("[MenuPreload] %s Starting background preload" % _ms())
-	var is_new_game: bool = not _has_saved_game()
+	var _is_new_game: bool = not _has_saved_game()
 
 	# main.tscn and player.tscn are intentionally NOT preloaded here.
 	# The loading screen loads main.tscn exclusively (no thread competition) which is faster.
@@ -363,13 +363,13 @@ func _build_dots(active_index: int, total: int) -> String:
 func _process(delta: float) -> void:
 	if _display_material == null:
 		return
-	var size: Vector2 = display_fx.size
-	if size.x <= 0.0 or size.y <= 0.0:
+	var display_size: Vector2 = display_fx.size
+	if display_size.x <= 0.0 or display_size.y <= 0.0:
 		return
 	var mouse_local: Vector2 = display_fx.get_local_mouse_position()
 	var normalized := Vector2(
-		clampf(mouse_local.x / size.x, 0.0, 1.0),
-		clampf(mouse_local.y / size.y, 0.0, 1.0)
+		clampf(mouse_local.x / display_size.x, 0.0, 1.0),
+		clampf(mouse_local.y / display_size.y, 0.0, 1.0)
 	) - Vector2(0.5, 0.5)
 	var target_offset := Vector2(
 		-normalized.x * DISPLAY_REFLECTION_MAX_OFFSET.x,

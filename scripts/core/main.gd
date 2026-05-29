@@ -405,10 +405,10 @@ func _add_layer_node(room_name: String, layer: int, inst: Node3D, path: String) 
 	inst.name = StringName(room_name if layer == 0 else path.get_file().get_basename())
 	_get_room_parent(room_name).add_child(inst)
 	_apply_room_light_isolation(inst, room_name)
+	_apply_exit_code_to_scene(inst)
 	if layer == 0:
 		_register_room_nav_regions(room_name, inst)
 		_ensure_hub_seam_light()
-		_apply_exit_code_to_scene(inst)
 		_connect_autosave_doors()
 	_apply_pending_world_state()
 	if _interaction_controller != null and _interaction_controller.has_method("retry_pending_restores"):

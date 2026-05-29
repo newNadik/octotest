@@ -152,12 +152,12 @@ func can_interact_from(player_position: Vector3) -> bool:
 
 
 func get_hold_transform() -> Transform3D:
-	var basis := Basis.from_euler(Vector3(
+	var hold_basis := Basis.from_euler(Vector3(
 		deg_to_rad(hold_rotation_degrees.x),
 		deg_to_rad(hold_rotation_degrees.y),
 		deg_to_rad(hold_rotation_degrees.z)
 	))
-	return Transform3D(basis, hold_offset)
+	return Transform3D(hold_basis, hold_offset)
 
 
 func get_pickup_root() -> Node3D:
@@ -366,13 +366,13 @@ func _collect_reveal_nodes(node: Node, seen_node_ids: Dictionary) -> void:
 		_collect_reveal_nodes(child, seen_node_ids)
 
 
-func _apply_reveal_highlight_state(is_visible: bool) -> void:
+func _apply_reveal_highlight_state(visible_flag: bool) -> void:
 	for visual_node in _highlight_reveal_nodes:
 		if visual_node == null:
 			continue
 		var node_id := visual_node.get_instance_id()
 		var original_visible := bool(_highlight_reveal_original_visibility.get(node_id, visual_node.visible))
-		visual_node.visible = is_visible or original_visible
+		visual_node.visible = visible_flag or original_visible
 
 
 func _build_outline_next_pass_materials() -> void:
@@ -661,8 +661,8 @@ func _make_indicator_dot_material(dot_texture: Texture2D) -> StandardMaterial3D:
 	return material
 
 
-func set_indicator_visible(is_visible: bool) -> void:
-	show_indicator = is_visible
+func set_indicator_visible(visible_flag: bool) -> void:
+	show_indicator = visible_flag
 	_refresh_indicator_visuals()
 
 
@@ -734,13 +734,13 @@ func _deserialize_transform(data: Variant):
 	var values := data as Array
 	if values.size() != 12:
 		return null
-	var basis := Basis(
+	var parsed_basis := Basis(
 		Vector3(float(values[0]), float(values[1]), float(values[2])),
 		Vector3(float(values[3]), float(values[4]), float(values[5])),
 		Vector3(float(values[6]), float(values[7]), float(values[8]))
 	)
 	var origin := Vector3(float(values[9]), float(values[10]), float(values[11]))
-	return Transform3D(basis, origin)
+	return Transform3D(parsed_basis, origin)
 
 
 func _restore_saved_held_item_as_dropped() -> void:
@@ -846,8 +846,8 @@ func _collect_other_pickup_positions() -> Array[Vector3]:
 
 func _is_restore_position_clear(candidate: Vector3, occupied_positions: Array[Vector3], min_spacing: float) -> bool:
 	var min_spacing_sq = min_spacing * min_spacing
-	for position in occupied_positions:
-		var delta = candidate - position
+	for occupied_pos in occupied_positions:
+		var delta = candidate - occupied_pos
 		delta.y = 0.0
 		if delta.length_squared() < min_spacing_sq:
 			return false
