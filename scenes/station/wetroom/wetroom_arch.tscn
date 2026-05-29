@@ -122,6 +122,12 @@ size = Vector3(8.673329, 1, 6.9594727)
 [sub_resource type="BoxShape3D" id="BoxShape3D_yxy63"]
 size = Vector3(5.3601046, 1, 4.3824463)
 
+[sub_resource type="BoxOccluder3D" id="BoxOccluder3D_g7ogh"]
+size = Vector3(5.66996, 6.5673256, 0.4039991)
+
+[sub_resource type="BoxOccluder3D" id="BoxOccluder3D_4e8f6"]
+size = Vector3(4.2138176, 6.5673256, 0.4039991)
+
 [node name="wetroom" type="Node3D" unique_id=2133782979 node_paths=PackedStringArray("light_switch", "ceiling_mesh", "lamp_lights")]
 script = ExtResource("1_uuxde")
 light_switch = NodePath("lights/LightSwitch")
@@ -200,6 +206,22 @@ shape = SubResource("BoxShape3D_kuayl")
 [node name="CollisionShape3D4" type="CollisionShape3D" parent="NavigationRegion3D/StaticBody3D" unique_id=1099668457]
 transform = Transform3D(0.99999994, 0, 0, 0, 1, 0, 0, 0, 0.99999994, 8.93835, -0.5, 27.923853)
 shape = SubResource("BoxShape3D_yxy63")
+
+[node name="OccluderInstance3D" type="OccluderInstance3D" parent="NavigationRegion3D/StaticBody3D" unique_id=251882327]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.89241, 3.2448144, 19.203257)
+occluder = SubResource("BoxOccluder3D_g7ogh")
+
+[node name="OccluderInstance3D2" type="OccluderInstance3D" parent="NavigationRegion3D/StaticBody3D" unique_id=254391387]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.917945, 3.2448144, 19.203257)
+occluder = SubResource("BoxOccluder3D_g7ogh")
+
+[node name="OccluderInstance3D3" type="OccluderInstance3D" parent="NavigationRegion3D/StaticBody3D" unique_id=1814213008]
+transform = Transform3D(0.39318785, 0, -0.91945815, 0, 1, 0, 0.91945815, 0, 0.39318785, 8.16789, 2.6734285, 21.399462)
+occluder = SubResource("BoxOccluder3D_4e8f6")
+
+[node name="OccluderInstance3D4" type="OccluderInstance3D" parent="NavigationRegion3D/StaticBody3D" unique_id=2005348959]
+transform = Transform3D(0.7205511, 0, 0.6934019, 0, 1, 0, -0.6934019, 0, 0.7205511, 7.349469, 2.6734285, 24.67315)
+occluder = SubResource("BoxOccluder3D_4e8f6")
 
 [node name="NavigationLink3D" type="NavigationLink3D" parent="NavigationRegion3D" unique_id=404373225]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.461985, 0.54339147, 20.258965)
