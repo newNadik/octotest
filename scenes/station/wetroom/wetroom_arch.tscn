@@ -8,6 +8,11 @@
 [ext_resource type="Material" uid="uid://bcdbcoirawpmg" path="res://assets/materials/plain_white.tres" id="5_05nb4"]
 [ext_resource type="PackedScene" uid="uid://b7vd8cvq5kxdt" path="res://scenes/station/items/light_switch.tscn" id="6_328kc"]
 [ext_resource type="PackedScene" uid="uid://d0tq5lhvb74vc" path="res://scenes/station/interior/cctv_cam.tscn" id="7_jo6uv"]
+[ext_resource type="PackedScene" uid="uid://p7pol1cjt5hs" path="res://assets/models/items/wetroom/drain.glb" id="9_i1xjc"]
+[ext_resource type="PackedScene" uid="uid://d12mw6ayih1in" path="res://assets/models/items/wetroom/vent.glb" id="10_mf4nf"]
+[ext_resource type="PackedScene" uid="uid://bwx4cmp7n3qhv" path="res://scenes/interactables/document_item.tscn" id="11_g7ogh"]
+[ext_resource type="Texture2D" uid="uid://bwyf121h826t6" path="res://assets/textures/documents/dive_safety.png" id="12_4e8f6"]
+[ext_resource type="Texture2D" uid="uid://cx26conw4y4pc" path="res://assets/textures/documents/dive_safety_ua.png" id="13_kuayl"]
 
 [sub_resource type="NavigationMesh" id="NavigationMesh_4e8f6"]
 vertices = PackedVector3Array(16.94945, 0.5, 21.409021, 17.44945, 0.5, 21.409021, 16.19945, 0.5, 20.909021, 14.94945, 0.5, 25.409021, 15.44945, 0.5, 24.659021, 14.69945, 0.5, 24.159021, 12.94945, 0.5, 24.909021, 11.44945, 0.5, 25.159021, 11.94945, 0.5, 26.409021, 12.69945, 0.5, 25.909021, 14.69945, 0.5, 23.159021, 13.44945, 0.5, 20.909021, 10.44945, 0.5, 20.909021, 10.94945, 0.5, 23.659021, 9.69945, 0.5, 24.659021, 15.69945, 0.5, 22.909021, 16.19945, 0.5, 19.409021, 13.69945, 0.5, 19.409021, 15.69945, 2, 24.659021, 15.69945, 2, 24.159021, 15.19945, 2, 24.159021, 13.94945, 2, 25.409021, 14.44945, 2, 25.909021, 9.19945, 0.5, 26.659021, 9.44945, 0.5, 24.909021, 8.44945, 0.5, 24.909021, 7.6994495, 0.5, 25.659021, 7.6994495, 0.5, 29.159021, 10.44945, 0.5, 29.159021)
@@ -169,7 +174,6 @@ surface_material_override/0 = ExtResource("3_uooyi")
 
 [node name="RoofWetroom" type="MeshInstance3D" parent="NavigationRegion3D/StaticBody3D" unique_id=850791184]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.747784, -8.88325, 20.900995)
-visible = false
 mesh = SubResource("ArrayMesh_5w8w2")
 surface_material_override/0 = ExtResource("5_05nb4")
 
@@ -204,3 +208,39 @@ start_position = Vector3(0.0018997192, 0.024113417, -1.9405231)
 [node name="NavigationLink3D2" type="NavigationLink3D" parent="NavigationRegion3D" unique_id=1695112915]
 transform = Transform3D(-0.5310585, 4.2412978e-08, 0.84733516, -3.3902808e-08, 1, -7.130278e-08, -0.84733516, -6.6592996e-08, -0.5310585, 10.932675, 0.54339147, 24.373241)
 start_position = Vector3(0.082969666, 0.024113178, -2.5877175)
+
+[node name="Sketchfab_Scene" parent="." unique_id=2038701776 instance=ExtResource("9_i1xjc")]
+transform = Transform3D(-1.3113417e-10, 0, 0.0030000003, 0, 0.003, 0, -0.0030000003, 0, -1.3113417e-10, 8.471071, 0.007, 27.495148)
+
+[node name="Sketchfab_Scene2" parent="." unique_id=1614082632 instance=ExtResource("9_i1xjc")]
+transform = Transform3D(0.0030000003, 0, 0, 0, 0.0029999996, 0, 0, 0, 0.0030000003, 12.494788, 0.007, 24.479557)
+
+[node name="Sketchfab_Scene3" parent="." unique_id=1996171372 instance=ExtResource("10_mf4nf")]
+transform = Transform3D(-0.4048544, 0, 0.91438127, 0, 1, 0, -0.91438127, 0, -0.4048544, 10.896587, 0.1, 28.392061)
+
+[node name="Sketchfab_Scene4" parent="." unique_id=385688998 instance=ExtResource("10_mf4nf")]
+transform = Transform3D(-0.4048544, 0, 0.91438127, 0, 1, 0, -0.91438127, 0, -0.4048544, 10.215049, 0.1, 26.838434)
+
+[node name="Sketchfab_Scene5" parent="." unique_id=284601736 instance=ExtResource("10_mf4nf")]
+transform = Transform3D(-0.69792795, 0, -0.7161679, 0, 1, 0, 0.7161679, 0, -0.69792795, 8.200976, 0.1, 24.32982)
+
+[node name="Sketchfab_Scene6" parent="." unique_id=711605306 instance=ExtResource("10_mf4nf")]
+transform = Transform3D(-0.69792795, 0, -0.7161679, 0, 1, 0, 0.7161679, 0, -0.69792795, 7.045928, 0.1, 25.479895)
+
+[node name="Sketchfab_Scene7" parent="." unique_id=1782698273 instance=ExtResource("10_mf4nf")]
+transform = Transform3D(-4.3711385e-08, 0, -0.99999994, 0, 1, 0, 0.99999994, 0, -4.3711385e-08, 6.1405745, 0.1, 27.13125)
+
+[node name="Sketchfab_Scene8" parent="." unique_id=1661058650 instance=ExtResource("10_mf4nf")]
+transform = Transform3D(-4.3711385e-08, 0, -0.99999994, 0, 1, 0, 0.99999994, 0, -4.3711385e-08, 6.1405745, 0.1, 28.87772)
+
+[node name="DocumentItem" parent="." unique_id=-1447463677 instance=ExtResource("11_g7ogh")]
+transform = Transform3D(-0.7086107, 0, -0.70559955, 0, 1, 0, 0.70559955, 0, -0.7086107, 13.373314, 3.5, 27.838987)
+document_size = 1
+document_texture = ExtResource("12_4e8f6")
+document_texture_ua = ExtResource("13_kuayl")
+
+[node name="DocumentItem2" parent="." unique_id=1865230864 instance=ExtResource("11_g7ogh")]
+transform = Transform3D(0.40084478, 0, -0.916146, 0, 1, 0, 0.916146, 0, 0.40084478, 10.534681, 3.5, 27.586203)
+document_size = 1
+document_texture = ExtResource("12_4e8f6")
+document_texture_ua = ExtResource("13_kuayl")

@@ -185,6 +185,10 @@ Source: [Flaticon](https://www.flaticon.com/)
 - "Regular ole Clipboard" (https://skfb.ly/orZJz) by Maggatron is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
 - "Metal space crate" (https://skfb.ly/o7yNU) by Bryan Okafor - Ogu is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
 - "Hanger" (https://skfb.ly/UXVK) by stevenearnest is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+- "Key Pad 2" (https://skfb.ly/oC8WU) by Ncn is licensed under Creative Commons Attribution-ShareAlike (http://creativecommons.org/licenses/by-sa/4.0/).
+- "Bulkhead Lamp (Game Ready)" (https://skfb.ly/6WSGU) by andersonmat is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+- "Model of Cytochrome P450 / Oxygen / Drug Complex" (https://skfb.ly/6Touy) by MedChemProf is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+- "Mechanical Gloves" (https://skfb.ly/6wZZ9) by rubiez is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/)
 - 
 
 ## Textures

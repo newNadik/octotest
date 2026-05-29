@@ -112,20 +112,15 @@
 ### Wet Room
 - [x] Dive suit rack / hangers
 - [x] SCUBA tanks on wall rack
-- [ ] Weight belts + BCD storage
 - [x] Dive gear table (fins, masks)
-- [ ] Freshwater rinse shower
-- [ ] Drain grate (floor)
-- [ ] Waterproof lockers
-- [ ] Emergency oxygen kit
-- [ ] Log board (dive records)
+- [x] Drain grate (floor)
+- [x] Log board (dive records)
 - [x] Fire extinguisher
 - [x] Evacuation plan (wall-mounted)
-- [ ] Dive logbook + pen (on table)
-- [ ] Underwater torch / flashlight
+- [x] Dive logbook + pen (on table)
+- [x] Underwater torch / flashlight
 - [ ] Wetsuit hood + gloves (on hook)
 - [x] Towel stack (shelf)
-- [ ] Conditions board (water temp, visibility, current depth)
 - [x] Wall clock
 - [x] First aid kit (wall-mounted)
 - [ ] Hatch code pad (separate from door card reader)
@@ -174,7 +169,7 @@
 - [x] Evacuation plan (wall-mounted)
 - [x] Torch / flashlight
 - [x] Keypad / card reader on door
-- [ ] CCTV camera
+- [x] CCTV camera
 - [x] NPC - mechanic 
 
 ### Quarters
