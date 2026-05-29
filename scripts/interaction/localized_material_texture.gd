@@ -18,7 +18,11 @@ var _last_locale := ""
 func _ready() -> void:
 	_last_locale = TranslationServer.get_locale()
 	_apply_texture()
-	set_process(true)
+	if Engine.is_editor_hint():
+		set_process(true)
+	else:
+		var _screen_enabler := VisibleOnScreenEnabler3D.new()
+		add_child(_screen_enabler)
 
 
 func _process(_delta: float) -> void:

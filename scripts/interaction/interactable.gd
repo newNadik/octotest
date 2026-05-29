@@ -132,7 +132,8 @@ func _ready() -> void:
 	_set_visual_state(VisualState.IDLE)
 	_ensure_sfx_player()
 	_rng.randomize()
-	set_process(true)
+	var _screen_enabler := VisibleOnScreenEnabler3D.new()
+	add_child(_screen_enabler)
 
 
 func _process(delta: float) -> void:

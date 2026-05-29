@@ -33,3 +33,7 @@ shadow_normal_bias = 0.35
 shadow_blur = 0.6
 spot_range = 22.0
 spot_angle = 40.0
+
+[node name="VisibleOnScreenEnabler3D" type="VisibleOnScreenEnabler3D" parent="." unique_id=1422508224]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5179253, -5.035849, 2.4438667)
+aabb = AABB(-10, -10, -10, 15, 15, 15)

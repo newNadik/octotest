@@ -111,6 +111,9 @@ func _ready() -> void:
 	if randomize_models_from_folder:
 		fish_scene_pool = _collect_scene_pool(fish_models_folder)
 	_schedule_next_school(0.2)
+	var _screen_enabler := VisibleOnScreenEnabler3D.new()
+	_screen_enabler.aabb = AABB(school_center - school_bounds * 0.5, school_bounds)
+	add_child(_screen_enabler)
 
 
 func _should_disable_for_platform() -> bool:
