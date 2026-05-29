@@ -4,7 +4,7 @@
 resource_name = "Glass"
 transparency = 4
 cull_mode = 2
-albedo_color = Color(0.78, 0.94, 0.97, 0.08)
+albedo_color = Color(0.5176471, 0.85882354, 0.9137255, 0.16470589)
 roughness = 0.04
 clearcoat_enabled = true
 clearcoat = 0.85

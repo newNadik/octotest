@@ -2,7 +2,7 @@ extends Node3D
 
 
 const CLICK_TARGET_COLLISION_MASK := (1 << 0) | (1 << 1) | (1 << 5)
-const CAMERA_OBSTACLE_COLLISION_MASK := (1 << 0) | (1 << 1) | (1 << 4)
+const CAMERA_OBSTACLE_COLLISION_MASK := (1 << 0) | (1 << 1) | (1 << 5) | (1 << 6)
 const MAIN_MENU_SCENE_PATH := "res://scenes/main_menu.tscn"
 const SETTINGS_MENU_SCENE := preload("res://scenes/ui/settings_menu.tscn")
 const InteractionControllerScript = preload("res://scripts/interaction/interaction_controller.gd")

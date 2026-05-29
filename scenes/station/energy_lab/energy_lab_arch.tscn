@@ -181,7 +181,7 @@ lamp_lights = [NodePath("lights/OmniLight3D")]
 navigation_mesh = SubResource("NavigationMesh_pe3mt")
 
 [node name="StaticBody3D" type="StaticBody3D" parent="NavigationRegion3D" unique_id=1093410393]
-collision_layer = 19
+collision_layer = 3
 collision_mask = 0
 
 [node name="FloorEnergyLab" type="MeshInstance3D" parent="NavigationRegion3D/StaticBody3D" unique_id=1813596186]
