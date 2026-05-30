@@ -13,6 +13,7 @@
 [ext_resource type="PackedScene" uid="uid://bwx4cmp7n3qhv" path="res://scenes/interactables/document_item.tscn" id="11_g7ogh"]
 [ext_resource type="Texture2D" uid="uid://bwyf121h826t6" path="res://assets/textures/documents/dive_safety.png" id="12_4e8f6"]
 [ext_resource type="Texture2D" uid="uid://cx26conw4y4pc" path="res://assets/textures/documents/dive_safety_ua.png" id="13_kuayl"]
+[ext_resource type="PackedScene" uid="uid://b3wqhjabuj43p" path="res://scenes/station/interior/numpad.tscn" id="14_4e8f6"]
 
 [sub_resource type="NavigationMesh" id="NavigationMesh_4e8f6"]
 vertices = PackedVector3Array(16.94945, 0.5, 21.409021, 17.44945, 0.5, 21.409021, 16.19945, 0.5, 20.909021, 14.94945, 0.5, 25.409021, 15.44945, 0.5, 24.659021, 14.69945, 0.5, 24.159021, 12.94945, 0.5, 24.909021, 11.44945, 0.5, 25.159021, 11.94945, 0.5, 26.409021, 12.69945, 0.5, 25.909021, 14.69945, 0.5, 23.159021, 13.44945, 0.5, 20.909021, 10.44945, 0.5, 20.909021, 10.94945, 0.5, 23.659021, 9.69945, 0.5, 24.659021, 15.69945, 0.5, 22.909021, 16.19945, 0.5, 19.409021, 13.69945, 0.5, 19.409021, 15.69945, 2, 24.659021, 15.69945, 2, 24.159021, 15.19945, 2, 24.159021, 13.94945, 2, 25.409021, 14.44945, 2, 25.909021, 9.19945, 0.5, 26.659021, 9.44945, 0.5, 24.909021, 8.44945, 0.5, 24.909021, 7.6994495, 0.5, 25.659021, 7.6994495, 0.5, 29.159021, 10.44945, 0.5, 29.159021)
@@ -266,3 +267,6 @@ transform = Transform3D(0.40084478, 0, -0.916146, 0, 1, 0, 0.916146, 0, 0.400844
 document_size = 1
 document_texture = ExtResource("12_4e8f6")
 document_texture_ua = ExtResource("13_kuayl")
+
+[node name="numpad" parent="." unique_id=1916992839 instance=ExtResource("14_4e8f6")]
+transform = Transform3D(-1, 8.742278e-08, 0, 3.821371e-15, 4.371139e-08, -1, -8.742278e-08, -1, -4.371139e-08, 10.084131, 1.6998894, 29.74002)
