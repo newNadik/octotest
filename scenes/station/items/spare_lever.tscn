@@ -1,5 +1,6 @@
 [gd_scene format=4 uid="uid://dnsv21frw6rbx"]
 
+[ext_resource type="Script" uid="uid://bt8vvmy3m63u7" path="res://scripts/interaction/interactable.gd" id="0_intbl"]
 [ext_resource type="Material" uid="uid://c5vqiags15sna" path="res://assets/materials/shelves_metal.tres" id="1_7l1s1"]
 [ext_resource type="Material" uid="uid://dcp1qimo3x5pf" path="res://assets/materials/model_blue.tres" id="2_828q7"]
 
@@ -105,6 +106,9 @@ _surfaces = [{
 blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_l2qup")
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_spare"]
+size = Vector3(0.5, 0.20064697, 0.63997805)
+
 [node name="spare_lever" type="Node3D" unique_id=1405863011]
 transform = Transform3D(1, 0, 0, 0, 0.99999994, 0, 0, 0, 0.99999994, 0, 0, 0)
 
@@ -124,3 +128,19 @@ mesh = SubResource("ArrayMesh_g2l61")
 transform = Transform3D(-0.9169191, 0, 0, 0, 3.6636584, 0, 0, 0, 3.6636584, 0, -0.0001500994, -0.5078949)
 mesh = SubResource("ArrayMesh_33g7w")
 surface_material_override/0 = ExtResource("2_828q7")
+
+[node name="Interactable" type="Area3D" parent="." unique_id=423129937]
+collision_layer = 8
+collision_mask = 0
+script = ExtResource("0_intbl")
+interaction_type = 1
+display_name = "Spare Lever"
+prompt_action = "Pick up"
+requires_line_of_sight = false
+item_id = "spare_lever"
+hold_offset = Vector3(0, -0.5, -0.3)
+hold_rotation_degrees = Vector3(90, 0, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Interactable" unique_id=1023779049]
+transform = Transform3D(1, 0, 0, 0, 0.99999374, 0, 0, 0, 0.99999374, 0, 0.06386078, -0.20194711)
+shape = SubResource("BoxShape3D_spare")

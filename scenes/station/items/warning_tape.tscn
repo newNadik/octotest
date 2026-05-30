@@ -1,0 +1,18 @@
+[gd_scene format=3 uid="uid://tepltc7qm54b"]
+
+[ext_resource type="Texture2D" uid="uid://nn3orh8pbrt7" path="res://assets/models/items/wetroom/warning_tape-2.png" id="1_4is06"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_vnhc6"]
+size = Vector2(0.4, 0.7)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_yalvp"]
+transparency = 1
+albedo_texture = ExtResource("1_4is06")
+uv1_world_triplanar = true
+texture_filter = 0
+
+[node name="warning_tape" type="Node3D" unique_id=49374677]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1910259900]
+mesh = SubResource("PlaneMesh_vnhc6")
+surface_material_override/0 = SubResource("StandardMaterial3D_yalvp")

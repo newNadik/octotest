@@ -29,6 +29,8 @@
 [ext_resource type="PackedScene" uid="uid://dpn3r7hpau3iy" path="res://scenes/station/items/crate.tscn" id="26_12oxw"]
 [ext_resource type="Texture2D" uid="uid://drw8m8b8ijnuk" path="res://assets/textures/documents/maintenance_log_ua.png" id="26_jhh3n"]
 [ext_resource type="PackedScene" uid="uid://fsb7v5nb71ac" path="res://assets/models/items/pen_holder.glb" id="29_4aqui"]
+[ext_resource type="PackedScene" uid="uid://dnsv21frw6rbx" path="res://scenes/station/items/spare_lever.tscn" id="30_e14r2"]
+[ext_resource type="PackedScene" uid="uid://cdrqcmunpx0an" path="res://assets/models/items/wetroom/warning_tape.glb" id="31_8fstu"]
 
 [node name="SystemsDetails" type="Node3D" unique_id=1373505699]
 
@@ -173,6 +175,12 @@ ball_color = 6
 
 [node name="crate" parent="items" unique_id=1676126179 instance=ExtResource("26_12oxw")]
 transform = Transform3D(0.46239933, 0, 0.19022858, 0, 0.5, 0, -0.19022858, 0, 0.46239933, -9.145743, 0.45322037, -20.347778)
+
+[node name="spare_lever" parent="items" unique_id=1405863011 instance=ExtResource("30_e14r2")]
+transform = Transform3D(0.90604204, 0, -0.4231876, 0, 0.9999999, 0, 0.4231876, 0, 0.9060419, -1.9035525, 1.5742368, -20.139223)
+
+[node name="warning_tape" parent="items" unique_id=2037887490 instance=ExtResource("31_8fstu")]
+transform = Transform3D(3.5, 0, 0, 0, 3.5, 0, 0, 0, 3.5, -8.190846, 1.5444428, -18.03016)
 
 [node name="Sketchfab_Scene13" parent="items" unique_id=1486896194 instance=ExtResource("29_4aqui")]
 transform = Transform3D(0.002, 0, 0, 0, 0.002, 0, 0, 0, 0.002, -1.4055842, 1.5574393, -20.055515)

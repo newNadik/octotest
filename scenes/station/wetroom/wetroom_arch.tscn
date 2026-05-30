@@ -17,6 +17,9 @@
 [ext_resource type="PackedScene" uid="uid://b3wqhjabuj43p" path="res://scenes/station/interior/numpad.tscn" id="14_4e8f6"]
 [ext_resource type="PackedScene" uid="uid://v64vgtuud03i" path="res://scenes/station/interior/bulkhead_lamp.tscn" id="16_yxy63"]
 [ext_resource type="Script" uid="uid://udr0kshr1tmk" path="res://scripts/interaction/dive_lock.gd" id="17_rct2j"]
+[ext_resource type="Texture2D" uid="uid://pomip2au73rs" path="res://assets/textures/documents/divelock_status.png" id="18_da2do"]
+[ext_resource type="Texture2D" uid="uid://bgqcich5gew6k" path="res://assets/textures/documents/divelock_status_ua.png" id="19_tmc1p"]
+[ext_resource type="PackedScene" uid="uid://tepltc7qm54b" path="res://scenes/station/items/warning_tape.tscn" id="20_tmc1p"]
 
 [sub_resource type="NavigationMesh" id="NavigationMesh_4e8f6"]
 vertices = PackedVector3Array(16.94945, 0.5, 21.409021, 17.44945, 0.5, 21.409021, 16.19945, 0.5, 20.909021, 14.94945, 0.5, 25.409021, 15.44945, 0.5, 24.659021, 14.69945, 0.5, 24.159021, 12.94945, 0.5, 24.909021, 11.44945, 0.5, 25.159021, 11.94945, 0.5, 26.409021, 12.69945, 0.5, 25.909021, 14.69945, 0.5, 23.159021, 13.44945, 0.5, 20.909021, 10.44945, 0.5, 20.909021, 10.94945, 0.5, 23.659021, 9.69945, 0.5, 24.659021, 15.69945, 0.5, 22.909021, 16.19945, 0.5, 19.409021, 13.69945, 0.5, 19.409021, 15.69945, 2, 24.659021, 15.69945, 2, 24.159021, 15.19945, 2, 24.159021, 13.94945, 2, 25.409021, 14.44945, 2, 25.909021, 9.19945, 0.5, 26.659021, 9.44945, 0.5, 24.909021, 8.44945, 0.5, 24.909021, 7.6994495, 0.5, 25.659021, 7.6994495, 0.5, 29.159021, 10.44945, 0.5, 29.159021)
@@ -287,3 +290,12 @@ lever_path = NodePath("../lever")
 lamp_path = NodePath("../lights/bulkhead_lamp")
 inner_door_path = NodePath("../DoorSingle2")
 outer_door_path = NodePath("../NavigationRegion3D/StaticBody3D/DoorSingle")
+
+[node name="DocumentItem3" parent="." unique_id=502282781 instance=ExtResource("11_g7ogh")]
+transform = Transform3D(0.49676836, 0, 0.4931746, 0, 0.7, 0, -0.4931746, 0, 0.49676836, 7.4918327, 2.5921912, 25.032993)
+document_size = 1
+document_texture = ExtResource("18_da2do")
+document_texture_ua = ExtResource("19_tmc1p")
+
+[node name="warning_tape" parent="." unique_id=49374677 instance=ExtResource("20_tmc1p")]
+transform = Transform3D(2, 0, 0, 0, -8.742278e-08, 2, 0, -2, -8.742278e-08, 7.5952353, 2.3183239, 29.744131)

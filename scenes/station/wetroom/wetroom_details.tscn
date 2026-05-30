@@ -23,6 +23,9 @@
 [ext_resource type="PackedScene" uid="uid://3di56riavh4m" path="res://scenes/station/items/toolbox.tscn" id="16_clpl4"]
 [ext_resource type="PackedScene" uid="uid://dkhpe8th3rq8c" path="res://assets/models/items/cable_drum.glb" id="20_1lmci"]
 [ext_resource type="PackedScene" uid="uid://dmu0fnpm3ha8u" path="res://assets/models/items/safety_gloves.glb" id="23_clpl4"]
+[ext_resource type="PackedScene" uid="uid://djqg3bp5bi0fm" path="res://scenes/station/items/broken_lever.tscn" id="24_f5l2i"]
+[ext_resource type="PackedScene" uid="uid://dnsv21frw6rbx" path="res://scenes/station/items/spare_lever.tscn" id="25_26s5g"]
+[ext_resource type="PackedScene" uid="uid://cdrqcmunpx0an" path="res://assets/models/items/wetroom/warning_tape.glb" id="26_xbti6"]
 
 [node name="WetroomDetails" type="Node3D" unique_id=218061277]
 
@@ -60,6 +63,15 @@ transform = Transform3D(0.070407555, -0.18719716, 3.077612e-09, 8.74228e-09, 6.2
 
 [node name="diving_tank10" parent="items" unique_id=1263602622 instance=ExtResource("9_vjmdh")]
 transform = Transform3D(0.070407555, -0.18719716, 3.077612e-09, 8.74228e-09, 6.2456017e-16, -0.2, 0.18719716, 0.070407555, 8.18265e-09, 18.074066, 0.94178283, 19.925898)
+
+[node name="diving_tank11" parent="items" unique_id=912729834 instance=ExtResource("9_vjmdh")]
+transform = Transform3D(-0.19994299, -0.0047747903, -8.7397884e-09, 8.74228e-09, 6.2456017e-16, -0.2, 0.0047747903, -0.19994299, 2.0871194e-10, 6.3425846, 0.17717671, 29.511982)
+
+[node name="diving_tank12" parent="items" unique_id=783428806 instance=ExtResource("9_vjmdh")]
+transform = Transform3D(-0.19994299, -0.0047747903, -8.7397884e-09, 8.74228e-09, 6.2456017e-16, -0.2, 0.0047747903, -0.19994299, 2.0871194e-10, 6.711663, 0.17717671, 29.503168)
+
+[node name="diving_tank13" parent="items" unique_id=940846759 instance=ExtResource("9_vjmdh")]
+transform = Transform3D(-0.19994299, -0.0047747903, -8.7397884e-09, 8.74228e-09, 6.2456017e-16, -0.2, 0.0047747903, -0.19994299, 2.0871194e-10, 6.521572, 0.48088753, 29.507708)
 
 [node name="cardbox_2" parent="items" unique_id=1669699599 instance=ExtResource("10_ss1lh")]
 transform = Transform3D(0.017539632, 0, 0.99984616, 0, 1, 0, -0.99984616, 0, 0.017539632, 18.75344, 2.9496834, 19.93984)
@@ -123,10 +135,10 @@ ball_color = 7
 transform = Transform3D(-6.0398313e-09, 1.2272892e-08, 0.080000006, -6.9938224e-09, -0.07999999, 1.2272894e-08, 0.080000006, -6.99382e-09, 6.0398326e-09, 17.399023, 2.2904124, 19.96792)
 
 [node name="flashlight3" parent="items" unique_id=528292116 instance=ExtResource("9_16g2j")]
-transform = Transform3D(-6.0398313e-09, 1.2272892e-08, 0.080000006, -6.9938224e-09, -0.07999999, 1.2272894e-08, 0.080000006, -6.99382e-09, 6.0398326e-09, 17.708742, 2.2965803, 20.245436)
+transform = Transform3D(-6.0398313e-09, 1.2272892e-08, 0.080000006, -6.9938224e-09, -0.07999999, 1.2272894e-08, 0.080000006, -6.99382e-09, 6.0398326e-09, 17.708742, 2.2965803, 19.703535)
 
 [node name="flashlight4" parent="items" unique_id=886409463 instance=ExtResource("9_16g2j")]
-transform = Transform3D(-6.0398313e-09, 1.2272892e-08, 0.080000006, -6.9938224e-09, -0.07999999, 1.2272894e-08, 0.080000006, -6.99382e-09, 6.0398326e-09, 17.311745, 2.2924438, 20.246714)
+transform = Transform3D(-6.0398313e-09, 1.2272892e-08, 0.080000006, -6.9938224e-09, -0.07999999, 1.2272894e-08, 0.080000006, -6.99382e-09, 6.0398326e-09, 17.179783, 2.2924438, 20.246714)
 
 [node name="Sketchfab_Scene3" parent="items" unique_id=235438405 instance=ExtResource("20_1lmci")]
 transform = Transform3D(1.0000001, 0, -9.313226e-10, 0, 0.0013264939, 0.99999917, 0, -0.9999993, 0.0013265014, 20.003157, 1.802249, 20.431885)
@@ -182,3 +194,12 @@ transform = Transform3D(-3.934025e-08, 0, 0.9, 0, 0.9, 0, -0.9, 0, -3.934025e-08
 
 [node name="safety_gloves" parent="furniture" unique_id=888171105 instance=ExtResource("23_clpl4")]
 transform = Transform3D(0.19908822, 0, 0.019075342, 0, 0.19999997, 0, -0.019075342, 0, 0.19908822, 15.509, 1.5575128, 25.176256)
+
+[node name="broken_lever" parent="." unique_id=314128129 instance=ExtResource("24_f5l2i")]
+transform = Transform3D(0.9708463, 0, -0.23970279, 0, 1, 0, 0.23970279, 0, 0.9708463, 15.222655, 1.6229371, 24.541443)
+
+[node name="spare_lever" parent="." unique_id=1405863011 instance=ExtResource("25_26s5g")]
+transform = Transform3D(1, 0, 0, 0, 0.99999994, 0, 0, 0, 0.99999994, 6.638805, 0.93608356, 27.369999)
+
+[node name="warning_tape" parent="." unique_id=2037887490 instance=ExtResource("26_xbti6")]
+transform = Transform3D(3.5, 0, 0, 0, 3.5, 0, 0, 0, 3.5, 17.75032, 1.5685257, 20.25869)

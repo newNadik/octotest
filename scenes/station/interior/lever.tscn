@@ -1,5 +1,6 @@
 [gd_scene format=4 uid="uid://c03rnyk2rsoq4"]
 
+[ext_resource type="Script" uid="uid://b0r404u7bpvr" path="res://scripts/interaction/focus_target.gd" id="0_focus"]
 [ext_resource type="Script" uid="uid://bt8vvmy3m63u7" path="res://scripts/interaction/interactable.gd" id="0_intbl"]
 [ext_resource type="Script" uid="uid://buf2diyt8xpjh" path="res://scripts/interaction/lever.gd" id="0_lever"]
 [ext_resource type="Material" uid="uid://dricar528fvxi" path="res://assets/materials/plain_dark_blue.tres" id="1_er8ho"]
@@ -295,6 +296,7 @@ surface_material_override/0 = ExtResource("3_ka1p1")
 
 [node name="lever" type="Node3D" parent="Node3D" unique_id=323907822]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.12295121, 0)
+visible = false
 
 [node name="Cylinder" type="MeshInstance3D" parent="Node3D/lever" unique_id=584249935]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 0.92423594, 0, 0, 0)
@@ -352,5 +354,14 @@ shape = SubResource("BoxShape3D_5671c")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1071153480]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00390625, 0.08880615, -0.0020751953)
 shape = SubResource("BoxShape3D_5671c")
+
+[node name="FocusTarget" type="Node3D" parent="." unique_id=1807049127]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.10625845, 0)
+script = ExtResource("0_focus")
+auto_exit_on_solved = false
+focus_pitch_degrees = 0.0
+focus_zoom_start = 1.5
+focus_min_zoom = 0.0
+focus_max_zoom = 1.5
 
 [connection signal="clicked" from="Interactable" to="." method="_on_interactable_clicked"]

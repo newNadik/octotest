@@ -1,4 +1,4 @@
-extends Node3D
+extends InteractionBehavior
 class_name Lever
 
 signal lever_pulled
@@ -11,7 +11,9 @@ signal lever_pulled
 var _lever_arm: Node3D
 var _indicator: MeshInstance3D
 var _interactable
+var _focus_target: Node3D
 
+var _lever_installed := false
 var _is_down := false
 var _enabled := false
 var _pull_tween: Tween
@@ -24,32 +26,68 @@ var _mat_red: StandardMaterial3D
 
 
 func _ready() -> void:
+	add_to_group("save_state_provider")
 	_lever_arm = get_node_or_null("Node3D/lever")
-	_indicator = get_node_or_null("Node3D/indicator")
+	_indicator  = get_node_or_null("Node3D/indicator")
+	_focus_target = get_node_or_null("FocusTarget")
+
 	if interactable_path:
 		_interactable = get_node_or_null(interactable_path)
 	if _interactable == null:
 		_interactable = get_node_or_null("Interactable")
+
 	_build_indicator_materials()
+	_apply_installed_state()
 	set_enabled(false)
 	set_indicator_off()
 
 
-func _build_indicator_materials() -> void:
-	_mat_off    = _make_mat(Color(0.12, 0.12, 0.14), false)
-	_mat_blue   = _make_mat(Color(0.3,  0.6,  1.0),  true)
-	_mat_orange = _make_mat(Color(1.0,  0.55, 0.1),  true)
-	_mat_red    = _make_mat(Color(0.9,  0.15, 0.15), true)
+func _apply_installed_state() -> void:
+	if _lever_arm:
+		_lever_arm.visible = _lever_installed
+	if _interactable:
+		if _lever_installed:
+			_interactable.prompt_action = tr("Pull")
+			if _focus_target:
+				_focus_target.queue_free()
+				_focus_target = null
+		else:
+			_interactable.prompt_action = tr("Inspect")
 
 
-func _make_mat(color: Color, emissive: bool) -> StandardMaterial3D:
-	var mat := StandardMaterial3D.new()
-	mat.albedo_color = color
-	if emissive:
-		mat.emission_enabled = true
-		mat.emission = color
-		mat.emission_energy_multiplier = 2.0
-	return mat
+# --- InteractionBehavior overrides (focus mode item application) ---
+
+func can_receive_item(item) -> bool:
+	return not _lever_installed and item != null and item.item_id == "spare_lever"
+
+
+func receive_item(_item) -> bool:
+	_install_lever()
+	return true
+
+
+func should_consume_received_item(_item) -> bool:
+	return true
+
+
+func _install_lever() -> void:
+	_lever_installed = true
+	_apply_installed_state()
+
+
+# --- Save state ---
+
+func get_save_key() -> String:
+	return "lever_installed:" + str(get_path())
+
+
+func get_save_state() -> Dictionary:
+	return {"installed": _lever_installed}
+
+
+func apply_save_state(state: Dictionary) -> void:
+	_lever_installed = bool(state.get("installed", false))
+	_apply_installed_state()
 
 
 # --- Public API for controller ---
@@ -57,7 +95,7 @@ func _make_mat(color: Color, emissive: bool) -> StandardMaterial3D:
 func set_enabled(enabled: bool) -> void:
 	_enabled = enabled
 	if _interactable != null:
-		_interactable.set_interaction_enabled(enabled and not _is_down)
+		_interactable.set_interaction_enabled(_lever_installed and enabled and not _is_down)
 
 
 func return_to_up(duration: float = -1.0, auto_enable: bool = true) -> void:
@@ -95,8 +133,25 @@ func set_indicator_red_flash() -> void:
 
 # --- Internal ---
 
+func _build_indicator_materials() -> void:
+	_mat_off    = _make_mat(Color(0.12, 0.12, 0.14), false)
+	_mat_blue   = _make_mat(Color(0.3,  0.6,  1.0),  true)
+	_mat_orange = _make_mat(Color(1.0,  0.55, 0.1),  true)
+	_mat_red    = _make_mat(Color(0.9,  0.15, 0.15), true)
+
+
+func _make_mat(color: Color, emissive: bool) -> StandardMaterial3D:
+	var mat := StandardMaterial3D.new()
+	mat.albedo_color = color
+	if emissive:
+		mat.emission_enabled = true
+		mat.emission = color
+		mat.emission_energy_multiplier = 2.0
+	return mat
+
+
 func _pull_down() -> void:
-	if _lever_arm == null or _is_down or not _enabled:
+	if _lever_arm == null or _is_down or not _enabled or not _lever_installed:
 		return
 	_is_down = true
 	set_enabled(false)

@@ -2,9 +2,9 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://nn3orh8pbrt7"
-path.s3tc="res://.godot/imported/warning_tape-2.png-193734b0ae45fb1a77e9a47605d1ef72.s3tc.ctex"
-path.etc2="res://.godot/imported/warning_tape-2.png-193734b0ae45fb1a77e9a47605d1ef72.etc2.ctex"
+uid="uid://pomip2au73rs"
+path.s3tc="res://.godot/imported/divelock_status.png-93e1f9dfdc708be988bbf61e6bb1e1aa.s3tc.ctex"
+path.etc2="res://.godot/imported/divelock_status.png-93e1f9dfdc708be988bbf61e6bb1e1aa.etc2.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
@@ -12,8 +12,8 @@ metadata={
 
 [deps]
 
-source_file="res://assets/models/items/wetroom/warning_tape-2.png"
-dest_files=["res://.godot/imported/warning_tape-2.png-193734b0ae45fb1a77e9a47605d1ef72.s3tc.ctex", "res://.godot/imported/warning_tape-2.png-193734b0ae45fb1a77e9a47605d1ef72.etc2.ctex"]
+source_file="res://assets/textures/documents/divelock_status.png"
+dest_files=["res://.godot/imported/divelock_status.png-93e1f9dfdc708be988bbf61e6bb1e1aa.s3tc.ctex", "res://.godot/imported/divelock_status.png-93e1f9dfdc708be988bbf61e6bb1e1aa.etc2.ctex"]
 
 [params]
 

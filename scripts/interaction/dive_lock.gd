@@ -13,6 +13,7 @@ enum Operation { NONE, EXIT_STATION, ENTER_STATION, EMERGENCY_SEAL }
 
 @export var operation_duration: float = 10.0
 @export var seal_timeout: float = 60.0
+@export var armed_timeout: float = 60.0
 
 const ENTER_CODE := "2407"
 const SEAL_CODE := "7700"
@@ -32,6 +33,7 @@ var _outer_door: Node
 var _control_state := ControlState.STANDBY
 var _chamber_state := ChamberState.DRAINED
 var _armed_operation := Operation.NONE
+var _armed_timer: SceneTreeTimer = null
 
 
 func _ready() -> void:
@@ -77,6 +79,7 @@ func _on_input_changed() -> void:
 func _on_lever_pulled() -> void:
 	if _control_state != ControlState.ARMED:
 		return
+	_cancel_armed_timer()
 	_start_operation()
 
 
@@ -101,11 +104,27 @@ func _arm(operation: Operation) -> void:
 		Operation.EMERGENCY_SEAL:
 			_numpad.set_display_text(tr("EMRG SEAL\nPULL LEVER"))
 
+	_armed_timer = get_tree().create_timer(armed_timeout)
+	_armed_timer.timeout.connect(_on_armed_timeout)
+
 
 func _cancel_armed() -> void:
+	_cancel_armed_timer()
 	_armed_operation = Operation.NONE
 	_lever.set_enabled(false)
 	_enter_standby()
+
+
+func _cancel_armed_timer() -> void:
+	if _armed_timer != null:
+		if _armed_timer.timeout.is_connected(_on_armed_timeout):
+			_armed_timer.timeout.disconnect(_on_armed_timeout)
+		_armed_timer = null
+
+
+func _on_armed_timeout() -> void:
+	_armed_timer = null
+	_cancel_armed()
 
 
 func _reject() -> void:
