@@ -48,6 +48,10 @@ func _setup_buttons() -> void:
 
 
 func _attach_button_interactable(button_mesh: MeshInstance3D, key: String):
+	# Glow mesh must exist before the Interactable's _ready() so the reveal system finds it.
+	var glow := _create_glow_mesh(button_mesh)
+	button_mesh.add_child(glow)
+
 	var area = INTERACTABLE_SCRIPT.new()
 	area.name = "Interactable"
 	area.collision_layer = 8
@@ -56,14 +60,15 @@ func _attach_button_interactable(button_mesh: MeshInstance3D, key: String):
 	area.prompt_action = "Press"
 	area.show_indicator = false
 	area.interaction_range = 2.5
-	button_mesh.add_child(area)
+	area.requires_line_of_sight = false
+	area.highlight_mode = 1  # REVEAL_MESHES
+	var glow_paths: Array[NodePath] = [NodePath("../GlowMesh")]
+	area.highlight_visible_paths = glow_paths
+	button_mesh.add_child(area)  # _ready() runs here and picks up GlowMesh
 
 	var col := CollisionShape3D.new()
 	col.name = "CollisionShape3D"
 	var shape := BoxShape3D.new()
-	# Use mesh AABB for accurate size and center position.
-	# Button meshes share the parent Node3D origin so the AABB offset
-	# must be applied to the collision shape's local position.
 	if button_mesh.mesh != null:
 		var aabb := button_mesh.mesh.get_aabb()
 		shape.size = Vector3(aabb.size.x + 0.04, maxf(aabb.size.y, 0.08), aabb.size.z + 0.04)
@@ -75,6 +80,23 @@ func _attach_button_interactable(button_mesh: MeshInstance3D, key: String):
 
 	area.clicked.connect(_on_button_clicked.bind(key))
 	return area
+
+
+func _create_glow_mesh(button_mesh: MeshInstance3D) -> MeshInstance3D:
+	var glow := MeshInstance3D.new()
+	glow.name = "GlowMesh"
+	glow.mesh = button_mesh.mesh
+	glow.visible = false
+
+	var mat := StandardMaterial3D.new()
+	mat.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+	mat.emission_enabled = true
+	mat.emission = Color(0.55, 0.85, 1.0)
+	mat.emission_energy_multiplier = 2.5
+	mat.albedo_color = Color(0.55, 0.85, 1.0, 0.4)
+	mat.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+	glow.material_override = mat
+	return glow
 
 
 func _on_button_clicked(_interactable, _actor: Node, key: String) -> void:
@@ -108,7 +130,7 @@ func _update_display() -> void:
 	if _input_text.is_empty():
 		_display_label.text = "ENTER CODE"
 		return
-	_display_label.text = "*".repeat(_input_text.length())
+	_display_label.text = _input_text
 
 
 func set_display_text(text: String) -> void:
