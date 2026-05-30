@@ -165,7 +165,7 @@ shader_parameter/traced_ssr_steps = 512
 shader_parameter/ssr_screen_fade = 0.05
 
 [sub_resource type="BoxMesh" id="BoxMesh_dcoqq"]
-size = Vector3(20, 7.5, 20)
+size = Vector3(10, 7.5, 10)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_dcoqq"]
 render_priority = 0
@@ -174,11 +174,12 @@ shader_parameter/sea_height = 0.0
 shader_parameter/sea_choppy = 2.000000095
 shader_parameter/sea_speed = 0.10000000475
 shader_parameter/sea_freq = 0.0400000019
-shader_parameter/height_offset = -2.0
+shader_parameter/height_offset = -1.0
 shader_parameter/underwater_color = Color(0.07734231, 0.2986705, 0.33451435, 1)
 shader_parameter/absorption_strength = 0.0
 shader_parameter/deep_tint_strength = 0.2000000095
 shader_parameter/refraction_amount = 0.002000000095
+shader_parameter/alpha = 1.0
 shader_parameter/refraction_speed = 0.50000002375
 shader_parameter/water_level_fudge = 0.0
 
@@ -236,7 +237,6 @@ surface_material_override/0 = ExtResource("3_uooyi")
 
 [node name="RoofWetroom" type="MeshInstance3D" parent="NavigationRegion3D/StaticBody3D" unique_id=850791184]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.747784, -8.88325, 20.900995)
-visible = false
 mesh = SubResource("ArrayMesh_5w8w2")
 surface_material_override/0 = ExtResource("5_05nb4")
 
@@ -350,12 +350,13 @@ document_texture_ua = ExtResource("19_tmc1p")
 transform = Transform3D(2, 0, 0, 0, -8.742278e-08, 2, 0, -2, -8.742278e-08, 7.5952353, 2.3183239, 29.744131)
 
 [node name="water_box" type="MeshInstance3D" parent="." unique_id=1583286313]
-transform = Transform3D(0.92028654, 0, 0.3912452, 0, 1, 0, -0.3912452, 0, 0.92028654, 8.078, -4, 27.677)
+transform = Transform3D(0.92028654, 0, 0.3912452, 0, 1, 0, -0.3912452, 0, 0.92028654, 8.078, -3.8162725, 27.677)
 mesh = SubResource("BoxMesh_tmc1p")
 surface_material_override/0 = SubResource("ShaderMaterial_itw1n")
 
 [node name="underwater_box" type="MeshInstance3D" parent="water_box" unique_id=371843394]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.024923801, 0)
+transform = Transform3D(0.922908, 0, -0.38502014, 0, 1, 0, 0.38502014, 0, 0.922908, 0.692049, -0.024923801, -0.23526955)
+visible = false
 mesh = SubResource("BoxMesh_dcoqq")
 surface_material_override/0 = SubResource("ShaderMaterial_dcoqq")
 

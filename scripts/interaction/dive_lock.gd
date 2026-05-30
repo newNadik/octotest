@@ -46,6 +46,7 @@ var _armed_timer: SceneTreeTimer = null
 
 
 func _ready() -> void:
+	add_to_group("save_state_provider")
 	_numpad = get_node(numpad_path)
 	_lever = get_node(lever_path)
 	_lamp = get_node(lamp_path)
@@ -60,6 +61,19 @@ func _ready() -> void:
 	_numpad.input_changed.connect(_on_input_changed)
 	_lever.lever_pulled.connect(_on_lever_pulled)
 
+	_enter_standby()
+
+
+func get_save_key() -> String:
+	return "dive_lock:" + str(get_path())
+
+
+func get_save_state() -> Dictionary:
+	return {"chamber_state": int(_chamber_state)}
+
+
+func apply_save_state(state: Dictionary) -> void:
+	_chamber_state = ChamberState.FLOODED if int(state.get("chamber_state", 0)) == ChamberState.FLOODED else ChamberState.DRAINED
 	_enter_standby()
 
 
