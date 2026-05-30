@@ -10,10 +10,14 @@ enum Operation { NONE, EXIT_STATION, ENTER_STATION, EMERGENCY_SEAL }
 @export var lamp_path: NodePath
 @export var inner_door_path: NodePath
 @export var outer_door_path: NodePath
+@export var water_box_path: NodePath
 
 @export var operation_duration: float = 10.0
 @export var seal_timeout: float = 60.0
 @export var armed_timeout: float = 60.0
+
+const WATER_Y_DRAINED := -4.0
+const WATER_Y_FLOODED := 3.5
 
 const ENTER_CODE := "2407"
 const SEAL_CODE := "7700"
@@ -29,6 +33,8 @@ var _lever: Lever
 var _lamp: BulkheadLamp
 var _inner_door: Node
 var _outer_door: Node
+var _water_box: Node3D
+var _water_tween: Tween
 
 var _control_state := ControlState.STANDBY
 var _chamber_state := ChamberState.DRAINED
@@ -42,6 +48,8 @@ func _ready() -> void:
 	_lamp = get_node(lamp_path)
 	_inner_door = get_node(inner_door_path)
 	_outer_door = get_node(outer_door_path)
+	if water_box_path:
+		_water_box = get_node_or_null(water_box_path)
 
 	_numpad.code_submitted.connect(_on_code_submitted)
 	_numpad.input_changed.connect(_on_input_changed)
@@ -150,8 +158,10 @@ func _start_operation() -> void:
 	match _armed_operation:
 		Operation.EXIT_STATION:
 			_numpad.set_display_text(tr("FLOODING"))
+			_tween_water(WATER_Y_FLOODED)
 		Operation.ENTER_STATION:
 			_numpad.set_display_text(tr("DRAINING"))
+			_tween_water(WATER_Y_DRAINED)
 
 	get_tree().create_timer(operation_duration).timeout.connect(_on_operation_complete)
 
@@ -196,7 +206,26 @@ func _enter_standby() -> void:
 			_inner_door.unlock()
 			_outer_door.disable()
 			_lamp.set_steady(COLOR_WHITE)
+			_set_water_y(WATER_Y_DRAINED)
 		ChamberState.FLOODED:
 			_inner_door.disable()
 			_outer_door.unlock()
 			_lamp.set_steady(COLOR_GREEN)
+			_set_water_y(WATER_Y_FLOODED)
+
+
+func _tween_water(target_y: float) -> void:
+	if _water_box == null:
+		return
+	if _water_tween:
+		_water_tween.kill()
+	_water_tween = create_tween().set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_SINE)
+	_water_tween.tween_property(_water_box, "position:y", target_y, operation_duration)
+
+
+func _set_water_y(y: float) -> void:
+	if _water_box == null:
+		return
+	var pos := _water_box.position
+	pos.y = y
+	_water_box.position = pos

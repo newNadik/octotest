@@ -113,7 +113,7 @@ size = Vector3(0.5, 0.20064697, 0.63997805)
 transform = Transform3D(1, 0, 0, 0, 0.99999994, 0, 0, 0, 0.99999994, 0, 0, 0)
 
 [node name="lever" type="Node3D" parent="." unique_id=2099909382]
-transform = Transform3D(0.79999995, 0, 0, 0, 0.79951876, 0.027738186, 0, -0.027738186, 0.79951876, 0, 0.06280006, 0)
+transform = Transform3D(-0.79999995, 2.4408082e-09, -6.9895606e-08, 0, 0.7995125, 0.02791959, 6.993822e-08, 0.02791959, -0.7995125, 0, 0.06280006, 0)
 
 [node name="Cylinder" type="MeshInstance3D" parent="lever" unique_id=827713369]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 0.92423594, 0, 0, 0)
@@ -138,9 +138,9 @@ display_name = "Spare Lever"
 prompt_action = "Pick up"
 requires_line_of_sight = false
 item_id = "spare_lever"
-hold_offset = Vector3(0, -0.5, -0.3)
-hold_rotation_degrees = Vector3(90, 0, 0)
+hold_offset = Vector3(0, -0.5, -0.2)
+hold_rotation_degrees = Vector3(-90, 0, 0)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Interactable" unique_id=1023779049]
-transform = Transform3D(1, 0, 0, 0, 0.99999374, 0, 0, 0, 0.99999374, 0, 0.06386078, -0.20194711)
+transform = Transform3D(1, 0, 0, 0, 0.9999937, 0, 0, 0, 0.9999937, 0, 0.063860774, 0.1803059)
 shape = SubResource("BoxShape3D_spare")

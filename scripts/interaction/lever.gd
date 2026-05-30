@@ -95,7 +95,9 @@ func apply_save_state(state: Dictionary) -> void:
 func set_enabled(enabled: bool) -> void:
 	_enabled = enabled
 	if _interactable != null:
-		_interactable.set_interaction_enabled(_lever_installed and enabled and not _is_down)
+		# When not installed the interactable must stay enabled so the player
+		# can enter focus mode to install the handle.
+		_interactable.set_interaction_enabled(not _lever_installed or (enabled and not _is_down))
 
 
 func return_to_up(duration: float = -1.0, auto_enable: bool = true) -> void:
