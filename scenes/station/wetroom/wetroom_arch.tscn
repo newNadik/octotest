@@ -142,12 +142,14 @@ transform = Transform3D(-0.3826834, 0, 0.92387956, 0, 1, 0, -0.92387956, 0, -0.3
 
 [node name="lights" type="Node3D" parent="." unique_id=1699587579]
 
+[node name="bulkhead_lamp" parent="lights" unique_id=970537917 instance=ExtResource("16_yxy63")]
+transform = Transform3D(0.70097154, 0, 0.71318924, 0, 1, 0, -0.71318924, 0, 0.70097154, 7.473503, 3.9780293, 24.97896)
+
 [node name="LightSwitch" parent="lights" unique_id=1802619805 instance=ExtResource("6_328kc")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.066742, 0, 19.405468)
 
 [node name="OmniLight3D" type="OmniLight3D" parent="lights" unique_id=1172026728]
-transform = Transform3D(0.99859184, 0.05305054, 0, -0.05305054, 0.99859184, 0, 0, 0, 1, 7.6399975, 5.5212016, 27.28033)
-light_energy = 5.0
+transform = Transform3D(0.99859184, 0.05305054, 0, -0.05305054, 0.99859184, 0, 0, 0, 1, 7.6399975, 5.5212016, 27.922794)
 light_indirect_energy = 5.0
 shadow_enabled = true
 shadow_blur = 2.0
@@ -275,6 +277,3 @@ transform = Transform3D(-1, 8.742278e-08, 0, 3.821371e-15, 4.371139e-08, -1, -8.
 
 [node name="lever" parent="." unique_id=15281427 instance=ExtResource("9_kuayl")]
 transform = Transform3D(-0.99999994, 8.742277e-08, 4.371139e-08, -4.3711385e-08, 1.9106853e-15, -1, -8.742277e-08, -0.9999999, 1.9106855e-15, 7.591727, 2.3242166, 29.758682)
-
-[node name="bulkhead_lamp" parent="." unique_id=970537917 instance=ExtResource("16_yxy63")]
-transform = Transform3D(0.70097154, 0, 0.71318924, 0, 1, 0, -0.71318924, 0, 0.70097154, 7.4636087, 3.9780293, 24.97896)

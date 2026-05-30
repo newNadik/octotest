@@ -1,6 +1,8 @@
 [gd_scene format=4 uid="uid://v64vgtuud03i"]
 
+[ext_resource type="Script" uid="uid://sw0ufflky5tb" path="res://scripts/interaction/bulkhead_lamp.gd" id="0_lamp"]
 [ext_resource type="Material" uid="uid://bgive7ce1ap5q" path="res://assets/materials/metalic.tres" id="1_qfjnp"]
+[ext_resource type="Material" uid="uid://du12to6mchmxd" path="res://assets/materials/white_glow.tres" id="3_lidge"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vo1we"]
 
@@ -72,16 +74,20 @@ shadow_mesh = SubResource("ArrayMesh_us2vn")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_r1b33"]
 resource_name = "Glass"
-transparency = 4
-cull_mode = 2
-albedo_color = Color(1, 1, 1, 0.92156863)
+transparency = 1
+albedo_color = Color(1, 1, 1, 0.78431374)
 roughness = 0.04
 clearcoat_enabled = true
 clearcoat = 0.85
 clearcoat_roughness = 0.02
 refraction_scale = 0.0
 
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_gpl4i"]
+radius = 0.2
+height = 1.0
+
 [node name="bulkhead_lamp" type="Node3D" unique_id=970537917]
+script = ExtResource("0_lamp")
 
 [node name="LowPoly" type="Node3D" parent="." unique_id=2075627303]
 transform = Transform3D(0.05, 0, 0, 0, 0.05, 0, 0, 0, 0.05, 0, 0, 0)
@@ -95,4 +101,11 @@ mesh = SubResource("ArrayMesh_r1b33")
 surface_material_override/0 = SubResource("StandardMaterial3D_r1b33")
 
 [node name="SpotLight3D" type="SpotLight3D" parent="." unique_id=478820844]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, 0, 0)
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, 0, 0.18281716)
+spot_range = 10.0
+spot_angle = 30.0
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=281493819]
+transform = Transform3D(-4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0, 1, 0, 0, 0.073381186)
+mesh = SubResource("CapsuleMesh_gpl4i")
+surface_material_override/0 = ExtResource("3_lidge")
