@@ -1141,10 +1141,7 @@ func _apply_held_item_to_focus_target_now(item) -> void:
 	if removed_item == null:
 		return
 	_focus_item_motion_by_item_id.erase(removed_item.get_instance_id())
-	removed_item.set_interaction_enabled(false)
-	var pickup_root = removed_item.get_pickup_root()
-	if pickup_root != null:
-		pickup_root.queue_free()
+	removed_item.consume()
 
 
 func _register_focus_item_motion(item, world_target: Vector3, should_return: bool) -> void:

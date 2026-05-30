@@ -172,7 +172,7 @@ func _on_operation_complete() -> void:
 	else:
 		_chamber_state = ChamberState.DRAINED
 
-	_lever.return_to_up()
+	_lever.return_to_up(-1.0, false)
 	_enter_standby()
 
 

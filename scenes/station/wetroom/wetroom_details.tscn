@@ -200,6 +200,7 @@ transform = Transform3D(0.9708463, 0, -0.23970279, 0, 1, 0, 0.23970279, 0, 0.970
 
 [node name="spare_lever" parent="." unique_id=1405863011 instance=ExtResource("25_26s5g")]
 transform = Transform3D(1, 0, 0, 0, 0.99999994, 0, 0, 0, 0.99999994, 6.638805, 0.93608356, 27.369999)
+visible = false
 
 [node name="warning_tape" parent="." unique_id=2037887490 instance=ExtResource("26_xbti6")]
 transform = Transform3D(3.5, 0, 0, 0, 3.5, 0, 0, 0, 3.5, 17.75032, 1.5685257, 20.25869)

@@ -20,7 +20,8 @@
 [ext_resource type="Texture2D" uid="uid://pomip2au73rs" path="res://assets/textures/documents/divelock_status.png" id="18_da2do"]
 [ext_resource type="Texture2D" uid="uid://bgqcich5gew6k" path="res://assets/textures/documents/divelock_status_ua.png" id="19_tmc1p"]
 [ext_resource type="PackedScene" uid="uid://tepltc7qm54b" path="res://scenes/station/items/warning_tape.tscn" id="20_tmc1p"]
-[ext_resource type="Material" uid="uid://cfl1yis2qhq8h" path="res://assets/materials/water.tres" id="21_7kytm"]
+[ext_resource type="Shader" uid="uid://60qtnkd40ru4" path="res://assets/shaders/water_shader.gdshader" id="21_7kytm"]
+[ext_resource type="Shader" uid="uid://8iwjcov8g8wi" path="res://assets/shaders/under_water_shader.gdshader" id="22_dcoqq"]
 
 [sub_resource type="NavigationMesh" id="NavigationMesh_4e8f6"]
 vertices = PackedVector3Array(16.94945, 0.5, 21.409021, 17.44945, 0.5, 21.409021, 16.19945, 0.5, 20.909021, 14.94945, 0.5, 25.409021, 15.44945, 0.5, 24.659021, 14.69945, 0.5, 24.159021, 12.94945, 0.5, 24.909021, 11.44945, 0.5, 25.159021, 11.94945, 0.5, 26.409021, 12.69945, 0.5, 25.909021, 14.69945, 0.5, 23.159021, 13.44945, 0.5, 20.909021, 10.44945, 0.5, 20.909021, 10.94945, 0.5, 23.659021, 9.69945, 0.5, 24.659021, 15.69945, 0.5, 22.909021, 16.19945, 0.5, 19.409021, 13.69945, 0.5, 19.409021, 15.69945, 2, 24.659021, 15.69945, 2, 24.159021, 15.19945, 2, 24.159021, 13.94945, 2, 25.409021, 14.44945, 2, 25.909021, 9.19945, 0.5, 26.659021, 9.44945, 0.5, 24.909021, 8.44945, 0.5, 24.909021, 7.6994495, 0.5, 25.659021, 7.6994495, 0.5, 29.159021, 10.44945, 0.5, 29.159021)
@@ -137,7 +138,49 @@ size = Vector3(5.66996, 6.5673256, 0.4039991)
 size = Vector3(4.2138176, 6.5673256, 0.4039991)
 
 [sub_resource type="BoxMesh" id="BoxMesh_tmc1p"]
-size = Vector3(5, 7, 7)
+size = Vector3(5, 7.5, 7)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_itw1n"]
+render_priority = 0
+shader = ExtResource("21_7kytm")
+shader_parameter/absorptioncolour = Color(0.12599999, 0.44460005, 0.45, 1)
+shader_parameter/absorptionmultiplier = 1.0
+shader_parameter/AirIOR = 1.0
+shader_parameter/IOR = 1.33
+shader_parameter/sampler1speed = Vector2(0.02, 0)
+shader_parameter/sampler2speed = Vector2(0, 0.02)
+shader_parameter/samplermix = 0.5
+shader_parameter/samplerscale = Vector2(0.1, 0.1)
+shader_parameter/normalstrength = 1.0
+shader_parameter/heightstrength = 0.12
+shader_parameter/refraction_type = 1
+shader_parameter/simple_refraction_amount = 0.1
+shader_parameter/traced_refraction_far_clip = 50.0
+shader_parameter/traced_refraction_steps = 512
+shader_parameter/edge_size = 0.1
+shader_parameter/foam_or_fade = false
+shader_parameter/ssr_type = 2
+shader_parameter/traced_ssr_far_clip = 50.0
+shader_parameter/traced_ssr_steps = 512
+shader_parameter/ssr_screen_fade = 0.05
+
+[sub_resource type="BoxMesh" id="BoxMesh_dcoqq"]
+size = Vector3(5, 5, 7)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_dcoqq"]
+render_priority = 0
+shader = ExtResource("22_dcoqq")
+shader_parameter/sea_height = 0.0
+shader_parameter/sea_choppy = 0.0
+shader_parameter/sea_speed = 0.50000002375
+shader_parameter/sea_freq = 0.08
+shader_parameter/height_offset = 0.0
+shader_parameter/underwater_color = Color(0.02, 0.18, 0.25, 1)
+shader_parameter/absorption_strength = 0.35
+shader_parameter/deep_tint_strength = 0.65
+shader_parameter/refraction_amount = 0.004
+shader_parameter/refraction_speed = 0.7
+shader_parameter/water_level_fudge = 0.0
 
 [node name="wetroom" type="Node3D" unique_id=2133782979 node_paths=PackedStringArray("light_switch", "ceiling_mesh", "lamp_lights")]
 script = ExtResource("1_uuxde")
@@ -307,6 +350,14 @@ document_texture_ua = ExtResource("19_tmc1p")
 transform = Transform3D(2, 0, 0, 0, -8.742278e-08, 2, 0, -2, -8.742278e-08, 7.5952353, 2.3183239, 29.744131)
 
 [node name="water_box" type="MeshInstance3D" parent="." unique_id=1583286313]
-transform = Transform3D(0.91323996, 0, 0.40742216, 0, 1, 0, -0.40742216, 0, 0.91323996, 7.878, -4, 27.677)
+transform = Transform3D(0.92028654, 0, 0.3912452, 0, 1, 0, -0.3912452, 0, 0.92028654, 8.078059, -4, 27.677)
 mesh = SubResource("BoxMesh_tmc1p")
-surface_material_override/0 = ExtResource("21_7kytm")
+surface_material_override/0 = SubResource("ShaderMaterial_itw1n")
+
+[node name="water_box2" type="MeshInstance3D" parent="water_box" unique_id=371843394]
+mesh = SubResource("BoxMesh_dcoqq")
+surface_material_override/0 = SubResource("ShaderMaterial_dcoqq")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="water_box" unique_id=2018417033]
+light_color = Color(0.19243005, 0.6574287, 0.6478341, 1)
+omni_range = 2.494964

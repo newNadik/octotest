@@ -82,3 +82,26 @@ lights_and_shadows/positional_shadow/atlas_size=1024
 lights_and_shadows/positional_shadow/atlas_size.mobile=1024
 lights_and_shadows/positional_shadow/atlas_quadrant_2_subdiv=2
 lights_and_shadows/positional_shadow/atlas_quadrant_3_subdiv=2
+
+[shader_globals]
+
+wind_intensity={
+"default": 0.5,
+"type": "float"
+}
+wind_direction={
+"default": {
+"x": 1.0,
+"y": 0.0,
+"z": 0.0
+},
+"type": "vec3"
+}
+player_position={
+"default": {
+"x": 0.0,
+"y": 0.0,
+"z": 0.0
+},
+"type": "vec3"
+}

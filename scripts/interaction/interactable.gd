@@ -98,6 +98,7 @@ var _saved_pickup_mask := 0
 var _has_saved_pickup_collision := false
 var _interaction_enabled := true
 var _is_currently_held := false
+var _consumed := false
 var _initial_save_key := ""
 var _indicator_root: Node3D
 var _indicator_dot: Sprite3D
@@ -683,9 +684,17 @@ func get_save_key() -> String:
 	return _initial_save_key
 
 
+func consume() -> void:
+	_consumed = true
+	set_interaction_enabled(false)
+	if _pickup_root != null:
+		_pickup_root.queue_free()
+
+
 func get_save_state() -> Dictionary:
 	var result := {
-		"is_held": _is_currently_held
+		"is_held": _is_currently_held,
+		"consumed": _consumed,
 	}
 	if not _is_managed_by_door_state():
 		result["interaction_enabled"] = _interaction_enabled
@@ -696,6 +705,12 @@ func get_save_state() -> Dictionary:
 
 func apply_save_state(state: Dictionary) -> void:
 	if state.is_empty():
+		return
+	if bool(state.get("consumed", false)):
+		_consumed = true
+		set_interaction_enabled(false)
+		if _pickup_root != null:
+			_pickup_root.queue_free()
 		return
 	if state.has("interaction_enabled") and not _is_managed_by_door_state():
 		set_interaction_enabled(bool(state["interaction_enabled"]))
