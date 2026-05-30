@@ -6,12 +6,14 @@ signal lever_pulled
 @export_range(-180.0, 180.0) var pulled_rotation_x: float = 180.0
 @export var pull_duration: float = 1.0
 @export var return_duration: float = 0.9
+@export var interactable_path: NodePath
 
 var _lever_arm: Node3D
 var _indicator: MeshInstance3D
 var _interactable
 
 var _is_down := false
+var _enabled := false
 var _pull_tween: Tween
 var _flash_tween: Tween
 
@@ -24,7 +26,10 @@ var _mat_red: StandardMaterial3D
 func _ready() -> void:
 	_lever_arm = get_node_or_null("Node3D/lever")
 	_indicator = get_node_or_null("Node3D/indicator")
-	_interactable = get_node_or_null("Node3D/lever/Interactable")
+	if interactable_path:
+		_interactable = get_node_or_null(interactable_path)
+	if _interactable == null:
+		_interactable = get_node_or_null("Interactable")
 	_build_indicator_materials()
 	set_enabled(false)
 	set_indicator_off()
@@ -50,19 +55,22 @@ func _make_mat(color: Color, emissive: bool) -> StandardMaterial3D:
 # --- Public API for controller ---
 
 func set_enabled(enabled: bool) -> void:
+	_enabled = enabled
 	if _interactable != null:
 		_interactable.set_interaction_enabled(enabled and not _is_down)
 
 
-func return_to_up() -> void:
+func return_to_up(duration: float = -1.0, auto_enable: bool = true) -> void:
 	if _lever_arm == null:
 		return
 	_is_down = false
 	if _pull_tween:
 		_pull_tween.kill()
+	var actual_duration := return_duration if duration < 0.0 else duration
 	_pull_tween = create_tween().set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CUBIC)
-	_pull_tween.tween_property(_lever_arm, "rotation_degrees:x", 0.0, return_duration)
-	_pull_tween.tween_callback(func(): set_enabled(true))
+	_pull_tween.tween_property(_lever_arm, "rotation_degrees:x", 0.0, actual_duration)
+	if auto_enable:
+		_pull_tween.tween_callback(func(): set_enabled(true))
 
 
 func set_indicator_off() -> void:
@@ -88,7 +96,7 @@ func set_indicator_red_flash() -> void:
 # --- Internal ---
 
 func _pull_down() -> void:
-	if _lever_arm == null or _is_down:
+	if _lever_arm == null or _is_down or not _enabled:
 		return
 	_is_down = true
 	set_enabled(false)
@@ -116,5 +124,5 @@ func _stop_flash() -> void:
 		_flash_tween = null
 
 
-func _on_interactable_clicked(_interactable, _actor: Node) -> void:
+func _on_interactable_clicked(_source, _actor: Node) -> void:
 	_pull_down()

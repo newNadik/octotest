@@ -128,7 +128,7 @@ func _update_display() -> void:
 	if _display_label == null:
 		return
 	if _input_text.is_empty():
-		_display_label.text = "ENTER CODE"
+		_display_label.text = tr("ENTER CODE")
 		return
 	_display_label.text = _input_text
 

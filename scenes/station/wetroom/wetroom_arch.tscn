@@ -16,6 +16,7 @@
 [ext_resource type="Texture2D" uid="uid://cx26conw4y4pc" path="res://assets/textures/documents/dive_safety_ua.png" id="13_kuayl"]
 [ext_resource type="PackedScene" uid="uid://b3wqhjabuj43p" path="res://scenes/station/interior/numpad.tscn" id="14_4e8f6"]
 [ext_resource type="PackedScene" uid="uid://v64vgtuud03i" path="res://scenes/station/interior/bulkhead_lamp.tscn" id="16_yxy63"]
+[ext_resource type="Script" uid="uid://udr0kshr1tmk" path="res://scripts/interaction/dive_lock.gd" id="17_rct2j"]
 
 [sub_resource type="NavigationMesh" id="NavigationMesh_4e8f6"]
 vertices = PackedVector3Array(16.94945, 0.5, 21.409021, 17.44945, 0.5, 21.409021, 16.19945, 0.5, 20.909021, 14.94945, 0.5, 25.409021, 15.44945, 0.5, 24.659021, 14.69945, 0.5, 24.159021, 12.94945, 0.5, 24.909021, 11.44945, 0.5, 25.159021, 11.94945, 0.5, 26.409021, 12.69945, 0.5, 25.909021, 14.69945, 0.5, 23.159021, 13.44945, 0.5, 20.909021, 10.44945, 0.5, 20.909021, 10.94945, 0.5, 23.659021, 9.69945, 0.5, 24.659021, 15.69945, 0.5, 22.909021, 16.19945, 0.5, 19.409021, 13.69945, 0.5, 19.409021, 15.69945, 2, 24.659021, 15.69945, 2, 24.159021, 15.19945, 2, 24.159021, 13.94945, 2, 25.409021, 14.44945, 2, 25.909021, 9.19945, 0.5, 26.659021, 9.44945, 0.5, 24.909021, 8.44945, 0.5, 24.909021, 7.6994495, 0.5, 25.659021, 7.6994495, 0.5, 29.159021, 10.44945, 0.5, 29.159021)
@@ -277,3 +278,12 @@ transform = Transform3D(-1, 8.742278e-08, 0, 3.821371e-15, 4.371139e-08, -1, -8.
 
 [node name="lever" parent="." unique_id=15281427 instance=ExtResource("9_kuayl")]
 transform = Transform3D(-0.99999994, 8.742277e-08, 4.371139e-08, -4.3711385e-08, 1.9106853e-15, -1, -8.742277e-08, -0.9999999, 1.9106855e-15, 7.591727, 2.3242166, 29.758682)
+
+[node name="DiveLock" type="Node3D" parent="." unique_id=2133282897]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.112595, 0, 27.926067)
+script = ExtResource("17_rct2j")
+numpad_path = NodePath("../numpad")
+lever_path = NodePath("../lever")
+lamp_path = NodePath("../lights/bulkhead_lamp")
+inner_door_path = NodePath("../DoorSingle2")
+outer_door_path = NodePath("../NavigationRegion3D/StaticBody3D/DoorSingle")
