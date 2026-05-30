@@ -1,5 +1,5 @@
 shader_type spatial;
-render_mode unshaded, cull_disabled, depth_test_disabled;
+render_mode unshaded, cull_disabled, depth_test_disabled, blend_mix;
 
 // uniforms must keep in sync with surface water shader above
 uniform float sea_height    : hint_range(0.0, 5.0) = 1.3;
@@ -15,6 +15,7 @@ uniform float deep_tint_strength   : hint_range(0.0, 1.0) = 0.65;   // how stron
 
 // gentle screen wobble
 uniform float refraction_amount    : hint_range(0.0, 0.015) = 0.004;
+uniform float alpha                : hint_range(0.0, 1.0)  = 1.0;
 uniform float refraction_speed     : hint_range(0.0, 3.0)   = 0.7;
 
 // slight depth fudge to avoid seeing through near the surface
@@ -131,4 +132,5 @@ void fragment() {
     final_color = mix(final_color, underwater_color, fog * 0.85);
 
     ALBEDO = final_color;
+    ALPHA = alpha;
 }

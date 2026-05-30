@@ -36,6 +36,8 @@ var _outer_door: Node
 var _water_box: Node3D
 var _underwater_box: MeshInstance3D
 var _water_tween: Tween
+var _shader_tween: Tween
+var _alpha_tween: Tween
 
 var _control_state := ControlState.STANDBY
 var _chamber_state := ChamberState.DRAINED
@@ -162,10 +164,14 @@ func _start_operation() -> void:
 		Operation.EXIT_STATION:
 			_numpad.set_display_text(tr("FLOODING"))
 			_set_underwater_box_visible(true)
+			_fade_underwater_box(1.0, operation_duration * 0.5)
 			_tween_water(WATER_Y_FLOODED)
+			_tween_sea_height(7.0, false)
 		Operation.ENTER_STATION:
 			_numpad.set_display_text(tr("DRAINING"))
 			_tween_water(WATER_Y_DRAINED)
+			_tween_sea_height(0.0, true)
+			_fade_underwater_box(0.0, operation_duration * 0.85, true)
 
 	get_tree().create_timer(operation_duration).timeout.connect(_on_operation_complete)
 
@@ -175,7 +181,6 @@ func _on_operation_complete() -> void:
 		_chamber_state = ChamberState.FLOODED
 	else:
 		_chamber_state = ChamberState.DRAINED
-		_set_underwater_box_visible(false)
 
 	_lever.return_to_up(-1.0, false)
 	_enter_standby()
@@ -219,11 +224,65 @@ func _enter_standby() -> void:
 			_lamp.set_steady(COLOR_GREEN)
 			_set_water_y(WATER_Y_FLOODED)
 			_set_underwater_box_visible(true)
+			var _mat := _get_underwater_mat()
+			if _mat != null:
+				_mat.set_shader_parameter("alpha", 1.0)
+				_mat.set_shader_parameter("sea_height", 7.0)
 
 
-func _set_underwater_box_visible(visible: bool) -> void:
-	if _underwater_box != null:
-		_underwater_box.visible = visible
+func _get_underwater_mat() -> ShaderMaterial:
+	if _underwater_box == null:
+		return null
+	return _underwater_box.get_surface_override_material(0) as ShaderMaterial
+
+
+func _set_underwater_box_visible(show: bool) -> void:
+	if _underwater_box == null:
+		return
+	if not show:
+		# instant hide — reset shader params too
+		_underwater_box.visible = false
+		var mat := _get_underwater_mat()
+		if mat != null:
+			mat.set_shader_parameter("sea_height", 0.0)
+			mat.set_shader_parameter("alpha", 0.0)
+	else:
+		# reset alpha to 0 so the fade-in always starts from invisible
+		var mat := _get_underwater_mat()
+		if mat != null:
+			mat.set_shader_parameter("alpha", 0.0)
+		_underwater_box.visible = true
+
+
+func _fade_underwater_box(target_alpha: float, duration: float, then_hide: bool = false) -> void:
+	var mat := _get_underwater_mat()
+	if mat == null:
+		return
+	if _alpha_tween:
+		_alpha_tween.kill()
+	var current := float(mat.get_shader_parameter("alpha"))
+	_alpha_tween = create_tween().set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_SINE)
+	_alpha_tween.tween_method(
+		func(v: float) -> void: mat.set_shader_parameter("alpha", v),
+		current, target_alpha, duration
+	)
+	if then_hide:
+		_alpha_tween.tween_callback(func() -> void: _set_underwater_box_visible(false))
+
+
+func _tween_sea_height(target: float, lag: bool) -> void:
+	var mat := _get_underwater_mat()
+	if mat == null:
+		return
+	if _shader_tween:
+		_shader_tween.kill()
+	var current := float(mat.get_shader_parameter("sea_height"))
+	_shader_tween = create_tween().set_trans(Tween.TRANS_SINE)
+	_shader_tween.set_ease(Tween.EASE_IN if lag else Tween.EASE_IN_OUT)
+	_shader_tween.tween_method(
+		func(v: float) -> void: mat.set_shader_parameter("sea_height", v),
+		current, target, operation_duration
+	)
 
 
 func _tween_water(target_y: float) -> void:
