@@ -25,6 +25,12 @@ msgid "Blue Current"
 msgstr "Блакитна течія\n"
 "Дослідницький центр"
 
+msgid "Pull"
+"\n"
+"Down"
+msgstr "Потягни\n"
+"вниз"
+
 msgid "Understanding the ocean"
 "\n"
 "Powering the future"

@@ -9,6 +9,7 @@
 [ext_resource type="PackedScene" uid="uid://b7vd8cvq5kxdt" path="res://scenes/station/items/light_switch.tscn" id="6_328kc"]
 [ext_resource type="PackedScene" uid="uid://d0tq5lhvb74vc" path="res://scenes/station/interior/cctv_cam.tscn" id="7_jo6uv"]
 [ext_resource type="PackedScene" uid="uid://p7pol1cjt5hs" path="res://assets/models/items/wetroom/drain.glb" id="9_i1xjc"]
+[ext_resource type="PackedScene" uid="uid://c03rnyk2rsoq4" path="res://scenes/station/interior/lever.tscn" id="9_kuayl"]
 [ext_resource type="PackedScene" uid="uid://d12mw6ayih1in" path="res://assets/models/items/wetroom/vent.glb" id="10_mf4nf"]
 [ext_resource type="PackedScene" uid="uid://bwx4cmp7n3qhv" path="res://scenes/interactables/document_item.tscn" id="11_g7ogh"]
 [ext_resource type="Texture2D" uid="uid://bwyf121h826t6" path="res://assets/textures/documents/dive_safety.png" id="12_4e8f6"]
@@ -223,6 +224,9 @@ occluder = SubResource("BoxOccluder3D_4e8f6")
 [node name="OccluderInstance3D4" type="OccluderInstance3D" parent="NavigationRegion3D/StaticBody3D" unique_id=2005348959]
 transform = Transform3D(0.7205511, 0, 0.6934019, 0, 1, 0, -0.6934019, 0, 0.7205511, 7.349469, 2.6734285, 24.67315)
 occluder = SubResource("BoxOccluder3D_4e8f6")
+
+[node name="lever" parent="NavigationRegion3D/StaticBody3D" unique_id=15281427 instance=ExtResource("9_kuayl")]
+transform = Transform3D(-0.99999994, 8.742277e-08, 4.371139e-08, -4.3711385e-08, 1.9106853e-15, -1, -8.742277e-08, -0.9999999, 1.9106855e-15, 7.591727, 2.3242166, 29.758682)
 
 [node name="NavigationLink3D" type="NavigationLink3D" parent="NavigationRegion3D" unique_id=404373225]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.461985, 0.54339147, 20.258965)
