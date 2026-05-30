@@ -29,7 +29,7 @@ and interacting with the numpad or inner door while armed cancels the pending op
 
 | Element | State |
 |---|---|
-| Lamp | blue steady |
+| Lamp | white steady |
 | Display | `ENTER CODE` |
 | Inner door | green (unlocked) |
 | Outer door | red (locked) |
