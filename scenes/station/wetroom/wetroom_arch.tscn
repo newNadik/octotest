@@ -165,21 +165,21 @@ shader_parameter/traced_ssr_steps = 512
 shader_parameter/ssr_screen_fade = 0.05
 
 [sub_resource type="BoxMesh" id="BoxMesh_dcoqq"]
-size = Vector3(5, 5, 7)
+size = Vector3(7, 7.5, 8)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_dcoqq"]
 render_priority = 0
 shader = ExtResource("22_dcoqq")
-shader_parameter/sea_height = 0.0
-shader_parameter/sea_choppy = 0.0
-shader_parameter/sea_speed = 0.50000002375
-shader_parameter/sea_freq = 0.08
+shader_parameter/sea_height = 5.0
+shader_parameter/sea_choppy = 2.000000095
+shader_parameter/sea_speed = 0.10000000475
+shader_parameter/sea_freq = 0.0400000019
 shader_parameter/height_offset = 0.0
-shader_parameter/underwater_color = Color(0.02, 0.18, 0.25, 1)
-shader_parameter/absorption_strength = 0.35
-shader_parameter/deep_tint_strength = 0.65
-shader_parameter/refraction_amount = 0.004
-shader_parameter/refraction_speed = 0.7
+shader_parameter/underwater_color = Color(0.07734231, 0.2986705, 0.33451435, 1)
+shader_parameter/absorption_strength = 0.0
+shader_parameter/deep_tint_strength = 0.2000000095
+shader_parameter/refraction_amount = 0.002000000095
+shader_parameter/refraction_speed = 0.50000002375
 shader_parameter/water_level_fudge = 0.0
 
 [node name="wetroom" type="Node3D" unique_id=2133782979 node_paths=PackedStringArray("light_switch", "ceiling_mesh", "lamp_lights")]
@@ -350,11 +350,13 @@ document_texture_ua = ExtResource("19_tmc1p")
 transform = Transform3D(2, 0, 0, 0, -8.742278e-08, 2, 0, -2, -8.742278e-08, 7.5952353, 2.3183239, 29.744131)
 
 [node name="water_box" type="MeshInstance3D" parent="." unique_id=1583286313]
-transform = Transform3D(0.92028654, 0, 0.3912452, 0, 1, 0, -0.3912452, 0, 0.92028654, 8.078059, -4, 27.677)
+transform = Transform3D(0.92028654, 0, 0.3912452, 0, 1, 0, -0.3912452, 0, 0.92028654, 8.078, -4, 27.677)
 mesh = SubResource("BoxMesh_tmc1p")
 surface_material_override/0 = SubResource("ShaderMaterial_itw1n")
 
-[node name="water_box2" type="MeshInstance3D" parent="water_box" unique_id=371843394]
+[node name="underwater_box" type="MeshInstance3D" parent="water_box" unique_id=371843394]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.06626749, 0)
+visible = false
 mesh = SubResource("BoxMesh_dcoqq")
 surface_material_override/0 = SubResource("ShaderMaterial_dcoqq")
 

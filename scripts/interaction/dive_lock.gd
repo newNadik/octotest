@@ -34,6 +34,7 @@ var _lamp: BulkheadLamp
 var _inner_door: Node
 var _outer_door: Node
 var _water_box: Node3D
+var _underwater_box: MeshInstance3D
 var _water_tween: Tween
 
 var _control_state := ControlState.STANDBY
@@ -50,6 +51,8 @@ func _ready() -> void:
 	_outer_door = get_node(outer_door_path)
 	if water_box_path:
 		_water_box = get_node_or_null(water_box_path)
+		if _water_box != null:
+			_underwater_box = _water_box.get_node_or_null("underwater_box") as MeshInstance3D
 
 	_numpad.code_submitted.connect(_on_code_submitted)
 	_numpad.input_changed.connect(_on_input_changed)
@@ -158,6 +161,7 @@ func _start_operation() -> void:
 	match _armed_operation:
 		Operation.EXIT_STATION:
 			_numpad.set_display_text(tr("FLOODING"))
+			_set_underwater_box_visible(true)
 			_tween_water(WATER_Y_FLOODED)
 		Operation.ENTER_STATION:
 			_numpad.set_display_text(tr("DRAINING"))
@@ -171,6 +175,7 @@ func _on_operation_complete() -> void:
 		_chamber_state = ChamberState.FLOODED
 	else:
 		_chamber_state = ChamberState.DRAINED
+		_set_underwater_box_visible(false)
 
 	_lever.return_to_up(-1.0, false)
 	_enter_standby()
@@ -207,11 +212,18 @@ func _enter_standby() -> void:
 			_outer_door.disable()
 			_lamp.set_steady(COLOR_WHITE)
 			_set_water_y(WATER_Y_DRAINED)
+			_set_underwater_box_visible(false)
 		ChamberState.FLOODED:
 			_inner_door.disable()
 			_outer_door.unlock()
 			_lamp.set_steady(COLOR_GREEN)
 			_set_water_y(WATER_Y_FLOODED)
+			_set_underwater_box_visible(true)
+
+
+func _set_underwater_box_visible(visible: bool) -> void:
+	if _underwater_box != null:
+		_underwater_box.visible = visible
 
 
 func _tween_water(target_y: float) -> void:
